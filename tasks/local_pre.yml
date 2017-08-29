@@ -1,0 +1,5 @@
+- name: KeePass unlock
+  run_once: true
+  changed_when: false
+  become: false
+  local_action: command /usr/bin/keepass --unlock-all

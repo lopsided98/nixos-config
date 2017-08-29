@@ -1,0 +1,6 @@
+---
+ssh_port: 4243
+domains: [odroid-xu4.nsupdate.info]
+ip: 192.168.1.3
+
+dnsupdate_secret_key: kQcVpAWKX4

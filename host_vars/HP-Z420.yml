@@ -1,0 +1,9 @@
+---
+ssh_port: 4245
+domains: [hp-z420.nsupdate.info]
+ip: 192.168.1.5
+common_host_users:
+  ben:
+    groups: [wheel, libvirt]
+
+dnsupdate_secret_key: 5ws9ASG3hA

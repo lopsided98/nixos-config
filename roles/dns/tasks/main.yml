@@ -1,0 +1,93 @@
+# dnscrypt-proxy
+
+- name: Install dnscrypt-proxy
+  pacman: name=dnscrypt-proxy state=present
+
+- name: Create /etc/dnscrypt
+  file: 
+    path: /etc/dnscrypt
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: dnscrypt-proxy configuration file
+  notify:
+    - Restart dnscrypt-proxy.service
+  copy:
+    src: etc/dnscrypt/dnscrypt-proxy.conf
+    dest: /etc/dnscrypt/dnscrypt-proxy.conf
+    owner: root
+    group: root
+    mode: '0644'
+    
+- name: dnscrypt-proxy resolvers list
+  notify:
+    - Restart dnscrypt-proxy.service
+  get_url:
+    url: https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv
+    dest: /etc/dnscrypt/dnscrypt-resolvers.conf
+    force: true
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create /etc/systemd/system/dnscrypt-proxy.socket.d
+  file: 
+    path: /etc/systemd/system/dnscrypt-proxy.socket.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Systemd dnscrypt-proxy.socket override
+  notify:
+    - Restart dnscrypt-proxy.socket
+  copy:
+    src: etc/systemd/system/dnscrypt-proxy.socket.d/override.conf
+    dest: /etc/systemd/system/dnscrypt-proxy.socket.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create /etc/systemd/system/dnscrypt-proxy.service.d
+  file: 
+    path: /etc/systemd/system/dnscrypt-proxy.service.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Systemd dnscrypt-proxy.service override
+  notify:
+    - Restart dnscrypt-proxy.service
+  copy:
+    src: etc/systemd/system/dnscrypt-proxy.service.d/override.conf
+    dest: /etc/systemd/system/dnscrypt-proxy.service.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+    
+- name: Disable dnscrypt-proxy.service
+  service: name=dnscrypt-proxy.service enabled=false
+
+- name: Enable dnscrypt-proxy.socket
+  service: name=dnscrypt-proxy.socket enabled=true state=started
+  
+# Unbound
+
+- name: Install Unbound
+  pacman: name=unbound state=present
+
+- name: Unbound configuration file
+  notify:
+    - Reload unbound
+  template:
+    src: etc/unbound/unbound.conf.j2
+    dest: /etc/unbound/unbound.conf
+    owner: root
+    group: root
+    mode: '0644'
+    
+- name: Enable Unbound
+  service: name=unbound.service enabled=true state=started

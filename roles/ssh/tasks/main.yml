@@ -1,0 +1,52 @@
+- name: pacman | install OpenSSH
+  pacman: name=openssh state=present
+
+- name: firewalld | create ssh-custom service
+  template:
+    src: etc/firewalld/services/ssh-custom.xml.j2
+    dest: /etc/firewalld/services/ssh-custom.xml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: firewalld | enable ssh-custom service
+  firewalld:
+    service: ssh-custom
+    permanent: true
+    state: enabled
+
+- name: ssh | install configuration file
+  template:
+    src: etc/ssh/sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0644'
+    validate: /usr/bin/sshd -t -f %s
+
+- name: systemd | create sshd.socket.d
+  file: 
+    path: /etc/systemd/system/sshd.socket.d
+    state: directory
+
+- name: systemd | install sshd.socket override
+  notify:
+    - systemd | restart sshd.socket
+  template:
+    src: etc/systemd/system/sshd.socket.d/override.conf.j2
+    dest: /etc/systemd/system/sshd.socket.d/override.conf
+    owner: root
+    group: root
+    mode: '0644'
+    
+- name: systemd | disable sshd.service
+  service: name=sshd.service enabled=false state=stopped
+  
+- name: systemd | enable sshd.socket
+  service: name=sshd.socket enabled=true state=started
+  
+- name: firewalld | disable ssh service
+  firewalld:
+    service: ssh
+    permanent: true
+    state: disabled

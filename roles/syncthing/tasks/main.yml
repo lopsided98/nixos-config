@@ -1,0 +1,30 @@
+- name: pacman | install syncthing
+  pacman: name=syncthing state=present
+
+- name: firewalld | install Syncthing service
+  copy:
+    src: etc/firewalld/services/syncthing.xml
+    dest: /etc/firewalld/services/syncthing.xml
+
+- name: firewalld | enable Syncthing service
+  firewalld:
+    service: syncthing
+    immediate: true
+    permanent: true
+    state: enabled
+
+- name: firewalld | add Syncthing web interface rule (IPv4)
+  firewalld:
+    rich_rule: 'rule family="ipv4" source address="{{ item }}" port protocol="tcp" port="8384" accept'
+    immediate: true
+    permanent: true
+    state: enabled
+  with_items: "{{ web_interface.allowed_ipv4 }}"
+
+- name: firewalld | add Syncthing web interface rule (IPv6)
+  firewalld:
+    rich_rule: 'rule family="ipv6" source address="{{ item }}" port protocol="tcp" port="8384" accept'
+    immediate: true
+    permanent: true
+    state: enabled
+  with_items: "{{ web_interface.allowed_ipv6 }}"

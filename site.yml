@@ -1,0 +1,6 @@
+- include: common.yml
+- include: firewall.yml
+- include: ssh.yml
+- include: syncthing.yml
+- include: dns.yml
+- include: backup-zfs.yml

@@ -1,0 +1,6 @@
+- name: systemd | restart sshd.socket
+  service:
+    name: sshd.socket
+    state: restarted
+    daemon_reload: true
+

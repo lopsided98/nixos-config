@@ -1,0 +1,5 @@
+- name: systemd | restart dnsupdate.timer
+  service:
+    name: dnsupdate.timer
+    state: restarted
+    daemon_reload: true

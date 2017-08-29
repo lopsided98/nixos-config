@@ -1,0 +1,5 @@
+- name: ZFS backup nodes
+  hosts: HP-Z420 Dell-Optiplex-780 ODROID-XU4
+
+  roles:
+    - backup-zfs

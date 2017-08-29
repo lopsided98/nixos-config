@@ -1,0 +1,5 @@
+- name: DNS server
+  hosts: RasPi2
+
+  roles:
+    - dns

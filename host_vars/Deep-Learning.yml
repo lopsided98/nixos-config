@@ -1,0 +1,9 @@
+---
+domains: [deep-learning.nsupdate.info]
+ip: 192.168.1.6
+
+# ssh
+ssh_port: 4246
+
+# dnsupdate
+dnsupdate_secret_key: 8ZCXb3nKum

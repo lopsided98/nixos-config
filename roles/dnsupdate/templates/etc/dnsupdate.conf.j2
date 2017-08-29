@@ -1,0 +1,17 @@
+address_provider:
+    ipv4: Web()
+    ipv6: Local("{{ args.interface }}")
+
+dns_services:
+{% include args.service_file | default("does-not-exist") ignore missing %}
+
+{% if args.hostname | default(false) %}
+    - type: NSUpdate
+      address_provider:
+        ipv4: None
+      args:
+          hostname: {{ args.hostname }}
+          secret_key: {{ args.secret_key }}
+{% endif %}
+    
+cache_file: /var/cache/dnsupdate/dnsupdate.cache

@@ -1,0 +1,6 @@
+<service>
+  <short>Syncthing</short>
+  <description>Open Source Continuous File Synchronization</description>
+  <port protocol="tcp" port="22000"/>
+</service>
+

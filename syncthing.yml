@@ -1,0 +1,9 @@
+- name: Syncthing node
+  hosts: ODROID-XU4 RasPi2
+
+  roles:
+    - role: syncthing
+      web_interface:
+        allowed_ipv4: ["{{ hostvars['RasPi2']['ansible_default_ipv4']['address'] }}"]
+        allowed_ipv6: ["{{ hostvars['RasPi2']['ansible_default_ipv6']['address'] }}"]
+      when: inventory_hostname != "RasPi2"

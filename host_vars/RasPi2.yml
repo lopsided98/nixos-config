@@ -1,0 +1,12 @@
+---
+ssh_port: 4242
+domains:
+  - raspi2.nsupdate.info
+  - raspi2.mooo.com
+  - ben.nsupdate.info
+  - hacker-hats.nsupdate.info
+  - gameadmin.nsupdate.info
+ip: 192.168.1.2
+
+dnsupdate_secret_key: UzZAWg2RW6
+dnsupdate_service_file: "files/{{ inventory_hostname }}/etc/dnsupdate.services.conf.j2"

@@ -1,0 +1,43 @@
+###################################
+# Managed by Ansible: DO NOT EDIT #
+###################################
+
+server:
+  use-syslog: yes
+  username: "dns"
+  directory: "/etc/unbound"
+  #auto-trust-anchor-file: trusted-key.key
+  access-control: 192.168.1.0/24 allow
+  root-hints: "/etc/unbound/root.hints"
+  #verbosity: 4
+  # optimization
+
+  num-threads: 4
+  so-reuseport: yes
+  prefetch: yes
+
+  # listen on all interfaces
+  interface: 0.0.0.0
+  interface: ::0
+
+  # override addresses for local servers
+
+  {% for host in groups['all'] %}
+    {% for domain in hostvars[host]['domains'] %}
+      local-zone: "{{ domain }}" typetransparent
+      local-data: "{{ domain }} A {{ hostvars[host]['ip'] }}"
+    {% endfor %}
+  {% endfor %}
+
+  # allow querying of dnscrypt-proxy
+  do-not-query-localhost: no
+
+  # forward anything else to dnscrypt-proxy
+forward-zone:
+  name: "."
+  forward-addr: ::1@5353
+  #forward-addr: 8.8.8.8
+
+remote-control:
+  control-enable: no
+

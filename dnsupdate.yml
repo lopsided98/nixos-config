@@ -1,0 +1,10 @@
+- name: Dynamic DNS update
+  hosts: all
+
+  roles:
+    - role: dnsupdate
+      args:
+        service_file: "{{ dnsupdate_service_file | default(omit) }}"
+        hostname: "{{ dnsupdate_hostname }}"
+        interface: "{{ dnsupdate_interface }}"
+        secret_key: "{{ dnsupdate_secret_key }}"

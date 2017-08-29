@@ -1,0 +1,10 @@
+---
+
+domains: [dell-optiplex-780.nsupdate.info]
+ip: 192.168.1.4
+
+# ssh
+ssh_port: 4244
+
+# dnsupdate
+dnsupdate_secret_key: cK2Adkzn9U

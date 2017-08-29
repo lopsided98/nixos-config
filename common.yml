@@ -1,0 +1,8 @@
+- name: Apply common configuration
+  hosts: all
+
+  roles:
+    - role: common
+      args:
+        users: "{{ common_users | combine(common_host_users | default({}), recursive=True) }}"
+        groups: "{{ common_groups | combine(common_host_groups | default({}), recursive=True) }}"

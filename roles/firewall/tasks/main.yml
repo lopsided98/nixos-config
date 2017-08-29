@@ -1,0 +1,5 @@
+- name: pacman | install firewalld
+  pacman: name=firewalld state=present
+    
+- name: systemd | enable firewalld
+  service: name=firewalld.service enabled=true state=started
