@@ -1,0 +1,5 @@
+- name: NGINX server + Let's Encrypt
+  hosts: RasPi2 HP-Z420
+
+  roles:
+    - letsencrypt

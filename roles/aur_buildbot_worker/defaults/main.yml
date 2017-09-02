@@ -1,0 +1,2 @@
+aur_buildbot_worker_service_name: aur-buildbot
+aur_buildbot_worker_description: AUR Buildbot worker on {{ inventory_hostname }}

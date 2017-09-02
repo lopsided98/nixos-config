@@ -1,0 +1,35 @@
+- name: pacman | install certbot
+  pacman: name=certbot state=present
+
+- name: nginx | install letsencrypt config
+  notify:
+    - systemd | reload nginx
+  copy:
+    src: etc/nginx/conf/letsencrypt.conf
+    dest: /etc/nginx/conf/letsencrypt.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: systemd | install certbot.service
+  notify:
+    - systemd | daemon-reload
+  copy:
+    src: etc/systemd/system/certbot.service
+    dest: /etc/systemd/system/certbot.service
+    owner: root
+    group: root
+    mode: 0644
+    
+- name: systemd | install certbot.timer
+  notify:
+    - systemd | daemon-reload
+  copy:
+    src: etc/systemd/system/certbot.timer
+    dest: /etc/systemd/system/certbot.timer
+    owner: root
+    group: root
+    mode: 0644
+    
+- name: systemd | enable certbot.timer
+  service: name=certbot.timer state=started enabled=true

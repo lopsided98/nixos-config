@@ -6,4 +6,4 @@ ip: 192.168.1.6
 ssh_port: 4246
 
 # dnsupdate
-dnsupdate_secret_key: 8ZCXb3nKum
+dnsupdate_secret_keys: [8ZCXb3nKum]

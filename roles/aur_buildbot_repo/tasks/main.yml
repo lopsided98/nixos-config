@@ -1,0 +1,19 @@
+- name: repository | create directory
+  file:
+    name: /srv/http/aur-buildbot
+    state: directory
+    owner: ben
+    group: http
+    mode: 0750
+
+- name: repository | create architectures
+  file:
+    name: /srv/http/aur-buildbot/{{ item }}
+    state: directory
+    owner: ben
+    group: http
+    mode: 0750
+  with_items:
+    - any
+    - x86_64
+    - armv7h

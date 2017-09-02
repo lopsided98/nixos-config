@@ -1,9 +1,13 @@
 ---
 ssh_port: 4245
-domains: [hp-z420.nsupdate.info]
+domains: [hp-z420.nsupdate.info, arch.awsmppl.com]
 ip: 192.168.1.5
 common_host_users:
   ben:
     groups: [wheel, libvirt]
 
-dnsupdate_secret_key: 5ws9ASG3hA
+dnsupdate_secret_keys: [5ws9ASG3hA, jWcKHK6QTG]
+
+aur_buildbot_worker_password: IccOWW6tkOlGXhT2nmFfi8XbajMI2DzA7Gqqq1pn
+
+nginx_worker_processes: 8

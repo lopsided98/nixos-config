@@ -1,0 +1,14 @@
+[Unit]
+Description={{ buildbot_worker_service_name }} worker
+Wants=network.target
+After=network.target
+
+[Service]
+WorkingDirectory=/var/lib/{{ buildbot_worker_service_name }}/worker
+ExecStart=/usr/bin/twistd3 -o --nodaemon --pidfile= --syslog --python="buildbot.tac"
+Restart=always
+User={{ buildbot_worker_service_name }}-worker
+
+[Install]
+WantedBy=multi-user.target
+

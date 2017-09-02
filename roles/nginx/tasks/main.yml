@@ -1,0 +1,66 @@
+- name: pacman | install nginx
+  pacman: name=nginx-mainline state=present
+  
+- name: nginx | create /etc/nginx/servers-available
+  file:
+    path: /etc/nginx/servers-available
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nginx | create /etc/nginx/servers-enabled
+  file:
+    path: /etc/nginx/servers-enabled
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nginx | install config file
+  notify:
+    - systemd | reload nginx
+  template:
+    src: etc/nginx/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+    
+- name: nginx | create /etc/nginx/conf
+  file:
+    path: /etc/nginx/conf
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nginx | create /etc/nginx/ssl
+  file:
+    path: /etc/nginx/ssl
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nginx | generate dhparam.pem
+  command: openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
+  args:
+    creates: /etc/nginx/ssl/dhparam.pem
+
+- name: firewalld | enable http service
+  firewalld:
+    service: http
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: firewalld | enable https service
+  firewalld:
+    service: https
+    permanent: true
+    immediate: true
+    state: enabled
+
+- name: systemd | enable nginx
+  service: name=nginx state=started enabled=true

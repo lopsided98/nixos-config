@@ -1,0 +1,5 @@
+- name: AUR Buildbot repository
+  hosts: HP-Z420
+
+  roles:
+    - role: aur_buildbot_repo

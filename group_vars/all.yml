@@ -13,5 +13,7 @@ common_groups:
     gid: 1000
 
 # dnsupdate
-dnsupdate_interface: "{{ ansible_default_ipv6.interface }}"
-dnsupdate_hostname: "{{ domains[0] }}"
+dnsupdate_domains: "{{ domains }}"
+
+# nginx_site
+nginx_site_email: benwolsieffer@gmail.com

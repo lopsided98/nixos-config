@@ -1,0 +1,5 @@
+dependencies:
+  - role: nginx_site
+    nginx_site_use_letsencrypt: false
+    nginx_site_name: aur-buildbot-repo
+    nginx_site_config: roles/aur_buildbot_repo/templates/aur-buildbot-repo.conf

@@ -1,0 +1,5 @@
+dependencies:
+  - role: letsencrypt
+    when: nginx_site_use_letsencrypt
+  - role: nginx
+    when: not nginx_site_use_letsencrypt

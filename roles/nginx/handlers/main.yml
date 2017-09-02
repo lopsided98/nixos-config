@@ -1,0 +1,2 @@
+- name: systemd | reload nginx
+  service: name=nginx state=reloaded

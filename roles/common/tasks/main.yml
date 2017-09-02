@@ -13,16 +13,32 @@
     comment: "{{ item.1.comment | default(omit) }}"
   with_together: ["{{ args.users.keys() }}", "{{ args.users.values() }}"]
 
-- name: pacman | custom repository file
+- name: pacman | aur-buildbot repository file
   copy:
-    src: etc/pacman.d/custom.conf
-    dest: /etc/pacman.d/custom.conf
+    src: etc/pacman.d/aur-buildbot.conf
+    dest: /etc/pacman.d/aur-buildbot.conf
     owner: root
     group: root
     mode: '0644'
 
-- name: pacman | custom repository include
+- name: pacman | mirrorlist
+  copy:
+    src: "{{ common_mirrorlist }}"
+    dest: /etc/pacman.d/mirrorlist
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: pacman | aur-buildbot repository include
   lineinfile:
     path: /etc/pacman.conf
     insertafter: EOF
-    line: "Include = /etc/pacman.d/custom.conf"
+    line: "Include = /etc/pacman.d/aur-buildbot.conf"
+    
+- name: install | hosts file
+  template:
+    src: etc/hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644

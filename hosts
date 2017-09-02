@@ -6,3 +6,17 @@ Dell-Optiplex-780
 
 [vm]
 Deep-Learning
+
+[aur_buildbot_worker]
+HP-Z420
+Dell-Optiplex-780
+ODROID-XU4
+
+[x86_64]
+Dell-Optiplex-780
+HP-Z420
+Deep-Learning
+
+[armv7h]
+ODROID-XU4
+RasPi2

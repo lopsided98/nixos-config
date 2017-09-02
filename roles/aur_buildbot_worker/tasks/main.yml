@@ -1,0 +1,67 @@
+- name: pacman | install devtools
+  pacman: name=devtools state=present
+
+- name: arch-chroot | create directory
+  file:
+    path: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot
+    state: directory
+    owner: "{{ aur_buildbot_worker_service_name }}-worker"
+    group: "{{ aur_buildbot_worker_service_name }}-worker"
+    
+- name: arch-chroot | initialize
+  command: /usr/bin/mkarchroot {{ '-s' if ansible_architecture == 'armv7l' else '' }} /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root base-devel
+  args:
+    creates: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root/etc/pacman.conf
+
+- name: arch-chroot | pacman | aur-buildbot repository include
+  lineinfile:
+    path: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root/etc/pacman.conf
+    insertafter: EOF
+    line: "Include = /etc/pacman.d/aur-buildbot.conf"
+
+- name: arch-chroot | pacman | aur-buildbot repository file
+  copy:
+    src: roles/common/files/etc/pacman.d/aur-buildbot.conf
+    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root/etc/pacman.d/aur-buildbot.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: create | .gnupg directory
+  file:
+    state: directory
+    path: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/.gnupg
+    owner: "{{ aur_buildbot_worker_service_name }}-worker"
+    group: "{{ aur_buildbot_worker_service_name }}-worker"
+    mode: '0700'
+
+- name: install | gpg.conf
+  copy:
+    src: base_dir/.gnupg/gpg.conf
+    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/.gnupg/gpg.conf
+    owner: "{{ aur_buildbot_worker_service_name }}-worker"
+    group: "{{ aur_buildbot_worker_service_name }}-worker"
+    mode: '0644'
+
+- name: sudoers | build scripts
+  template:
+    src: etc/sudoers.d/aur-buildbot-worker.j2
+    dest: /etc/sudoers.d/{{ aur_buildbot_worker_service_name }}-worker
+    owner: root
+    group: root
+    
+- name: install | update-chroot
+  template:
+    src: base_dir/update-chroot.j2
+    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/update-chroot
+    owner: root
+    group: root
+    mode: '0755'
+    
+- name: install | build-chroot
+  template:
+    src: base_dir/build-chroot.j2
+    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/build-chroot
+    owner: root
+    group: root
+    mode: '0755'

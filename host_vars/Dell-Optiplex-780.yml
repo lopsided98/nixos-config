@@ -7,4 +7,6 @@ ip: 192.168.1.4
 ssh_port: 4244
 
 # dnsupdate
-dnsupdate_secret_key: cK2Adkzn9U
+dnsupdate_secret_keys: [cK2Adkzn9U]
+
+aur_buildbot_worker_password: VKK4scBAqYuRmtuDUXZDz0E65voAOaj31UIoLH7t
