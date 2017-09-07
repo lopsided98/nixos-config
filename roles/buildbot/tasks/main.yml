@@ -59,6 +59,7 @@
     mode: '0640'
 
 - name: buildbot | create database
+  become: yes
   become_user: "{{ buildbot_name }}"
   notify:
     - systemd | restart buildbot

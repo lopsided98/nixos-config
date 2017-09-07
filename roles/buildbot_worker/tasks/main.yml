@@ -1,9 +1,12 @@
-- name: pacman | install buildbot-worker
-  pacman: name=buildbot-worker state=present
+- name: pacman | install buildbot-worker and dependencies
+  pacman: name={{ item }} state=present
+  with_items:
+    - buildbot-worker
+    - python-service-identity
 
 - name: buildbot-worker | create base directory
   file:
-    path: /var/lib/{{ buildbot_worker_service_name }}/worker
+    path: "{{ buildbot_worker_base_dir }}"
     state: directory
 
 - name: group | {{ buildbot_worker_service_name }}-worker
@@ -16,7 +19,7 @@
     name: "{{ buildbot_worker_service_name }}-worker"
     group: "{{ buildbot_worker_service_name }}-worker"
     shell: /usr/bin/nologin
-    home: /var/lib/{{ buildbot_worker_service_name }}/worker
+    home: "{{ buildbot_worker_base_dir }}"
     system: true
 
 - name: buildbot-worker | base directory permissions
@@ -26,29 +29,43 @@
     owner: "{{ buildbot_worker_service_name }}-worker"
     group: "{{ buildbot_worker_service_name }}-worker"
     mode: '0750'
-    
+
+- name: buildbot-worker | create config directory
+  file:
+    path: /etc/{{ buildbot_worker_service_name }}/worker
+    state: directory
+    owner: root
+    group: "{{ buildbot_worker_service_name }}-worker"
+    mode: '0750'
+
 - name: buildbot-worker | create worker config
-  command: /usr/bin/buildbot-worker create-worker /var/lib/{{ buildbot_worker_service_name }}/worker {{ buildbot_worker_master }} {{ buildbot_worker_name }} {{ buildbot_worker_password }}
-  become: yes
-  become_user: "{{ buildbot_worker_service_name }}-worker"
+  template:
+    src: etc/buildbot/worker/buildbot.tac.j2
+    dest: /etc/{{ buildbot_worker_service_name }}/worker/buildbot.tac
+    owner: root
+    group: "{{ buildbot_worker_service_name }}-worker"
+    mode: '0640'
   notify:
     - systemd | restart buildbot-worker
-  args:
-    creates: /var/lib/{{ buildbot_worker_service_name }}/worker/buildbot.tac
-    
+
+- name: buildbot-worker | remove old config
+  file:
+    path: "{{ buildbot_worker_base_dir }}/buildbot.tac"
+    state: absent
+
 - name: buildbot-worker | admin file
   notify:
     - systemd | restart buildbot-worker
   template:
     src: base_dir/info/admin.j2
-    dest: /var/lib/{{ buildbot_worker_service_name }}/worker/info/admin
+    dest: "{{ buildbot_worker_base_dir }}/info/admin"
 
 - name: buildbot-worker | host file
   notify:
     - systemd | restart buildbot-worker
   template:
     src: base_dir/info/host.j2
-    dest: /var/lib/{{ buildbot_worker_service_name }}/worker/info/host
+    dest: "{{ buildbot_worker_base_dir }}/info/host"
     
 - name: systemd | install {{ buildbot_worker_service_name }}-worker.service
   notify:
