@@ -1,0 +1,16 @@
+[Unit]
+Description={{ buildbot_description }} Master
+Wants=network.target
+After=network.target
+
+[Service]
+WorkingDirectory={{ buildbot_base_dir }}
+Environment=PYTHONPATH=/etc/{{ buildbot_name }}/master
+ExecStart=/usr/bin/twistd3 -o --nodaemon --pidfile= --syslog --python="/etc/{{ buildbot_name }}/master/buildbot.tac"
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+User={{ buildbot_name }}
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,7 @@
+---
+dependencies:
+  - role: buildbot
+    buildbot_name: "{{ aur_buildbot_name }}"
+    buildbot_port: "{{ aur_buildbot_port }}"
+    buildbot_config_file: "{{ aur_buildbot_config_file }}"
+    buildbot_description: "{{ aur_buildbot_description }}"

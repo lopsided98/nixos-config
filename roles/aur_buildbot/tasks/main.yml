@@ -1,0 +1,26 @@
+- name: pacman | install dependencies
+  pacman: name={{ item }} state=present
+  with_items:
+    - python3-aur
+    - python-requests
+    - python-yaml
+
+- name: buildbot | packages.py
+  notify:
+    - systemd | reload aur-buildbot
+  copy:
+    src: etc/aur-buildbot/master/packages.py
+    dest: /etc/{{ aur_buildbot_name }}/master/packages.py
+    owner: root
+    group: "{{ aur_buildbot_name }}"
+    mode: '0640'
+
+- name: buildbot | config.yml
+  notify:
+    - systemd | reload aur-buildbot
+  copy:
+    src: etc/aur-buildbot/master/config.yml
+    dest: /etc/{{ aur_buildbot_name }}/master/config.yml
+    owner: root
+    group: "{{ aur_buildbot_name }}"
+    mode: '0640'

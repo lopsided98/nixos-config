@@ -7,7 +7,38 @@
     state: directory
     owner: "{{ aur_buildbot_worker_service_name }}-worker"
     group: "{{ aur_buildbot_worker_service_name }}-worker"
-    
+
+- name: aur-buildbot-worker | create scripts directory
+  file:
+    path: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: '0755'
+
+- name: install | ARM workaround scripts
+  copy: 
+    src: scripts/{{ item }}
+    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts/{{ item }}
+    owner: root
+    group: root
+    mode: '0755'
+  when: ansible_architecture == 'armv7l'
+  with_items:
+    - arch-nspawn
+    - makepkg
+
+- name: install | script templates
+  template:
+    src: scripts/{{ item }}.j2
+    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts/{{ item }}
+    owner: root
+    group: root
+    mode: '0755'
+  with_items:
+    - update-chroot
+    - build-chroot
+ 
 - name: arch-chroot | initialize
   command: /usr/bin/mkarchroot {{ '-s' if ansible_architecture == 'armv7l' else '' }} /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root base-devel
   args:
@@ -50,18 +81,4 @@
     owner: root
     group: root
     
-- name: install | update-chroot
-  template:
-    src: base_dir/update-chroot.j2
-    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/update-chroot
-    owner: root
-    group: root
-    mode: '0755'
-    
-- name: install | build-chroot
-  template:
-    src: base_dir/build-chroot.j2
-    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/build-chroot
-    owner: root
-    group: root
-    mode: '0755'
+

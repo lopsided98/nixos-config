@@ -1,0 +1,63 @@
+architectures:
+  x86_64:
+    - HP-Z420
+    - Dell-Optiplex-780
+  armv7h:
+    - ODROID-XU4
+packages:
+  buildbot: {}
+  python3-aur: {}
+  dnsupdate: {}
+  dnsupdate-git: {}
+  python-keras: {}
+  google-chrome: {}
+  telegraf: {}
+  tinyssh-convert: {}
+  mkinitcpio-netconf: {}
+  mkinitcpio-tinyssh: {}
+  mkinitcpio-utils: {}
+  pacaur: {}
+  arm-linux-gnueabihf-gcc: {}
+  redeclipse: {}
+  python-scikit-image: {}
+  ldcad: {}
+  keepass-plugin-http: {}
+  keepass-plugin-quickunlock: {}
+  keepass-plugin-traytotp: {}
+  qdriverstation: {}
+  zotero: {}
+  solaar: {}
+  clion: {}
+  pycharm-professional: {}
+  gnome-mpv: {}
+  cutecom: {}
+  webstorm: {}
+  android-studio: {}
+  android-studio-canary: {}
+  ghetto-skype: {}
+  genymotion: {}
+  influxdb: {}
+  ucspi-tcp: 
+    architectures: [armv7h]
+  python-wakeonlan: {}
+  sanoid-git: {}
+  dkms-sorted: {}
+  zfs-dkms:
+    architectures: [armv7h]
+  ovpngen: {}
+  sbupdate-git: {}
+  libvirt-zfs:
+    dependencies: [zfs-utils]
+  chrome-gnome-shell-git: {}
+  dislocker: {}
+  dmg2img: {}
+  dropbox: {}
+  dex2jar: {}
+  lejos-nxj: {}
+  eagle: {}
+  python-v4l2capture:
+    architectures: [armv7h]
+  heimdall-git: {}
+  grpc:
+    architectures: [armv7h]
+  jd-gui: {}

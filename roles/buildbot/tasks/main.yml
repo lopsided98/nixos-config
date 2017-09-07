@@ -1,0 +1,104 @@
+- name: pacman | install buildbot and dependencies
+  pacman: name={{ item }} state=present
+  with_items:
+    - buildbot
+    - python-service-identity
+
+- name: buildbot | create base directory
+  file:
+    path: "{{ buildbot_base_dir }}"
+    state: directory
+
+- name: group | {{ buildbot_name }}
+  group:
+    name: "{{ buildbot_name }}"
+    system: true
+
+- name: user | {{ buildbot_name }}
+  user:
+    name: "{{ buildbot_name }}"
+    group: "{{ buildbot_name }}"
+    shell: /usr/bin/nologin
+    home: "{{ buildbot_base_dir }}"
+    system: true
+
+- name: buildbot | base directory permissions
+  file:
+    path: "/var/lib/{{ buildbot_name }}/master"
+    state: directory
+    owner: "{{ buildbot_name }}"
+    group: "{{ buildbot_name }}"
+    mode: '0750'
+
+- name: buildbot | create config directory
+  file:
+    path: /etc/{{ buildbot_name }}/master
+    state: directory
+    owner: root
+    group: "{{ buildbot_name }}"
+    mode: '0750'
+
+- name: buildbot | config file
+  notify:
+    - systemd | reload buildbot
+  template:
+    src: "{{ buildbot_config_file }}"
+    dest: /etc/{{ buildbot_name }}/master/master.cfg
+    owner: root
+    group: "{{ buildbot_name }}"
+    mode: '0640'
+    
+- name: buildbot | twisted config file
+  notify:
+    - systemd | restart buildbot
+  template:
+    src: etc/buildbot/master/buildbot.tac.j2
+    dest: /etc/{{ buildbot_name }}/master/buildbot.tac
+    owner: root
+    group: "{{ buildbot_name }}"
+    mode: '0640'
+
+- name: buildbot | create database
+  become_user: "{{ buildbot_name }}"
+  notify:
+    - systemd | restart buildbot
+  command: buildbot create-master {{ buildbot_base_dir | quote }}
+  args:
+    creates: "{{ buildbot_base_dir }}/state.sqlite"
+
+- name: systemd | install {{ buildbot_name }}.service
+  notify:
+    - systemd | restart buildbot
+  template:
+    src: etc/systemd/system/buildbot.service.j2
+    dest: /etc/systemd/system/{{ buildbot_name }}.service
+    owner: root
+    group: root
+    mode: '0644'
+    
+- name: systemd | enable {{ buildbot_name }}.service
+  service: name={{ buildbot_name }}.service enabled=true daemon_reload=true
+
+- name: firewalld | check {{ buildbot_name }} service
+  stat:
+    path: /etc/firewalld/services/{{ buildbot_name }}.xml
+  register: firewalld_service
+
+- name: firewalld | copy {{ buildbot_name }} service
+  template:
+    src: etc/firewalld/services/buildbot.xml.j2
+    dest: /etc/firewalld/services/{{ buildbot_name }}.xml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: firewalld | create {{ buildbot_name }} service
+  command: firewallctl new -p service -f /etc/firewalld/services/{{ buildbot_name }}.xml
+  when: not firewalld_service.stat.exists
+
+- name: firewalld | enable {{ buildbot_name }} service
+  firewalld:
+    service: "{{ buildbot_name }}"
+    permanent: true
+    immediate: true
+    state: enabled

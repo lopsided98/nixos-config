@@ -1,2 +1,3 @@
-{{ aur_buildbot_worker_service_name }}-worker ALL=(ALL) NOPASSWD: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/update-chroot
-{{ aur_buildbot_worker_service_name }}-worker ALL=(ALL) NOPASSWD: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/build-chroot *
+Defaults:{{ aur_buildbot_worker_service_name }}-worker secure_path="/var/lib/{{ aur_buildbot_worker_service_name }}/scripts:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+{{ aur_buildbot_worker_service_name }}-worker ALL=(ALL) NOPASSWD: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts/update-chroot
+{{ aur_buildbot_worker_service_name }}-worker ALL=(ALL) NOPASSWD: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts/build-chroot *

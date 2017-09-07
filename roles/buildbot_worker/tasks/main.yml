@@ -25,7 +25,7 @@
     state: directory
     owner: "{{ buildbot_worker_service_name }}-worker"
     group: "{{ buildbot_worker_service_name }}-worker"
-    mode: 0750
+    mode: '0750'
     
 - name: buildbot-worker | create worker config
   command: /usr/bin/buildbot-worker create-worker /var/lib/{{ buildbot_worker_service_name }}/worker {{ buildbot_worker_master }} {{ buildbot_worker_name }} {{ buildbot_worker_password }}

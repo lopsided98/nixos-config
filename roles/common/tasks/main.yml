@@ -13,6 +13,15 @@
     comment: "{{ item.1.comment | default(omit) }}"
   with_together: ["{{ args.users.keys() }}", "{{ args.users.values() }}"]
 
+- name: install | sudoers
+  copy:
+    src: etc/sudoers
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: '0440'
+    validate: visudo -cf %s
+
 - name: pacman | aur-buildbot repository file
   copy:
     src: etc/pacman.d/aur-buildbot.conf
@@ -41,4 +50,4 @@
     dest: /etc/hosts
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'

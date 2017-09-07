@@ -1,0 +1,5 @@
+- name: systemd | restart buildbot
+  service: name={{ buildbot_name }}.service state=restarted daemon_reload=true
+
+- name: systemd | reload buildbot
+  service: name={{ buildbot_name }}.service state=reloaded
