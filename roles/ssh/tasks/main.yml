@@ -1,13 +1,22 @@
 - name: pacman | install OpenSSH
   pacman: name=openssh state=present
 
-- name: firewalld | create ssh-custom service
+- name: firewalld | check ssh-custom service
+  stat:
+    path: /etc/firewalld/services/ssh-custom.xml
+  register: firewalld_service
+
+- name: firewalld | copy ssh-custom service
   template:
     src: etc/firewalld/services/ssh-custom.xml.j2
     dest: /etc/firewalld/services/ssh-custom.xml
     owner: root
     group: root
     mode: '0644'
+
+- name: firewalld | create ssh-custom service
+  command: firewallctl new -p service -f /etc/firewalld/services/ssh-custom.xml
+  when: not firewalld_service.stat.exists
 
 - name: firewalld | enable ssh-custom service
   firewalld:
@@ -16,9 +25,25 @@
     immediate: true
     state: enabled
 
-- name: ssh | install configuration file
+- name: ssh | create dropin directory
+  file:
+    path: /etc/ssh/sshd_config.d
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: ssh | base configuration file
   template:
-    src: etc/ssh/sshd_config.j2
+    src: etc/ssh/sshd_config.d/00-base.j2
+    dest: /etc/ssh/sshd_config.d/00-base
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: ssh | assemble configuration file
+  assemble:
+    src: /etc/ssh/sshd_config.d/
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
@@ -34,8 +59,8 @@
   notify:
     - systemd | restart sshd.socket
   template:
-    src: etc/systemd/system/sshd.socket.d/override.conf.j2
-    dest: /etc/systemd/system/sshd.socket.d/override.conf
+    src: etc/systemd/system/sshd.socket.d/50-port.conf.j2
+    dest: /etc/systemd/system/sshd.socket.d/50-port.conf
     owner: root
     group: root
     mode: '0644'
