@@ -2,3 +2,5 @@ buildbot_name: buildbot
 buildbot_base_dir: /var/lib/{{ buildbot_name }}/master
 buildbot_worker_description: Buildbot
 buildbot_port: 9989
+buildbot_web_interface_port: 8010
+buildbot_web_interface_allowed_ipv4: []

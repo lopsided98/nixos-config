@@ -19,7 +19,7 @@
     immediate: true
     permanent: true
     state: enabled
-  with_items: "{{ web_interface.allowed_ipv4 }}"
+  with_items: "{{ syncthing_web_interface_allowed_ipv4 }}"
 
 - name: firewalld | add Syncthing web interface rule (IPv6)
   firewalld:
@@ -27,4 +27,4 @@
     immediate: true
     permanent: true
     state: enabled
-  with_items: "{{ web_interface.allowed_ipv6 }}"
+  with_items: "{{ syncthing_web_interface_allowed_ipv6 }}"

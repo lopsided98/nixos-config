@@ -318,10 +318,10 @@ c['titleURL'] = "https://aur.archlinux.org"
 # the 'www' entry below, but with an externally-visible host name which the
 # buildbot cannot figure out without some help.
 
-c['buildbotURL'] = "http://localhost:8010/"
+c['buildbotURL'] = "https://ben.nsupdate.info/hp-z420/aur-buildbot/"
 
 # minimalistic config to activate new web UI
-c['www'] = dict(port=8010, plugins=dict(waterfall_view={}, console_view={}))
+c['www'] = dict(port={{ buildbot_web_interface_port }}, plugins=dict(waterfall_view={}, console_view={}))
 
 c['buildbotNetUsageData'] = 'basic'
 

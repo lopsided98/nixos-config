@@ -103,3 +103,12 @@
     permanent: true
     immediate: true
     state: enabled
+
+- name: firewalld | web interface rule (IPv4)
+  firewalld:
+    rich_rule: 'rule family="ipv4" source address="{{ item }}" port protocol="tcp" port="{{ buildbot_web_interface_port }}" accept'
+    immediate: true
+    permanent: true
+    state: enabled
+  with_items: "{{ buildbot_web_interface_allowed_ipv4 }}"
+

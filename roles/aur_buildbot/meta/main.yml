@@ -5,3 +5,5 @@ dependencies:
     buildbot_port: "{{ aur_buildbot_port }}"
     buildbot_config_file: "{{ aur_buildbot_config_file }}"
     buildbot_description: "{{ aur_buildbot_description }}"
+    buildbot_web_interface_port: "{{ aur_buildbot_web_interface_port }}"
+    buildbot_web_interface_allowed_ipv4: "{{ aur_buildbot_web_interface_allowed_ipv4 }}"

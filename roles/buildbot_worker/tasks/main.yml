@@ -48,11 +48,6 @@
   notify:
     - systemd | restart buildbot-worker
 
-- name: buildbot-worker | remove old config
-  file:
-    path: "{{ buildbot_worker_base_dir }}/buildbot.tac"
-    state: absent
-
 - name: buildbot-worker | admin file
   notify:
     - systemd | restart buildbot-worker
