@@ -1,0 +1,8 @@
+{% for domain, secret_key in dnsupdate_domains | zip(dnsupdate_secret_keys) %}
+    - type: NSUpdate
+      address_provider:
+        ipv6: None
+      args:
+          hostname: {{ domain }}
+          secret_key: {{ secret_key }}
+{% endfor %}

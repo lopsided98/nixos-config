@@ -9,6 +9,6 @@ domains:
 ip: 192.168.1.2
 
 dnsupdate_secret_keys: [UzZAWg2RW6]
-dnsupdate_service_file: "files/{{ inventory_hostname }}/etc/dnsupdate.services.conf.j2"
+dnsupdate_service_file: "templates/{{ inventory_hostname }}/etc/dnsupdate.services.conf.j2"
 
 nginx_worker_processes: 4

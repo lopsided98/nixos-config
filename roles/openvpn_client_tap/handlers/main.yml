@@ -1,0 +1,2 @@
+- name: systemd | restart openvpn
+  systemd: name=openvpn-client@{{ openvpn_client_tap_name }} state=restarted

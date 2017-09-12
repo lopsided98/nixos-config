@@ -1,0 +1,5 @@
+- name: OpenVPN client to connect to home network
+  hosts: dartmouth_network
+
+  roles:
+    - role: openvpn_client_home_network

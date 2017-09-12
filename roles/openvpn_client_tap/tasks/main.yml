@@ -1,0 +1,9 @@
+- name: openvpn | install config file
+  notify:
+    - systemd | restart openvpn
+  template:
+    src: "{{ openvpn_client_tap_config_file }}"
+    dest: /etc/openvpn/client/{{ openvpn_client_tap_name }}.conf
+    owner: root
+    group: root
+    mode: '0644'

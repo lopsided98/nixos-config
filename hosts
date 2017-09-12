@@ -20,3 +20,12 @@ Deep-Learning
 [armv7h]
 ODROID-XU4
 RasPi2
+
+[home_network]
+RasPi2
+Dell-Optiplex-780
+ODROID-XU4
+Deep-Learning
+
+[dartmouth_network]
+HP-Z420

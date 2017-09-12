@@ -1,12 +1,15 @@
 address_provider:
     ipv4: Web()
+{% if dnsupdate_enable_ipv6 | default(true) %}
     ipv6: Local("{{ dnsupdate_interface }}")
+{% endif %}
 
 dns_services:
 {% if dnsupdate_service_file | default(false) %}
 {% include dnsupdate_service_file %}
 {% endif %}
 
+{% if dnsupdate_enable_ipv6 | default(true) %}
 {% for domain, secret_key in dnsupdate_domains | zip(dnsupdate_secret_keys) %}
     - type: NSUpdate
       address_provider:
@@ -15,5 +18,6 @@ dns_services:
           hostname: {{ domain }}
           secret_key: {{ secret_key }}
 {% endfor %}
+{% endif %}
     
 cache_file: /var/cache/dnsupdate/dnsupdate.cache

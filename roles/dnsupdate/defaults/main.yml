@@ -1,1 +1,1 @@
-dnsupdate_interface: "{{ ansible_default_ipv6.interface }}"
+dnsupdate_interface: "{{ ansible_default_ipv6.interface | default('no-ipv6')}}"

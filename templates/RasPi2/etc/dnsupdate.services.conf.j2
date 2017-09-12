@@ -15,7 +15,7 @@
           ipv4_key: z7AJNkZ5ZAg3zzz1462BgFtC
           ipv6_key: vsdGrZzZx3KATgO8IHU4DB3Z
 
-{% for host in groups['all'] %}
+{% for host in groups['home_network'] %}
 {% for domain, secret_key in hostvars[host]['dnsupdate_domains'] | zip(hostvars[host]['dnsupdate_secret_keys']) %}
     - type: NSUpdate
       address_provider:
