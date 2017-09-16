@@ -267,6 +267,7 @@ common_steps = [
     steps.Git(
         name='Download package repo',
         repourl=util.Interpolate('https://aur.archlinux.org/%(prop:project)s.git'),
+        alwaysUseLatest=True,
         branch='master',
         mode='full',
         method='fresh'

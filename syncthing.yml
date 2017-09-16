@@ -1,5 +1,5 @@
 - name: Syncthing node
-  hosts: ODROID-XU4 RasPi2
+  hosts: ODROID-XU4 HP-Z420 RasPi2
 
   roles:
     - role: syncthing

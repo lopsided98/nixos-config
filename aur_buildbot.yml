@@ -5,3 +5,10 @@
     - role: aur_buildbot
       aur_buildbot_web_interface_allowed_ipv4: ["{{ hostvars['RasPi2']['ansible_default_ipv4']['address'] }}"]
       when: inventory_hostname != "RasPi2"
+      
+- name: AUR Buildbot Repository
+  hosts: HP-Z420
+
+  roles:
+    - role: aur_buildbot_repo
+

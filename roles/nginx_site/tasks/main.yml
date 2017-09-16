@@ -18,8 +18,10 @@
     group: root
     state: link
 
+- meta: flush_handlers
+
 - name: certbot | request certificate
-  command: /usr/bin/certbot --email {{ nginx_site_email }} --webroot -w /var/lib/letsencrypt/ -d {{ item }}
+  command: /usr/bin/certbot --email {{ nginx_site_email }} --webroot -w /var/lib/letsencrypt/ -d {{ item }} --non-interactive --agree-tos certonly
   args:
     creates: /etc/letsencrypt/live/{{ item }}
   with_items: "{{ nginx_site_domains }}"

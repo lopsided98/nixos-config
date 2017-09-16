@@ -2,7 +2,7 @@
   file:
     name: /srv/http/aur-buildbot
     state: directory
-    owner: ben
+    owner: aur-buildbot
     group: http
     mode: 0750
 
@@ -10,7 +10,7 @@
   file:
     name: /srv/http/aur-buildbot/{{ item }}
     state: directory
-    owner: ben
+    owner: aur-buildbot
     group: http
     mode: 0750
   with_items:

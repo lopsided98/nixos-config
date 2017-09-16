@@ -10,4 +10,6 @@ dnsupdate_secret_keys: [5ws9ASG3hA, jWcKHK6QTG]
 
 aur_buildbot_worker_password: IccOWW6tkOlGXhT2nmFfi8XbajMI2DzA7Gqqq1pn
 
+aur_buildbot_repo_domains: ['arch.awsmppl.com']
+
 nginx_worker_processes: 8

@@ -1,0 +1,4 @@
+syncthing_web_interface_port: 8384
+syncthing_web_interface_address: '[::]'
+syncthing_web_interface_allowed_ipv4: []
+syncthing_web_interface_allowed_ipv6: []

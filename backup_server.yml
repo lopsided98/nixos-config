@@ -1,0 +1,7 @@
+- include: syncthing.yml
+
+- name: Backup server
+  hosts: HP-Z420 ODROID-XU4
+
+  roles:
+    - role: backup_server
