@@ -305,6 +305,18 @@ for arch, workers in architectures.items():
 # has a variety to choose from, like IRC bots.
 
 c['services'] = []
+ 
+c['services'].append(reporters.MailNotifier(
+    mode=('failing', 'exception', 'warnings'),
+    fromaddr="aur-buildbot@hp-z420.nsupdate.com",
+    sendToInterestedUsers=False,
+    extraRecipients=["benwolsieffer@gmail.com"],
+    relayhost="smtp.gmail.com",
+    smtpPort=587,
+    useTls=True,
+    smtpUser="benwolsieffer@gmail.com",
+    smtpPassword="{{ aur_buildbot_smtp_password }}"
+))
 
 ####### PROJECT IDENTITY
 

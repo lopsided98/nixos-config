@@ -61,3 +61,4 @@ packages:
   grpc:
     architectures: [armv7h]
   jd-gui: {}
+  chromium-vaapi: {}
