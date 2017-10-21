@@ -4,3 +4,4 @@
     state: restarted
     daemon_reload: true
 
+- import_tasks: firewall.yml

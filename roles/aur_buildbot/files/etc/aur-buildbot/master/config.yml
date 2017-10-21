@@ -25,6 +25,7 @@ packages:
   keepass-plugin-quickunlock: {}
   keepass-plugin-traytotp: {}
   qdriverstation: {}
+  qdriverstation-git: {}
   zotero: {}
   solaar: {}
   clion: {}
@@ -62,3 +63,10 @@ packages:
     architectures: [armv7h]
   jd-gui: {}
   chromium-vaapi: {}
+  lcov: {}
+  btrfs-snap: {}
+  python-nss: {}
+  python-port-for: {}
+  obfuscate: {}
+  python-sphinx-autobuild: {}
+  slapi-nis: {}  

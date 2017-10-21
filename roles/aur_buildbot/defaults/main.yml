@@ -4,3 +4,4 @@ aur_buildbot_config_file: roles/aur_buildbot/templates/etc/aur-buildbot/master/m
 aur_buildbot_description: AUR Buildbot
 aur_buildbot_web_interface_port: 8010
 aur_buildbot_web_interface_allowed_ipv4: []
+aur_buildbot_web_interface_allowed_ipv6: []

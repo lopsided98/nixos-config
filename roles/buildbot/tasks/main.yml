@@ -76,39 +76,14 @@
     owner: root
     group: root
     mode: '0644'
-    
-- name: systemd | enable {{ buildbot_name }}.service
-  service: name={{ buildbot_name }}.service enabled=true daemon_reload=true
 
-- name: firewalld | check {{ buildbot_name }} service
-  stat:
-    path: /etc/firewalld/services/{{ buildbot_name }}.xml
-  register: firewalld_service
-
-- name: firewalld | copy {{ buildbot_name }} service
+- name: firewall | buildbot dropin
+  notify:
+    - reload firewall
   template:
-    src: etc/firewalld/services/buildbot.xml.j2
-    dest: /etc/firewalld/services/{{ buildbot_name }}.xml
+    src: etc/nftables.d/inet/input/52-buildbot.conf.j2
+    dest: /etc/nftables.d/inet/input/52-buildbot.conf
     owner: root
     group: root
     mode: '0644'
-
-- name: firewalld | create {{ buildbot_name }} service
-  command: firewallctl new -p service -f /etc/firewalld/services/{{ buildbot_name }}.xml
-  when: not firewalld_service.stat.exists
-
-- name: firewalld | enable {{ buildbot_name }} service
-  firewalld:
-    service: "{{ buildbot_name }}"
-    permanent: true
-    immediate: true
-    state: enabled
-
-- name: firewalld | web interface rule (IPv4)
-  firewalld:
-    rich_rule: 'rule family="ipv4" source address="{{ item }}" port protocol="tcp" port="{{ buildbot_web_interface_port }}" accept'
-    immediate: true
-    permanent: true
-    state: enabled
-  with_items: "{{ buildbot_web_interface_allowed_ipv4 }}"
 

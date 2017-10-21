@@ -1,29 +1,15 @@
-- name: pacman | install OpenSSH
+- name: install OpenSSH
   pacman: name=openssh state=present
 
-- name: firewalld | check ssh-custom service
-  stat:
-    path: /etc/firewalld/services/ssh-custom.xml
-  register: firewalld_service
-
-- name: firewalld | copy ssh-custom service
+- name: firewall | install SSH dropin
+  notify:
+    - systemd | reload firewall
   template:
-    src: etc/firewalld/services/ssh-custom.xml.j2
-    dest: /etc/firewalld/services/ssh-custom.xml
+    src: etc/nftables.d/inet/input/50-ssh.conf.j2
+    dest: /etc/nftables.d/inet/input/50-ssh.conf
     owner: root
     group: root
     mode: '0644'
-
-- name: firewalld | create ssh-custom service
-  command: firewallctl new -p service -f /etc/firewalld/services/ssh-custom.xml
-  when: not firewalld_service.stat.exists
-
-- name: firewalld | enable ssh-custom service
-  firewalld:
-    service: ssh-custom
-    permanent: true
-    immediate: true
-    state: enabled
 
 - name: ssh | create dropin directory
   file:
@@ -70,9 +56,3 @@
   
 - name: systemd | enable sshd.socket
   service: name=sshd.socket enabled=true state=started
-  
-- name: firewalld | disable ssh service
-  firewalld:
-    service: ssh
-    permanent: true
-    state: disabled

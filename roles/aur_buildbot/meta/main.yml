@@ -7,3 +7,4 @@ dependencies:
     buildbot_description: "{{ aur_buildbot_description }}"
     buildbot_web_interface_port: "{{ aur_buildbot_web_interface_port }}"
     buildbot_web_interface_allowed_ipv4: "{{ aur_buildbot_web_interface_allowed_ipv4 }}"
+    buildbot_web_interface_allowed_ipv6: "{{ aur_buildbot_web_interface_allowed_ipv6 }}"

@@ -1,2 +1,4 @@
 - name: systemd | reload nginx
   service: name=nginx state=reloaded
+  
+- import_tasks: firewall.yml

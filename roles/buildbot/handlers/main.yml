@@ -3,3 +3,6 @@
 
 - name: systemd | reload buildbot
   service: name={{ buildbot_name }}.service state=reloaded
+
+- name: reload firewall
+  service: name=nftables state=reloaded

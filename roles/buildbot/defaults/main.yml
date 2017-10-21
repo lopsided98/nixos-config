@@ -4,3 +4,4 @@ buildbot_worker_description: Buildbot
 buildbot_port: 9989
 buildbot_web_interface_port: 8010
 buildbot_web_interface_allowed_ipv4: []
+buildbot_web_interface_allowed_ipv6: []
