@@ -47,8 +47,7 @@ packages:
     architectures: [armv7h]
   ovpngen: {}
   sbupdate-git: {}
-  libvirt-zfs:
-    dependencies: [zfs-utils]
+  libvirt-zfs: {}
   chrome-gnome-shell-git: {}
   dislocker: {}
   dmg2img: {}
@@ -61,7 +60,8 @@ packages:
   heimdall-git: {}
   grpc:
     architectures: [armv7h]
-  jd-gui: {}
+  jd-gui:
+    dependencies: [jdk8-openjdk]
   chromium-vaapi: {}
   lcov: {}
   btrfs-snap: {}

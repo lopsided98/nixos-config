@@ -1,0 +1,83 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 9 (0x9)
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN=Ben Wolsieffer's CA
+        Validity
+            Not Before: Oct 22 22:34:08 2017 GMT
+            Not After : Oct 20 22:34:08 2027 GMT
+        Subject: CN=KittyCop
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d1:ce:be:9b:34:77:2b:f9:07:ff:c3:aa:71:84:
+                    77:6f:7a:cd:df:c0:b3:36:5a:fa:a8:9e:e9:e5:b9:
+                    a0:fd:3f:90:5d:7c:a8:0e:94:97:aa:fb:d4:c3:6c:
+                    bf:19:ed:18:77:aa:0e:78:d9:d7:2c:28:8b:8d:d7:
+                    c6:51:9f:54:69:11:e0:12:92:b7:b0:4e:85:b5:81:
+                    8a:f8:5e:37:4e:18:fb:bf:fc:aa:65:c7:72:ee:6f:
+                    65:83:54:35:9f:00:80:9c:45:c0:9c:01:9c:ec:fa:
+                    c3:c0:1d:cd:b6:1c:e5:92:83:d3:d3:41:43:72:c7:
+                    4f:49:72:8f:45:9d:e1:9b:13:ee:f7:dd:45:dd:ab:
+                    64:f7:3d:fc:10:a1:8e:fa:f9:1e:c9:cb:f9:e7:c2:
+                    ea:29:a3:1b:91:e5:3c:7d:56:a6:4b:7a:c5:e6:69:
+                    ab:61:48:51:02:c2:c1:a5:ee:60:d9:0c:6c:11:da:
+                    db:a1:75:43:ec:89:16:ec:45:45:cc:9e:a0:0e:77:
+                    29:26:c1:e0:41:41:61:1c:e7:07:5a:6f:ee:61:44:
+                    81:98:33:5f:bb:48:eb:3e:ee:d5:ad:a8:f0:75:5f:
+                    c6:60:37:3d:d6:ab:b3:24:2f:83:79:12:f0:a8:ea:
+                    37:fd:f3:65:ec:16:6e:07:df:c6:86:1c:23:cf:69:
+                    6d:9b
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                80:37:0C:5D:DE:FB:AE:9A:4A:B9:22:D8:20:F9:82:8F:43:DE:D9:A3
+            X509v3 Authority Key Identifier: 
+                keyid:EC:2A:B0:F3:D1:8E:EC:E7:11:14:D6:7E:28:CA:16:A6:E8:B9:4C:A7
+                DirName:/CN=Ben Wolsieffer's CA
+                serial:A1:13:01:7A:32:24:CE:E3
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha256WithRSAEncryption
+         7d:62:c5:23:9c:1d:f6:6f:f4:0a:cb:8e:45:ab:c4:5a:86:66:
+         2e:82:71:44:ae:ba:9c:4d:1d:64:2e:f6:54:54:74:6e:22:4b:
+         96:28:48:f1:11:01:9f:89:ee:3b:59:be:f9:c6:10:04:05:75:
+         60:75:2a:e1:68:3a:75:98:ab:8f:24:04:f3:01:da:f4:a1:7d:
+         ba:bb:71:c2:89:da:22:92:d8:9c:26:3e:63:d1:f0:b1:30:ab:
+         90:40:f2:7d:26:59:8b:99:48:9b:bc:81:41:97:3e:84:bd:a0:
+         99:3f:39:e0:06:34:3f:cf:67:19:06:12:a2:61:59:5c:2e:2b:
+         13:05:0c:6a:a6:f6:cf:e3:57:ec:0c:8a:3d:c3:31:36:b0:7f:
+         ab:4e:57:b7:2e:ba:c7:79:8e:94:d4:66:c5:fc:54:a3:7b:99:
+         fd:12:97:77:ce:fc:dd:89:11:5f:ef:b8:d3:50:a3:46:13:7b:
+         ca:a9:79:ca:17:a1:db:ae:94:53:82:81:83:06:4f:6f:58:62:
+         cd:fe:70:2b:c7:90:f0:c9:8f:e7:0b:a1:f9:5c:ff:49:9a:15:
+         44:59:f1:1f:04:1e:ad:90:09:9a:2f:dd:c5:4c:30:1c:82:5f:
+         20:66:3f:62:10:bd:92:a1:90:32:2c:66:0d:4c:75:19:ee:8e:
+         6e:cd:e5:ff
+-----BEGIN CERTIFICATE-----
+MIIDTDCCAjSgAwIBAgIBCTANBgkqhkiG9w0BAQsFADAeMRwwGgYDVQQDDBNCZW4g
+V29sc2llZmZlcidzIENBMB4XDTE3MTAyMjIyMzQwOFoXDTI3MTAyMDIyMzQwOFow
+EzERMA8GA1UEAwwIS2l0dHlDb3AwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDRzr6bNHcr+Qf/w6pxhHdves3fwLM2WvqonunluaD9P5BdfKgOlJeq+9TD
+bL8Z7Rh3qg542dcsKIuN18ZRn1RpEeASkrewToW1gYr4XjdOGPu//Kplx3Lub2WD
+VDWfAICcRcCcAZzs+sPAHc22HOWSg9PTQUNyx09Jco9FneGbE+733UXdq2T3PfwQ
+oY76+R7Jy/nnwuopoxuR5Tx9VqZLesXmaathSFECwsGl7mDZDGwR2tuhdUPsiRbs
+RUXMnqAOdykmweBBQWEc5wdab+5hRIGYM1+7SOs+7tWtqPB1X8ZgNz3Wq7MkL4N5
+EvCo6jf982XsFm4H38aGHCPPaW2bAgMBAAGjgZ8wgZwwCQYDVR0TBAIwADAdBgNV
+HQ4EFgQUgDcMXd77rppKuSLYIPmCj0Pe2aMwTgYDVR0jBEcwRYAU7Cqw89GO7OcR
+FNZ+KMoWpui5TKehIqQgMB4xHDAaBgNVBAMME0JlbiBXb2xzaWVmZmVyJ3MgQ0GC
+CQChEwF6MiTO4zATBgNVHSUEDDAKBggrBgEFBQcDAjALBgNVHQ8EBAMCB4AwDQYJ
+KoZIhvcNAQELBQADggEBAH1ixSOcHfZv9ArLjkWrxFqGZi6CcUSuupxNHWQu9lRU
+dG4iS5YoSPERAZ+J7jtZvvnGEAQFdWB1KuFoOnWYq48kBPMB2vShfbq7ccKJ2iKS
+2JwmPmPR8LEwq5BA8n0mWYuZSJu8gUGXPoS9oJk/OeAGND/PZxkGEqJhWVwuKxMF
+DGqm9s/jV+wMij3DMTawf6tOV7cuusd5jpTUZsX8VKN7mf0Sl3fO/N2JEV/vuNNQ
+o0YTe8qpecoXoduulFOCgYMGT29YYs3+cCvHkPDJj+cLoflc/0maFURZ8R8EHq2Q
+CZov3cVMMByCXyBmP2IQvZKhkDIsZg1MdRnujm7N5f8=
+-----END CERTIFICATE-----

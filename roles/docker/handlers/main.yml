@@ -1,0 +1,4 @@
+- name: restart docker
+  service: name=docker.service state=restarted
+  
+- import_tasks: roles/firewall/handlers/main.yml

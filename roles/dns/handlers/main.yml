@@ -1,8 +1,10 @@
-- name: Restart dnscrypt-proxy.service
+- name: restart dnscrypt-proxy.service
   service: name=dnscrypt-proxy.service state=restarted daemon_reload=true
   
-- name: Restart dnscrypt-proxy.socket
+- name: restart dnscrypt-proxy.socket
   service: name=dnscrypt-proxy.socket state=restarted daemon_reload=true
 
-- name: Reload unbound
+- name: reload unbound
   service: name=unbound.service state=reloaded
+  
+- import_tasks: roles/firewall/handlers/main.yml

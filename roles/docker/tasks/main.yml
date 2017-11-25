@@ -10,9 +10,21 @@
     mode: '0700'
  
 - name: docker | daemon config file
+  notify:
+    - restart docker
   template: 
     src: etc/docker/daemon.json.j2
     dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: firewall | docker dropin
+  notify:
+    - reload firewall
+  template:
+    src: etc/nftables.d/50-docker.conf.j2
+    dest: /etc/nftables.d/50-docker.conf
     owner: root
     group: root
     mode: '0644'

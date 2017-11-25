@@ -3,7 +3,7 @@
 - name: Install dnscrypt-proxy
   pacman: name=dnscrypt-proxy state=present
 
-- name: Create /etc/dnscrypt
+- name: dnscrypt | create /etc/dnscrypt
   file: 
     path: /etc/dnscrypt
     state: directory
@@ -11,9 +11,9 @@
     group: root
     mode: '0755'
 
-- name: dnscrypt-proxy configuration file
+- name: dnscrypt-proxy | configuration file
   notify:
-    - Restart dnscrypt-proxy.service
+    - restart dnscrypt-proxy.service
   copy:
     src: etc/dnscrypt/dnscrypt-proxy.conf
     dest: /etc/dnscrypt/dnscrypt-proxy.conf
@@ -21,9 +21,9 @@
     group: root
     mode: '0644'
     
-- name: dnscrypt-proxy resolvers list
+- name: dnscrypt-proxy | resolvers list
   notify:
-    - Restart dnscrypt-proxy.service
+    - restart dnscrypt-proxy.service
   get_url:
     url: https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv
     dest: /etc/dnscrypt/dnscrypt-resolvers.conf
@@ -32,7 +32,7 @@
     group: root
     mode: '0644'
 
-- name: Create /etc/systemd/system/dnscrypt-proxy.socket.d
+- name: dnscrypt-proxy | /etc/systemd/system/dnscrypt-proxy.socket.d
   file: 
     path: /etc/systemd/system/dnscrypt-proxy.socket.d
     state: directory
@@ -40,9 +40,9 @@
     group: root
     mode: '0755'
 
-- name: Systemd dnscrypt-proxy.socket override
+- name: systemd | dnscrypt-proxy.socket override
   notify:
-    - Restart dnscrypt-proxy.socket
+    - restart dnscrypt-proxy.socket
   copy:
     src: etc/systemd/system/dnscrypt-proxy.socket.d/override.conf
     dest: /etc/systemd/system/dnscrypt-proxy.socket.d/override.conf
@@ -60,7 +60,7 @@
 
 - name: Systemd dnscrypt-proxy.service override
   notify:
-    - Restart dnscrypt-proxy.service
+    - restart dnscrypt-proxy.service
   copy:
     src: etc/systemd/system/dnscrypt-proxy.service.d/override.conf
     dest: /etc/systemd/system/dnscrypt-proxy.service.d/override.conf
@@ -76,18 +76,28 @@
   
 # Unbound
 
-- name: Install Unbound
+- name: install | unbound
   pacman: name=unbound state=present
 
-- name: Unbound configuration file
+- name: unbound | configuration file
   notify:
-    - Reload unbound
+    - reload unbound
   template:
     src: etc/unbound/unbound.conf.j2
     dest: /etc/unbound/unbound.conf
     owner: root
     group: root
     mode: '0644'
+
+- name: firewall | unbound dropin
+  notify:
+    - reload firewall
+  copy:
+    src: etc/nftables.d/inet/input/40-unbound.conf
+    dest: /etc/nftables.d/inet/input/40-unbound.conf
+    owner: root
+    group: root
+    mode: '0644'
     
-- name: Enable Unbound
+- name: systemd | enable unbound
   service: name=unbound.service enabled=true state=started

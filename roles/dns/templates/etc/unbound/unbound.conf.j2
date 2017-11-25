@@ -1,6 +1,4 @@
-###################################
-# Managed by Ansible: DO NOT EDIT #
-###################################
+# {{ ansible_managed }}
 
 server:
   use-syslog: yes
@@ -8,6 +6,8 @@ server:
   directory: "/etc/unbound"
   #auto-trust-anchor-file: trusted-key.key
   access-control: 192.168.1.0/24 allow
+  # Allow access by docker
+  access-control: 172.17.0.0/16 allow
   root-hints: "/etc/unbound/root.hints"
   #verbosity: 4
   # optimization
