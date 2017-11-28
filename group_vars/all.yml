@@ -12,6 +12,8 @@ common_groups:
   ben:
     gid: 1000
 
+domains: []
+
 # dnsupdate
 dnsupdate_domains: "{{ domains }}"
 

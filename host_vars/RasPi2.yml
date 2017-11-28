@@ -1,7 +1,7 @@
 ---
 ssh_port: 4242
 domains:
-  - ipa.nsupdate.info
+  - benwolsieffer.com
   - raspi2.nsupdate.info
   - ben.nsupdate.info
   - hacker-hats.nsupdate.info

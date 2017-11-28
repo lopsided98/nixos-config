@@ -1,0 +1,5 @@
+- name: Update NixOS configuration
+  hosts: nixos
+
+  roles:
+    - nixos

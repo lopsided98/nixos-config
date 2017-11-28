@@ -1,0 +1,26 @@
+- name: Synchronize NixOS config
+  become: no
+  synchronize:
+    src: files/nixos/
+    dest: /home/ben/nixos/
+    rsync_path: rsync
+    owner: no
+    group: no
+    delete: yes
+    rsync_opts:
+      - "--exclude=/configuration.nix"
+
+- name: Create configuration symlink
+  become: no
+  file:
+    src: machines/{{ inventory_hostname }}/configuration.nix
+    dest: /home/ben/nixos/configuration.nix
+    state: link
+
+- name: Rebuild NixOS configuration
+  command: nixos-rebuild switch
+  register: nixos_rebuild
+  environment:
+    NIXOS_CONFIG: /home/ben/nixos/configuration.nix
+  changed_when: nixos_rebuild.stderr | search("these derivations will be built")
+
