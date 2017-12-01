@@ -5,12 +5,34 @@ with lib;
 let
   cfg = config.services.telegraf-fixed;
 
+  recursiveAttrs = mkOption {
+    default = {};
+    type = types.nullOr (types.attrs // {
+      merge = loc: foldl' (res: def: recursiveUpdate res def.value) {};
+    });
+  };
+
+  optionString = name: value: optionalString (value != null) ''"name": "${value}"'';
+
+  configFileJSON = pkgs.writeText "config.json" ''
+    {
+      "global_tags": {
+        ${concatStringsSep (mapAttrsToList optionString cfg.globalTags)}
+      },
+      "agent": ${builtins.toJSON cfg.agent},
+      "aggregators": ${builtins.toJSON cfg.aggregators},
+      "inputs": ${builtins.toJSON cfg.inputs},
+      "outputs": ${builtins.toJSON cfg.outputs},
+      "processors": ${builtins.toJSON cfg.processors}
+    }
+  '';
+
   configFile = pkgs.runCommand "config.toml" {
     buildInputs = [ pkgs.remarshal ];
   } ''
     remarshal -if json -of toml \
-      < ${pkgs.writeText "config.json" (builtins.toJSON cfg.extraConfig)} \
-      > $out
+      < "${configFileJSON}" \
+      > "$out"
   '';
 in {
   ###### interface
@@ -25,27 +47,17 @@ in {
         type = types.package;
       };
 
-      extraConfig = mkOption {
+      globalTags = mkOption {
         default = {};
-        description = "Extra configuration options for telegraf";
-        type = types.attrs // {
-          merge = loc: foldl' (res: def: recursiveUpdate res def.value) {};
-        };
-        example = {
-          outputs = {
-            influxdb = {
-              urls = ["http://localhost:8086"];
-              database = "telegraf";
-            };
-          };
-          inputs = {
-            statsd = {
-              service_address = ":8125";
-              delete_timings = true;
-            };
-          };
-        };
+        description = "Global tags for all outputs";
+        type = types.attrsOf types.str;
       };
+
+      agent = recursiveAttrs;
+      aggregators = recursiveAttrs;
+      inputs = recursiveAttrs;
+      outputs = recursiveAttrs;
+      processors = recursiveAttrs;
     };
   };
 

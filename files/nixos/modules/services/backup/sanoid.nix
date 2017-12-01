@@ -5,33 +5,29 @@ with lib;
 let
   cfg = config.services.sanoid;
 
-  countType = (types.addCheck types.int (v: v >= 0)) // {
-    name = "Snapshot count";
-  };
-
-  percentType = (types.addCheck types.int (v: v >= 0 && v <= 100)) // {
+  percentType = (types.ints.between 0 100) // {
     name = "Percent";
   };
 
   commonOptions = {
     hourly = mkOption {
       description = "Number of hourly snapshots";
-      type = types.nullOr countType;
+      type = types.nullOr types.ints.unsigned;
       default = null;
     };
     daily = mkOption {
       description = "Number of daily snapshots";
-      type = types.nullOr countType;
+      type = types.nullOr types.ints.unsigned;
       default = null;
     };
     monthly = mkOption {
       description = "Number of monthly snapshots";
-      type = types.nullOr countType;
+      type = types.nullOr types.ints.unsigned;
       default = null;
     };
     yearly = mkOption {
       description = "Number of yearly snapshots";
-      type = types.nullOr countType;
+      type = types.nullOr types.ints.unsigned;
       default = null;
     };
 

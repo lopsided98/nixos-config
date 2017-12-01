@@ -57,7 +57,7 @@ rec {
   networking.hostName = "Dell-Optiplex-780"; # Define your hostname.
   networking.hostId = "8e4fab4d";
   # Enable telegraf metrics for this interface
-  services.telegraf-fixed.extraConfig.inputs.net.interfaces = [ "eth0" ];
+  services.telegraf-fixed.inputs.net.interfaces = [ "eth0" ];
 
   # List services that you want to enable:
   
