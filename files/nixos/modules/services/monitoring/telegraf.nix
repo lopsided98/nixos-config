@@ -17,7 +17,7 @@ let
   configFileJSON = pkgs.writeText "config.json" ''
     {
       "global_tags": {
-        ${concatStringsSep (mapAttrsToList optionString cfg.globalTags)}
+        ${concatStringsSep "," (mapAttrsToList optionString cfg.globalTags)}
       },
       "agent": ${builtins.toJSON cfg.agent},
       "aggregators": ${builtins.toJSON cfg.aggregators},
