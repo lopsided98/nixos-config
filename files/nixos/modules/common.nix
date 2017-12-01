@@ -1,6 +1,9 @@
 { lib, pkgs, ... }:
 
 {
+  # Build packages in sandbox
+  nix.useSandbox = true;
+
   nixpkgs.overlays = [ (import ../pkgs/packages.nix) ];
 
   time.timeZone = "America/New_York";

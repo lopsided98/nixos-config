@@ -89,7 +89,7 @@ in {
       mkdir -p /etc/tinyssh/sshkeydir
       mkdir -p /root/.ssh
       
-      tinyssh-convert -f /etc/ssh/ssh_host_ed25519_key -d /etc/tinyssh/sshkeydir
+      tinyssh-convert -f /etc/tinyssh/ssh_host_ed25519_key -d /etc/tinyssh/sshkeydir
       
       ${concatStrings (map (key: ''
         echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
@@ -99,7 +99,7 @@ in {
     '';
 
     boot.initrd.secrets =
-     (optionalAttrs (cfg.hostEd25519Key != null) { "/etc/ssh/ssh_host_ed25519_key" = cfg.hostEd25519Key; });
+     (optionalAttrs (cfg.hostEd25519Key != null) { "/etc/tinyssh/ssh_host_ed25519_key" = cfg.hostEd25519Key; });
 
   };
 

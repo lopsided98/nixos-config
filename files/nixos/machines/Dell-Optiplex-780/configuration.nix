@@ -13,6 +13,7 @@ rec {
       ../../modules/telegraf.nix
       ../../modules/system/boot/initrd-tinyssh.nix
       ../../modules/system/boot/initrd-decryptssh.nix
+      ../../modules/zfs-backup.nix
     ];
   
   boot = {
@@ -29,30 +30,25 @@ rec {
       network = {
         enable = true;
         tinyssh = {
-          enable = true;
           port = lib.head services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
-          hostEd25519Key = "/var/tinyssh.key";
+          hostEd25519Key = /var/tinyssh.key;
         };
         decryptssh = {
           enable = true;
         };
       };
     };
-    # Enable ZFS support
-    supportedFilesystems = [ "zfs" ];
-    kernelPackages = pkgs.linuxPackages_4_13;
     kernelParams = [ "ip=192.168.1.4::192.168.1.1:255.255.255.0::eth0:none" ];
   };
-  
+
   environment.systemPackages = with pkgs; [
-    tinyssh tinyssh-convert
   ];
 
   systemd.network = {
     enable = true;
-    networks.enp0s25 = {
-      name = "enp0s25";
+    networks.eth0 = {
+      name = "eth0";
       address = ["192.168.1.4/24"];
       gateway = ["192.168.1.1"];
       dns = ["192.168.1.2"];
@@ -61,7 +57,7 @@ rec {
   networking.hostName = "Dell-Optiplex-780"; # Define your hostname.
   networking.hostId = "8e4fab4d";
   # Enable telegraf metrics for this interface
-  services.telegraf.extraConfig.inputs.net.interfaces = [ "enp0s25" ];
+  services.telegraf-fixed.extraConfig.inputs.net.interfaces = [ "eth0" ];
 
   # List services that you want to enable:
   

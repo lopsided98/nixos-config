@@ -4,7 +4,7 @@ let
 commit = "66b11488206b44364b6ed8bb438462cbbb0835c5";
 
 in stdenv.mkDerivation {
-  name = with lib; "muximux-${substring 0 7 commit}";
+  name = "muximux-${lib.substring 0 7 commit}";
 
   src = fetchFromGitHub {
     owner = "mescon";

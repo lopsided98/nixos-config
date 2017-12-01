@@ -1,8 +1,12 @@
 { config, lib, pkgs, ... }:
 
-{
+with lib;
 
-  services.telegraf = {
+{
+  imports = [ ./services/monitoring/telegraf.nix ];
+
+
+  services.telegraf-fixed = {
     enable = true;
     
     extraConfig = {
@@ -156,6 +160,9 @@
           ##
           # interfaces = ["vpn0" "vpn1" "br0"];
         };
+        
+        # Read TCP metrics such as established, time wait and sockets counts.
+        netstat = {};
       };
     };
   };
