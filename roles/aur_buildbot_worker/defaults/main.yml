@@ -1,2 +1,3 @@
-aur_buildbot_worker_service_name: aur-buildbot
-aur_buildbot_worker_description: AUR Buildbot worker on {{ inventory_hostname }}
+aur_buildbot_worker_directory: /var/lib/aur-buildbot/worker
+aur_buildbot_worker_host: AUR Buildbot worker on {{ inventory_hostname }}
+aur_buildbot_worker_admin: Ben Wolsieffer <benwolsieffer@gmail.com>

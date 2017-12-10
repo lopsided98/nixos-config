@@ -1,4 +1,0 @@
-buildbot_worker_service_name: buildbot
-buildbot_worker_name: "{{ inventory_hostname }}"
-buildbot_worker_base_dir: /var/lib/{{ buildbot_worker_service_name }}/worker
-buildbot_worker_description: "{{ buildbot_worker_name }}"

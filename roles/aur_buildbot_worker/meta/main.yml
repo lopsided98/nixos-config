@@ -1,8 +1,0 @@
----
-dependencies:
-  - role: buildbot_worker
-    buildbot_worker_service_name: "{{ aur_buildbot_worker_service_name }}"
-    buildbot_worker_master: "{{ aur_buildbot_worker_master | default(omit) }}"
-    buildbot_worker_password: "{{ aur_buildbot_worker_password | default(omit) }}"
-    buildbot_worker_admin: "{{ aur_buildbot_worker_admin | default(omit) }}"
-    buildbot_worker_description: "{{ aur_buildbot_worker_description }}"

@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-Skip-channeltest.patch ];
   
   installPhase = ''
-    make install DESTDIR="''${out}"
-    mv "''${out}/usr/sbin" "''${out}/bin"
+    make install DESTDIR="$out"
+    mv "''${out}/usr/sbin" "$out/bin"
   '';
 
   meta = with lib; {

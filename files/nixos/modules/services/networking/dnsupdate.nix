@@ -41,13 +41,13 @@ let
   };
   
   addressProviderProtocol = a: if a == null then "None" else '' {
-    type: ${a.type},
-    args: ${builtins.toJSON a.args}
+    "type": "${a.type}",
+    "args": ${builtins.toJSON a.args}
   } '';
   
   addressProvider = a: if (a.ipv4 != null || a.ipv6 != null) then '' {
-    ${if a.ipv4 != null then "ipv4: ${addressProviderProtocol a.ipv4}" else ""}
-    ${if a.ipv6 != null then "ipv6: ${addressProviderProtocol a.ipv6}" else ""}
+    ${if a.ipv4 != null then "\"ipv4\": ${addressProviderProtocol a.ipv4}," else ""}
+    ${if a.ipv6 != null then "\"ipv6\": ${addressProviderProtocol a.ipv6}" else ""}
   } '' else addressProviderProtocol a.all;
   
   addressProviderCheck = a: {
@@ -56,19 +56,21 @@ let
   };
   
   dnsService = d: '' {
-    type: ${d.type},
-    ${if (d.addressProvider != null) then "address_provider: ${addressProvider d.addressProvider}," else ""}
-    args: ${builtins.toJSON d.args}
+    "type": "${d.type}",
+    ${if (d.addressProvider != null) then "\"address_provider\": ${addressProvider d.addressProvider}," else ""}
+    "args": ${builtins.toJSON d.args}
   }'';
   
   configFile = cfg: ''
-    ${if cfg.addressProvider != null then "address_provider: ${addressProvider cfg.addressProvider}" else ""}
+    {
+    ${if cfg.addressProvider != null then "\"address_provider\": ${addressProvider cfg.addressProvider}," else ""}
     
-    dns_services: [
+    "dns_services": [
       ${concatMapStringsSep ",\n" dnsService cfg.dnsServices}
-    ]
+    ],
     
-    cache_file: "${cfg.cacheFile}"
+    "cache_file": "${cfg.cacheFile}"
+    }
   '';
 in {
 

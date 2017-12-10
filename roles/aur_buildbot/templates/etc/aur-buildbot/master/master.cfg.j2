@@ -156,7 +156,6 @@ for arch in tuple(architectures) + ('any',):
 
 c['builders'] = []
 
-chroot_update_lock = util.WorkerLock('chroot_update_lock')
 repo_add_lock = util.MasterLock('repo_add_lock')
 
 class PropertyInitializer(steps.BuildStep):
@@ -170,12 +169,19 @@ class PropertyInitializer(steps.BuildStep):
     def run(self):
         log = yield self.addLog('output')
     
-        # Set extra_dependencies property
-        extra_dependencies = tuple(all_packages[self.getProperty('project')].get('extra_dependencies', tuple()))
+        # Set dependencies property
+        package_info = all_packages[self.getProperty('project')]
+        yield log.addStdout('PackageInfo: {}'.format(package_info))
         
-        yield log.addStdout('Extra dependencies: {}'.format(extra_dependencies))
+        dependencies = set(package_info.get('dependencies', set()))
+        yield log.addStdout('Dependencies: {}'.format(dependencies))
+        dependencies.update(set(package_info.get('extra_dependencies', set())))
+        yield log.addStdout('Dependencies: {}'.format(dependencies))
+        dependencies = tuple(dependencies)
         
-        self.setProperty('extra_dependencies', extra_dependencies)
+        yield log.addStdout('Dependencies: {}'.format(dependencies))
+        
+        self.setProperty('dependencies', dependencies)
         
         return defer.returnValue(util.SUCCESS)
 
@@ -257,13 +263,6 @@ class UploadRepoAdd(steps.MultipleFileUpload):
 
 common_steps = [
     PropertyInitializer(),
-    steps.ShellCommand(
-        name='Update chroot',
-        command=['/usr/bin/sudo', 'update-chroot', os.path.join(chroot_dir, 'root'), 'pacman', '-Syu'],
-        locks=[chroot_update_lock.access('exclusive')],
-        haltOnFailure=True,
-        flunkOnFailure=True
-    ),
     steps.Git(
         name='Download package repo',
         repourl=util.Interpolate('https://aur.archlinux.org/%(prop:project)s.git'),
@@ -274,7 +273,7 @@ common_steps = [
     ),
     steps.ShellCommand(
         name='Build package',
-        command=['/usr/bin/sudo', 'build-chroot', util.Property('buildername'), util.Property('extra_dependencies', default=tuple())],
+        command=['/usr/bin/sudo', 'build-package', '/var/lib/aur-buildbot/scripts/worker', util.Property('dependencies', default=tuple())],
         haltOnFailure=True,
         flunkOnFailure=True
     )

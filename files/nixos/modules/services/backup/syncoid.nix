@@ -1,9 +1,9 @@
-{ config, stdenv, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-  cfg = config.services.sanoid;
+  cfg = config.services.syncoid;
 
   percentType = (types.ints.between 0 100) // {
     name = "Percent";
@@ -86,7 +86,7 @@ let
 
       ${optionalString ((v.useTemplate or null) != null) ''
         use_template = ${concatStringsSep "," v.useTemplate}
-      ''}
+      ''};
     '') blocks);
 
   configFile = ''
@@ -106,38 +106,106 @@ in {
 
     # Interface
 
-    options.services.sanoid = {
-      enable = mkEnableOption "Sanoid ZFS snapshotting service";
+    options.services.syncoid = {
+      enable = mkEnableOption "Syncoid ZFS synchronization service";
 
       interval = mkOption {
         type = types.str;
         default = "hourly";
-        example = "daily";
+        example = "*-*-* *:15:00";
         description = ''
-          Run sanoid at this interval. The default is to run hourly.
+          Run syncoid at this interval. The default is to run hourly.
 
           The format is described in
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
           <manvolnum>7</manvolnum></citerefentry>.
         '';
       };
-
-      datasets = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = datasetOptions;
-        });
-        default = {};
+      
+      user = mkOption { 
+        type = types.str;
+        default = "root";
+        example = "backup";
         description = ''
-          Datasets to snapshot
+          The user for the service. ZFS priveledge delegation must be set up to
+          use a user other than root.
+        '';
+      };
+      
+      sshKey = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          SSH private key file to use to login to remote system. Can be 
+          overridden in individual commands.
+        '';
+      };
+      
+      defaultArguments = mkOption { 
+        type = types.str;
+        default = "";
+        example = "--no-sync-snap";
+        description = ''
+          Arguments to add to every syncoid command, unless disabled for that 
+          command.
         '';
       };
 
-      templates = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = commonOptions;
+      commands = mkOption {
+        type = types.listOf (types.submodule {
+          options = {
+            source = mkOption {
+              type = types.str;
+              description = ''
+                Source ZFS dataset. Can be either local or remote.
+              '';
+            };
+            
+            target = mkOption {
+              type = types.str;
+              description = ''
+                Target ZFS dataset. Can be either local or remote.
+              '';
+            };
+            
+            recursive = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to also transfer child datasets.
+              '';
+            };
+            
+            sshKey = mkOption {
+              type = types.nullOr types.path;
+              default = cfg.sshKey;
+              description = ''
+                SSH private key file to use to login to remote system.
+              '';
+            };
+            
+            useDefaultArguments = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether to use the default arguments for this command.
+              '';
+            };
+          
+            extraArguments = mkOption { 
+              type = types.str;
+              default = "";
+              example = "--sshport 2222";
+              description = ''
+                Extra syncoid arguments.
+              '';
+            };
+          };
         });
-        default = {};
-        description = "Templates for datasets";
+        default = [];
+        description = ''
+          Syncoid commands to run.
+        '';
       };
 
     };
@@ -146,20 +214,30 @@ in {
 
     config = mkIf cfg.enable {
 
-      systemd.services.sanoid = {
-        description = "Sanoid snapshot service";
+      systemd.services.syncoid = {
+        description = "Syncoid ZFS synchronization service";
         unitConfig = {
           After = "zfs.target";
         };
         serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.sanoid}/bin/sanoid --cron --configdir=${configDir}";
+          Type = "simple";
+          User = cfg.user;
+          ExecStart = pkgs.writeScript "syncoid-service" ''
+            #!${pkgs.stdenv.shell}
+            ${concatMapStringsSep "\n" (c: ''
+              ${pkgs.sanoid}/bin/syncoid \
+                ${optionalString c.useDefaultArguments cfg.defaultArguments} \
+                ${optionalString c.recursive "-r"} \
+                ${optionalString (c.sshKey != null) "--sshkey \"${c.sshKey}\""} \
+                ${c.extraArguments} ${c.source} ${c.target}
+            '') cfg.commands}
+          '';
         };
       };
 
-      systemd.timers.sanoid = {
-        description = "Sanoid timer";
-        partOf = [ "sanoid.service" ];
+      systemd.timers.syncoid = {
+        description = "Syncoid timer";
+        partOf = [ "syncoid.service" ];
         wantedBy = [ "timers.target" ];
         timerConfig.OnCalendar = cfg.interval;
       };

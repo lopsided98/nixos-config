@@ -13,13 +13,14 @@
   
   # Standard set of packages
   environment.systemPackages = with pkgs; [
-    htop git python27 file
+    htop iotop git python27 file vim
   ];
   
   environment.variables = {
     NIX_PATH = lib.mkForce [ 
       "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
       "nixos-config=/home/ben/nixos/configuration.nix"
+      "nixpkgs-overlays=/home/ben/nixos/overlays"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };

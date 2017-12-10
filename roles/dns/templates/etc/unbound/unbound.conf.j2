@@ -6,6 +6,7 @@ server:
   directory: "/etc/unbound"
   #auto-trust-anchor-file: trusted-key.key
   access-control: 192.168.1.0/24 allow
+  access-control: 2601:18a:0:7829::/64 allow
   # Allow access by docker
   access-control: 172.17.0.0/16 allow
   root-hints: "/etc/unbound/root.hints"

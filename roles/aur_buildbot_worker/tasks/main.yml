@@ -1,84 +1,28 @@
-- name: pacman | install devtools
-  pacman: name=devtools state=present
-
-- name: arch-chroot | create directory
+- name: worker directory
   file:
-    path: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot
+    path: "{{ aur_buildbot_worker_directory }}"
     state: directory
-    owner: "{{ aur_buildbot_worker_service_name }}-worker"
-    group: "{{ aur_buildbot_worker_service_name }}-worker"
-
-- name: aur-buildbot-worker | create scripts directory
+    owner: aur-buildbot-worker
+    group: aur-buildbot-worker
+    mode: "0750"
+- name: worker info directory
   file:
-    path: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts
+    path: "{{ aur_buildbot_worker_directory }}/info"
     state: directory
-    owner: "root"
-    group: "root"
-    mode: '0755'
-
-- name: install | ARM workaround scripts
-  copy: 
-    src: scripts/{{ item }}
-    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts/{{ item }}
     owner: root
     group: root
-    mode: '0755'
-  when: ansible_architecture == 'armv7l'
-  with_items:
-    - arch-nspawn
-    - makepkg
-
-- name: install | script templates
+    mode: "0755"
+- name: worker host file
   template:
-    src: scripts/{{ item }}.j2
-    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/scripts/{{ item }}
+    src: base_dir/info/host
+    dest: "{{ aur_buildbot_worker_directory }}/info/host"
     owner: root
     group: root
-    mode: '0755'
-  with_items:
-    - update-chroot
-    - build-chroot
- 
-- name: arch-chroot | initialize
-  command: /usr/bin/mkarchroot {{ '-s' if ansible_architecture == 'armv7l' else '' }} /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root base-devel
-  args:
-    creates: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root/etc/pacman.conf
-
-- name: arch-chroot | pacman | aur-buildbot repository include
-  lineinfile:
-    path: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root/etc/pacman.conf
-    insertafter: EOF
-    line: "Include = /etc/pacman.d/aur-buildbot.conf"
-
-- name: arch-chroot | pacman | aur-buildbot repository file
-  copy:
-    src: roles/common/files/etc/pacman.d/aur-buildbot.conf
-    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/chroot/root/etc/pacman.d/aur-buildbot.conf
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: create | .gnupg directory
-  file:
-    state: directory
-    path: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/.gnupg
-    owner: "{{ aur_buildbot_worker_service_name }}-worker"
-    group: "{{ aur_buildbot_worker_service_name }}-worker"
-    mode: '0700'
-
-- name: install | gpg.conf
-  copy:
-    src: base_dir/.gnupg/gpg.conf
-    dest: /var/lib/{{ aur_buildbot_worker_service_name }}/worker/.gnupg/gpg.conf
-    owner: "{{ aur_buildbot_worker_service_name }}-worker"
-    group: "{{ aur_buildbot_worker_service_name }}-worker"
-    mode: '0644'
-
-- name: sudoers | build scripts
+    mode: "0644"
+- name: worker admin file
   template:
-    src: etc/sudoers.d/aur-buildbot-worker.j2
-    dest: /etc/sudoers.d/{{ aur_buildbot_worker_service_name }}-worker
+    src: base_dir/info/admin
+    dest: "{{ aur_buildbot_worker_directory }}/info/admin"
     owner: root
     group: root
-    
-
+    mode: "0644"

@@ -3,8 +3,13 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { lib, config, pkgs, ... }:
+let
 
-rec {
+interface = "eth0";
+address = "192.168.1.4";
+gateway = "192.168.1.1";
+
+in rec {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -14,6 +19,9 @@ rec {
       ../../modules/system/boot/initrd-tinyssh.nix
       ../../modules/system/boot/initrd-decryptssh.nix
       ../../modules/zfs-backup.nix
+      ../../modules/services/continuous-integration/aur-buildbot/worker.nix
+      ../../modules/docker.nix
+      ../../modules/services/networking/dnsupdate.nix
     ];
   
   boot = {
@@ -39,19 +47,16 @@ rec {
         };
       };
     };
-    kernelParams = [ "ip=192.168.1.4::192.168.1.1:255.255.255.0::eth0:none" ];
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::${interface}:none" ];
   };
-
-  environment.systemPackages = with pkgs; [
-  ];
 
   systemd.network = {
     enable = true;
-    networks.eth0 = {
-      name = "eth0";
-      address = ["192.168.1.4/24"];
-      gateway = ["192.168.1.1"];
-      dns = ["192.168.1.2"];
+    networks."${interface}" = {
+      name = interface;
+      address = [ "${address}/24" ];
+      gateway = [ gateway ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
     };
   };
   networking.hostName = "Dell-Optiplex-780"; # Define your hostname.
@@ -59,8 +64,57 @@ rec {
   # Enable telegraf metrics for this interface
   services.telegraf-fixed.inputs.net.interfaces = [ "eth0" ];
 
+  environment.systemPackages = with pkgs; [
+  ];
+
   # List services that you want to enable:
   
   # Set SSH port
   services.openssh.ports = [4244];
+  
+  services.aur-buildbot-worker = {
+    enable = true;
+    workerPass = "VKK4scBAqYuRmtuDUXZDz0E65voAOaj31UIoLH7t";
+    masterHost = "hp-z420.nsupdate.info";
+  };
+  
+  services.sanoid = {
+    datasets = {
+      "root/root" = {
+        useTemplate = [ "local" ];
+      };
+      "root/home" = {
+        useTemplate = [ "local" ];
+      };
+    };
+  };
+  
+  services.syncoid = let
+    remote = "backup@hp-z420.nsupdate.info";
+  in {
+    defaultArguments = "--no-privilege-elevation --no-sync-snap --sshport 4245";
+    commands = [ {
+      source = "root/root";
+      target = "${remote}:backup/backups/Dell-Optiplex-780/root";
+    } {
+      source = "root/home";
+      target = "${remote}:backup/backups/Dell-Optiplex-780/home";
+    } ];
+  };
+  
+  services.dnsupdate = {
+    enable = true;
+    addressProvider = {
+      ipv4.type = "Web";
+    };
+    
+    dnsServices = [ {
+      type = "GoogleDomains";
+      args = {
+        hostname = "dell-optiplex-780.benwolsieffer.com";
+        username = "6jXuwtQkd5SxHmM2";
+        password = "c2GpDRJ6OUfiIJ7Q";
+      };
+    } ];
+  };
 }

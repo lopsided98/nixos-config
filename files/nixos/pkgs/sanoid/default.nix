@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper,
   coreutils, zfs, perl, procps, ConfigIniFiles, openssh, sudo,
-  mbufferSupport ? false, mbuffer ? null,
-  pvSupport ? false, pv ? null,
-  lzoSupport ? false, lzop ? null,
+  mbufferSupport ? true, mbuffer ? null,
+  pvSupport ? true, pv ? null,
+  lzoSupport ? true, lzop ? null,
   gzipSupport ? false, gzip ? null,
   parallelGzipSupport ? false, pigz ? null}:
 
@@ -15,16 +15,16 @@ assert gzipSupport -> gzip != null;
 assert parallelGzipSupport -> pigz != null;
 
 let
-  commit = "f6519c0aea4c624161f92a1304943d1c60e714bc";
+  commit = "d2eea19644de9d44a5d7dd2da2a54b3597ca15c9";
 
 in stdenv.mkDerivation rec {
   name = "sanoid-${substring 0 7 commit}";
 
   src = fetchFromGitHub {
-    owner = "jimsalterjrs";
+    owner = "lopsided98";
     repo = "sanoid";
     rev = "${commit}";
-    sha256 = "1zfg438zbzfmhaq92dfmkialwar1lqxvl24yhvyz52wxwy6v5wa1";
+    sha256 = "0z89zxpdr3dszjryrlzawyvfm8lihjgp1v2y6yg571zxgylikc78";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -47,21 +47,29 @@ in stdenv.mkDerivation rec {
     chmod +x "$out/bin/sanoid"
     wrapProgram "$out/bin/sanoid" --prefix PERL5LIB ":" "$PERL5LIB"
 
+    # Replace "ls" with "which" to with varied paths
     substitute syncoid "$out/bin/syncoid" \
       --replace /usr/bin/perl "${perl}/bin/perl" \
-      --replace /sbin/zfs "${zfs}/bin/zfs" \
+      --replace /sbin/zfs zfs \
       --replace /usr/bin/ssh "${openssh}/bin/ssh" \
-      --replace /usr/bin/sudo "${sudo}/bin/sudo" \
-      --replace /bin/ps "${procps}/bin/ps" \
-      --replace /bin/ls "${procps}/bin/ps" \
-      ${optionalString pvSupport "--replace /usr/bin/pv \"${pv}/bin/pv\""} \
-      ${optionalString mbufferSupport "--replace /usr/bin/mbuffer \"${mbuffer}/bin/mbuffer\""} \
-      ${optionalString lzoSupport "--replace /usr/bin/lzop \"${lzop}/bin/lzop\""} \
-      ${optionalString gzipSupport "--replace /bin/gzip \"${gzip}/bin/gzip\""} \
-      ${optionalString gzipSupport "--replace /bin/zcat \"${gzip}/bin/zcat\""} \
-      ${optionalString parallelGzipSupport "--replace /usr/bin/pigz \"${pigz}/bin/pigz\""}
+      --replace /usr/bin/sudo sudo \
+      --replace /bin/ps ps \
+      --replace /bin/ls which \
+      ${optionalString pvSupport "--replace /usr/bin/pv pv"} \
+      ${optionalString mbufferSupport "--replace /usr/bin/mbuffer mbuffer"} \
+      ${optionalString lzoSupport "--replace /usr/bin/lzop lzop"} \
+      ${optionalString gzipSupport "--replace /bin/gzip gzip"} \
+      ${optionalString gzipSupport "--replace /bin/zcat zcat"} \
+      ${optionalString parallelGzipSupport "--replace /usr/bin/pigz pigz"}
     chmod +x "$out/bin/syncoid"
-    wrapProgram "$out/bin/syncoid" --prefix PERL5LIB ":" "$PERL5LIB"
+    wrapProgram "$out/bin/syncoid" \
+      --prefix PERL5LIB ":" "$PERL5LIB" \
+      --prefix PATH : "${makeBinPath ([ zfs sudo procps ]
+                          ++ optional pvSupport pv
+                          ++ optional mbufferSupport mbuffer
+                          ++ optional lzoSupport lzop
+                          ++ optional gzipSupport gzip
+                          ++ optional parallelGzipSupport pigz)}"
 
     substitute findoid "$out/bin/findoid" \
       --replace /usr/bin/perl "${perl}/bin/perl" \

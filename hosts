@@ -11,6 +11,7 @@ Deep-Learning
 [aur_buildbot_worker]
 HP-Z420
 ODROID-XU4
+Dell-Optiplex-780
 
 [x86_64]
 Dell-Optiplex-780
@@ -24,6 +25,9 @@ KittyCop
 ODROID-XU4
 RasPi2
 
+[aarch64]
+Roomba
+
 [home_network]
 RasPi2
 ODROID-XU4
@@ -31,8 +35,10 @@ Deep-Learning
 HP-Z420
 
 [dartmouth_network]
-KittyCop
 
 [nixos]
 Dell-Optiplex-780
 NixOS-Test
+KittyCop
+Roomba
+ODROID-XU4

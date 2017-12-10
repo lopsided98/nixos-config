@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   
@@ -17,6 +17,8 @@
       ../../modules/docker.nix
       ../../modules/nginx.nix
     ];
+    
+  nix.useSandbox = lib.mkForce false;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -35,17 +37,20 @@
   };
   networking.hostName = "NixOS-Test";
 
+  environment.systemPackages = with pkgs; with rosPackages; [
+  ];
+
   # List services that you want to enable:
 
   # Set SSH port
   services.openssh.ports = [4247];
   
   # Configure Muximux
-  services.muximux.enable = true;
-  services.nginx.virtualHosts.muximux = {
-    serverName = "\"\"";
-    listen = [{addr = "0.0.0.0"; port = 81;}];
-  };
-  networking.firewall.allowedTCPPorts = [81];
+  #services.muximux.enable = true;
+  #services.nginx.virtualHosts.muximux = {
+  #  serverName = ''"\"'';
+  #  listen = [{addr = "0.0.0.0"; port = 81;}];
+  #};
+  #networking.firewall.allowedTCPPorts = [81];
 }
 
