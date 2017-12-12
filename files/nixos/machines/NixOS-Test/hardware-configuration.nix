@@ -22,11 +22,6 @@
       fsType = "vfat";
     };
 
-  fileSystems."/tmp" =
-    { device = "tmpfs";
-      fsType = "tmpfs";
-    };
-
   swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 4;

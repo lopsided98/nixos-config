@@ -9,8 +9,8 @@ in {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/common.nix
-      ../../modules/ssh.nix
-      ../../modules/docker.nix
+      ../../modules/services/networking/dnsupdate.nix
+#      ../../modules/docker.nix
       ../../modules/services/continuous-integration/aur-buildbot/worker.nix
     ];
 
@@ -46,33 +46,28 @@ in {
   # Set SSH port
   services.openssh.ports = [4243];
   
-  services.aur-buildbot-worker = {
-    enable = true;
-    workerPass = "xZdKI5whiX5MNSfWcAJ799Krhq5BZhfe11zBdamx";
-    masterHost = "hp-z420.nsupdate.info";
-  };
+#  services.aur-buildbot-worker = {
+#    enable = true;
+#    workerPass = "xZdKI5whiX5MNSfWcAJ799Krhq5BZhfe11zBdamx";
+#    masterHost = "hp-z420.nsupdate.info";
+#  };
   
   services.dnsupdate = {
     enable = true;
     addressProvider = {
       ipv4.type = "Web";
-      ipv6 = {
-        type = "Interface";
-        args.interface = interface;
-      };
     };
     
     dnsServices = [ {
-      type = "StandardService";
+      type = "GoogleDomains";
       args = {
-        service_ipv4 = "domains.google.com";
-        service_ipv6 = "domains.google.com";
         hostname = "odroid-xu4.benwolsieffer.com";
         username = "jPniAhcATuQPmThZ";
         password = "7DNMvRSY5eq5ypSG";
       };
     } ];
   };
+
   
   # Enable SD card TRIM
   services.fstrim.enable = true;

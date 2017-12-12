@@ -14,7 +14,6 @@ in rec {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/common.nix
-      ../../modules/ssh.nix
       ../../modules/telegraf.nix
       ../../modules/system/boot/initrd-tinyssh.nix
       ../../modules/system/boot/initrd-decryptssh.nix

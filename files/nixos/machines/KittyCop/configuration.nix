@@ -9,7 +9,6 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/common.nix
-      ../../modules/ssh.nix
     ];
 
   boot = {

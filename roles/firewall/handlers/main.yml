@@ -1,2 +1,0 @@
-- name: reload firewall
-  service: name=nftables.service state=reloaded

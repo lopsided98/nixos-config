@@ -14,11 +14,11 @@ in stdenv.mkDerivation {
   };
 
   installPhase = ''
-    cp -ar . "${out}"
+    cp -ar . "$out"
 
-    ln -sf "${dataDir}/cache" "${out}/cache" 
+    ln -sf "${dataDir}/cache" "$out/cache" 
   
-    find "${out}" -type f -print0 | xargs -0 sed -i -e 's#settings\.ini\.php#${dataDir}/settings.ini.php#g' \
+    find "$out" -type f -print0 | xargs -0 sed -i -e 's#settings\.ini\.php#${dataDir}/settings.ini.php#g' \
                                                     -e 's#muximux\.log#${dataDir}/muximux.log#g' \
                                                     -e 's#secret\.txt#${dataDir}/secret.txt#g' \
                                                     -e 's#js/iconset-muximux\.js#${dataDir}/iconset-muximux.js#g'

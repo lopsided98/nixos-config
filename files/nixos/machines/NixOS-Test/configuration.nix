@@ -10,12 +10,10 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/common.nix
-      ../../modules/ssh.nix
-      ../../modules/services/networking/dnsupdate.nix
       ../../modules/services/web-apps/muximux.nix
-      ../../modules/dnsupdate.nix
       ../../modules/docker.nix
       ../../modules/nginx.nix
+      ../../modules/hydra.nix
     ];
     
   nix.useSandbox = lib.mkForce false;

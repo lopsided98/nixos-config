@@ -1,2 +1,0 @@
-docker_storage_driver: overlay2
-docker_dns: [192.168.1.2]

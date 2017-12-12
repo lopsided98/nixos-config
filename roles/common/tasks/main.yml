@@ -1,53 +1,28 @@
-- name: Create group
-  group:
-    name: "{{ item.0 }}"
-    gid: "{{ item.1.gid | default(omit) }}"
-  with_together: ["{{ args.groups.keys() }}", "{{ args.groups.values() }}"]
-
-- name: Create user
-  user:
-    name: "{{ item.0 }}"
-    uid: "{{ item.1.uid | default(omit) }}"
-    group: "{{ item.1.group | default(omit) }}"
-    groups: "{{ item.1.groups | default(omit) }}"
-    comment: "{{ item.1.comment | default(omit) }}"
-  with_together: ["{{ args.users.keys() }}", "{{ args.users.values() }}"]
-
-- name: install | sudoers
+- name: build home directory
+  file:
+    path: /var/lib/build
+    state: directory
+    owner: hydra-queue-runner
+    group: hydra
+    mode: '0750'
+- name: build ssh directory
+  file:
+    path: /var/lib/build/.ssh
+    state: directory
+    owner: hydra-queue-runner
+    group: hydra
+    mode: '0755'
+- name: build ssh private key
   copy:
-    src: etc/sudoers
-    dest: /etc/sudoers
-    owner: root
-    group: root
-    mode: '0440'
-    validate: visudo -cf %s
-
-- name: pacman | aur-buildbot repository file
+    src: var/lib/build/.ssh/id_ed25519
+    dest: /var/lib/build/.ssh/id_ed25519
+    owner: hydra-queue-runner
+    group: hydra
+    mode: '0400'
+- name: signing private key
   copy:
-    src: etc/pacman.d/aur-buildbot.conf
-    dest: /etc/pacman.d/aur-buildbot.conf
+    src: etc/nix/signing-key.sec
+    dest: /etc/nix/signing-key.sec
     owner: root
     group: root
-    mode: '0644'
-
-- name: pacman | mirrorlist
-  copy:
-    src: "{{ common_mirrorlist }}"
-    dest: /etc/pacman.d/mirrorlist
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: pacman | aur-buildbot repository include
-  lineinfile:
-    path: /etc/pacman.conf
-    insertafter: EOF
-    line: "Include = /etc/pacman.d/aur-buildbot.conf"
-    
-- name: install | hosts file
-  template:
-    src: etc/hosts.j2
-    dest: /etc/hosts
-    owner: root
-    group: root
-    mode: '0644'
+    mode: '0600'

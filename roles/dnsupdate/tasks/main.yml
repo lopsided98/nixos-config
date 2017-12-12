@@ -1,63 +1,7 @@
-- name: pacman | install dnsupdate and optional deps
-  pacman: name={{ item }} state=present
-  with_items:
-    - dnsupdate-git
-    - python-netifaces
-
-- name: group | dnsupdate
-  group:
-    name: dnsupdate
-    system: true
-
-- name: user | dnsupdate
-  user:
-    name: dnsupdate
-    group: dnsupdate
-    shell: /usr/bin/nologin
-    home: /
-    system: true
-
-- name: dnsupdate | configuration file
-  template:
-    src: etc/dnsupdate.conf.j2
-    dest: /etc/dnsupdate.conf
-    owner: root
-    group: dnsupdate
-    mode: '0640'
-    
-- name: dnsupdate | create cache directory
+- name: create cache directory
   file: 
     path: /var/cache/dnsupdate
     state: directory
     owner: dnsupdate
-    group: dnsupdate
+    group: root
     mode: '0750'
-
-- name: systemd | create dnsupdate.service.d
-  file: 
-    path: /etc/systemd/system/dnsupdate.service.d
-    state: directory
-    owner: root
-    group: root
-    mode: '0755'
-
-- name: systemd | install dnsupdate.service override
-  copy:
-    src: etc/systemd/system/dnsupdate.service.d/override.conf
-    dest: /etc/systemd/system/dnsupdate.service.d/override.conf
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: systemd | install dnsupdate.timer
-  notify:
-    - systemd | restart dnsupdate.timer
-  copy:
-    src: etc/systemd/system/dnsupdate.timer
-    dest: /etc/systemd/system/dnsupdate.timer
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: systemd | enable dnsupdate.timer
-  service: name=dnsupdate.timer enabled=true state=started

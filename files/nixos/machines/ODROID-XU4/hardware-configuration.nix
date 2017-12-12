@@ -13,5 +13,5 @@
     { device = "/dev/disk/by-uuid/2178-694E";
       fsType = "vfat";
     };
-  nix.maxJobs = lib.mkDefault 8;
+  nix.maxJobs = lib.mkDefault 4;
 }

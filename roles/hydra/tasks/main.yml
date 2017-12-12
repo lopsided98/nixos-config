@@ -1,0 +1,14 @@
+- name: base directory
+  file:
+    path: /var/lib/hydra
+    state: directory
+    owner: hydra
+    group: hydra
+    mode: '0750'
+- name: binary cache secret key
+  copy:
+    src: var/lib/hydra/nix-cache.benwolsieffer.com-1
+    dest: /var/lib/hydra/nix-cache.benwolsieffer.com-1
+    owner: hydra
+    group: hydra
+    mode: '0440'

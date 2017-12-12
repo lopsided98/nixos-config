@@ -1,0 +1,5 @@
+- name: Hydra configuration
+  hosts: NixOS-Test
+
+  roles:
+    - role: hydra
