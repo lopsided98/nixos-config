@@ -13,7 +13,6 @@
       ../../modules/services/web-apps/muximux.nix
       ../../modules/docker.nix
       ../../modules/nginx.nix
-      ../../modules/hydra.nix
     ];
     
   nix.useSandbox = lib.mkForce false;
@@ -34,6 +33,10 @@
     };
   };
   networking.hostName = "NixOS-Test";
+  networking.extraHosts = ''
+    192.168.1.3 odroid-xu4.benwolsieffer.com
+    192.168.1.4 dell-optiplex-780.benwolsieffer.com
+  '';
 
   environment.systemPackages = with pkgs; with rosPackages; [
   ];

@@ -139,7 +139,12 @@ in {
         default = {};
         description = "Templates for datasets";
       };
-
+      
+      extraArgs = mkOption {
+        description = "Extra arguments to pass to sanoid";
+        type = types.separatedString " ";
+        default = "";
+      };
     };
 
     # Implementation
@@ -153,7 +158,7 @@ in {
         };
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.sanoid}/bin/sanoid --cron --configdir=${configDir}";
+          ExecStart = "${pkgs.sanoid}/bin/sanoid --cron --configdir=${configDir} ${cfg.extraArgs}";
         };
       };
 

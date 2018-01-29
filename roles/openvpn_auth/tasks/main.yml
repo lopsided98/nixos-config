@@ -1,0 +1,39 @@
+- name: openvpn | create data dir
+  file: 
+    path: "{{ openvpn_auth_data_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: openvpn | install private key
+  copy:
+    src: "{{ openvpn_auth_key }}"
+    dest: "{{ openvpn_auth_data_dir }}/{{ inventory_hostname }}.key"
+    owner: root
+    group: root
+    mode: '0600'
+    
+- name: openvpn | install device certificate
+  copy:
+    src: "{{ openvpn_auth_cert }}"
+    dest: "{{ openvpn_auth_data_dir }}/{{ inventory_hostname }}.crt"
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: openvpn | install CA certificate
+  copy:
+    src: "{{ openvpn_auth_ca_cert }}"
+    dest: "{{ openvpn_auth_data_dir }}/ca.crt"
+    owner: root
+    group: root
+    mode: '0600'
+    
+- name: openvpn | install TLS auth key
+  copy:
+    src: "{{ openvpn_auth_static_key }}"
+    dest: "{{ openvpn_auth_data_dir }}/ta.key"
+    owner: root
+    group: root
+    mode: '0600'

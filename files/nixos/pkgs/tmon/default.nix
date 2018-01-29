@@ -1,18 +1,14 @@
-{ stdenv, fetchurl, kernel, coreutils, ncurses }:
+{ stdenv, buildPackages, fetchurl, kernel, coreutils, ncurses }:
 
 stdenv.mkDerivation {
   name = "tmon-${kernel.version}";
 
-  src = kernel.src;
+  inherit (kernel) src makeFlags;
 
   buildInputs = [ ncurses ];
 
   configurePhase = ''
     cd tools/thermal/tmon
-  '';
-
-  buildPhase = ''
-    make
   '';
 
   installPhase = ''

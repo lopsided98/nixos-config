@@ -3,7 +3,7 @@
 {
   virtualisation.docker = {
     enable = true;
-    extraOptions = "--dns 192.168.1.2";
+    extraOptions = "--dns 8.8.8.8";
   };
 
 }

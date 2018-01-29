@@ -118,7 +118,7 @@ in {
   
   # Implementation
   
-  config = {
+  config = mkIf cfg.enable {
     assertions = [(addressProviderCheck cfg.addressProvider)] ++
       (map (d: addressProviderCheck d.addressProvider) cfg.dnsServices);
   
@@ -136,7 +136,7 @@ in {
       };
     };
 
-    systemd.timers.dnsupdate = mkIf cfg.enable {
+    systemd.timers.dnsupdate = {
       description = "Dynamic DNS update timer";
       partOf = [ "dnsupdate.service" ];
       wantedBy = [ "timers.target" ];

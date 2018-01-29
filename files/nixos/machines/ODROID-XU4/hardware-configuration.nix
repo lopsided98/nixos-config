@@ -9,9 +9,10 @@
       fsType = "ext4";
     };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/2178-694E";
-      fsType = "vfat";
-    };
+#  fileSystems."/boot" =
+#    { device = "/dev/disk/by-uuid/2178-694E";
+#      fsType = "vfat";
+#    };
   nix.maxJobs = lib.mkDefault 4;
+  nix.buildCores = lib.mkDefault 4;
 }

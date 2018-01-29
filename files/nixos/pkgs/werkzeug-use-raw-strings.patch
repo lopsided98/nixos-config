@@ -1,0 +1,32 @@
+From a0d744bd170a0b98107afdc094adf4392e20da78 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sat, 16 Dec 2017 17:02:08 -0500
+Subject: [PATCH] Use raw strings.
+
+---
+ werkzeug/_internal.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/werkzeug/_internal.py b/werkzeug/_internal.py
+index 3d1ee090..2fbabf17 100644
+--- a/werkzeug/_internal.py
++++ b/werkzeug/_internal.py
+@@ -42,12 +42,12 @@ for _i in chain(range_type(32), range_type(127, 256)):
+ 
+ _octal_re = re.compile(b'\\\\[0-3][0-7][0-7]')
+ _quote_re = re.compile(b'[\\\\].')
+-_legal_cookie_chars_re = b'[\w\d!#%&\'~_`><@,:/\$\*\+\-\.\^\|\)\(\?\}\{\=]'
+-_cookie_re = re.compile(b"""
++_legal_cookie_chars_re = br'[\w\d!#%&\'~_`><@,:/\$\*\+\-\.\^\|\)\(\?\}\{\=]'
++_cookie_re = re.compile(br"""
+     (?P<key>[^=]+)
+     \s*=\s*
+     (?P<val>
+-        "(?:[^\\\\"]|\\\\.)*" |
++        "(?:[^\\"]|\\.)*" |
+          (?:.*?)
+     )
+     \s*;
+-- 
+2.15.0
+

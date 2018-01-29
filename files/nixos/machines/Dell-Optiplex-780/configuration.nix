@@ -20,7 +20,6 @@ in rec {
       ../../modules/zfs-backup.nix
       ../../modules/services/continuous-integration/aur-buildbot/worker.nix
       ../../modules/docker.nix
-      ../../modules/services/networking/dnsupdate.nix
     ];
   
   boot = {
@@ -39,7 +38,7 @@ in rec {
         tinyssh = {
           port = lib.head services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
-          hostEd25519Key = /var/tinyssh.key;
+          hostEd25519Key = ./tinyssh.id_ed25519;
         };
         decryptssh = {
           enable = true;
@@ -60,21 +59,40 @@ in rec {
   };
   networking.hostName = "Dell-Optiplex-780"; # Define your hostname.
   networking.hostId = "8e4fab4d";
+  services.wakeonlan.interfaces = lib.singleton {
+    interface = interface;
+    method = "magicpacket";
+  };
+  
   # Enable telegraf metrics for this interface
-  services.telegraf-fixed.inputs.net.interfaces = [ "eth0" ];
+  services.telegraf-fixed.inputs.net.interfaces = [ interface ];
 
   environment.systemPackages = with pkgs; [
   ];
 
   # List services that you want to enable:
   
+  # Serial terminal
+  systemd.services."serial-getty@ttyS0".enable = true;
+  
   # Set SSH port
-  services.openssh.ports = [4244];
+  services.openssh = {
+    ports = [4244];
+    gatewayPorts = "clientspecified";
+  };
+  
+  # Quassel core (IRC)
+  services.quassel = {
+    enable = true;
+    portNumber = 4600;
+    interfaces = [ "0.0.0.0" ];
+    dataDir = "/var/lib/quassel";
+  };
   
   services.aur-buildbot-worker = {
     enable = true;
     workerPass = "VKK4scBAqYuRmtuDUXZDz0E65voAOaj31UIoLH7t";
-    masterHost = "hp-z420.nsupdate.info";
+    masterHost = "hp-z420.benwolsieffer.com";
   };
   
   services.sanoid = {
@@ -89,31 +107,31 @@ in rec {
   };
   
   services.syncoid = let
-    remote = "backup@hp-z420.nsupdate.info";
+    remote = "backup@hp-z420.benwolsieffer.com";
   in {
-    defaultArguments = "--no-privilege-elevation --no-sync-snap --sshport 4245";
+    defaultArguments = "--sshport 4245";
     commands = [ {
       source = "root/root";
-      target = "${remote}:backup/backups/Dell-Optiplex-780/root";
+      target = "backup/backups/Dell-Optiplex-780/root";
     } {
       source = "root/home";
-      target = "${remote}:backup/backups/Dell-Optiplex-780/home";
+      target = "backup/backups/Dell-Optiplex-780/home";
+    } {
+      source = "backup/backups/Dell-Optiplex-780";
+      target = "${remote}:backup/backups/Dell-Optiplex-780";
+      recursive = true;
     } ];
   };
   
-  services.dnsupdate = {
+  services.syncthing = {
     enable = true;
-    addressProvider = {
-      ipv4.type = "Web";
-    };
-    
-    dnsServices = [ {
-      type = "GoogleDomains";
-      args = {
-        hostname = "dell-optiplex-780.benwolsieffer.com";
-        username = "6jXuwtQkd5SxHmM2";
-        password = "c2GpDRJ6OUfiIJ7Q";
-      };
-    } ];
+    user = "backup";
+    group = "backup";
+    openDefaultPorts = true;
+    dataDir = "/mnt/backup/syncthing";
   };
+  systemd.services.syncthing.unitConfig.RequiresMountsFor = "/mnt/backup";
+  
+  networking.firewall.allowedTCPPorts = [ 1313 4600 ];
+  networking.firewall.allowedUDPPorts = [ 4600 ];
 }

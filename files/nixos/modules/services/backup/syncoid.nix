@@ -142,7 +142,7 @@ in {
       };
       
       defaultArguments = mkOption { 
-        type = types.str;
+        type = types.separatedString " ";
         default = "";
         example = "--no-sync-snap";
         description = ''
@@ -193,7 +193,7 @@ in {
             };
           
             extraArguments = mkOption { 
-              type = types.str;
+              type = types.separatedString " ";
               default = "";
               example = "--sshport 2222";
               description = ''

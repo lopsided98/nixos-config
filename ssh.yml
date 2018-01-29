@@ -1,5 +1,0 @@
-- name: SSH server
-  hosts: all
-
-  roles:
-    - ssh

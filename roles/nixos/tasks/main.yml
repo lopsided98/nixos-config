@@ -2,7 +2,7 @@
   become: no
   synchronize:
     src: files/nixos/
-    dest: /home/ben/nixos/
+    dest: /etc/nixos/
     rsync_path: rsync
     owner: no
     group: no
@@ -14,13 +14,11 @@
   become: no
   file:
     src: machines/{{ inventory_hostname }}/configuration.nix
-    dest: /home/ben/nixos/configuration.nix
+    dest: /etc/nixos/configuration.nix
     state: link
 
 - name: Rebuild NixOS configuration
-  command: nixos-rebuild switch
+  command: nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix -I localpkgs=/etc/nixos
   register: nixos_rebuild
-  environment:
-    NIXOS_CONFIG: /home/ben/nixos/configuration.nix
   changed_when: nixos_rebuild.stderr | search("these derivations will be built")
 

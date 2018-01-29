@@ -1,0 +1,5 @@
+- name: HackerHats state
+  hosts: HP-Z420
+
+  roles:
+    - role: hacker_hats

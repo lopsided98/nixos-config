@@ -1,0 +1,14 @@
+- name: state directory
+  file:
+    path: /var/lib/hacker-hats
+    state: directory
+    owner: uwsgi
+    group: uwsgi
+    mode: '0750'
+- name: secret key
+  copy:
+    src: var/lib/hacker-hats/secret_key.txt
+    dest: /var/lib/hacker-hats/secret_key.txt
+    owner: uwsgi
+    group: uwsgi
+    mode: '0400'

@@ -9,5 +9,10 @@
                       '"$http_user_agent" "$http_x_forwarded_for"';
       access_log syslog:server=unix:/dev/log,nohostname,tag= access;
     '';
+    recommendedTlsSettings = true;
+    recommendedOptimisation = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
   };
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
 }

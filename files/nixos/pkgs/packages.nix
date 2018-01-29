@@ -1,32 +1,54 @@
-self: super: rec {
+self: super: with super.lib; let
+  armv7lPackages = super.crossPackages {
+    system = "x86_64-linux";
+    platform = systems.platforms.pc64;
+  } systems.examples.armv7l-hf-multiplatform;
+  
+  aarch64Packages = super.crossPackages {
+    system = "x86_64-linux";
+    platform = systems.platforms.pc64;
+  } systems.examples.aarch64-multiplatform;
+  
+  crossPackages = if super.stdenv.hostPlatform.system == "armv7l-linux" then armv7lPackages
+                  else if super.stdenv.hostPlatform.system == "aarch64-linux" then aarch64Packages
+                  else super;
+in rec {
+  # Use cross compiled stdenv
+  #stdenv = crossPackages.stdenv;
+
   dnsupdate = super.callPackage ./dnsupdate/default.nix {
     inherit (self.python3Packages) buildPythonApplication requests pyyaml beautifulsoup4 netifaces;
   };
   
   aur-buildbot = super.callPackage ./aur-buildbot/default.nix {};
+
+  buildbot = (super.buildbot.override { 
+    pythonPackages = self.python3Packages;
+    inherit (self) buildbot-worker;
+  }).overridePythonAttrs (oldAttrs: rec {
+    
+    # 7 tests fail because of some stupid ascii/utf-8 conversion issue, and I 
+    # don't use the failing modules anyway
+    doCheck = false;
+    LC_ALL = "en_US.UTF-8";
+    preCheck = ''
+      export PYTHONIOENCODING=utf8
+    '';
+  });
   
-  buildbot = super.buildbot.override { 
+  buildbot-plugins = mapAttrs (n: p: p.override {
+    pythonPackages = self.python3Packages;
+  }) super.buildbot-plugins;
+  
+  buildbot-worker = super.buildbot-worker.override {
     pythonPackages = self.python3Packages;
   };
-  
-  buildbot-worker = (super.buildbot-worker.override {
-    pythonPackages = self.python3Packages;
-  }).overrideAttrs (oldAttrs: rec {
-    version = "0.9.12";
-    src = self.python3Packages.fetchPypi {
-      inherit (oldAttrs) pname;
-      inherit version;
-      sha256 = "0hdgcm175xnb49mdmgqh5mpw90wbzfd2nvgrq5jqklavabswvafj";
-    };
-  
-    passthru = oldAttrs.passthru // {
-      python = self.python3Packages.python;
-    };
-  });
   
   pacman = super.callPackage ./pacman/default.nix {};
   
   muximux = super.callPackage ./muximux/default.nix {};
+  
+  hacker-hats = super.callPackage ./hacker-hats/default.nix {};
   
   tinyssh = super.callPackage ./tinyssh/default.nix {};
   
@@ -39,6 +61,36 @@ self: super: rec {
     lzoSupport = true;
     gzipSupport = true;
     parallelGzipSupport = true;
+  };
+
+  python3 = super.python3.override {
+    packageOverrides = se: su: {
+      sqlalchemy_migrate = su.sqlalchemy_migrate.overridePythonAttrs (oldAttrs: {
+        patches = [ ./sqlachemy-migrate-use-raw-strings.patch ];
+      });
+    };
+  };
+  
+  python3Packages = with self.python3Packages; super.python3Packages // {
+    pyalpm = super.callPackage ./python-modules/pyalpm/default.nix {
+      inherit buildPythonPackage nose;
+    };
+    
+    xcgf = super.callPackage ./python-modules/xcgf/default.nix {
+      inherit buildPythonPackage;
+    };
+    
+    memoizedb = super.callPackage ./python-modules/memoizedb/default.nix {
+      inherit buildPythonPackage;
+    };
+    
+    xcpf = super.callPackage ./python-modules/xcpf/default.nix {
+      inherit buildPythonPackage pyalpm pyxdg memoizedb xcgf;
+    };
+    
+    aur = super.callPackage ./python-modules/aur/default.nix {
+      inherit buildPythonPackage pyalpm xcgf xcpf pyxdg;
+    };
   };
 
   perlPackages = super.perlPackages // {
@@ -57,15 +109,40 @@ self: super: rec {
     };
   };
   
-  linuxPackages_latest = super.linuxPackages_latest // {
-    tmon = super.callPackage ./tmon/default.nix {
-      kernel = self.linuxPackages_latest.kernel;
-    };
+  inherit (crossPackages) linux_4_14 linuxPackagesFor;
+  
+  linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4/linux-odroid-xu4.nix {
+    kernelPatches =
+      [ super.kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        super.kernelPatches.cpu-cgroup-v2."4.11"
+        super.kernelPatches.modinst_arg_list_too_long
+      ];
   };
   
-  linuxPackages_4_13 = super.linuxPackages_4_13 // {
-    tmon = super.callPackage ./tmon/default.nix {
-      kernel = self.linuxPackages_4_13.kernel;
-    };
+  linux_rock64_mainline = crossPackages.callPackage ./linux-rock64-mainline/linux-rock64-mainline.nix {
+    kernelPatches =
+      [ super.kernelPatches.bridge_stp_helper
+        super.kernelPatches.modinst_arg_list_too_long
+      ];
   };
+  
+  linux_rock64 = crossPackages.callPackage ./linux-rock64/linux-rock64.nix {
+    kernelPatches =
+      [ super.kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        super.kernelPatches.cpu-cgroup-v2."4.4"
+        super.kernelPatches.modinst_arg_list_too_long
+        {
+          name = "gcc-wrapper";
+          patch = ./linux-rock64/remove-gcc-wrapper.patch;
+        }
+      ];
+  };
+  
+  linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
+  linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
+  linuxPackages_rock64 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }

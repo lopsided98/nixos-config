@@ -13,8 +13,13 @@ stdenv.mkDerivation rec {
   };
   
   nativeBuildInputs = [ pkgconfig m4 ];
-  buildInputs = [ perl libarchive xz zlib bzip2 curl ];
-  propagatedBuildInputs = [ openssl ];
+  buildInputs = [ perl libarchive xz zlib bzip2 curl openssl ];
+  
+  postFixup = ''
+    substituteInPlace $out/bin/repo-add \
+      --replace bsdtar "${libarchive}/bin/bsdtar" \
+      --replace openssl "${openssl}/bin/openssl" \
+  '';
 
   meta = with lib; {
     description = "A simple library-based package manager";

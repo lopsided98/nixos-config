@@ -1,2 +1,0 @@
-- name: systemd | reload aur-buildbot
-  service: name={{ aur_buildbot_name }}.service state=reloaded

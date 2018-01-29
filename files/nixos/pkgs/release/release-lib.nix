@@ -1,8 +1,7 @@
-{ supportedSystems,
-  packageSet ? (import <nixpkgs>),
-  overlay ? (self: super: {}),
-  scrubJobs ? true,
-  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+{ supportedSystems
+, packageSet ? (import <nixpkgs>)
+, scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
@@ -12,10 +11,7 @@ in with lib;
 
 rec {
 
-  allPackages = args: let
-    super = packageSet (args // nixpkgsArgs);
-    output = overlay (super // output) super;
-  in output;
+  allPackages = args: packageSet (args // nixpkgsArgs);
 
   pkgs = packageSet (lib.recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
   inherit lib;
@@ -30,11 +26,13 @@ rec {
   pkgsFor = system:
     if system == "x86_64-linux" then pkgs_x86_64_linux
     else if system == "aarch64-linux" then pkgs_aarch64_linux
+    else if system == "armv6l-linux" then pkgs_armv6l_linux
     else if system == "armv7l-linux" then pkgs_armv7l_linux
     else abort "unsupported system type: ${system}";
 
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
   pkgs_aarch64_linux = allPackages { system = "aarch64-linux"; };
+  pkgs_armv6l_linux = allPackages { system = "armv6l-linux"; };
   pkgs_armv7l_linux = allPackages { system = "armv7l-linux"; };
 
 

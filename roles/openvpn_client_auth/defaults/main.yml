@@ -1,4 +1,0 @@
-openvpn_client_auth_key: files/{{ inventory_hostname }}/etc/openvpn/client/{{ inventory_hostname }}.key
-openvpn_client_auth_cert: files/{{ inventory_hostname }}/etc/openvpn/client/{{ inventory_hostname }}.crt
-openvpn_client_auth_ca_cert: etc/openvpn/client/ca.crt
-openvpn_client_auth_static_key: etc/openvpn/client/ta.key

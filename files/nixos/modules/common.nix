@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
-
-{
+{ config, lib, pkgs, ... }: let
+  buildSSHKey = "/var/lib/build/.ssh/id_ed25519";
+in {
 
   imports = [
     ./ssh.nix # Enable SSH on all systems
+    ./system/build-machines.nix
   ];
 
   # Include my custom package overlay
@@ -27,43 +28,62 @@
     defaultLocale = "en_US.UTF-8";
   };
 
+  system.buildMachines = let
+    machine = m: m // {
+      sshUser = "build";
+      sshKey = "/var/lib/build/.ssh/id_ed25519";
+    };
+  in {
+    "HP-Z420" = machine {
+      system = "x86_64-linux";
+      maxJobs = 8;
+      speedFactor = 8;
+      supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
+    };
+    "ODROID-XU4" = machine {
+      system = "armv7l-linux";
+      maxJobs = 4;
+      speedFactor = 1;
+      supportedFeatures = [ "big-parallel" "nixos-test" ];
+    };
+    "Rock64" = machine {
+      system = "aarch64-linux";
+      maxJobs = 4;
+      speedFactor = 2;
+      supportedFeatures = [ "big-parallel" ];
+    };
+  };
+
   nix = {
+    package = pkgs.nixUnstable;
     # Build packages in sandbox
     useSandbox = true;
-    
-    buildMachines = let
-      # Automatically set current machine hostname to localhost
-      machine = { hostName, ... }@m: m // {
-        sshUser = "build";
-        sshKey = "/var/lib/build/.ssh/id_ed25519";
-      };
-    in builtins.filter ({ hostName, ... }: hostName != config.networking.hostName) [
-      (machine {
-        hostName = "NixOS-Test";
-        system = "x86_64-linux";
-        maxJobs = 2;
-      })
-      (machine {
-        hostName = "ODROID-XU4";
-        system = "armv7l-linux";
-        maxJobs = 4;
-      }) 
-      (machine {
-        hostName = "Dell-Optiplex-780";
-        system = "x86_64-linux";
-        maxJobs = 2;
-      })
-    ];
+
+    trustedUsers = [ "build" ];
     distributedBuilds = true;
     extraOptions = ''
       auto-optimise-store = true
-      trusted-users = build
+      
+      gc-keep-outputs = true
+      tarball-ttl = 10
+      netrc-file = ${pkgs.writeText "nix-netrc" ''
+        machine hydra.benwolsieffer.com
+        login hydra
+        password _d-SlzcGcwUf1nT9fsW0O5PUV2m_YfaRpGUBObT_
+      ''}
     '';
     
-    nixPath = [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
-      "nixos-config=/home/ben/nixos/configuration.nix"
-      "nixpkgs-overlays=/home/ben/nixos/overlays"
+    # Use my binary cache
+    binaryCaches = [ https://hydra.benwolsieffer.com/ https://cache.nixos.org/ ];
+    binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
+    
+    nixPath = let 
+      machineChannel = "/nix/var/nix/profiles/per-user/root/channels/channels.machines.${config.networking.hostName}";
+    in [
+      "nixpkgs=${machineChannel}/nixpkgs"
+      "localpkgs=${machineChannel}"
+      "nixos-config=${machineChannel}/machines/${config.networking.hostName}/configuration.nix"
+      "nixpkgs-overlays=${machineChannel}/overlays"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
@@ -86,7 +106,7 @@
   # Global SSH configuration for distributed builds
   programs.ssh = let
     host = { name, port, hostName }: ''
-      Host ${if name == config.networking.hostName then "localhost" else name}
+      Host ${name}
           Port ${toString port}
           HostName ${hostName}
           IdentityFile /var/lib/build/.ssh/id_ed25519
@@ -94,9 +114,9 @@
   in {
     extraConfig = 
       (host {
-        name = "NixOS-Test";
-        port = 4247;
-        hostName = "hp-z420.nsupdate.info";
+        name = "HP-Z420";
+        port = 4245;
+        hostName = "hp-z420.benwolsieffer.com";
       }) +
       (host {
         name = "ODROID-XU4";
@@ -107,9 +127,23 @@
         name = "Dell-Optiplex-780";
         port = 4244;
         hostName = "dell-optiplex-780.benwolsieffer.com";
+      }) +
+      (host {
+        name = "RasPi2";
+        port = 4242;
+        hostName = "raspi2.benwolsieffer.com";
+      }) +
+      (host {
+        name = "Rock64";
+        port = 4246;
+        hostName = "rock64.benwolsieffer.com";
       });
 
     knownHosts = [
+      {
+        hostNames = [ "hp-z420.benwolsieffer.com" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
+      }
       {
         hostNames = [ "odroid-xu4.benwolsieffer.com" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
@@ -118,12 +152,20 @@
         hostNames = [ "dell-optiplex-780.benwolsieffer.com" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODxgNjFuareM/XZEo7ZZrGddVj2Bx6RfaOTK1/DyNBJ";
       }
+      {
+        hostNames = [ "rock64.benwolsieffer.com" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODxgNjFuareM/XZEo7ZZrGddVj2Bx6RfaOTK1/DyNBJ";
+      }
     ];
   };
 
-  networking.firewall.enable = true;
-  # Disable NixOS standard network configuration because I use systemd-networkd
-  networking.useDHCP = false;
+  networking = {
+    firewall.enable = true;
+    # Disable NixOS standard network configuration because I use systemd-networkd
+    useDHCP = false;
+    # Enable systemd predictable network names
+    usePredictableInterfaceNames = true;
+  };
   
   programs.bash.enableCompletion = true;
   # Stolen from Arch Linux
@@ -163,9 +205,7 @@
         openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAo5DSurLPw8PhMJq11qdqy312ie2oLV478grGUjR+B NixOS Build User" ];
       };
     };
-    extraGroups = {
-      build = {};
-    };
+    extraGroups.build = {};
   };
   
   # This value determines the NixOS release with which your system is to be

@@ -1,0 +1,5 @@
+openvpn_auth_data_dir: /var/lib/openvpn
+openvpn_auth_key: files/{{ inventory_hostname }}/var/lib/openvpn/{{ inventory_hostname }}.key
+openvpn_auth_cert: files/{{ inventory_hostname }}/var/lib/openvpn/{{ inventory_hostname }}.crt
+openvpn_auth_ca_cert: var/lib/openvpn/ca.crt
+openvpn_auth_static_key: var/lib/openvpn/ta.key

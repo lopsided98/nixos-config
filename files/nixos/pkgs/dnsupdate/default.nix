@@ -8,7 +8,7 @@ assert webScrapingSupport -> beautifulsoup4 != null;
 
 buildPythonApplication rec {
   pname = "dnsupdate";
-  version = "0.2.1";
+  version = "0.3";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

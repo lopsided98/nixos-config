@@ -2,22 +2,22 @@
   file:
     path: /var/lib/build
     state: directory
-    owner: hydra-queue-runner
-    group: hydra
+    owner: build
+    group: build
     mode: '0750'
 - name: build ssh directory
   file:
     path: /var/lib/build/.ssh
     state: directory
-    owner: hydra-queue-runner
-    group: hydra
+    owner: build
+    group: build
     mode: '0755'
 - name: build ssh private key
   copy:
     src: var/lib/build/.ssh/id_ed25519
     dest: /var/lib/build/.ssh/id_ed25519
-    owner: hydra-queue-runner
-    group: hydra
+    owner: build
+    group: build
     mode: '0400'
 - name: signing private key
   copy:
