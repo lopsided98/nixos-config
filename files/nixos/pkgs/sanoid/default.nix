@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper,
-  coreutils, zfs, perl, procps, ConfigIniFiles, openssh, sudo,
+  coreutils, zfs, perl, procps, which, ConfigIniFiles, openssh, sudo,
   mbufferSupport ? true, mbuffer ? null,
   pvSupport ? true, pv ? null,
   lzoSupport ? true, lzop ? null,
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     chmod +x "$out/bin/syncoid"
     wrapProgram "$out/bin/syncoid" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
-      --prefix PATH : "${makeBinPath ([ zfs sudo procps ]
+      --prefix PATH : "${makeBinPath ([ zfs sudo procps which ]
                           ++ optional pvSupport pv
                           ++ optional mbufferSupport mbuffer
                           ++ optional lzoSupport lzop
