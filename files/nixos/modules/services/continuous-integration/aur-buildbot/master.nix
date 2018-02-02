@@ -93,7 +93,7 @@ in {
 
         # NOTE: call twistd directly with stdout logging for systemd
         #ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
-        ExecStart = "${cfg.package}/bin/buildbot-twistd -n -l - -y ${tacFile}";
+        ExecStart = "${cfg.package}/bin/buildbot-twistd -o --nodaemon --pidfile= --syslog --python ${tacFile}";
       };
 
     };
