@@ -33,6 +33,16 @@ with lib;
   # Enable OpenVPN client
   services.openvpn.servers = let
     dataDir = "/var/lib/openvpn";
+
+    clientConfigDir = pkgs.linkFarm "openvpn-client-config" [
+      {
+        name = "Dell-Inspiron-15";
+        path = pkgs.writeText "openvpn-Dell-Inspiron-15-client-config" ''
+
+        '';
+      }
+    ];
+
     common = ''
       # Use UDP
       proto udp
@@ -119,9 +129,6 @@ with lib;
       # sequential messages of the same message
       # category will be output to the log.
       ;mute 20
-
-      # MTU optimization
-      ;fragment 1472
     '';
   in {
     tap.config = ''
@@ -153,6 +160,7 @@ with lib;
       # server's TUN/TAP interface.
       ;client-to-client
 
+      # MTU optimization
       fragment 1472
     '';
     tun.config = ''
@@ -197,6 +205,8 @@ with lib;
       # will also need to appropriately firewall the
       # server's TUN/TAP interface.
       ;client-to-client
+
+      client-config-dir ${clientConfigDir}
     '';
   };
   
