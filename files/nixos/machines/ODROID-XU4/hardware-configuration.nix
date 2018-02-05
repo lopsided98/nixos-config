@@ -5,14 +5,10 @@
 
 {
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/44444444-4444-4444-8888-888888888888";
+    { device = "/dev/disk/by-uuid/35003c68-484a-4f31-8ec6-c44c987b0ae3";
       fsType = "ext4";
     };
 
-#  fileSystems."/boot" =
-#    { device = "/dev/disk/by-uuid/2178-694E";
-#      fsType = "vfat";
-#    };
   nix.maxJobs = lib.mkDefault 4;
   nix.buildCores = lib.mkDefault 4;
 }
