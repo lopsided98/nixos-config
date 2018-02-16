@@ -34,15 +34,6 @@ with lib;
   services.openvpn.servers = let
     dataDir = "/var/lib/openvpn";
 
-    clientConfigDir = pkgs.linkFarm "openvpn-client-config" [
-      {
-        name = "Dell-Inspiron-15";
-        path = pkgs.writeText "openvpn-Dell-Inspiron-15-client-config" ''
-
-        '';
-      }
-    ];
-
     common = ''
       # Use UDP
       proto udp
@@ -91,7 +82,7 @@ with lib;
       # on the server and '1' on the clients.
       tls-auth ${dataDir}/ta.key 0 # This file is secret
       tls-version-min 1.2
-      tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-2}56-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
+      tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
 
       # Select a cryptographic cipher.
       # This config item must be copied to
@@ -163,7 +154,17 @@ with lib;
       # MTU optimization
       fragment 1472
     '';
-    tun.config = ''
+    tun.config = let
+      subnet = "10.54.0";
+      clientConfigDir = pkgs.linkFarm "openvpn-client-config" [
+        rec {
+          name = "Sam LaRussa";
+          path = pkgs.writeText "openvpn-SamLaRussa-client-config" ''
+            ifconfig-push ${subnet}.10 255.255.255.0
+          '';
+        }
+      ];
+    in ''
       ${common}
 
       port 4295
@@ -178,7 +179,7 @@ with lib;
       # the rest will be made available to clients.
       # Each client will be able to reach the server
       # on 10.54.0.1.
-      server 10.54.0.0 255.255.255.0
+      server ${subnet}.0 255.255.255.0
 
       # Maintain a record of client <-> virtual IP address
       # associations in this file.  If OpenVPN goes down or
@@ -210,5 +211,14 @@ with lib;
     '';
   };
   
-  networking.firewall.allowedUDPPorts = [ 4294 4295 ];
+  networking.firewall = {
+    extraCommands = ''
+      # Deny Sam access to the router
+      iptables -F FORWARD || true
+      iptables -X FORWARD || true
+      iptables -A FORWARD -i vpn1 -s 10.54.0.10 -d 192.168.1.2 -j ACCEPT
+      iptables -A FORWARD -i vpn1 -s 10.54.0.10 -d 192.168.1.0/24 -j REJECT
+    '';
+    allowedUDPPorts = [ 4294 4295 ];
+  };
 }
