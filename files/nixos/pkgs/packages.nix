@@ -36,22 +36,26 @@ in rec {
     '';
   });
   
+  buildbot-pkg = super.buildbot-pkg.override {
+    inherit (self.python3Packages) buildPythonPackage fetchPypi setuptools;
+  };
+
   buildbot-plugins = mapAttrs (n: p: p.override {
     pythonPackages = self.python3Packages;
   }) super.buildbot-plugins;
-  
+
   buildbot-worker = super.buildbot-worker.override {
     pythonPackages = self.python3Packages;
   };
-  
+
   pacman = super.callPackage ./pacman/default.nix {};
-  
+
   muximux = super.callPackage ./muximux/default.nix {};
-  
+
   hacker-hats = super.callPackage ./hacker-hats/default.nix {};
-  
+
   tinyssh = super.callPackage ./tinyssh/default.nix {};
-  
+
   tinyssh-convert = super.callPackage ./tinyssh-convert/default.nix {};
 
   sanoid = super.callPackage ./sanoid/default.nix {
@@ -109,7 +113,7 @@ in rec {
     };
   };
   
-  inherit (crossPackages) linux_4_14 linuxPackagesFor;
+  # inherit (crossPackages) linux_4_14 linuxPackagesFor;
   
   linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4/linux-odroid-xu4.nix {
     kernelPatches =
