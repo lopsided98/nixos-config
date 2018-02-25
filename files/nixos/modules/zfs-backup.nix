@@ -27,7 +27,7 @@
 
         recursive = false;
         autosnap = false;
-        autoprune = false;
+        autoprune = true;
       };
 
       default = {

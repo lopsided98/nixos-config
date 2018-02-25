@@ -4,7 +4,9 @@
     supportedFilesystems = [ "zfs" ];
     # Use a supported kernel version
     
-    kernelPackages = lib.mkForce pkgs.linuxPackages_4_14;
+    # Uncomment when ZFS does not support the latest kernel
+    # Lower priority than mkForce to allow devices to use custom kernels
+    # kernelPackages = lib.mkOverride 100 pkgs.linuxPackages_latest;
   };
 
   virtualisation.docker.storageDriver = "zfs";
