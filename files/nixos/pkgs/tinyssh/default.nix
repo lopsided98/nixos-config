@@ -1,18 +1,21 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "tinyssh-20161101";
+  name = "tinyssh-20180201";
 
   src = fetchurl {
     url = "https://mojzis.com/software/tinyssh/${name}.tar.gz";
-    sha256 = "0kmjgkvzp2jm15lkw66kqrv0ziqy97k36ll58jfijmx064kga3jg";
+    sha256 = "00lrb4ra7j731cxk69jcf5sf9gvad037v9jgigj4hh31w46asbsc";
   };
   
   patches = [ ./0001-Skip-channeltest.patch ];
   
-  installPhase = ''
-    make install DESTDIR="$out"
-    mv "''${out}/usr/sbin" "$out/bin"
+  makeFlags = [ "DESTDIR=$(out)" ];
+  
+  postInstall = ''
+    mv "$out/usr/sbin" "$out/bin"
+    mv "$out/usr/share" "$out/share"
+    rmdir "$out/usr"
   '';
 
   meta = with lib; {
