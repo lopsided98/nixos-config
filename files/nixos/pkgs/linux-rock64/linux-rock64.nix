@@ -1,6 +1,6 @@
 { stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
-import <nixpkgs/pkgs/os-specific/linux/kernel/generic.nix> (args // rec {
+buildLinux (args // rec {
   version = "4.4.103";
   modDirVersion = "4.4.103";
   extraMeta.branch = "4.4";
