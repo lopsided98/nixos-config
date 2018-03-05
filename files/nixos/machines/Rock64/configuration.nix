@@ -11,6 +11,7 @@ in {
       ./hardware-configuration.nix
       ../../modules/common.nix
       ../../modules/ssh.nix
+      ../../modules/zfs.nix
     ];
     
   nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform // {
@@ -39,6 +40,7 @@ in {
     };
   };
   networking.hostName = "Rock64"; # Define your hostname.
+  networking.hostId = "566a7fd8";
   
   environment.systemPackages = with pkgs; with rosPackages; [
   ];
