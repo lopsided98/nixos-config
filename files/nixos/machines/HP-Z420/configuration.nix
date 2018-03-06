@@ -78,15 +78,16 @@ in rec {
   networking.hostId = "5e9c1aa3";
   # Enable telegraf metrics for this interface
   services.telegraf-fixed.inputs.net.interfaces = [ interface ];
-  
-  environment.etc = {
-    "binfmt.d/qemu-aarch64.conf".text = ''
-      :qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:${pkgs.qemu}/bin/qemu-aarch64:OC
-    '';
-    "binfmt.d/qemu-armv7l.conf".text = ''
-      :qemu-armv7l:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:${pkgs.qemu}/bin/qemu-arm:
-    '';
-  };
+
+  # ARM binfmt-misc support
+  #environment.etc = {
+  #  "binfmt.d/qemu-aarch64.conf".text = ''
+  #    :qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:${pkgs.qemu}/bin/qemu-aarch64:OC
+  #  '';
+  #  "binfmt.d/qemu-armv7l.conf".text = ''
+  #    :qemu-armv7l:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:${pkgs.qemu}/bin/qemu-arm:
+  #  '';
+  #};
 
   environment.systemPackages = with pkgs; [
   ];
@@ -119,14 +120,12 @@ in rec {
       "backup/data" = {
         useTemplate = [ "backup" ];
         autosnap = true;
-        autoprune = true;
         recursive = true;
         processChildrenOnly = true;
       };
       # Prune all backups with one rule
       "backup/backups" = {
         useTemplate = [ "backup" ];
-        autoprune = true;
         recursive = true;
         processChildrenOnly = true;
       };
