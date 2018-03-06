@@ -1,6 +1,6 @@
 { localpkgs ? ../.., 
   nixpkgs ? <nixpkgs>,
-  buildSystems ? [ "x86_64-linux" "armv7l-linux" ],
+  buildSystems ? [ "x86_64-linux" "armv7l-linux" "aarch64-linux" ],
   hostSystems ? [ "x86_64-linux" ] }:
 with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = buildSystems; });
 let
