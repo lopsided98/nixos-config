@@ -25,9 +25,14 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelParams = [ "earlycon=uart8250,mmio32,0xff130000 rw root=/dev/mmcblk0p2 rootfstype=ext4 rootwait coherent_pool=1M ethaddr=\${ethaddr} eth1addr=\${eth1addr} serial=\${serial#}" ];
+    kernelParams = [ "earlycon=uart8250,mmio32,0xff130000 coherent_pool=1M ethaddr=\${ethaddr} eth1addr=\${eth1addr} serial=\${serial#}" ];
     kernelPackages = lib.mkForce pkgs.linuxPackages_rock64;
   };
+
+  # Workaround checksumming bug
+  networking.localCommands = ''
+    ${pkgs.ethtool}/bin/ethtool -K eth0 rx off tx off
+  '';
 
   systemd.network = {
     enable = true;
@@ -41,10 +46,10 @@ in {
   };
   networking.hostName = "Rock64"; # Define your hostname.
   networking.hostId = "566a7fd8";
-  
-  environment.systemPackages = with pkgs; with rosPackages; [
+
+  environment.systemPackages = with pkgs; [
   ];
-  
+
   # List services that you want to enable:
 
   # Set SSH port
