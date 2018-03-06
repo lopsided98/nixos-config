@@ -132,7 +132,7 @@ in rec {
       ];
   };
   
-  linux_rock64 = crossPackages.callPackage ./linux-rock64/linux-rock64.nix {
+  linux_rock64 = super.callPackage ./linux-rock64/linux-rock64.nix {
     kernelPatches =
       [ super.kernelPatches.bridge_stp_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
@@ -140,13 +140,13 @@ in rec {
         super.kernelPatches.cpu-cgroup-v2."4.4"
         super.kernelPatches.modinst_arg_list_too_long
         {
-          name = "gcc-wrapper";
+          name = "remove-gcc-wrapper";
           patch = ./linux-rock64/remove-gcc-wrapper.patch;
         }
       ];
   };
   
   linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
-  linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
+  linuxPackages_rock64_mainline = crossPackages.recurseIntoAttrs (crossPackages.linuxPackagesFor crossPackages.linux_rock64_mainline);
   linuxPackages_rock64 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }
