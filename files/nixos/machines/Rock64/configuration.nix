@@ -57,7 +57,4 @@ in {
   
   # Enable SD card TRIM
   services.fstrim.enable = true;
-  
-  # Manual does not build on aarch64
-  services.nixosManual.enable = false;
 }

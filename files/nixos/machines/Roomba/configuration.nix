@@ -50,10 +50,7 @@
   
   # Enable SD card TRIM
   services.fstrim.enable = true;
-  
-  # Manual does not build on aarch64
-  services.nixosManual.enable = false;
-  
+
   # Override OpenBLAS to support aarch64
   nixpkgs.config.packageOverrides = pkgs: rec {
     openblas = pkgs.openblas.overrideAttrs (oldAttrs: rec {
