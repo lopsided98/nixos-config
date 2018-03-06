@@ -19,10 +19,3 @@
     owner: build
     group: build
     mode: '0400'
-- name: signing private key
-  copy:
-    src: etc/nix/signing-key.sec
-    dest: /etc/nix/signing-key.sec
-    owner: root
-    group: root
-    mode: '0600'
