@@ -125,9 +125,6 @@ in {
           architectures: [armv7h]
         python-wakeonlan: {}
         sanoid-git: {}
-        dkms-sorted: {}
-        zfs-dkms:
-          architectures: [armv7h]
         ovpngen: {}
         sbupdate-git: {}
         libvirt-zfs: {}
