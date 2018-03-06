@@ -9,19 +9,29 @@ in {
 
   # Include my custom package overlay
   nixpkgs.overlays = [ (import ../pkgs/packages.nix) ];
-  
-  # Use the latest kernel. Some ARM systems and those with ZFS might use a 
-  # different kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  boot = {
+    # Use the latest kernel. Some ARM systems and those with ZFS might use a 
+    # different kernel
+    kernelPackages = pkgs.linuxPackages_latest;
+    cleanTmpDir = true;
+
+    # Enable GRUB serial console
+    loader.grub.extraConfig = ''
+      serial --unit=0 --speed=115200
+      terminal_input --append serial
+      terminal_output --append serial
+    '';
+  };
 
   # All systems use USA Eastern Time
   time.timeZone = "America/New_York";
-  
+
   # Standard set of packages
   environment.systemPackages = with pkgs; [
-    htop iotop git python27 file vim
+    htop iotop git python27 file vim screen
   ];
-  
+
   # Select internationalisation properties.
   i18n = {
     consoleKeyMap = "us";
@@ -43,7 +53,7 @@ in {
     "ODROID-XU4" = machine {
       system = "armv7l-linux";
       maxJobs = 4;
-      speedFactor = 1;
+      speedFactor = 4;
       supportedFeatures = [ "big-parallel" "nixos-test" ];
     };
     "Rock64" = machine {
@@ -72,7 +82,7 @@ in {
         password _d-SlzcGcwUf1nT9fsW0O5PUV2m_YfaRpGUBObT_
       ''}
     '';
-    
+
     # Use my binary cache
     binaryCaches = [ https://hydra.benwolsieffer.com/ https://cache.nixos.org/ ];
     binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
@@ -87,7 +97,7 @@ in {
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
-  
+
   # Public key for nix-copy-closure (might not be necessary with Nix 1.12?)
   # The private key is stored in Ansible Vault
   environment.etc."nix/signing-key.pub".text = ''
@@ -102,7 +112,7 @@ in {
     -----END PUBLIC KEY-----
   '';
 
-  
+
   # Global SSH configuration for distributed builds
   programs.ssh = let
     host = { name, port, hostName }: ''
@@ -166,7 +176,7 @@ in {
     # Enable systemd predictable network names
     usePredictableInterfaceNames = true;
   };
-  
+
   programs.bash.enableCompletion = true;
   # Stolen from Arch Linux
   programs.bash.promptInit = ''
@@ -207,7 +217,7 @@ in {
     };
     extraGroups.build = {};
   };
-  
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
