@@ -38,10 +38,14 @@ in {
     enable = true;
     networks."${interface}" = {
       name = interface;
-      DHCP = "v4";
-      #address = [ "192.168.1.6/24" ];
-      #gateway = [ "192.168.1.1" ];
-      #dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      # DHCP=v4
+      address = [ "192.168.1.6/24" ];
+      gateway = [ "192.168.1.1" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
     };
   };
   networking.hostName = "Rock64"; # Define your hostname.

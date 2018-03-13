@@ -113,8 +113,8 @@ in {
         local-zone: "hydra.benwolsieffer.com" typetransparent
         local-data: "hydra.benwolsieffer.com A 192.168.1.5"
         
-        local-zone: "deep-learning.nsupdate.info" typetransparent
-        local-data: "deep-learning.nsupdate.info A 192.168.1.6"
+        local-zone: "rock64.benwolsieffer.com" typetransparent
+        local-data: "rock64.benwolsieffer.com A 192.168.1.6"
         
         local-zone: "raspi2.benwolsieffer.com" typetransparent
         local-data: "raspi2.benwolsieffer.com A 192.168.1.2"
