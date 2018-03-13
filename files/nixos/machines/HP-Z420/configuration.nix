@@ -53,8 +53,8 @@ in rec {
         };
       };
     };
-    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
-    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ]; 
+    # "ip=:::::eth0:dhcp"
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ]; 
   };
 
   #modules.openvpn-client-home-network.enable = true;
@@ -71,7 +71,14 @@ in rec {
     #};
     networks."${interface}" = {
       name = interface;
-      DHCP = "v4";
+      # DHCP = "v4";
+      address = [ "${address}/24" ];
+      gateway = [ gateway ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
     };
   };
   networking.hostName = "HP-Z420"; # Define your hostname.
@@ -212,14 +219,6 @@ in rec {
     };
     
     dnsServices = [
-      {
-        type = "GoogleDomains";
-        args = {
-          hostname = "hp-z420.benwolsieffer.com";
-          username = "PiqrZUDJPzi3jAyx";
-          password = "qhsVXD1RZ2HOQYFO";
-        };
-      }
     ];
   };
   

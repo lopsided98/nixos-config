@@ -28,6 +28,10 @@ in {
       address = [ "192.168.1.2/24" ];
       gateway = [ "192.168.1.1" ];
       dns = [ "127.0.0.1" "::1" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
     };
   };
   networking.hostName = "RasPi2"; # Define your hostname.
@@ -73,6 +77,14 @@ in {
           password = "7DNMvRSY5eq5ypSG";
         };
       }
+      {
+        type = "GoogleDomains";
+        args = {
+          hostname = "hp-z420.benwolsieffer.com";
+          username = "PiqrZUDJPzi3jAyx";
+          password = "qhsVXD1RZ2HOQYFO";
+        };
+      }
     ];
   };
   
@@ -92,11 +104,14 @@ in {
         local-zone: "dell-optiplex-780.benwolsieffer.com" typetransparent
         local-data: "dell-optiplex-780.benwolsieffer.com A 192.168.1.4"
         
-        #local-zone: "hp-z420.benwolsieffer.com" typetransparent
-        #local-data: "hp-z420.benwolsieffer.com A 192.168.1.5"
+        local-zone: "hp-z420.benwolsieffer.com" typetransparent
+        local-data: "hp-z420.benwolsieffer.com A 192.168.1.5"
         
-        #local-zone: "arch.benwolsieffer.com" typetransparent
-        #local-data: "arch.benwolsieffer.com A 192.168.1.5"
+        local-zone: "arch.benwolsieffer.com" typetransparent
+        local-data: "arch.benwolsieffer.com A 192.168.1.5"
+
+        local-zone: "hydra.benwolsieffer.com" typetransparent
+        local-data: "hydra.benwolsieffer.com A 192.168.1.5"
         
         local-zone: "deep-learning.nsupdate.info" typetransparent
         local-data: "deep-learning.nsupdate.info A 192.168.1.6"

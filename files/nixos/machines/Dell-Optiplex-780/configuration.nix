@@ -58,6 +58,10 @@ in rec {
       address = [ "${address}/24" ];
       gateway = [ gateway ];
       dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
     };
   };
   networking.hostName = "Dell-Optiplex-780"; # Define your hostname.
