@@ -147,6 +147,6 @@ in rec {
   };
   
   linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
-  linuxPackages_rock64_mainline = crossPackages.recurseIntoAttrs (crossPackages.linuxPackagesFor crossPackages.linux_rock64_mainline);
+  linuxPackages_rock64_mainline = crossPackages.recurseIntoAttrs (crossPackages.linuxPackagesFor self.linux_rock64_mainline);
   linuxPackages_rock64 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }
