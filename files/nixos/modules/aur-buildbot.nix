@@ -76,29 +76,15 @@ in {
           use_tls: true
       workers:
         HP-Z420: "IccOWW6tkOlGXhT2nmFfi8XbajMI2DzA7Gqqq1pn"
-        Dell-Optiplex-780: "VKK4scBAqYuRmtuDUXZDz0E65voAOaj31UIoLH7t"
-        ODROID-XU4: "xZdKI5whiX5MNSfWcAJ799Krhq5BZhfe11zBdamx"
       architectures:
         any:
           - HP-Z420
-          - Dell-Optiplex-780
         x86_64:
           - HP-Z420
-          - Dell-Optiplex-780
-        armv7h:
-          - ODROID-XU4
       packages:
-        buildbot: {}
-        python3-aur: {}
         dnsupdate: {}
         dnsupdate-git: {}
         python-keras: {}
-        google-chrome: {}
-        telegraf: {}
-        tinyssh-convert: {}
-        mkinitcpio-netconf: {}
-        mkinitcpio-tinyssh: {}
-        mkinitcpio-utils: {}
         pacaur: {}
         arm-linux-gnueabihf-gcc: {}
         redeclipse: {}
@@ -120,14 +106,7 @@ in {
         android-studio-canary: {}
         ghetto-skype: {}
         genymotion: {}
-        influxdb: {}
-        ucspi-tcp: 
-          architectures: [armv7h]
-        python-wakeonlan: {}
-        sanoid-git: {}
-        ovpngen: {}
         sbupdate-git: {}
-        libvirt-zfs: {}
         chrome-gnome-shell-git: {}
         dislocker: {}
         dmg2img: {}
@@ -135,23 +114,20 @@ in {
         dex2jar: {}
         lejos-nxj: {}
         eagle: {}
-        python-v4l2capture:
-          architectures: [armv7h]
+        python-v4l2capture: {}
         heimdall-git: {}
-        grpc:
-          architectures: [armv7h]
+        grpc: {}
         jd-gui:
           dependencies: [jdk8-openjdk]
         chromium-vaapi: {}
         lcov: {}
-        btrfs-snap: {}
-        python-nss: {}
         python-port-for: {}
         obfuscate: {}
         python-sphinx-autobuild: {}
         slapi-nis: {}  
         logisim: {}
         lib32-tk: {}
+        xca: {}
     '';
   };
 }
