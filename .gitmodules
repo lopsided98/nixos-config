@@ -1,3 +1,6 @@
 [submodule "files/nixos/overlays/nixos-secrets"]
 	path = files/nixos/overlays/nixos-secrets
 	url = git@github.com:lopsided98/nixos-secrets.git
+[submodule "files/nixos/secrets"]
+	path = files/nixos/secrets
+	url = git@github.com:lopsided98/nixos-config-secrets.git
