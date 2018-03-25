@@ -75,7 +75,7 @@ in {
           password: "rogkzzbgkneihqaz"
           use_tls: true
       workers:
-        HP-Z420: "IccOWW6tkOlGXhT2nmFfi8XbajMI2DzA7Gqqq1pn"
+        HP-Z420: !include /etc/secrets/aur-buildbot/HP-Z420.txt
       architectures:
         any:
           - HP-Z420
@@ -96,7 +96,7 @@ in {
         qdriverstation: {}
         qdriverstation-git: {}
         zotero: {}
-        solaar: {}
+        solaar-git: {}
         clion: {}
         pycharm-professional: {}
         gnome-mpv: {}
@@ -129,5 +129,12 @@ in {
         lib32-tk: {}
         xca: {}
     '';
+  };
+  
+  environment.secrets."aur-buildbot/HP-Z420.txt" = {
+    source = ../secrets/HP-Z420/aur-buildbot/password.txt;
+    user = "aur-buildbot";
+    group = "aur-buildbot";
+    mode = "0440";
   };
 }

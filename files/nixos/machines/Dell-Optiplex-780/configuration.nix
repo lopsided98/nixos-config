@@ -13,13 +13,11 @@ in rec {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/common.nix
       ../../modules/telegraf.nix
-      ../../modules/system/boot/initrd-tinyssh.nix
-      ../../modules/system/boot/initrd-decryptssh.nix
-      ../../modules/zfs-backup.nix
-      ../../modules/services/continuous-integration/aur-buildbot/worker.nix
+      ../../modules/config/zfs-backup.nix
       ../../modules/docker.nix
+      
+      ../../modules
     ];
   
   boot = {
@@ -94,12 +92,6 @@ in rec {
     portNumber = 4600;
     interfaces = [ "0.0.0.0" ];
     dataDir = "/var/lib/quassel";
-  };
-  
-  services.aur-buildbot-worker = {
-    enable = true;
-    workerPass = "VKK4scBAqYuRmtuDUXZDz0E65voAOaj31UIoLH7t";
-    masterHost = "hp-z420.benwolsieffer.com";
   };
   
   services.sanoid = {

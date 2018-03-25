@@ -1,1 +1,1 @@
-import <localpkgs/pkgs/packages.nix>
+import <localpkgs/pkgs>

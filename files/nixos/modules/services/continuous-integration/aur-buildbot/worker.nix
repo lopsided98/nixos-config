@@ -106,12 +106,12 @@ in {
       '';
     };
     
-    users.extraGroups."aur-buildbot-worker" = {};
+    users.extraGroups."aur-buildbot" = {};
     users.extraUsers."aur-buildbot-worker" = {
       description = "AUR Buildbot Worker user";
       isSystemUser = true;
       home = cfg.buildbotDir;
-      group = "aur-buildbot-worker";
+      group = "aur-buildbot";
     };
 
     systemd.services.aur-buildbot-worker = {
@@ -123,7 +123,7 @@ in {
       serviceConfig = {
         Type = "simple";
         User = "aur-buildbot-worker";
-        Group = "aur-buildbot-worker";
+        Group = "aur-buildbot";
         WorkingDirectory = cfg.buildbotDir;
         Environment = "PYTHONPATH=${cfg.package}/lib/python${pythonVersion}/site-packages:${pythonPackages.future}/lib/python3.6/site-packages";
 

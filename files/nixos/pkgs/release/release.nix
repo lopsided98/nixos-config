@@ -4,7 +4,7 @@
   hostSystems ? [ "x86_64-linux" ] }:
 with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = buildSystems; });
 let
-  machines = import "${localpkgs}/machines" { inherit hostSystems; };
+  machines = import (builtins.toPath "${localpkgs}/machines") { inherit hostSystems; };
 
   channelWithNixpkgs = { name, src, ... }@args: let
     nixpkgsRevCount = nixpkgs.revCount or 12345;

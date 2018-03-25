@@ -10,13 +10,11 @@ in {
     ./hardware-configuration.nix
     
     # Modules without configuration options
-    ../../modules/common.nix
     ../../modules/telegraf.nix
 #   ../../modules/docker.nix
-    ../../modules/openvpn-server.nix
-
-    # Modules with configuration options
-    ../../modules/services/continuous-integration/aur-buildbot/worker.nix
+    ../../modules/config/openvpn/server.nix
+    
+    ../../modules
   ];
     
   nixpkgs.config.platform = lib.systems.platforms.armv7l-hf-multiplatform // {

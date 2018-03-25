@@ -1,8 +1,8 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }: let
+  secrets = import ../../secrets;
+in {
   imports = [
     ./zfs.nix
-    ./services/backup/sanoid.nix
-    ./services/backup/syncoid.nix
   ];
 
   services.sanoid = {
@@ -40,7 +40,7 @@
     enable = true;
     interval = "*-*-* *:15:00";
     user = "backup";
-    sshKey = "/var/lib/backup/.ssh/id_ed25519";
+    sshKey = secrets.getSecret secrets."${config.networking.hostName}".backup.sshKey;
     defaultArguments = "--no-privilege-elevation --no-sync-snap";
   };
   
@@ -60,4 +60,6 @@
     ];
     packages = [ pkgs.lzop pkgs.mbuffer ];
   };
+  
+  environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".backup.sshKey { user = "backup"; };
 }

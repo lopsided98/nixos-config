@@ -1,8 +1,10 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
-{
+with lib; let
+  secrets = import ../../../secrets;
+in {
+  imports = [
+  ];
 
   # NAT configuration for tun VPN
   boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
@@ -53,14 +55,14 @@ with lib;
       # Any X509 key management system can be used.
       # OpenVPN can also use a PKCS #12 formatted key file
       # (see "pkcs12" directive in man page).
-      ca ${dataDir}/ca.crt
-      cert ${dataDir}/ODROID-XU4.crt
-      key ${dataDir}/ODROID-XU4.key  # This file should be kept secret
+      ca ${./ca.crt}
+      cert ${./. + "/${config.networking.hostName}.crt"}
+      key ${secrets.getSecret secrets."${config.networking.hostName}".openvpn.privateKey}
 
       # Diffie hellman parameters.
       # Generate your own with:
       #   openssl dhparam -out dh2048.pem 2048
-      dh ${dataDir}/dh.pem
+      dh ${./dh.pem}
 
       # Network topology
       topology subnet
@@ -80,7 +82,7 @@ with lib;
       # a copy of this key.
       # The second parameter should be '0'
       # on the server and '1' on the clients.
-      tls-auth ${dataDir}/ta.key 0 # This file is secret
+      tls-auth /etc/secrets/openvpn/ta.key 0 # This file is secret
       tls-version-min 1.2
       tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
 
@@ -221,4 +223,8 @@ with lib;
     '';
     allowedUDPPorts = [ 4294 4295 ];
   };
+  
+  environment.secrets = 
+    secrets.mkSecret secrets.openvpn.hmacKey {} //
+    secrets.mkSecret secrets."${config.networking.hostName}".openvpn.privateKey {};
 }

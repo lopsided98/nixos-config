@@ -14,8 +14,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "dnsupdate";
-    rev = "1bb6cd0f7a84298087a3d90a0a9a78f41ae8a9aa";
-    sha256 = "10ypzsk7c09lcs57p416gf491x2cwn49hhh0rxnz62pv7xymfqng";
+    rev = "34da06243fefc76ce06ffe515781e7fbf781d182";
+    sha256 = "08ggqndvzxb46dpz0f7r2ly96q0q68xzg1qda77xzw0yd6v1lsrg";
   };
 
   # Requests and PyYaml are needed for tests

@@ -8,9 +8,10 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/common.nix
       ../../modules/telegraf.nix
-      ../../modules/services/networking/dnsupdate.nix
+      ../../modules/config/dnsupdate.nix
+      
+      ../../modules
     ];
 
   boot = {
@@ -46,49 +47,6 @@ in {
   # Set SSH port
   services.openssh.ports = [4242];
   
-  services.dnsupdate = {
-    enable = true;
-    addressProvider = {
-      ipv4.type = "Web";
-    };
-    
-    dnsServices = [
-      {
-        type = "GoogleDomains";
-        args = {
-          hostname = "raspi2.benwolsieffer.com";
-          username = "uuPdmYq3n4JVMGF5";
-          password = "L44OboQAp05Q1gxg";
-        };
-      } 
-      {
-        type = "GoogleDomains";
-        args = {
-          hostname = "dell-optiplex-780.benwolsieffer.com";
-          username = "6jXuwtQkd5SxHmM2";
-          password = "c2GpDRJ6OUfiIJ7Q";
-        };
-      }
-      {
-        type = "GoogleDomains";
-        args = {
-          hostname = "odroid-xu4.benwolsieffer.com";
-          username = "jPniAhcATuQPmThZ";
-          password = "7DNMvRSY5eq5ypSG";
-        };
-      }
-      {
-        type = "GoogleDomains";
-        args = {
-          hostname = "hp-z420.benwolsieffer.com";
-          username = "PiqrZUDJPzi3jAyx";
-          password = "qhsVXD1RZ2HOQYFO";
-        };
-      }
-    ];
-  };
-  
-
   # Unbound DNS server
   services.unbound = {
     enable = true;
@@ -132,7 +90,9 @@ in {
       control-enable: no
     '';
   };
+  
   networking.firewall.allowedUDPPorts = [ 53 ];
+  networking.firewall.allowedTCPPorts = [ 8883 ];
   
   # Enable SD card TRIM
   services.fstrim.enable = true;

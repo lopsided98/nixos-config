@@ -1,14 +1,20 @@
 { config, lib, pkgs, ... }: let
-  buildSSHKey = "/var/lib/build/.ssh/id_ed25519";
+  secrets = import ../../secrets;
 in {
 
   imports = [
     ./ssh.nix # Enable SSH on all systems
-    ./system/build-machines.nix
   ];
 
   # Include my custom package overlay
-  nixpkgs.overlays = [ (import ../pkgs/packages.nix) ];
+  nixpkgs = {
+    overlays = [ (import ../../pkgs) ];
+  
+    config.packageOverrides = pkgs: {
+      # GPG pulls in huge numbers of graphics libraries by default
+      gnupg = pkgs.gnupg.override { guiSupport = false; };
+    };
+  };
 
   boot = {
     # Use the latest kernel. Some ARM systems and those with ZFS might use a 
@@ -41,7 +47,7 @@ in {
   system.buildMachines = let
     machine = m: m // {
       sshUser = "build";
-      sshKey = "/var/lib/build/.ssh/id_ed25519";
+      sshKey = secrets.getSecret secrets.build.sshKey;
     };
   in {
     "HP-Z420" = machine {
@@ -112,14 +118,13 @@ in {
     -----END PUBLIC KEY-----
   '';
 
-
   # Global SSH configuration for distributed builds
   programs.ssh = let
     host = { name, port, hostName }: ''
       Host ${name}
           Port ${toString port}
           HostName ${hostName}
-          IdentityFile /var/lib/build/.ssh/id_ed25519
+          IdentityFile ${secrets.getSecret secrets.build.sshKey}
     '';
   in {
     extraConfig = 
@@ -217,6 +222,9 @@ in {
     };
     extraGroups.build = {};
   };
+  
+  # Build user SSH private key
+  environment.secrets = secrets.mkSecret secrets.build.sshKey {};
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

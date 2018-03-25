@@ -5,12 +5,23 @@ with lib;
 let
   cfg = config.services.dnsupdate;
   
+  # Combine args with include files
+  argsString = a: let
+    aJson = builtins.toJSON a.args;
+    includeArgList = mapAttrsToList (k: f: "\"${k}\": !include_text \"${f}\"") a.includeArgs;
+  in (builtins.substring 0 ((builtins.stringLength aJson) - 1) aJson) + (if builtins.length includeArgList != 0 then "," else "") +
+    (concatStringsSep "," includeArgList) + "}";
+  
   addressProviderProtocolType = types.submodule {
     options = {
       type = mkOption {
         type = types.str;
       };
       args = mkOption {
+        type = types.attrs;
+        default = {};
+      };
+      includeArgs = mkOption {
         type = types.attrs;
         default = {};
       };
@@ -37,12 +48,16 @@ let
         type = types.attrs;
         default = {};
       };
+      includeArgs = mkOption {
+        type = types.attrs;
+        default = {};
+      };
     };
   };
   
   addressProviderProtocol = a: if a == null then "None" else '' {
     "type": "${a.type}",
-    "args": ${builtins.toJSON a.args}
+    "args": ${argsString a}
   } '';
   
   addressProvider = a: if (a.ipv4 != null || a.ipv6 != null) then '' {
@@ -58,7 +73,7 @@ let
   dnsService = d: '' {
     "type": "${d.type}",
     ${if (d.addressProvider != null) then "\"address_provider\": ${addressProvider d.addressProvider}," else ""}
-    "args": ${builtins.toJSON d.args}
+    "args": ${argsString d}
   }'';
   
   configFile = cfg: ''

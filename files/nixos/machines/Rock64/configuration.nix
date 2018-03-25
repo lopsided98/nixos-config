@@ -9,9 +9,9 @@ in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/common.nix
-      ../../modules/ssh.nix
-      ../../modules/zfs.nix
+      ../../modules/config/zfs.nix
+      
+      ../../modules
     ];
     
   nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform // {

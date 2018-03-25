@@ -9,10 +9,11 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/common.nix
       ../../modules/services/web-apps/muximux.nix
       ../../modules/docker.nix
       ../../modules/nginx.nix
+      
+      ../../modules
     ];
     
   nix.useSandbox = lib.mkForce false;

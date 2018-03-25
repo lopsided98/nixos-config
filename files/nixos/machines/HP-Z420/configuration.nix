@@ -13,20 +13,14 @@ in rec {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/common.nix
     ../../modules/telegraf.nix
-    ../../modules/zfs-backup.nix
+    ../../modules/config/zfs-backup.nix
     ../../modules/docker.nix
-    ../../modules/hydra.nix
-    ../../modules/hacker-hats.nix
+    ../../modules/config/hydra.nix
+    ../../modules/config/hacker-hats.nix
     ../../modules/aur-buildbot.nix
     
-    ../../modules/system/boot/initrd-tinyssh.nix
-    ../../modules/system/boot/initrd-decryptssh.nix
-    ../../modules/services/continuous-integration/aur-buildbot/worker.nix
-    ../../modules/services/continuous-integration/aur-buildbot/master.nix
-    ../../modules/services/networking/dnsupdate.nix
-    ../../modules/services/networking/openvpn-client-home-network.nix
+    ../../modules
   ];
   
   boot = {
@@ -106,7 +100,7 @@ in rec {
 
   services.aur-buildbot-worker = {
     enable = true;
-    workerPass = "IccOWW6tkOlGXhT2nmFfi8XbajMI2DzA7Gqqq1pn";
+    workerPassFile = "/etc/secrets/aur-buildbot/HP-Z420.txt";
     masterHost = "hp-z420.benwolsieffer.com";
   };
 
@@ -209,7 +203,7 @@ in rec {
     };
   };
   
-  services.dnsupdate = {
+  /*services.dnsupdate = {
     enable = true;
     addressProvider = {
       ipv4 = {
@@ -220,7 +214,7 @@ in rec {
     
     dnsServices = [
     ];
-  };
+  };*/
   
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB

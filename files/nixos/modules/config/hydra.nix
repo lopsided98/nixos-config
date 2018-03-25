@@ -1,6 +1,6 @@
-{ config, lib, pkgs, ... }:
-
-{
+{ config, lib, pkgs, ... }: let
+  secrets = import ../../secrets;
+in {
 
   imports = [
     ./nginx.nix
@@ -44,18 +44,6 @@
     '';
     
     virtualHosts = {
-      "nix-cache.benwolsieffer.com" = {
-        enableACME = true;
-        forceSSL = true;
-        root = "/var/lib/hydra/cache";
-        extraConfig = ''
-          autoindex on;
-          allow 192.168.1.0/24;
-          allow 2601:18a:0:7829::/64;
-          deny  all;
-        '';
-      };
-    
       "hydra.benwolsieffer.com" = let
         proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
       in {
@@ -91,5 +79,10 @@
         '';
       };
     };
+  };
+  
+  environment.secrets."${secrets.build.sshKey}" = {
+    group = "hydra";
+    mode = "0440";
   };
 }

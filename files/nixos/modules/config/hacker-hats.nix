@@ -1,6 +1,9 @@
 { config, lib, pkgs, ... }: let
+  
+  secrets = import ../../secrets;
+  
   cfgFile = pkgs.writeText "HackerHats.cfg" ''
-    with open('/var/lib/hacker-hats/secret_key.txt', 'r') as passwd_file:
+    with open('/etc/secrets/hacker-hats/secret.key', 'r') as passwd_file:
         SECRET_KEY = passwd_file.read().strip('\r\n')
     DATABASE = '/var/lib/hacker-hats/data.db'
   '';
@@ -8,7 +11,7 @@ in {
 
   imports = [
     ./nginx.nix
-    ./services/web-apps/hacker-hats.nix
+    ../services/web-apps/hacker-hats.nix
   ];
 
   services.hacker-hats.enable = true;
@@ -40,4 +43,7 @@ in {
       forceSSL = true;
     };
   };
+  
+  environment.secrets = 
+    secrets.mkSecret "hacker-hats/secret.txt" { user = "nginx"; };
 }

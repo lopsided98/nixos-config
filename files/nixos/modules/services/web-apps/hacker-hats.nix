@@ -22,11 +22,10 @@ in {
     };
     
     uwsgiSocket = mkOption {
-      type = types.nullOr types.str;
+      type = types.str;
       default = "${config.services.uwsgi.runDir}/HackerHats.sock";
       description = ''
-        Name of the nginx virtualhost to use and setup. If null, do not setup 
-        any virtualhost.
+        Socket file used to communicate between nginx and uwsgi.
       '';
     };
   };

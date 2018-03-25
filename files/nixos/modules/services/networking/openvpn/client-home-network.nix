@@ -29,8 +29,7 @@ in {
   config = mkIf cfg.enable {
     # Enable OpenVPN client
     services.openvpn.servers = {
-      client = let
-        in {
+      client = {
         config = ''
         # Specify that we are a client and that we
         # will be pulling certain config file directives
