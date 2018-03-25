@@ -10,8 +10,8 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/services/web-apps/muximux.nix
-      ../../modules/docker.nix
-      ../../modules/nginx.nix
+      ../../modules/config/docker.nix
+      ../../modules/config/nginx.nix
       
       ../../modules
     ];

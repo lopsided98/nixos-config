@@ -38,15 +38,15 @@ in {
   networking.hostName = "RasPi2"; # Define your hostname.
 
   # Use ARM binary cache
-  nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
+  # Currently broken
+  # nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
   nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
 
-  
   # List services that you want to enable:
 
   # Set SSH port
   services.openssh.ports = [4242];
-  
+
   # Unbound DNS server
   services.unbound = {
     enable = true;
@@ -59,41 +59,38 @@ in {
         so-reuseport: yes
         prefetch: yes
 
+        local-zone: "raspi2.benwolsieffer.com" typetransparent
+        local-data: "raspi2.benwolsieffer.com A 192.168.1.2"
+
+        local-zone: "odroid-xu4.benwolsieffer.com" typetransparent
+        local-data: "odroid-xu4.benwolsieffer.com A 192.168.1.3"
+
         local-zone: "dell-optiplex-780.benwolsieffer.com" typetransparent
         local-data: "dell-optiplex-780.benwolsieffer.com A 192.168.1.4"
-        
+
         local-zone: "hp-z420.benwolsieffer.com" typetransparent
         local-data: "hp-z420.benwolsieffer.com A 192.168.1.5"
-        
+
         local-zone: "arch.benwolsieffer.com" typetransparent
         local-data: "arch.benwolsieffer.com A 192.168.1.5"
 
         local-zone: "hydra.benwolsieffer.com" typetransparent
         local-data: "hydra.benwolsieffer.com A 192.168.1.5"
-        
+
+        local-zone: "hackerhats.benwolsieffer.com" typetransparent
+        local-data: "hackerhats.benwolsieffer.com A 192.168.1.5"
+
         local-zone: "rock64.benwolsieffer.com" typetransparent
         local-data: "rock64.benwolsieffer.com A 192.168.1.6"
-        
-        local-zone: "raspi2.benwolsieffer.com" typetransparent
-        local-data: "raspi2.benwolsieffer.com A 192.168.1.2"
-        
-        local-zone: "ben.nsupdate.info" typetransparent
-        local-data: "ben.nsupdate.info A 192.168.1.2"
-        
-        local-zone: "gameadmin.nsupdate.info" typetransparent
-        local-data: "gameadmin.nsupdate.info A 192.168.1.2"
-        
-        local-zone: "odroid-xu4.benwolsieffer.com" typetransparent
-        local-data: "odroid-xu4.benwolsieffer.com A 192.168.1.3"
-    
+
     remote-control:
       control-enable: no
     '';
   };
-  
+
   networking.firewall.allowedUDPPorts = [ 53 ];
   networking.firewall.allowedTCPPorts = [ 8883 ];
-  
+
   # Enable SD card TRIM
   services.fstrim.enable = true;
 }

@@ -1,6 +1,4 @@
-{ config, lib, pkgs, ... }: let
-  secrets = import ../../secrets;
-in {
+{ config, lib, pkgs, secrets, ... }: {
 
   imports = [
     ./nginx.nix
@@ -31,7 +29,8 @@ in {
 
   
   # Use ARM binary cache
-  nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
+  # Currently broken
+  # nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
   nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
   
   # Serve binary cache

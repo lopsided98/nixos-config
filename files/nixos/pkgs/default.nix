@@ -13,6 +13,7 @@ self: super: with super.lib; let
                   else if super.stdenv.hostPlatform.system == "aarch64-linux" then aarch64Packages
                   else super;
 in rec {
+
   # Use cross compiled stdenv
   #stdenv = crossPackages.stdenv;
 
@@ -113,6 +114,9 @@ in rec {
     };
   };
   
+  # GPG pulls in huge numbers of graphics libraries by default
+  gnupg = super.gnupg.override { guiSupport = false; };
+
   # inherit (crossPackages) linux_4_14 linuxPackagesFor;
   
   linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4/linux-odroid-xu4.nix {

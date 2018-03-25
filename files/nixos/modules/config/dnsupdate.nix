@@ -1,6 +1,4 @@
-{ ... }: let
-  secrets = import ../../secrets;
-  
+{ secrets, ... }: let
   googleDomains = domain: {
     type = "GoogleDomains";
     args.hostname = domain;
@@ -21,6 +19,7 @@ in {
       (googleDomains "dell-optiplex-780.benwolsieffer.com")
       (googleDomains "odroid-xu4.benwolsieffer.com")
       (googleDomains "hp-z420.benwolsieffer.com")
+      (googleDomains "rock64.benwolsieffer.com")
     ];
   };
   
@@ -32,5 +31,7 @@ in {
     secrets.mkSecret secrets.dnsupdate."odroid-xu4.benwolsieffer.com".username { user = "dnsupdate"; } //
     secrets.mkSecret secrets.dnsupdate."odroid-xu4.benwolsieffer.com".password { user = "dnsupdate"; } //
     secrets.mkSecret secrets.dnsupdate."hp-z420.benwolsieffer.com".username { user = "dnsupdate"; } //
-    secrets.mkSecret secrets.dnsupdate."hp-z420.benwolsieffer.com".password { user = "dnsupdate"; };
+    secrets.mkSecret secrets.dnsupdate."hp-z420.benwolsieffer.com".password { user = "dnsupdate"; } //
+    secrets.mkSecret secrets.dnsupdate."rock64.benwolsieffer.com".username { user = "dnsupdate"; } //
+    secrets.mkSecret secrets.dnsupdate."rock64.benwolsieffer.com".password { user = "dnsupdate"; };
 }

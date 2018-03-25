@@ -11,7 +11,7 @@ in {
     
     # Modules without configuration options
     ../../modules/telegraf.nix
-#   ../../modules/docker.nix
+#   ../../modules/config/docker.nix
     ../../modules/config/openvpn/server.nix
     
     ../../modules
@@ -42,7 +42,8 @@ in {
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
   # Use ARM binary cache
-  nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
+  # Currently broken
+  # nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
   nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
   
   environment.systemPackages = with pkgs; [

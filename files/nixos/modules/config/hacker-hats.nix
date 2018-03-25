@@ -1,9 +1,6 @@
-{ config, lib, pkgs, ... }: let
-  
-  secrets = import ../../secrets;
-  
+{ config, pkgs, secrets, ... }: let
   cfgFile = pkgs.writeText "HackerHats.cfg" ''
-    with open('/etc/secrets/hacker-hats/secret.key', 'r') as passwd_file:
+    with open('${secrets.getSecret secrets.hackerHats.secretKey}', 'r') as passwd_file:
         SECRET_KEY = passwd_file.read().strip('\r\n')
     DATABASE = '/var/lib/hacker-hats/data.db'
   '';
@@ -44,6 +41,5 @@ in {
     };
   };
   
-  environment.secrets = 
-    secrets.mkSecret "hacker-hats/secret.txt" { user = "nginx"; };
+  environment.secrets = secrets.mkSecret secrets.hackerHats.secretKey { user = "nginx"; };
 }

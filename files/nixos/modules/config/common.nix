@@ -1,20 +1,14 @@
-{ config, lib, pkgs, ... }: let
-  secrets = import ../../secrets;
-in {
+{ config, lib, pkgs, secrets, ... }: {
 
   imports = [
     ./ssh.nix # Enable SSH on all systems
   ];
 
-  # Include my custom package overlay
-  nixpkgs = {
-    overlays = [ (import ../../pkgs) ];
-  
-    config.packageOverrides = pkgs: {
-      # GPG pulls in huge numbers of graphics libraries by default
-      gnupg = pkgs.gnupg.override { guiSupport = false; };
-    };
-  };
+  # Include overlays
+  nixpkgs.overlays = [
+    (import ../../pkgs)
+    (import ../../overlays/nixos-secrets)
+  ];
 
   boot = {
     # Use the latest kernel. Some ARM systems and those with ZFS might use a 

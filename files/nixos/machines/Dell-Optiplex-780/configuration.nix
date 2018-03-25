@@ -15,7 +15,7 @@ in rec {
       ./hardware-configuration.nix
       ../../modules/telegraf.nix
       ../../modules/config/zfs-backup.nix
-      ../../modules/docker.nix
+      ../../modules/config/docker.nix
       
       ../../modules
     ];

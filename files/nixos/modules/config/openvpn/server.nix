@@ -1,8 +1,5 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, secrets, ... }: {
 
-with lib; let
-  secrets = import ../../../secrets;
-in {
   imports = [
   ];
 
@@ -82,7 +79,7 @@ in {
       # a copy of this key.
       # The second parameter should be '0'
       # on the server and '1' on the clients.
-      tls-auth /etc/secrets/openvpn/ta.key 0 # This file is secret
+      tls-auth ${secrets.getSecret secrets.openvpn.hmacKey} 0 # This file is secret
       tls-version-min 1.2
       tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
 
