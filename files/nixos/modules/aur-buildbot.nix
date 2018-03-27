@@ -72,10 +72,10 @@ in {
           addr: smtp.gmail.com
           port: 587
           user: benwolsieffer@gmail.com
-          password: "rogkzzbgkneihqaz"
+          password: !include_text ${secrets.getSecret secrets.aurBuildbot.smtpPassword}
           use_tls: true
       workers:
-        HP-Z420: !include ${secrets.getSecret secrets.HP-Z420.aurBuildbot.password}
+        HP-Z420: !include_text ${secrets.getSecret secrets.HP-Z420.aurBuildbot.password}
       architectures:
         any:
           - HP-Z420
@@ -131,9 +131,11 @@ in {
     '';
   };
   
-  environment.secrets = secrets.mkSecret secrets.HP-Z420.aurBuildbot.password {
-    user = "aur-buildbot";
-    group = "aur-buildbot";
-    mode = "0440";
-  };
+  environment.secrets =
+    secrets.mkSecret secrets.HP-Z420.aurBuildbot.password {
+      user = "aur-buildbot";
+      group = "aur-buildbot";
+      mode = "0440";
+    } //
+    secrets.mkSecret secrets.aurBuildbot.smtpPassword { user = "aur-buildbot"; };
 }
