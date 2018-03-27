@@ -13,6 +13,7 @@
     ./services/continuous-integration/aur-buildbot/master.nix
     ./services/networking/dnsupdate.nix
     ./services/networking/openvpn/client-home-network.nix
+    ./services/monitoring/telegraf.nix
 
     ../overlays/nixos-secrets/secrets.nix
   ];

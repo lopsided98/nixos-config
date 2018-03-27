@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, secrets, ... }:
 let
 
 interface = "eth0";
@@ -40,7 +40,7 @@ in rec {
         tinyssh = {
           port = lib.head config.services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
-          hostEd25519Key = ./tinyssh.id_ed25519;
+          hostEd25519Key = secrets.getBootSecret secrets.HP-Z420.tinyssh.hostKey;
         };
         decryptssh = {
           enable = true;
@@ -51,6 +51,8 @@ in rec {
     kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ]; 
   };
 
+  boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
+
   #modules.openvpn-client-home-network.enable = true;
   systemd.network = {
     enable = true;
@@ -59,8 +61,8 @@ in rec {
     #  gateway = [ gateway ];
     #  dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
     #  extraConfig = ''
-    #  [IPv6AcceptRA]
-    #  UseDNS=false
+    #    [IPv6AcceptRA]
+    #    UseDNS=false
     #  '';
     #};
     networks."${interface}" = {
@@ -68,7 +70,7 @@ in rec {
       # DHCP = "v4";
       address = [ "${address}/24" ];
       gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no
@@ -100,7 +102,7 @@ in rec {
 
   services.aur-buildbot-worker = {
     enable = true;
-    workerPassFile = "/etc/secrets/aur-buildbot/HP-Z420.txt";
+    workerPassFile = secrets.getSecret secrets.HP-Z420.aurBuildbot.password;
     masterHost = "hp-z420.benwolsieffer.com";
   };
 
@@ -194,13 +196,6 @@ in rec {
   services.influxdb = {
     enable = true;
     extraConfig.http.log-enabled = false;
-  };
-  
-  services.grafana = {
-    enable = true;
-    security = {
-      secretKey = "FRsXpveMdntWfWAtyoliYgLPNQwIQcOkPSYVwgHL";
-    };
   };
   
   /*services.dnsupdate = {

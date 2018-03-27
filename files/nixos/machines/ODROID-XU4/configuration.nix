@@ -11,7 +11,6 @@ in {
     
     # Modules without configuration options
     ../../modules/telegraf.nix
-#   ../../modules/config/docker.nix
     ../../modules/config/openvpn/server.nix
     
     ../../modules
@@ -57,12 +56,6 @@ in {
 
   # Set SSH port
   services.openssh.ports = [4243];
-  
-#  services.aur-buildbot-worker = {
-#    enable = true;
-#    workerPass = "xZdKI5whiX5MNSfWcAJ799Krhq5BZhfe11zBdamx";
-#    masterHost = "hp-z420.nsupdate.info";
-#  };
   
   # Enable SD card TRIM
   services.fstrim.enable = true;

@@ -9,6 +9,8 @@
       };
 
       getSecret = name: "/etc/secrets/" + name;
+
+      getBootSecret = name: "/boot/secrets/" + name;
     } // (import ../../secrets);
   };
 }

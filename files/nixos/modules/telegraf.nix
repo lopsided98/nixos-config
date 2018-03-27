@@ -1,14 +1,8 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-{
-  imports = [ ./services/monitoring/telegraf.nix ];
-
+{ config, lib, pkgs, ... }: with lib; {
 
   services.telegraf-fixed = {
     enable = true;
-    
+
     agent = {
       # Default data collection interval for all inputs
       interval = "10s";

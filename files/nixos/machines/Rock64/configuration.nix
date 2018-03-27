@@ -2,17 +2,17 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }:
-let
+{ lib, config, pkgs, ... }: let
   interface = "eth0";
 in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../modules/config/zfs.nix
-      
-      ../../modules
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+
+    ../../modules/config/zfs.nix
+
+    ../../modules
+  ];
     
   nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform // {
     name = "rock64";
@@ -41,7 +41,7 @@ in {
       # DHCP=v4
       address = [ "192.168.1.6/24" ];
       gateway = [ "192.168.1.1" ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no
@@ -58,7 +58,7 @@ in {
 
   # Set SSH port
   services.openssh.ports = [4246];
-  
+
   # Enable SD card TRIM
   services.fstrim.enable = true;
 }

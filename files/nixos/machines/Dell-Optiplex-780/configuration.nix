@@ -55,7 +55,7 @@ in rec {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:a0ad:20ff:fe40:7a1c" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no

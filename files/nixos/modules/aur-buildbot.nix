@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }: let
+{ lib, config, pkgs, secrets, ... }: let
   internalInterfacePort = 8010; 
 in {
 
@@ -75,7 +75,7 @@ in {
           password: "rogkzzbgkneihqaz"
           use_tls: true
       workers:
-        HP-Z420: !include /etc/secrets/aur-buildbot/HP-Z420.txt
+        HP-Z420: !include ${secrets.getSecret secrets.HP-Z420.aurBuildbot.password}
       architectures:
         any:
           - HP-Z420
@@ -131,8 +131,7 @@ in {
     '';
   };
   
-  environment.secrets."aur-buildbot/HP-Z420.txt" = {
-    source = ../secrets/HP-Z420/aur-buildbot/password.txt;
+  environment.secrets = secrets.mkSecret secrets.HP-Z420.aurBuildbot.password {
     user = "aur-buildbot";
     group = "aur-buildbot";
     mode = "0440";
