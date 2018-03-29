@@ -31,6 +31,8 @@
     "/boot/esp" = {
       device = "/dev/disk/by-uuid/BAA5-3E52";
       fsType = "vfat";
+      # Prevent unprivileged users from being able to read secrets in the initrd
+      options = [ "fmask=0137" ];
     };
   };
 

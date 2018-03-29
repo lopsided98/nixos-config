@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, secrets, ... }:
 let
 
 interface = "eth0";
@@ -36,7 +36,7 @@ in rec {
         tinyssh = {
           port = lib.head services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
-          hostEd25519Key = ./tinyssh.id_ed25519;
+          hostEd25519Key = secrets.getBootSecret secrets.Dell-Optiplex-780.tinyssh.hostKey;
         };
         decryptssh = {
           enable = true;
@@ -48,6 +48,8 @@ in rec {
       "console=ttyS0,115200n8" # Serial boot console
     ];
   };
+
+  boot.secrets = secrets.mkSecret secrets.Dell-Optiplex-780.tinyssh.hostKey {};
 
   systemd.network = {
     enable = true;
