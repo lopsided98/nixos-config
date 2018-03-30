@@ -217,6 +217,9 @@
     extraGroups.build = {};
   };
   
+  # My personal root CA
+  security.pki.certificateFiles = [ ./root_ca.crt ];
+  
   # Build user SSH private key
   environment.secrets = secrets.mkSecret secrets.build.sshKey {};
 

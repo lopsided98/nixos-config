@@ -1,7 +1,7 @@
 { ... }: {
   imports = [
     # Automatically apply common configuration
-    ./config/common.nix
+    ./config/common
 
     ./system/build-machines.nix
     ./system/boot/initrd-tinyssh.nix

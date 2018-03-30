@@ -19,6 +19,7 @@ in rec {
     ../../modules/config/hydra.nix
     ../../modules/config/hacker-hats.nix
     ../../modules/aur-buildbot.nix
+    ../../modules/config/influxdb
     
     ../../modules
   ];
@@ -42,9 +43,7 @@ in rec {
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
           hostEd25519Key = secrets.getBootSecret secrets.HP-Z420.tinyssh.hostKey;
         };
-        decryptssh = {
-          enable = true;
-        };
+        decryptssh.enable = true;
       };
     };
     # "ip=:::::eth0:dhcp"
@@ -192,12 +191,7 @@ in rec {
     onShutdown = "shutdown";
   };
   users.extraUsers.ben.extraGroups = [ "libvirtd" ];
-  
-  services.influxdb = {
-    enable = true;
-    extraConfig.http.log-enabled = false;
-  };
-  
+
   /*services.dnsupdate = {
     enable = true;
     addressProvider = {
