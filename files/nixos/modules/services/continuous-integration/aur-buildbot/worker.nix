@@ -73,6 +73,18 @@ in {
         type = types.path;
         description = "File used to store the AUR Buildbot worker password";
       };
+      
+      hostMessage = mkOption {
+        default = "AUR Buildbot Worker on ${config.networking.hostName}";
+        type = types.str;
+        description = "Description of this worker";
+      };
+      
+      adminMessage = mkOption {
+        default = "";
+        type = types.str;
+        description = "Name of the administrator of this worker";
+      };
 
       masterHost = mkOption {
         default = "localhost";
@@ -102,7 +114,7 @@ in {
       enable = true;
       extraConfig = with pkgs; ''
         Defaults:aur-buildbot-worker secure_path="${aur-buildbot}/worker:${docker}/bin:${coreutils}/bin"
-        aur-buildbot-worker ALL=(ALL) NOPASSWD: ${aur-buildbot}/worker/build-package *
+        aur-buildbot-worker ALL=(root) NOPASSWD: ${aur-buildbot}/worker/build-package *
       '';
     };
     
@@ -120,11 +132,20 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ "/run/wrappers" pythonPackages.twisted git ];
 
+      preStart = ''
+        mkdir -p "${cfg.buildbotDir}/info"
+        chmod 0750 "${cfg.buildbotDir}"
+        chown aur-buildbot-worker:aur-buildbot "${cfg.buildbotDir}"
+        ln -sf "${pkgs.writeText "aur-buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
+        ln -sf "${pkgs.writeText "aur-buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
+      '';
+
       serviceConfig = {
         Type = "simple";
         User = "aur-buildbot-worker";
         Group = "aur-buildbot";
         WorkingDirectory = cfg.buildbotDir;
+        PermissionsStartOnly = true;
         Environment = "PYTHONPATH=${cfg.package}/lib/python${pythonVersion}/site-packages:${pythonPackages.future}/lib/python3.6/site-packages";
 
         # NOTE: call twistd directly with stdout logging for systemd

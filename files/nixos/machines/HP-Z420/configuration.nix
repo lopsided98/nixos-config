@@ -20,6 +20,7 @@ in rec {
     ../../modules/config/hacker-hats.nix
     ../../modules/aur-buildbot.nix
     ../../modules/config/influxdb
+    ../../modules/config/grafana
     
     ../../modules
   ];
@@ -103,6 +104,7 @@ in rec {
     enable = true;
     workerPassFile = secrets.getSecret secrets.HP-Z420.aurBuildbot.password;
     masterHost = "hp-z420.benwolsieffer.com";
+    adminMessage = "Ben Wolsieffer <benwolsieffer@gmail.com>";
   };
 
   services.sanoid = {

@@ -53,32 +53,41 @@ in {
       ];
       
       addSSL = true;
-      sslCertificate = ./influxdb.pem;
+      sslCertificate = ./server.pem;
       sslCertificateKey = secrets.getSecret secrets.influxdb.sslCertificateKey;
       
       locations."/" = {
         proxyPass = "http://unix:${influxdbSocket}";
+        
+        extraConfig = ''
+          proxy_set_header Authorization "Basic $influxdb_authorization";
+        '';
       };
       
       extraConfig = ''
         access_log off;
 
-        #proxy_set_header "Authorization: Basic $authorization";
+        ssl_client_certificate ${../common/root_ca.pem};
+        ssl_verify_depth 2;
+        ssl_verify_client optional;
+        
+        if ($ssl_client_i_dn != "CN=InfluxDB Client CA") {
+          return 401;
+        }
       '';
     };
     
     appendHttpConfig = ''
       # Get username from the organization field of the client certificate
-      map $ssl_client_s_dn $username {
+      map $ssl_client_s_dn $influxdb_username {
         "~O=(?<u>[^,]+)(,|$)" $u;
       }
       
-      # These passwords are not really secret, because the connection between
-      # nginx and influxdb is already secured by the filesystem permissions 
-      # of the unix socket.
-      map $username $authorization {
-        "telegraf" "dGVsZWdyYWY6Wk9NbkhxbGVnYUttRUxaSndzTU0K";
-        "grafana" "Z3JhZmFuYTpwcWNZT0tTVk5ka0xNbUl2S3RTTwo=";
+      # If the certificate organization field contains an allowed username, 
+      # automatically authenticate that user. Otherwise, pass the basic auth
+      # header through.
+      map $influxdb_username $influxdb_authorization {
+        include ${secrets.getSecret secrets.influxdb.passwordMap};
       }
     '';
   };
@@ -88,5 +97,7 @@ in {
     extraGroups = [ config.services.influxdb.group ];
   };
   
-  environment.secrets = secrets.mkSecret secrets.influxdb.sslCertificateKey { user = "nginx"; };
+  environment.secrets = 
+    secrets.mkSecret secrets.influxdb.sslCertificateKey { user = "nginx"; } //
+    secrets.mkSecret secrets.influxdb.passwordMap { user = "nginx"; };
 }

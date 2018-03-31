@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }: with lib; {
+{ config, lib, pkgs, secrets, ... }: with lib; {
 
   services.telegraf-fixed = {
     enable = true;
@@ -69,17 +69,14 @@
         ## Write timeout (for the InfluxDB client), formatted as a string.
         ## If not provided, will default to 5s. 0s means no timeout (not recommended).
         timeout = "5s";
-        username = "telegraf";
-        password = "8B9YfENuvfy7DcG5OFXKDVjVIkeDmUrOCQfxnxHT";
         ## Set the user agent for HTTP POSTs (can be useful for log differentiation)
         user_agent = "${ config.networking.hostName }:telegraf";
         ## Set UDP payload size, defaults to InfluxDB UDP Client default (512 bytes)
         # udp_payload = 512
 
         ## Optional SSL Config
-        ssl_ca = "${./config/ca/root_ca.crt}";
-        # ssl_cert = "/etc/telegraf/cert.pem";
-        # ssl_key = "/etc/telegraf/key.pem";
+        ssl_cert = ../machines + "/${config.networking.hostName}/telegraf/client.pem";
+        ssl_key = secrets.getSecret secrets."${config.networking.hostName}".telegraf.sslClientCertificateKey;
         ## Use SSL but skip chain & host verification
         # insecure_skip_verify = false;
       };
@@ -159,4 +156,5 @@
     };
   };
 
+  environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".telegraf.sslClientCertificateKey { user = "telegraf"; };
 }

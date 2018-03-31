@@ -1,13 +1,13 @@
 { config, lib, pkgs, secrets, ... }: {
 
   imports = [
-    ./ssh.nix # Enable SSH on all systems
+    ../ssh.nix # Enable SSH on all systems
   ];
 
   # Include overlays
   nixpkgs.overlays = [
-    (import ../../pkgs)
-    (import ../../overlays/nixos-secrets)
+    (import ../../../pkgs)
+    (import ../../../overlays/nixos-secrets)
   ];
 
   boot = {
@@ -218,7 +218,7 @@
   };
   
   # My personal root CA
-  security.pki.certificateFiles = [ ./root_ca.crt ];
+  security.pki.certificateFiles = [ ./root_ca.pem ];
   
   # Build user SSH private key
   environment.secrets = secrets.mkSecret secrets.build.sshKey {};
