@@ -10,7 +10,7 @@ in {
     ./hardware-configuration.nix
     
     # Modules without configuration options
-    ../../modules/telegraf.nix
+    ../../modules/config/telegraf.nix
     ../../modules/config/openvpn/server.nix
     
     ../../modules

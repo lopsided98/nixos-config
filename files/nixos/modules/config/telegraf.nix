@@ -56,7 +56,7 @@
         ## Multiple urls can be specified as part of the same cluster,
         ## this means that only ONE of the urls will be written to each interval.
         # urls = ["udp://localhost:8089"] # UDP endpoint example
-        urls = [ "https://hp-z420.benwolsieffer.com:8086" ]; # required
+        urls = [ "https://influxdb.benwolsieffer.com:8086" ]; # required
         ## The target database for metrics (telegraf will create it if not exists).
         database = "telegraf"; # required
 
@@ -75,7 +75,7 @@
         # udp_payload = 512
 
         ## Optional SSL Config
-        ssl_cert = ../machines + "/${config.networking.hostName}/telegraf/client.pem";
+        ssl_cert = ../../machines + "/${config.networking.hostName}/telegraf/client.pem";
         ssl_key = secrets.getSecret secrets."${config.networking.hostName}".telegraf.sslClientCertificateKey;
         ## Use SSL but skip chain & host verification
         # insecure_skip_verify = false;

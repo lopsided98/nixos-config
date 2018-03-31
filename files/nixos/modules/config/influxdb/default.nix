@@ -68,6 +68,7 @@ in {
         access_log off;
 
         ssl_client_certificate ${../common/root_ca.pem};
+        ssl_crl ${./client_ca_crl.pem};
         ssl_verify_depth 2;
         ssl_verify_client optional;
         

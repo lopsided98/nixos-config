@@ -13,7 +13,7 @@ in rec {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/telegraf.nix
+    ../../modules/config/telegraf.nix
     ../../modules/config/zfs-backup.nix
     ../../modules/config/docker.nix
     ../../modules/config/hydra.nix
