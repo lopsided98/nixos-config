@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "aur";
-  version = "2017.7";
+  version = "2018";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://xyne.archlinux.ca/projects/python3-${pname}/src/python3-${pname}-${version}.tar.xz";
-    sha256 = "0dhjzgzsc3qpj3wrd1hh0dg7hfca7gx484h19a1v4b2kgf14hs37";
+    sha256 = "1v1xfvb6q78nk8bgzj958q90q6y9qk9b9d9sy0l1hmks2dcycwmw";
   };
   
   propagatedBuildInputs = [ pyalpm xcgf xcpf pyxdg ];
