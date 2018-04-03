@@ -116,8 +116,6 @@ in rec {
   
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
-
-  # inherit (crossPackages) linux_4_14 linuxPackagesFor;
   
   linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4/linux-odroid-xu4.nix {
     kernelPatches =
@@ -129,7 +127,7 @@ in rec {
       ];
   };
   
-  linux_rock64_mainline = crossPackages.callPackage ./linux-rock64-mainline/linux-rock64-mainline.nix {
+  linux_rock64_mainline = super.callPackage ./linux-rock64-mainline/linux-rock64-mainline.nix {
     kernelPatches =
       [ super.kernelPatches.bridge_stp_helper
         super.kernelPatches.modinst_arg_list_too_long
@@ -149,8 +147,8 @@ in rec {
         }
       ];
   };
-  
+
   linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
-  linuxPackages_rock64_mainline = crossPackages.recurseIntoAttrs (crossPackages.linuxPackagesFor self.linux_rock64_mainline);
+  linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
   linuxPackages_rock64 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }
