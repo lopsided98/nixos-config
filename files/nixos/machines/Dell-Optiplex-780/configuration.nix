@@ -113,25 +113,12 @@ in rec {
     defaultArguments = "--sshport 4245";
     commands = [ {
       source = "root/root";
-      target = "backup/backups/Dell-Optiplex-780/root";
+      target = "${remote}:backup/backups/Dell-Optiplex-780/root";
     } {
       source = "root/home";
-      target = "backup/backups/Dell-Optiplex-780/home";
-    } {
-      source = "backup/backups/Dell-Optiplex-780";
-      target = "${remote}:backup/backups/Dell-Optiplex-780";
-      recursive = true;
+      target = "${remote}:backup/backups/Dell-Optiplex-780/home";
     } ];
   };
-  
-  services.syncthing = {
-    enable = true;
-    user = "backup";
-    group = "backup";
-    openDefaultPorts = true;
-    dataDir = "/mnt/backup/syncthing";
-  };
-  systemd.services.syncthing.unitConfig.RequiresMountsFor = "/mnt/backup";
   
   networking.firewall.allowedTCPPorts = [ 1313 4600 ];
   networking.firewall.allowedUDPPorts = [ 4600 ];

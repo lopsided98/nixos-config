@@ -1,6 +1,6 @@
 { config, lib, ... }: {
 
-# Unbound DNS server
+  # Unbound DNS server
   services.unbound = {
     enable = true;
     allowedAccess = [ "192.168.1.0/24" "2601:18a:0:7829::/64" "172.17.0.0/16" ];
@@ -38,4 +38,6 @@
       control-enable: no
     '';
   };
+
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }

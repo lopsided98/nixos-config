@@ -10,15 +10,17 @@ in {
     ./hardware-configuration.nix
 
     ../../modules/config/zfs.nix
+    ../../modules/config/zfs-backup.nix
+    ../../modules/config/telegraf.nix
 
     ../../modules
   ];
     
-  nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform // {
-    name = "rock64";
-    kernelBaseConfig = "rockchip_linux_defconfig";
-    kernelAutoModules = false;
-  };
+  #nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform // {
+  #  name = "rock64";
+  #  kernelBaseConfig = "rockchip_linux_defconfig";
+  #  kernelAutoModules = false;
+  #};
 
   boot = {
     loader = {
@@ -26,7 +28,7 @@ in {
       generic-extlinux-compatible.enable = true;
     };
     kernelParams = [ "earlycon=uart8250,mmio32,0xff130000 coherent_pool=1M ethaddr=\${ethaddr} eth1addr=\${eth1addr} serial=\${serial#}" ];
-    kernelPackages = lib.mkForce pkgs.linuxPackages_rock64;
+    kernelPackages = lib.mkForce pkgs.linuxPackages_rock64_mainline;
   };
 
   # Workaround checksumming bug
@@ -58,6 +60,33 @@ in {
 
   # Set SSH port
   services.openssh.ports = [4246];
+
+  services.sanoid = {
+    datasets = {
+      # Each backup node takes its own snapshots of data
+      "backup/data" = {
+        useTemplate = [ "backup" ];
+        autosnap = true;
+        recursive = true;
+        processChildrenOnly = true;
+      };
+      # Prune all backups with one rule
+      "backup/backups" = {
+        useTemplate = [ "backup" ];
+        recursive = true;
+        processChildrenOnly = true;
+      };
+    };
+  };
+
+  services.syncthing = {
+    enable = true;
+    user = "backup";
+    group = "backup";
+    openDefaultPorts = true;
+    dataDir = "/mnt/backup/syncthing";
+  };
+  systemd.services.syncthing.unitConfig.ConditionPathIsMountPoint = "/mnt/backup";
 
   # Enable SD card TRIM
   services.fstrim.enable = true;

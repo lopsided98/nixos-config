@@ -49,8 +49,22 @@ in {
   # Set SSH port
   services.openssh.ports = [4242];
 
-  networking.firewall.allowedUDPPorts = [ 53 ];
   networking.firewall.allowedTCPPorts = [ 8883 ];
+
+  # Network monitoring
+  services.telegraf-fixed.inputs.ping = {
+    urls = [
+      "www.google.com"
+      "192.168.1.1"
+      "odroid-xu4.benwolsieffer.com"
+      "hp-z420.benwolsieffer.com"
+      "dell-optiplex-780.benwolsieffer.com"
+      "rock64.benwolsieffer.com"
+    ];
+
+    # The only metric used in the dashboard
+    fieldpass = [ "average_response_ms" ];
+  };
 
   # Enable SD card TRIM
   services.fstrim.enable = true;

@@ -86,40 +86,45 @@
 
       # Read metrics about cpu usage
       cpu = {
-        ## Whether to report per-cpu stats or not
-        percpu = true;
-        ## Whether to report total system cpu stats or not
+        # Whether to report per-cpu stats or not
+        percpu = false;
+        # Whether to report total system cpu stats or not
         totalcpu = true;
-        ## If true, collect raw CPU time metrics.
+        # If true, collect raw CPU time metrics.
         collect_cpu_time = false;
+        # If true, compute and report the sum of all non-idle CPU states.
+        report_active = false;
       };
 
       # Read metrics about disk usage by mount point
       disk = {
         interval = "5m";
-        ## By default, telegraf gather stats for all mountpoints.
-        ## Setting mountpoints will restrict the stats to the specified mountpoints.
-        # mount_points = ["/"];
+        # By default, telegraf gather stats for all mountpoints.
+        # Setting mountpoints will restrict the stats to the specified mountpoints.
+        # mount_points = [ "/" ];
 
-        ## Ignore some mountpoints by filesystem type. For example (dev)tmpfs (usually
-        ## present on /run, /var/run, /dev/shm or /dev).
+        # Ignore some mountpoints by filesystem type. For example (dev)tmpfs (usually
+        # present on /run, /var/run, /dev/shm or /dev).
         ignore_fs = ["tmpfs" "devtmpfs" "devfs"];
+
+        # /nix/store is a bind mount of another filesystem, so ignore it
+        tagdrop.path = [ "/nix/store" ];
       };
 
       # Read metrics about disk IO by device
       diskio = {
-        ## By default, telegraf will gather stats for all devices including
-        ## disk partitions.
-        ## Setting devices will restrict the stats to the specified devices.
+        # By default, telegraf will gather stats for all devices including
+        # disk partitions.
+        # Setting devices will restrict the stats to the specified devices.
         devices = ["mmcblk1" "sda"];
-        ## Uncomment the following line if you need disk serial numbers.
+        # Uncomment the following line if you need disk serial numbers.
         # skip_serial_number = false
-        #
-        ## On systems which support it, device metadata can be added in the form of
-        ## tags.
-        ## Currently only Linux is supported via udev properties. You can view
-        ## available properties for a device by running:
-        ## 'udevadm info -q property -n /dev/sda'
+
+        # On systems which support it, device metadata can be added in the form of
+        # tags.
+        # Currently only Linux is supported via udev properties. You can view
+        # available properties for a device by running:
+        # 'udevadm info -q property -n /dev/sda'
         # device_tags = ["ID_FS_TYPE" "ID_FS_USAGE"];
         #
         ## Using the same metadata source as device_tags, you can also customize the
@@ -155,6 +160,10 @@
       netstat = {};
     };
   };
+
+  # We need the privileged ping executable in the path (is there a better way
+  # to do this?)
+  systemd.services.telegraf.path = [ "/run/wrappers" ];
 
   environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".telegraf.sslClientCertificateKey { user = "telegraf"; };
 }

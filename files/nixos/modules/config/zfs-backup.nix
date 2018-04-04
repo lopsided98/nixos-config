@@ -55,6 +55,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEQYJwUP/dvd3jFA/F1XFRfScPlraZf3jodYWanb44je" # Dell-Optiplex-780
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM9m160Ia27+V9i29j3feDzN/Xp6wabKeAR273LkgjGj backup@HP-Z420"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKZXFj+YKXOM5IjChnSbn7vVMwZDup/+eoBEHJJYvf82 backup@Rock64"
     ];
     packages = [ pkgs.lzop pkgs.mbuffer ];
   };

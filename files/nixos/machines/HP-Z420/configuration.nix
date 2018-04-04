@@ -141,6 +141,11 @@ in rec {
         recursive = true;
         processChildrenOnly = true;
       };
+      "backup/backups/Dell-Inspiron-15-Windows" = {
+        useTemplate = [ "backup" ];
+        autosnap = true;
+        recursive = true;
+      };
       "backup/backups/P-3400" = {
         useTemplate = [ "backup" ];
         autosnap = true;
@@ -150,9 +155,9 @@ in rec {
   };
 
   services.syncoid = let
-    remote = "backup@dell-optiplex-780.benwolsieffer.com";
+    remote = "backup@rock64.benwolsieffer.com";
   in {
-    defaultArguments = "--sshport 4244";
+    defaultArguments = "--sshport 4246";
     commands = [ {
       source = "root/root";
       target = "backup/backups/HP-Z420/root";
@@ -185,7 +190,7 @@ in rec {
     openDefaultPorts = true;
     dataDir = "/mnt/backup/syncthing";
   };
-  systemd.services.syncthing.unitConfig.RequiresMountsFor = "/mnt/backup";
+  systemd.services.syncthing.unitConfig.ConditionPathIsMountPoint = "/mnt/backup";
   
   # Libvirt
   virtualisation.libvirtd = {
