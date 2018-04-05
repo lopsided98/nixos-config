@@ -13,7 +13,7 @@
     #  EMAIL_SENDER_TRANSPORT_port = "465";
     #  EMAIL_SENDER_TRANSPORT_ssl = "ssl";
     #  EMAIL_SENDER_TRANSPORT_sasl_username = "benwolsieffer@gmail.com";
-    #  EMAIL_SENDER_TRANSPORT_sasl_password = "zfzrmrfpzzshhvpc";
+    #  EMAIL_SENDER_TRANSPORT_sasl_password = ""; # Previous password was revoked
     #};
     port = 8080;
     extraConfig = ''
@@ -49,9 +49,7 @@
         enableACME = true;
         forceSSL = true;
         
-        basicAuth = {
-          "hydra" = "_d-SlzcGcwUf1nT9fsW0O5PUV2m_YfaRpGUBObT_";
-        };
+        basicAuthFile = secrets.getSecret secrets.hydra.htpasswd;
         
         locations = {
           "/" = {
@@ -80,8 +78,10 @@
     };
   };
   
-  environment.secrets."${secrets.build.sshKey}" = {
-    group = "hydra";
-    mode = "0440";
-  };
+  environment.secrets = {
+    "${secrets.build.sshKey}" = {
+      group = "hydra";
+      mode = "0440";
+    };
+  } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; };
 }
