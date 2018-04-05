@@ -9,9 +9,7 @@ in {
         enableACME = true;
         forceSSL = true;
         
-        basicAuth = {
-          "aur-buildbot" = "Nb7fDr5NyfUnzWpPndGdIO3mWXAgarfoSU43IPzv";
-        };
+        basicAuthFile = secrets.getSecret secrets.aurBuildbot.htpasswd;
         
         locations = {
           "/aur-buildbot/" = {
@@ -137,5 +135,6 @@ in {
       group = "aur-buildbot";
       mode = "0440";
     } //
-    secrets.mkSecret secrets.aurBuildbot.smtpPassword { user = "aur-buildbot"; };
+    secrets.mkSecret secrets.aurBuildbot.smtpPassword { user = "aur-buildbot"; } //
+    secrets.mkSecret secrets.aurBuildbot.htpasswd { user = "nginx"; };
 }
