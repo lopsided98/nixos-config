@@ -20,5 +20,5 @@
 - name: Rebuild NixOS configuration
   command: nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix -I localpkgs=/etc/nixos
   register: nixos_rebuild
-  changed_when: nixos_rebuild.stderr | search("these derivations will be built")
+  changed_when: nixos_rebuild.stderr is search("these derivations will be built")
 
