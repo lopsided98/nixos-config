@@ -1,9 +1,0 @@
-- name: AUR Buildbot worker
-  hosts: aur_buildbot_worker
-
-  roles:
-    - role: aur_buildbot_worker
-      aur_buildbot_worker_service_name: aur-buildbot
-      aur_buildbot_worker_master: "hp-z420.nsupdate.info:7192"
-      aur_buildbot_worker_admin: "Ben Wolsieffer <benwolsieffer@gmail.com>"
-      aur_buildbot_worker_mirrorlist: "{{ common_mirrorlist }}"

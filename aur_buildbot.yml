@@ -1,5 +1,0 @@
-- name: AUR Buildbot
-  hosts: HP-Z420
-
-  roles:
-    - role: aur_buildbot

@@ -1,8 +1,0 @@
-- name: Syncthing node
-  hosts: ODROID-XU4 HP-Z420 RasPi2
-
-  roles:
-    - role: syncthing
-      syncthing_web_interface_allowed_ipv4: ["{{ hostvars['RasPi2']['ansible_default_ipv4']['address'] }}"]
-      syncthing_web_interface_allowed_ipv6: ["{{ hostvars['RasPi2']['ansible_default_ipv6']['address'] }}"]
-      when: inventory_hostname != "RasPi2"

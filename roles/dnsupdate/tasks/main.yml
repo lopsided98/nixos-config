@@ -1,7 +1,0 @@
-- name: create cache directory
-  file: 
-    path: /var/cache/dnsupdate
-    state: directory
-    owner: dnsupdate
-    group: root
-    mode: '0750'

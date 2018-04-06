@@ -1,7 +1,0 @@
----
-ssh_port: 4246
-domains: [kittycop.nsupdate.info]
-ip: 192.168.1.6
-common_host_users:
-  ben:
-    groups: [wheel]

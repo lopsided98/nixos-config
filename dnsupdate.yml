@@ -1,5 +1,0 @@
-- name: Dynamic DNS update
-  hosts: all
-
-  roles:
-    - role: dnsupdate

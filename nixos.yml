@@ -1,5 +1,0 @@
-- name: Update NixOS configuration
-  hosts: nixos
-  gather_facts: false
-  roles:
-    - nixos

@@ -1,6 +1,0 @@
-dependencies:
-  - role: openvpn_client_tap
-    openvpn_client_tap_name: home-network
-    openvpn_client_tap_server: odroid-xu4.nsupdate.info
-    openvpn_client_tap_port: 4294
-    openvpn_client_tap_config_file: roles/openvpn_client_home_network/templates/etc/openvpn/client/home-network.conf.j2

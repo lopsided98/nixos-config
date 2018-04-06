@@ -1,5 +1,0 @@
-- name: Backup client
-  hosts: HP-Z420 Dell-Optiplex-780
-
-  roles:
-    - role: backup

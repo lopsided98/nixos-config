@@ -1,2 +1,0 @@
-dnsupdate_enable_ipv6: false
-dnsupdate_service_file: "templates/dartmouth_network/etc/dnsupdate.services.conf.j2"

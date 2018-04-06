@@ -1,3 +1,2 @@
-*.retry
 .idea/
-files/nixos/pkgs/ros/
+pkgs/ros/

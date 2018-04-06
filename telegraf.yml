@@ -1,5 +1,0 @@
-- name: Telegraf agent
-  hosts: all
-
-  roles:
-    - telegraf

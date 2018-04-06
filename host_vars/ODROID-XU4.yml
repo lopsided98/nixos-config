@@ -1,8 +1,0 @@
----
-ssh_port: 4243
-domains: [odroid-xu4.benwolsieffer.com]
-ip: 192.168.1.3
-
-dnsupdate_secret_keys: [kQcVpAWKX4]
-
-aur_buildbot_worker_password: xZdKI5whiX5MNSfWcAJ799Krhq5BZhfe11zBdamx

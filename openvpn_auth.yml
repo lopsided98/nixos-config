@@ -1,5 +1,0 @@
-- name: OpenVPN authentication
-  hosts: HP-Z420
-
-  roles:
-    - role: openvpn_auth

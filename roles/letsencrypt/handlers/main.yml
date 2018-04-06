@@ -1,2 +1,0 @@
-- name: systemd | daemon-reload
-  service: name=certbot.timer daemon_reload=true

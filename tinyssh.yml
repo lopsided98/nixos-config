@@ -1,5 +1,0 @@
-- name: Apply initrd tinyssh configuration
-  hosts: Dell-Optiplex-780 HP-Z420
-
-  roles:
-    - role: tinyssh
