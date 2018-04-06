@@ -1,7 +1,0 @@
-- name: working directory
-  file:
-    path: "{{ aur_buildbot_directory }}"
-    state: directory
-    owner: aur-buildbot
-    group: aur-buildbot
-    mode: "0750"
