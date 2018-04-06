@@ -8,9 +8,9 @@ in {
       "arch.benwolsieffer.com" = {
         enableACME = true;
         forceSSL = true;
-        
+
         basicAuthFile = secrets.getSecret secrets.aurBuildbot.htpasswd;
-        
+
         locations = {
           "/aur-buildbot/" = {
             alias = "/var/lib/aur-buildbot/repo/";
@@ -42,9 +42,6 @@ in {
             '';
           };
         };
-        extraConfig = ''
-          
-        '';
       };
     };
   };
@@ -128,7 +125,7 @@ in {
         xca: {}
     '';
   };
-  
+
   environment.secrets =
     secrets.mkSecret secrets.HP-Z420.aurBuildbot.password {
       user = "aur-buildbot";

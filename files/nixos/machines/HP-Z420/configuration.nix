@@ -18,7 +18,7 @@ in rec {
     ../../modules/config/docker.nix
     ../../modules/config/hydra.nix
     ../../modules/config/hacker-hats.nix
-    ../../modules/aur-buildbot.nix
+    ../../modules/config/aur-buildbot.nix
     ../../modules/config/influxdb
     ../../modules/config/grafana
     
