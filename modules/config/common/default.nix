@@ -76,11 +76,7 @@
       
       gc-keep-outputs = true
       tarball-ttl = 10
-      netrc-file = ${pkgs.writeText "nix-netrc" ''
-        machine hydra.benwolsieffer.com
-        login hydra
-        password _d-SlzcGcwUf1nT9fsW0O5PUV2m_YfaRpGUBObT_
-      ''}
+      netrc-file = ${secrets.getSecret secrets.hydra.netrc}
     '';
 
     # Use my binary cache
@@ -221,7 +217,9 @@
   security.pki.certificateFiles = [ ./root_ca.pem ];
   
   # Build user SSH private key
-  environment.secrets = secrets.mkSecret secrets.build.sshKey {};
+  environment.secrets =
+    secrets.mkSecret secrets.build.sshKey {} //
+    secrets.mkSecret secrets.hydra.netrc {};
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
