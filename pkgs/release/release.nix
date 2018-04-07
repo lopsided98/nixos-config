@@ -26,7 +26,6 @@ let
         if [ ! -e nixpkgs/.git-revision ]; then
           echo -n ${nixpkgs.rev or nixpkgsShortRev} > nixpkgs/.git-revision
         fi
-        rm configuration.nix
         cp -r . $out
       '';
     };
