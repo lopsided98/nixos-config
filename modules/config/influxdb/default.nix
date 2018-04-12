@@ -1,5 +1,6 @@
 { lib, config, secrets, ... }: with lib; let
-  influxdbSocket = "/var/run/influxdb/influxdb.sock";
+  influxdbSocketDir = "/var/run/influxdb";
+  influxdbSocket = "${influxdbSocketDir}/influxdb.sock";
   influxdbPort = 8086;
 in {
   imports = [
@@ -23,8 +24,14 @@ in {
   # Setup influxdb socket permissions
   systemd.services.influxdb = {
     preStart = ''
-      mkdir -m 0750 -p /var/run/influxdb
-      chown ${config.services.influxdb.user}:${config.services.influxdb.group} /var/run/influxdb
+      # Setup socket directory
+      mkdir -p "${influxdbSocketDir}"
+      chmod 0750 "${influxdbSocketDir}"
+      chown ${config.services.influxdb.user}:${config.services.influxdb.group} "${influxdbSocketDir}"
+      # Setup data directory
+      mkdir -p "${config.services.influxdb.dataDir}"
+      chmod 0750 "${config.services.influxdb.dataDir}"
+      chown ${config.services.influxdb.user}:${config.services.influxdb.group} "${config.services.influxdb.dataDir}"
     '';
     postStart = mkForce ''
       # Wait for socket to be created
