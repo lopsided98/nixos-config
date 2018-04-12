@@ -56,6 +56,13 @@ in {
 
   # Set SSH port
   services.openssh.ports = [4243];
+
+  # Temperature monitoring
+  services.telegraf-fixed.inputs.sensors = {
+    remove_numbers = true;
+  };
+  # Add lm_sensors for temperature monitoring
+  systemd.services.telegraf.path = [ pkgs.lm_sensors ];
   
   # Enable SD card TRIM
   services.fstrim.enable = true;
