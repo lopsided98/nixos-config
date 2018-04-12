@@ -21,7 +21,7 @@ in rec {
     ../../modules/config/aur-buildbot.nix
     ../../modules/config/influxdb
     ../../modules/config/grafana
-    
+
     ../../modules
   ];
   
@@ -167,6 +167,10 @@ in rec {
     } {
       source = "root/vm";
       target = "backup/backups/HP-Z420/vm";
+      recursive = true;
+    } {
+      source = "backup/backups/HP-Z420";
+      target = "${remote}:backup/backups/HP-Z420";
       recursive = true;
     } {
       source = "backup/backups/Dell-Inspiron-15";
