@@ -172,6 +172,11 @@
     usePredictableInterfaceNames = true;
   };
 
+  # Delete old logs after 3 months
+  services.journald.extraConfig = ''
+    MaxRetentionSec=3month
+  '';
+
   programs.bash.enableCompletion = true;
   # Stolen from Arch Linux
   programs.bash.promptInit = ''
