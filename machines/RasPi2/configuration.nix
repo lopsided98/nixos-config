@@ -21,7 +21,6 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
   };
 
   systemd.network = {
@@ -47,9 +46,7 @@ in {
   # List services that you want to enable:
 
   # Set SSH port
-  services.openssh.ports = [4242];
-
-  networking.firewall.allowedTCPPorts = [ 8883 ];
+  services.openssh.ports = [ 4242 ];
 
   # Network monitoring
   services.telegraf-fixed.inputs.ping = {
@@ -65,7 +62,22 @@ in {
     # The only metric used in the dashboard
     fieldpass = [ "average_response_ms" ];
   };
+  # We need the privileged ping executable in the path (is there a better way
+  # to do this?)
+  systemd.services.telegraf.path = [ "/run/wrappers" ];
+
+  # Quassel core (IRC)
+  services.quassel = {
+    enable = true;
+    portNumber = 4600;
+    interfaces = [ "0.0.0.0" ];
+    dataDir = "/var/lib/quassel";
+  };
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
+
+  networking.firewall.allowedTCPPorts = [
+    4600 # Quassel
+  ];
 }

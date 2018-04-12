@@ -19,7 +19,7 @@ in rec {
       
       ../../modules
     ];
-  
+
   boot = {
     # Use the GRUB 2 boot loader.
     loader.grub = {
@@ -87,15 +87,7 @@ in rec {
     ports = [4244];
     gatewayPorts = "clientspecified";
   };
-  
-  # Quassel core (IRC)
-  services.quassel = {
-    enable = true;
-    portNumber = 4600;
-    interfaces = [ "0.0.0.0" ];
-    dataDir = "/var/lib/quassel";
-  };
-  
+
   services.sanoid = {
     datasets = {
       "root/root" = {
@@ -119,7 +111,4 @@ in rec {
       target = "${remote}:backup/backups/Dell-Optiplex-780/home";
     } ];
   };
-  
-  networking.firewall.allowedTCPPorts = [ 1313 4600 ];
-  networking.firewall.allowedUDPPorts = [ 4600 ];
 }

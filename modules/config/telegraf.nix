@@ -161,9 +161,5 @@
     };
   };
 
-  # We need the privileged ping executable in the path (is there a better way
-  # to do this?)
-  systemd.services.telegraf.path = [ "/run/wrappers" ];
-
   environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".telegraf.sslClientCertificateKey { user = "telegraf"; };
 }
