@@ -1,8 +1,9 @@
-{ services, ... }:
+{ config, pkgs, ... }:
 
 {
   services.nginx = {
     enable = true;
+    package = pkgs.nginxMainline;
     commonHttpConfig = ''
       log_format access '[$host] $remote_addr "$request" '
                       '$status $body_bytes_sent "$http_referer" '
