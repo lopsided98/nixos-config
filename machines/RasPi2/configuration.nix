@@ -49,7 +49,7 @@ in {
   services.openssh.ports = [ 4242 ];
 
   # Network monitoring
-  services.telegraf-fixed.inputs.ping = {
+  services.telegraf.inputs.ping = {
     urls = [
       "www.google.com"
       "192.168.1.1"

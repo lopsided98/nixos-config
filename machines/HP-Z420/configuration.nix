@@ -80,7 +80,7 @@ in rec {
   networking.hostName = "HP-Z420"; # Define your hostname.
   networking.hostId = "5e9c1aa3";
   # Enable telegraf metrics for this interface
-  services.telegraf-fixed.inputs.net.interfaces = [ interface ];
+  services.telegraf.inputs.net.interfaces = [ interface ];
 
   # ARM binfmt-misc support
   #environment.etc = {

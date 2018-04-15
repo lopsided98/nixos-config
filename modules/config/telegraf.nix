@@ -1,6 +1,6 @@
 { config, lib, pkgs, secrets, ... }: with lib; {
 
-  services.telegraf-fixed = {
+  services.telegraf = {
     enable = true;
 
     agent = {

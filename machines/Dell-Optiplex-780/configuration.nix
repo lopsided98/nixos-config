@@ -72,7 +72,7 @@ in rec {
   };
   
   # Enable telegraf metrics for this interface
-  services.telegraf-fixed.inputs.net.interfaces = [ interface ];
+  services.telegraf.inputs.net.interfaces = [ interface ];
 
   environment.systemPackages = with pkgs; [
   ];

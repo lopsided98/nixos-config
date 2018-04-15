@@ -58,7 +58,7 @@ in {
   services.openssh.ports = [4243];
 
   # Temperature monitoring
-  services.telegraf-fixed.inputs.sensors = {
+  services.telegraf.inputs.sensors = {
     remove_numbers = true;
   };
   # Add lm_sensors for temperature monitoring
