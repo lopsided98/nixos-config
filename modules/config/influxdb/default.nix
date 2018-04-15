@@ -1,6 +1,6 @@
-{ lib, config, secrets, ... }: with lib; let
-  influxdbSocketDir = "/var/run/influxdb";
-  influxdbSocket = "${influxdbSocketDir}/influxdb.sock";
+{ lib, config, secrets, pkgs, ... }: with lib; let
+  socketDir = "/var/run/influxdb";
+  socket = "${socketDir}/influxdb.sock";
   influxdbPort = 8086;
 in {
   imports = [
@@ -16,30 +16,26 @@ in {
         log-enabled = false;
         bind-address = "";
         unix-socket-enabled = true;
-        bind-socket = influxdbSocket;
+        bind-socket = socket;
       };
     };
   };
   
   # Setup influxdb socket permissions
-  systemd.services.influxdb = {
+  systemd.services.influxdb = let cfg = config.services.influxdb; in {
+    path = [ pkgs.acl ];
     preStart = ''
       # Setup socket directory
-      mkdir -p "${influxdbSocketDir}"
-      chmod 0750 "${influxdbSocketDir}"
-      chown ${config.services.influxdb.user}:${config.services.influxdb.group} "${influxdbSocketDir}"
+      install -o ${cfg.user} -g ${cfg.group} -m 0750 -d "${socketDir}"
+      setfacl -bm u:nginx:rx "${socketDir}"
       # Setup data directory
-      mkdir -p "${config.services.influxdb.dataDir}"
-      chmod 0750 "${config.services.influxdb.dataDir}"
-      chown ${config.services.influxdb.user}:${config.services.influxdb.group} "${config.services.influxdb.dataDir}"
+      install -o ${cfg.user} -g ${cfg.group} -m 0750 -d "${cfg.dataDir}"
     '';
     postStart = mkForce ''
       # Wait for socket to be created
-      while [ ! -S "${influxdbSocket}" ]; do
-        sleep 1
-      done
+      while [ ! -S "${socket}" ]; do sleep 1; done
       # Make socket writable by nginx
-      chmod 0660 "${influxdbSocket}"
+      setfacl -bm u:nginx:rw "${socket}"
     '';
   };
   
@@ -64,7 +60,7 @@ in {
       sslCertificateKey = secrets.getSecret secrets.influxdb.sslCertificateKey;
       
       locations."/" = {
-        proxyPass = "http://unix:${influxdbSocket}";
+        proxyPass = "http://unix:${socket}";
         
         extraConfig = ''
           proxy_set_header Authorization "Basic $influxdb_authorization";
@@ -98,11 +94,6 @@ in {
         include ${secrets.getSecret secrets.influxdb.passwordMap};
       }
     '';
-  };
-  
-  # Add nginx to the influxdb group so it can access the socket
-  users.extraUsers.nginx = {
-    extraGroups = [ config.services.influxdb.group ];
   };
   
   environment.secrets = 
