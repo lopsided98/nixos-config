@@ -1,4 +1,4 @@
-{ config, lib, pkgs, secrets, ... }: {
+{ config, pkgs, secrets, ... }: {
 
   imports = [
     ../ssh.nix # Enable SSH on all systems
@@ -29,7 +29,7 @@
 
   # Standard set of packages
   environment.systemPackages = with pkgs; [
-    htop iotop git python27 file vim screen
+    htop iotop linuxPackages_latest.tmon git file vim screen
   ];
 
   # Select internationalisation properties.
@@ -217,11 +217,10 @@
     };
     extraGroups.build = {};
   };
-  
+
   # My personal root CA
   security.pki.certificateFiles = [ ./root_ca.pem ];
-  
-  # Build user SSH private key
+
   environment.secrets =
     secrets.mkSecret secrets.build.sshKey {} //
     secrets.mkSecret secrets.hydra.netrc {};
