@@ -70,6 +70,8 @@
 
     { name = "influxdb"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "grafana"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
+    { name = "syncthing.hp-z420"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
+    { name = "syncthing.rock64"; class = "IN"; type = "CNAME"; data = "rock64"; }
   ];
 in {
 
