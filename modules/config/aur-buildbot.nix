@@ -77,19 +77,29 @@ in {
         x86_64:
           - HP-Z420
       packages:
+        # Packages I maintain
+        btrfs-snap: {}
         dnsupdate: {}
         dnsupdate-git: {}
+        keepass-plugin-quickunlock: {}
+        ldcad: {}
+        obfuscate: {}
+        python-nss: {}
+        python-port-for: {}
+        python-pynmea2: {}
+        python-sphinx-argparse: {}
+        python-sphinx-autobuild: {}
+        qdriverstation: {}
+        qdriverstation-git: {}
+
+        # Other packages
         python-keras: {}
         pacaur: {}
         arm-linux-gnueabihf-gcc: {}
         redeclipse: {}
         python-scikit-image: {}
-        ldcad: {}
         keepass-plugin-http: {}
-        keepass-plugin-quickunlock: {}
         keepass-plugin-traytotp: {}
-        qdriverstation: {}
-        qdriverstation-git: {}
         zotero: {}
         solaar-git: {}
         clion: {}
@@ -116,9 +126,6 @@ in {
           dependencies: [jdk8-openjdk]
         chromium-vaapi: {}
         lcov: {}
-        python-port-for: {}
-        obfuscate: {}
-        python-sphinx-autobuild: {}
         slapi-nis: {}  
         logisim: {}
         lib32-tk: {}
