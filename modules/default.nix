@@ -9,6 +9,7 @@
     ./system/secrets.nix
     ./services/backup/sanoid.nix
     ./services/backup/syncoid.nix
+    ./services/backup/syncthing-backup.nix
     ./services/continuous-integration/aur-buildbot/worker.nix
     ./services/continuous-integration/aur-buildbot/master.nix
     ./services/networking/dnsupdate.nix

@@ -12,6 +12,7 @@ in {
     ../../modules/config/zfs.nix
     ../../modules/config/zfs-backup.nix
     ../../modules/config/telegraf.nix
+    ../../modules/config/nginx.nix
 
     ../../modules
   ];
@@ -90,14 +91,10 @@ in {
     } ];
   };
 
-  services.syncthing = {
+  modules.syncthingBackup = {
     enable = true;
-    user = "backup";
-    group = "backup";
-    openDefaultPorts = true;
-    dataDir = "/mnt/backup/syncthing";
+    virtualHost = "syncthing.rock64.benwolsieffer.com";
   };
-  systemd.services.syncthing.unitConfig.ConditionPathIsMountPoint = "/mnt/backup";
 
   # Enable SD card TRIM
   services.fstrim.enable = true;

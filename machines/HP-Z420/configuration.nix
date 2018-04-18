@@ -187,21 +187,17 @@ in rec {
     } ];
   };
   
-  services.syncthing = {
-    enable = true;
-    user = "backup";
-    group = "backup";
-    openDefaultPorts = true;
-    dataDir = "/mnt/backup/syncthing";
-  };
-  systemd.services.syncthing.unitConfig.ConditionPathIsMountPoint = "/mnt/backup";
-  
   # Libvirt
   virtualisation.libvirtd = {
     enable = true;
     onShutdown = "shutdown";
   };
   users.extraUsers.ben.extraGroups = [ "libvirtd" ];
+
+  modules.syncthingBackup = {
+    enable = true;
+    virtualHost = "syncthing.hp-z420.benwolsieffer.com";
+  };
 
   /*services.dnsupdate = {
     enable = true;

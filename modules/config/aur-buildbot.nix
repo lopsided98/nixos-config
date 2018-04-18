@@ -130,6 +130,7 @@ in {
         logisim: {}
         lib32-tk: {}
         xca: {}
+        nix: {}
     '';
   };
 
