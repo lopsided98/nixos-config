@@ -41,7 +41,7 @@ in {
     };
   };
   
-  config = {
+  config = mkIf cfg.enable {
     services.syncthing = {
       enable = true;
       user = cfg.user;
