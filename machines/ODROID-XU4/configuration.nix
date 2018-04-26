@@ -36,6 +36,10 @@ in {
       address = [ "192.168.1.3/24" ];
       gateway = [ "192.168.1.1" ];
       dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
     };
   };
   networking.hostName = "ODROID-XU4"; # Define your hostname.
