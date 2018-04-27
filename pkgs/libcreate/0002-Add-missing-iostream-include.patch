@@ -1,0 +1,22 @@
+From 0b6d6c6996765284900ecb70efee703780a37aed Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Wed, 31 Jan 2018 15:54:28 -0500
+Subject: [PATCH] Add missing iostream include.
+
+---
+ src/data.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/data.cpp b/src/data.cpp
+index ef226e8..d35dd2a 100644
+--- a/src/data.cpp
++++ b/src/data.cpp
+@@ -1,4 +1,5 @@
+ #include "create/data.h"
++#include <iostream>
+ 
+ #define ADD_PACKET(id,nbytes,info,enabledVersion) if ((enabledVersion) & version) packets[id]=boost::make_shared<Packet>(nbytes,info)
+ 
+-- 
+2.17.0
+

@@ -56,6 +56,8 @@ in rec {
 
   tinyssh-convert = super.callPackage ./tinyssh-convert/default.nix {};
 
+  libcreate = super.callPackage ./libcreate {};
+
   sanoid = super.callPackage ./sanoid/default.nix {
     inherit (perlPackages) ConfigIniFiles;
     mbufferSupport = true;
