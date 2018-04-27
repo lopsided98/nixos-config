@@ -89,6 +89,8 @@ in {
         pid-file "/var/run/named/named.pid";
 
         recursion no;
+        dnssec-validation auto;
+
         allow-transfer { none; };
         allow-query { none; };
       };
