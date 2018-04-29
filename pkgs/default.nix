@@ -48,8 +48,6 @@ in rec {
 
   pacman = super.callPackage ./pacman/default.nix {};
 
-  muximux = super.callPackage ./muximux/default.nix {};
-
   hacker-hats = super.callPackage ./hacker-hats/default.nix {};
 
   tinyssh = super.callPackage ./tinyssh/default.nix {};

@@ -9,7 +9,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/services/web-apps/muximux.nix
       ../../modules/config/docker.nix
       ../../modules/config/nginx.nix
       
@@ -46,13 +45,5 @@
 
   # Set SSH port
   services.openssh.ports = [4247];
-  
-  # Configure Muximux
-  #services.muximux.enable = true;
-  #services.nginx.virtualHosts.muximux = {
-  #  serverName = ''"\"'';
-  #  listen = [{addr = "0.0.0.0"; port = 81;}];
-  #};
-  #networking.firewall.allowedTCPPorts = [81];
 }
 

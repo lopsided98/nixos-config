@@ -36,7 +36,6 @@ let
       dnsupdate
       aur-buildbot
       pacman
-      muximux
       hacker-hats
       tinyssh
       tinyssh-convert
@@ -63,7 +62,6 @@ let
     dnsupdate = hostSystems;
     aur-buildbot = hostSystems;
     pacman = hostSystems;
-    muximux = hostSystems;
     hacker-hats = hostSystems;
     tinyssh = hostSystems;
     tinyssh-convert = hostSystems;
