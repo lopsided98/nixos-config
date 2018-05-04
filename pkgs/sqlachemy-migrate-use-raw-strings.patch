@@ -1,4 +1,4 @@
-From 925c58137da563b64aa1d784f2dc5d0b25a18df1 Mon Sep 17 00:00:00 2001
+From a5d69a17d9354ec1a792493280f96484740cf7ff Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Sat, 16 Dec 2017 14:10:24 -0500
 Subject: [PATCH] Use raw strings.
@@ -59,7 +59,7 @@ index 931ef7b..ec707be 100644
          May receive parameters arranged in several different ways:
  
 diff --git a/migrate/versioning/script/sql.py b/migrate/versioning/script/sql.py
-index 862bc9f..0949cac 100644
+index 862bc9f..3f6a317 100644
 --- a/migrate/versioning/script/sql.py
 +++ b/migrate/versioning/script/sql.py
 @@ -47,7 +47,7 @@ class SqlScript(base.BaseScript):
@@ -67,10 +67,10 @@ index 862bc9f..0949cac 100644
                  # the whole idea of ROLLBACK)
                  ignored_statements = ('BEGIN', 'END', 'COMMIT')
 -                ignored_regex = re.compile('^\s*(%s).*;?$' % '|'.join(ignored_statements),
-+                ignored_regex = re.compile(r'^\s*(%s).*;?$' % r'|'.join(ignored_statements),
++                ignored_regex = re.compile(r'^\s*(%s).*;?$' % '|'.join(ignored_statements),
                                             re.IGNORECASE)
  
                  # NOTE(ihrachys): script may contain multiple statements, and
 -- 
-2.15.0
+2.17.0
 
