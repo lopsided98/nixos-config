@@ -131,6 +131,7 @@ in {
         lib32-tk: {}
         xca: {}
         nix: {}
+        intellij-idea-ultimate-edition: {}
     '';
   };
 
