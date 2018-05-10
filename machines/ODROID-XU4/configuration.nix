@@ -65,6 +65,15 @@ in {
   services.telegraf.inputs.sensors = {
     remove_numbers = true;
   };
+  # Register TMP102 at boot
+  systemd.services.tmp102 = {
+    description = "Register TMP102 as I2C device";
+    serviceConfig = {
+      Type = "oneshot";
+      WantedBy = "telegraf.service";
+    };
+    script = "echo tmp102 0x48 > /sys/class/i2c-adapter/i2c-1/new_device";
+  };
   # Add lm_sensors for temperature monitoring
   systemd.services.telegraf.path = [ pkgs.lm_sensors ];
   
