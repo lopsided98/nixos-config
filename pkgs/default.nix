@@ -65,6 +65,16 @@ in rec {
     parallelGzipSupport = true;
   };
 
+  hydra = super.hydra.overrideAttrs (oldAttrs: {
+    version = "20180517";
+    src = self.fetchFromGitHub {
+      owner = "NixOS";
+      repo = "hydra";
+      rev = "4013e83e3f5c965f8cefa66cb8ff6d9bf37d46cd";
+      sha256 = "0hfjyrgpmycra0n7kmzd8ddmsg18ii7420xlmnw5a49dz5ijdyzg";
+    };
+  });
+
   python3 = super.python3.override {
     packageOverrides = se: su: {
       sqlalchemy_migrate = su.sqlalchemy_migrate.overridePythonAttrs (oldAttrs: {
@@ -114,8 +124,7 @@ in rec {
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
 
-  # Cross compile kernel on ARMv6/7
-  linux_4_16 = if super.stdenv.hostPlatform.isArm then crossPackages.linux_4_16 else super.linux_4_16;
+  linux_4_16 = crossPackages.linux_4_16;
 
   linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4/linux-odroid-xu4.nix {
     kernelPatches =
