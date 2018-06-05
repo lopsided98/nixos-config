@@ -132,6 +132,7 @@ in {
         xca: {}
         nix: {}
         intellij-idea-ultimate-edition: {}
+        python-pyalsaaudio: {}
     '';
   };
 
