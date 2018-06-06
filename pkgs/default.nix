@@ -126,7 +126,7 @@ in rec {
 
   linux_4_16 = crossPackages.linux_4_16;
 
-  linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4/linux-odroid-xu4.nix {
+  linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4 {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
@@ -135,6 +135,7 @@ in rec {
         self.kernelPatches.modinst_arg_list_too_long
       ];
   };
+  linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
 
   linux_rock64_mainline = super.callPackage ./linux-rock64-mainline/linux-rock64-mainline.nix {
     kernelPatches =
@@ -145,6 +146,7 @@ in rec {
         self.kernelPatches.modinst_arg_list_too_long
       ];
   };
+  linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
 
   linux_rock64 = super.callPackage ./linux-rock64/linux-rock64.nix {
     kernelPatches =
@@ -157,8 +159,5 @@ in rec {
         }
       ];
   };
-
-  linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
-  linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
   linuxPackages_rock64 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }

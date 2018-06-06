@@ -11,5 +11,7 @@ buildLinux (args // rec {
     rev = version;
     sha256 = "1cifd6arpd9pl5wdnk5z9n1dya5dldlj3p33v44na8bkg8rrqx9r";
   };
+  
+  defconfig = "odroid_xu4_defconfig";
 
 } // (args.argsOverride or {}))
