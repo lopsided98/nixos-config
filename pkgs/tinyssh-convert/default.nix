@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
-let
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }: let
   version = "0.2";
 in stdenv.mkDerivation rec {
   name = "tinyssh-convert-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/ansemjo/tinyssh-convert/archive/v${version}.tar.gz";
-    sha256 = "1fi9zms9kcwgcw1hdpclkhid9ys7xrzqvmf02spvwns54lsk81m2";
+  src = fetchFromGitHub {
+    owner = "ansemjo";
+    repo = "tinyssh-convert";
+    rev = "v${version}";
+    sha256 = "19l888pn45ayx9lpyfw2c5nlk484cyzn4r53mpcbs3q3c762igrc";
   };
 
   buildInputs = [ autoreconfHook ];
