@@ -133,6 +133,8 @@ in {
         nix: {}
         intellij-idea-ultimate-edition: {}
         python-pyalsaaudio: {}
+        qemu-user-static: {}
+        binfmt-qemu-static: {}
     '';
   };
 
