@@ -137,7 +137,7 @@ in rec {
   };
   linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
 
-  linux_rock64_mainline = super.callPackage ./linux-rock64-mainline/linux-rock64-mainline.nix {
+  linux_rock64_mainline = super.callPackage ./linux-rock64-mainline {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
