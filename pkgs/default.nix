@@ -147,17 +147,4 @@ in rec {
       ];
   };
   linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
-
-  linux_rock64 = super.callPackage ./linux-rock64 {
-    kernelPatches =
-      [ self.kernelPatches.bridge_stp_helper
-        self.kernelPatches.cpu-cgroup-v2."4.4"
-        self.kernelPatches.modinst_arg_list_too_long
-        {
-          name = "remove-gcc-wrapper";
-          patch = ./linux-rock64/remove-gcc-wrapper.patch;
-        }
-      ];
-  };
-  linuxPackages_rock64 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }
