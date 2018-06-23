@@ -24,7 +24,7 @@ in rec {
 
     ../../modules
   ];
-  
+
   boot = {
     # Use systemd-boot
     loader = {
@@ -47,34 +47,41 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=:::::eth0:dhcp"
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ]; 
+    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
+    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ];
   };
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
-  #modules.openvpn-client-home-network.enable = true;
+  modules.openvpnClientHomeNetwork = {
+    enable = true;
+    macAddress = "a0:d3:c1:20:da:3f";
+  };
   systemd.network = {
     enable = true;
-    #networks.openvpn-client-home-network = {
+    networks.openvpn-client-home-network = {
+      address = [ "${address}/24" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=false
+      '';
+    };
+    # Home network
+    #networks."${interface}" = {
+    #  name = interface;
+    #  # DHCP = "v4";
     #  address = [ "${address}/24" ];
     #  gateway = [ gateway ];
     #  dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
     #  extraConfig = ''
     #    [IPv6AcceptRA]
-    #    UseDNS=false
+    #    UseDNS=no
     #  '';
     #};
+    # Dartmouth network
     networks."${interface}" = {
       name = interface;
-      # DHCP = "v4";
-      address = [ "${address}/24" ];
-      gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
+      DHCP = "v4";
     };
   };
   networking.hostName = "HP-Z420"; # Define your hostname.
@@ -96,7 +103,7 @@ in rec {
   ];
 
   # List services that you want to enable:
-  
+
   # Set SSH port
   services.openssh.ports = [4245];
 
@@ -133,7 +140,7 @@ in rec {
         recursive = true;
         processChildrenOnly = true;
       };
-      
+
       # Snapshots of non-ZFS devices that backup to this node
       "backup/backups/Dell-Inspiron-15" = {
         useTemplate = [ "backup" ];
@@ -186,7 +193,7 @@ in rec {
       recursive = true;
     } ];
   };
-  
+
   # Libvirt
   virtualisation.libvirtd = {
     enable = true;
@@ -207,11 +214,11 @@ in rec {
         args.interface = "eth0";
       };
     };
-    
+
     dnsServices = [
     ];
   };*/
-  
+
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
     22000 # Syncthing port

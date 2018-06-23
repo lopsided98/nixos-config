@@ -10,7 +10,7 @@
     externalInterface = "br0";
     internalInterfaces  = [ "vpn1" ];
   };
-  
+
   # Bridge configuration for tap VPN
   systemd.network = {
     netdevs = {
@@ -23,9 +23,15 @@
         Kind = "tap";
       };
     };
-    networks.eth0 = {
-      name = "eth0";
-      networkConfig.Bridge = "br0";
+    networks = {
+      eth0 = {
+        name = "eth0";
+        networkConfig.Bridge = "br0";
+      };
+      vpn0 = {
+        name = "vpn0";
+        networkConfig.Bridge = "br0";
+      };
     };
   };
 
@@ -174,7 +180,7 @@
 
       # Configure server mode and supply a VPN subnet
       # for OpenVPN to draw client addresses from.
-      # The server will take 10.8.0.1 for itself,
+      # The server will take 10.54.0.1 for itself,
       # the rest will be made available to clients.
       # Each client will be able to reach the server
       # on 10.54.0.1.
@@ -209,7 +215,7 @@
       client-config-dir ${clientConfigDir}
     '';
   };
-  
+
   networking.firewall = {
     extraCommands = ''
       # Deny Sam access to the router
@@ -220,8 +226,8 @@
     '';
     allowedUDPPorts = [ 4294 4295 ];
   };
-  
-  environment.secrets = 
+
+  environment.secrets =
     secrets.mkSecret secrets.openvpn.hmacKey {} //
     secrets.mkSecret secrets."${config.networking.hostName}".openvpn.privateKey {};
 }
