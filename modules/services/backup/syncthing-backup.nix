@@ -7,7 +7,7 @@ in {
     
     virtualHost = mkOption {
       type = types.str;
-      description = "Name of the nginx vritual host";
+      description = "Name of the nginx virtual host";
     };
     
     user = mkOption {
