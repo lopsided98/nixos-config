@@ -22,35 +22,35 @@
     '';
     useSubstitutes = true;
   };
+
   services.postgresql = {
     package = pkgs.postgresql96;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
   };
 
-  
   # Use ARM binary cache
   # Currently broken
   # nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
   nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
-  
+
   # Serve binary cache
   services.nginx = {
     enable = true;
-    
+
     appendHttpConfig = ''
       proxy_cache_path /var/cache/hydra levels=1:2 keys_zone=hydra:10m max_size=10g
                        inactive=1w use_temp_path=off;
     '';
-    
+
     virtualHosts = {
       "hydra.benwolsieffer.com" = let
         proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
       in {
         enableACME = true;
         forceSSL = true;
-        
+
         basicAuthFile = secrets.getSecret secrets.hydra.htpasswd;
-        
+
         locations = {
           "/" = {
             inherit proxyPass;
@@ -61,7 +61,7 @@
               proxy_cache hydra;
 
               add_header X-Cache $upstream_cache_status;
-              
+
               # Allow access from local network without password
               satisfy any;
               allow 192.168.1.0/24;
@@ -77,7 +77,7 @@
       };
     };
   };
-  
+
   environment.secrets = {
     "${secrets.build.sshKey}" = {
       group = "hydra";
