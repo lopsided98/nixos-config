@@ -15,11 +15,6 @@ in {
     
     ../../modules
   ];
-    
-  nixpkgs.config.platform = lib.systems.platforms.armv7l-hf-multiplatform // {
-    name = "odroid-xu4";
-    kernelBaseConfig = "odroidxu4_defconfig";
-  };
 
   boot = {
     loader = {
