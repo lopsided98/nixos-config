@@ -1,6 +1,6 @@
-{ localpkgs ? ../.., 
+{ localpkgs ? ../..,
   nixpkgs ? <nixpkgs>,
-  buildSystems ? [ "x86_64-linux" "armv7l-linux" "aarch64-linux" ],
+  buildSystems ? [ "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ],
   hostSystems ? [ "x86_64-linux" ] }:
 with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = buildSystems; });
 let
@@ -10,7 +10,7 @@ let
     nixpkgsRevCount = nixpkgs.revCount or 12345;
     nixpkgsShortRev = nixpkgs.shortRev or "abcdefg";
     nixpkgsVersion = "pre${toString nixpkgsRevCount}.${nixpkgsShortRev}-localpkgs";
-    
+
     src = pkgs.stdenv.mkDerivation {
       inherit (args) name src;
       phases = [ "unpackPhase" "installPhase" ];
@@ -32,7 +32,7 @@ let
   in pkgs.releaseTools.channel (args // { inherit src; });
 
   jobs = {
-    inherit (pkgs) 
+    inherit (pkgs)
       dnsupdate
       aur-buildbot
       pacman
@@ -45,12 +45,12 @@ let
       inherit (pkgs.perlPackages)
         ConfigIniFiles;
     };
-    
+
     linuxPackages_latest = {
       inherit (pkgs.linuxPackages_latest)
         tmon;
     };
-    
+
     linuxPackages = {
       inherit (pkgs.linuxPackages)
         tmon;
@@ -66,29 +66,39 @@ let
     tinyssh = hostSystems;
     tinyssh-convert = hostSystems;
     sanoid = hostSystems;
-    
+    libcreate = hostSystems;
+
     perlPackages = {
       ConfigIniFiles = hostSystems;
+    };
+
+    python3Packages = {
+      pyalpm = hostSystems;
+      xcgf = hostSystems;
+      memoizedb = hostSystems;
+      xcpf = hostSystems;
+      aur = hostSystems;
+      pyalsaaudio = hostSystems;
     };
 
     linuxPackages_latest = {
       tmon = hostSystems;
     };
-    
+
     linuxPackages = {
       tmon = hostSystems;
     };
-   
+
   } /*// (lib.optionalAttrs (builtins.elem "armv7l-linux" hostSystems) ( {
     inherit (pkgs) linux_odroid_xu4;
-    
+
     linuxPackages_odroid_xu4 = {
       inherit (pkgs.linuxPackages)
         tmon;
     };
   } // mapTestOnCross (lib.systems.examples.armv7l-hf-multiplatform // { platform = machines."ODROID-XU4".config.nixpkgs.config.platform; }) {
     linux_odroid_xu4 = [ "x86_64-linux" ];
-    
+
     linuxPackages_odroid_xu4 = {
       tmon = [ "x86_64-linux" ];
     };

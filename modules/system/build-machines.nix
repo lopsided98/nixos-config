@@ -33,9 +33,9 @@ in {
             type = types.str;
             default = "-";
           };
-          system = mkOption {
-            type = types.str;
-            default = "x86_64-linux";
+          systems = mkOption {
+            type = types.listOf types.str;
+            default = [ "x86_64-linux" ];
           };
           maxJobs = mkOption {
             type = types.ints.unsigned;
@@ -64,7 +64,7 @@ in {
         inherit hostName;
         inherit (m)
           sshKey
-          system
+          systems
           maxJobs
           speedFactor
           supportedFeatures

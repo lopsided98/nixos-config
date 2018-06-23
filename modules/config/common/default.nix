@@ -1,4 +1,4 @@
-{ config, pkgs, secrets, ... }: {
+{ config, lib, pkgs, secrets, ... }: {
 
   imports = [
     ../ssh.nix # Enable SSH on all systems
@@ -14,6 +14,11 @@
     # Use the latest kernel. Some ARM systems and those with ZFS might use a 
     # different kernel
     kernelPackages = pkgs.linuxPackages_latest;
+
+    # Enable a shell if boot fails. This is disabled by default because it
+    # gives root access, but someone with access to this shell would also have
+    # physical access to the machine, so this doesn't really matter.
+    kernelParams = [ "boot.shell_on_fail" ];
     cleanTmpDir = true;
 
     # Enable GRUB serial console
@@ -29,7 +34,7 @@
 
   # Standard set of packages
   environment.systemPackages = with pkgs; [
-    htop iotop linuxPackages_latest.tmon git file vim screen
+    htop iotop linuxPackages_latest.tmon git file vim screen usbutils
   ];
 
   # Select internationalisation properties.
@@ -45,19 +50,19 @@
     };
   in {
     "HP-Z420" = machine {
-      system = "x86_64-linux";
+      systems = [ "x86_64-linux" ];
       maxJobs = 8;
       speedFactor = 8;
       supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
     };
     "ODROID-XU4" = machine {
-      system = "armv7l-linux";
-      maxJobs = 4;
+      systems = [ "armv6l-linux" "armv7l-linux" ];
+      maxJobs = 6;
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" "nixos-test" ];
     };
     "Rock64" = machine {
-      system = "aarch64-linux";
+      systems = [ "aarch64-linux" ];
       maxJobs = 4;
       speedFactor = 2;
       supportedFeatures = [ "big-parallel" ];
@@ -80,7 +85,7 @@
     '';
 
     # Use my binary cache
-    binaryCaches = [ https://hydra.benwolsieffer.com/ https://cache.nixos.org/ ];
+    binaryCaches = [ https://cache.nixos.org/ ] ++ lib.optional (!config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com") https://hydra.benwolsieffer.com;
     binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
     
     nixPath = let 
@@ -229,5 +234,5 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "18.09"; # Did you read the comment?
+  system.nixos.stateVersion = "18.09"; # Did you read the comment?
 }
