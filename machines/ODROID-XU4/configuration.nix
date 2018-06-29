@@ -66,6 +66,7 @@ in {
     serviceConfig.Type = "oneshot";
     wantedBy = [ "telegraf.service" ];
     script = "echo tmp102 0x48 > /sys/class/i2c-adapter/i2c-1/new_device";
+    unitConfig.ConditionPathExists = "!/sys/class/i2c-adapter/i2c-1/1-0048";
   };
   # Add lm_sensors for temperature monitoring
   systemd.services.telegraf.path = [ pkgs.lm_sensors ];
