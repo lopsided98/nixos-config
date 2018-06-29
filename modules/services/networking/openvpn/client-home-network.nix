@@ -35,7 +35,7 @@ in {
   config = mkIf cfg.enable {
     # Enable OpenVPN client
     services.openvpn.servers = {
-      client = {
+      client-home-network = {
         config = ''
           # Specify that we are a client and that we
           # will be pulling certain config file directives
@@ -65,11 +65,10 @@ in {
           # try hosts in the order specified.
           ;remote-random
 
-          # Keep trying indefinitely to resolve the
-          # host name of the OpenVPN server.  Very useful
-          # on machines which are not permanently connected
-          # to the internet such as laptops.
-          resolv-retry infinite
+          # Don't retry resolving, so that the process will exit and remove its
+          # interface, causing systemd-networkd to use a DNS server outside of
+          # the tunnel. The service will be restarted by systemd.
+          resolv-retry 0
 
           # Most clients don't need to bind to
           # a specific local port number.
