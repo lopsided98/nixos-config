@@ -201,7 +201,7 @@
   users = {
     # Don't allow normal user management
     mutableUsers = false;
-    extraUsers = {
+    users = {
       ben = {
         isNormalUser = true;
         home = "/home/ben";
@@ -220,7 +220,7 @@
         openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAo5DSurLPw8PhMJq11qdqy312ie2oLV478grGUjR+B NixOS Build User" ];
       };
     };
-    extraGroups.build = {};
+    groups.build = {};
   };
 
   # My personal root CA
