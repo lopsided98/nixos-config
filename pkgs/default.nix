@@ -20,12 +20,12 @@ in rec {
 
   aur-buildbot = super.callPackage ./aur-buildbot/default.nix {};
 
-  buildbot = (super.buildbot.override { 
+  buildbot = (super.buildbot.override {
     pythonPackages = self.python3Packages;
     inherit (self) buildbot-worker;
   }).overridePythonAttrs (oldAttrs: rec {
 
-    # 7 tests fail because of some stupid ascii/utf-8 conversion issue, and I 
+    # 7 tests fail because of some stupid ascii/utf-8 conversion issue, and I
     # don't use the failing modules anyway
     doCheck = false;
     LC_ALL = "en_US.UTF-8";
@@ -56,6 +56,8 @@ in rec {
 
   libcreate = super.callPackage ./libcreate {};
 
+  audioRecorder = self.python3Packages.callPackage ./audio-recorder {};
+
   sanoid = super.callPackage ./sanoid/default.nix {
     inherit (perlPackages) ConfigIniFiles;
     mbufferSupport = true;
@@ -65,7 +67,8 @@ in rec {
     parallelGzipSupport = true;
   };
 
-  hydra = super.hydra.overrideAttrs (oldAttrs: {
+  hydra = super.hydra.overrideAttrs (oldAttrs: rec {
+    name = "hydra-${version}";
     version = "20180517";
     src = self.fetchFromGitHub {
       owner = "NixOS";
@@ -76,32 +79,26 @@ in rec {
   });
 
   python3 = super.python3.override {
-    packageOverrides = se: su: {
-      sqlalchemy_migrate = su.sqlalchemy_migrate.overridePythonAttrs (oldAttrs: {
+    packageOverrides = pySelf: pySuper: with pySuper; {
+      sqlalchemy_migrate = pySuper.sqlalchemy_migrate.overridePythonAttrs (oldAttrs: {
         patches = [ ./sqlachemy-migrate-use-raw-strings.patch ];
       });
-    };
-  };
 
-  python3Packages = with self.python3Packages; super.python3Packages // {
-    pyalpm = super.callPackage ./python-modules/pyalpm/default.nix {
-      inherit buildPythonPackage nose;
-    };
+      pyalpm = pySelf.callPackage ./python-modules/pyalpm/default.nix {
+        inherit (self) libarchive;
+      };
 
-    xcgf = super.callPackage ./python-modules/xcgf/default.nix {
-      inherit buildPythonPackage;
-    };
+      xcgf = pySelf.callPackage ./python-modules/xcgf/default.nix { };
 
-    memoizedb = super.callPackage ./python-modules/memoizedb/default.nix {
-      inherit buildPythonPackage;
-    };
+      memoizedb = pySelf.callPackage ./python-modules/memoizedb/default.nix { };
 
-    xcpf = super.callPackage ./python-modules/xcpf/default.nix {
-      inherit buildPythonPackage pyalpm pyxdg memoizedb xcgf;
-    };
+      xcpf = pySelf.callPackage ./python-modules/xcpf/default.nix { };
 
-    aur = super.callPackage ./python-modules/aur/default.nix {
-      inherit buildPythonPackage pyalpm xcgf xcpf pyxdg;
+      aur = pySelf.callPackage ./python-modules/aur/default.nix { };
+
+      pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio/default.nix { };
+
+      grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools/default.nix { };
     };
   };
 
@@ -124,7 +121,27 @@ in rec {
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
 
-  linux_4_16 = crossPackages.linux_4_16;
+  ffmpeg-full = super.ffmpeg-full.override {
+    libX11 = null; # Xlib support
+    libxcb = null; # X11 grabbing using XCB
+    libxcbshmExtlib = false; # X11 grabbing shm communication
+    libxcbxfixesExtlib = false; # X11 grabbing mouse rendering
+    libxcbshapeExtlib = false; # X11 grabbing shape rendering
+    libXv = null; # Xlib support
+    libpulseaudio = null; # Pulseaudio input support
+  };
+
+  libao = super.libao.override {
+    usePulseAudio = false;
+  };
+
+  sox = super.sox.override {
+    enableLibpulseaudio = false;
+  };
+
+  linux_4_16 = if super.stdenv.hostPlatform.isArm then crossPackages.linux_4_16 else super.linux_4_16;
+  linux_rpi = crossPackages.linux_rpi;
+  linux_testing = crossPackages.linux_testing;
 
   linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4 {
     kernelPatches =
