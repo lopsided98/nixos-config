@@ -14,4 +14,5 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   "ODROID-XU4" = callMachine ./ODROID-XU4/configuration.nix "armv7l-linux";
   "RasPi2" = callMachine ./RasPi2/configuration.nix "armv7l-linux";
   "Rock64" = callMachine ./Rock64/configuration.nix "aarch64-linux";
+  "KittyCop" = callMachine ./KittyCop/configuration.nix "armv6l-linux";
 }
