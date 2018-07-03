@@ -80,25 +80,29 @@ in rec {
 
   python3 = super.python3.override {
     packageOverrides = pySelf: pySuper: with pySuper; {
+      aur = pySelf.callPackage ./python-modules/aur { };
+
+      grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools { };
+
+      memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
+
+      netdisco = pySelf.callPackage ./python-modules/netdisco { };
+
+      pyalpm = pySelf.callPackage ./python-modules/pyalpm{
+        inherit (self) libarchive;
+      };
+
+      pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio { };
+
       sqlalchemy_migrate = pySuper.sqlalchemy_migrate.overridePythonAttrs (oldAttrs: {
         patches = [ ./sqlachemy-migrate-use-raw-strings.patch ];
       });
 
-      pyalpm = pySelf.callPackage ./python-modules/pyalpm/default.nix {
-        inherit (self) libarchive;
-      };
+      upnpclient = pySelf.callPackage ./python-modules/upnpclient { };
 
-      xcgf = pySelf.callPackage ./python-modules/xcgf/default.nix { };
+      xcgf = pySelf.callPackage ./python-modules/xcgf { };
 
-      memoizedb = pySelf.callPackage ./python-modules/memoizedb/default.nix { };
-
-      xcpf = pySelf.callPackage ./python-modules/xcpf/default.nix { };
-
-      aur = pySelf.callPackage ./python-modules/aur/default.nix { };
-
-      pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio/default.nix { };
-
-      grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools/default.nix { };
+      xcpf = pySelf.callPackage ./python-modules/xcpf { };
     };
   };
 
