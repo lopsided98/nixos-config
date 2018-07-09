@@ -1,10 +1,10 @@
 self: super: with super.lib; let
-  armv7lPackages = super.crossPackages {
+  armv7lPackages = super.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.armv7l-hf-multiplatform;
 
-  aarch64Packages = super.crossPackages {
+  aarch64Packages = super.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.aarch64-multiplatform;
