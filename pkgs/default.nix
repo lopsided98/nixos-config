@@ -109,7 +109,7 @@ in rec {
   perlPackages = super.perlPackages // {
     ConfigIniFiles = with self.perlPackages; buildPerlModule rec {
       name = "Config-IniFiles-2.94";
-      src = fetchurl {
+      src = super.fetchurl {
         url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
         sha256 = "1d4la72fpsf61hcpslmn03ajm5rfy8hm50piqmsfi7d7dm0qmlyn";
       };
