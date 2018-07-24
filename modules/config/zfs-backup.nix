@@ -1,7 +1,7 @@
 { config, pkgs, secrets, ... }: {
-  imports = [
-    ./zfs.nix
-  ];
+
+  # Enable ZFS
+  boot.supportedFilesystems = [ "zfs" ];
 
   services.sanoid = {
     enable = true;
