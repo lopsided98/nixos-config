@@ -59,6 +59,7 @@ in rec {
   };
   systemd.network = {
     enable = true;
+
     networks.openvpn-client-home-network = {
       address = [ "${address}/24" ];
       extraConfig = ''
@@ -66,10 +67,10 @@ in rec {
         UseDNS=false
       '';
     };
+
     # Home network
     #networks."${interface}" = {
     #  name = interface;
-    #  # DHCP = "v4";
     #  address = [ "${address}/24" ];
     #  gateway = [ gateway ];
     #  dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
@@ -200,6 +201,12 @@ in rec {
     onShutdown = "shutdown";
   };
   users.extraUsers.ben.extraGroups = [ "libvirtd" ];
+
+  # VFIO/PCI Passthrough
+  # These modules must come before early modesetting
+  boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
+  # Quadro K4000
+  boot.extraModprobeConfig ="options vfio-pci ids=10de:11fa,10de:0e0b";
 
   modules.syncthingBackup = {
     enable = true;
