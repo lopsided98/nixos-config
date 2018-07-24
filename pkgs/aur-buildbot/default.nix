@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, bash }: let
-  commit = "c65ee5262cf8681258b675ed05609ddf81820d81";
+  commit = "594b475c7080b5c54ca0d27e9a21fe118d4831b0";
 in stdenv.mkDerivation {
   name = "aur-buildbot-${lib.substring 0 7 commit}";
 
@@ -7,7 +7,7 @@ in stdenv.mkDerivation {
     owner = "lopsided98";
     repo = "aur-buildbot";
     rev = commit;
-    sha256 = "0x6ga2ppmz7ygidvqi2sl4vadvsyv3na4609q5i02jgnvxhb8cwm";
+    sha256 = "0rpvc42fqh4jdh7ly15qhzy2w5s1vbhdafvivdml9csb9d60jwm9";
   };
   
   installPhase = ''
