@@ -9,7 +9,6 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
 
-    ../../modules/config/zfs.nix
     ../../modules/config/zfs-backup.nix
     ../../modules/config/telegraf.nix
     ../../modules/config/nginx.nix
