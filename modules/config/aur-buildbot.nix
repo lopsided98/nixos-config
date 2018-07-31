@@ -126,7 +126,7 @@ in {
           dependencies: [jdk8-openjdk]
         chromium-vaapi: {}
         lcov: {}
-        slapi-nis: {}  
+        slapi-nis: {}
         logisim: {}
         lib32-tk: {}
         xca: {}
