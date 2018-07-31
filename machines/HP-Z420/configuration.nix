@@ -5,7 +5,7 @@
 { lib, config, pkgs, secrets, ... }:
 let
 
-interface = "eth0";
+interface = "br0";
 address = "192.168.1.5";
 gateway = "192.168.1.1";
 
@@ -79,10 +79,30 @@ in rec {
     #    UseDNS=no
     #  '';
     #};
+
     # Dartmouth network
-    networks."${interface}" = {
+    networks."50-${interface}" = {
       name = interface;
       DHCP = "v4";
+    };
+    # Use a different MAC address on physical interface, because the normal MAC
+    # is used on the VPN in order to get the same IPv6 address as when at home.
+    links."50-eth0" = {
+      matchConfig = {
+        MACAddress = "a0:d3:c1:20:da:3f";
+        # VPN interface has the same MAC, so also match the driver
+        Driver = "e1000e";
+      };
+      linkConfig.MACAddress = "ea:d3:5b:d6:a0:6b";
+    };
+
+    netdevs."50-${interface}".netdevConfig = {
+      Name = interface;
+      Kind = "bridge";
+    };
+    networks."50-eth0" = {
+      name = "eth0";
+      networkConfig.Bridge = interface;
     };
   };
   networking.hostName = "HP-Z420"; # Define your hostname.
