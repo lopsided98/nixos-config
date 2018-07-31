@@ -145,13 +145,18 @@ in {
       };
     };
 
-    systemd.network = {
-      networks.openvpn-client-home-network = {
-        name = cfg.interface;
-        dhcpConfig.UseDNS = false;
-        dns = cfg.dns;
-        # Make the VPN dns override all others
-        domains = ["~."];
+    systemd.network.networks.openvpn-client-home-network = {
+      name = cfg.interface;
+      dhcpConfig.UseDNS = false;
+      dns = cfg.dns;
+      # Make the VPN dns override all others
+      domains = ["~."];
+    };
+
+    systemd.services.openvpn-client-home-network = {
+      unitConfig = {
+        # Keep attempting to connect forever
+        StartLimitIntervalSec = 0;
       };
     };
 
