@@ -39,10 +39,16 @@ in {
   };
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
-  # Use ARM binary cache
-  # Currently broken
-  # nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
-  nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
+  nix = {
+    # Use ARM binary cache
+    # Currently broken
+    # binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
+    # binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
+
+    extraOptions = ''
+      extra-platforms = armv6l-linux
+    '';
+  };
   
   environment.systemPackages = with pkgs; [
     pkgs.linuxPackages_latest.tmon
