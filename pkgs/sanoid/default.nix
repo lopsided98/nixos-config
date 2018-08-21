@@ -15,7 +15,7 @@ assert gzipSupport -> gzip != null;
 assert parallelGzipSupport -> pigz != null;
 
 let
-  commit = "d2eea19644de9d44a5d7dd2da2a54b3597ca15c9";
+  commit = "b04fb4552ab5bea793064c5f59d0e402231f5f56";
 
 in stdenv.mkDerivation rec {
   name = "sanoid-${substring 0 7 commit}";
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
     owner = "lopsided98";
     repo = "sanoid";
     rev = "${commit}";
-    sha256 = "0z89zxpdr3dszjryrlzawyvfm8lihjgp1v2y6yg571zxgylikc78";
+    sha256 = "171m0iyhqsxz7fycq9jz9cz80myylw2nq5kydyfywlxbqg04rzff";
   };
 
   nativeBuildInputs = [ makeWrapper ];
