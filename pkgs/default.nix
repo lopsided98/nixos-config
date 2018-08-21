@@ -67,17 +67,6 @@ in rec {
     parallelGzipSupport = true;
   };
 
-  hydra = super.hydra.overrideAttrs (oldAttrs: rec {
-    name = "hydra-${version}";
-    version = "20180517";
-    src = self.fetchFromGitHub {
-      owner = "NixOS";
-      repo = "hydra";
-      rev = "4013e83e3f5c965f8cefa66cb8ff6d9bf37d46cd";
-      sha256 = "0hfjyrgpmycra0n7kmzd8ddmsg18ii7420xlmnw5a49dz5ijdyzg";
-    };
-  });
-
   python3 = super.python3.override {
     packageOverrides = pySelf: pySuper: with pySuper; {
       aur = pySelf.callPackage ./python-modules/aur { };
