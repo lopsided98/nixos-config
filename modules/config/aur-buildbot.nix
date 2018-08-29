@@ -97,9 +97,11 @@ in {
         pacaur: {}
         arm-linux-gnueabihf-gcc: {}
         redeclipse: {}
+        flightgear: {}
+        flightgear-data: {}
         python-scikit-image: {}
-        keepass-plugin-http: {}
         keepass-plugin-traytotp: {}
+        keepass-plugin-rpc: {}
         zotero: {}
         solaar-git: {}
         clion: {}
