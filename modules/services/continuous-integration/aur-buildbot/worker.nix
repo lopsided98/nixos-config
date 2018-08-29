@@ -15,7 +15,7 @@ let
     from buildbot_worker.bot import Worker
     from twisted.application import service
 
-    basedir = '${cfg.buildbotDir}'
+    basedir = '/var/lib/${cfg.stateDirectory}'
     rotateLength = 10000000
     maxRotatedFiles = 10
 
@@ -50,10 +50,10 @@ in {
         description = "Whether to enable the AUR Buildbot Worker.";
       };
 
-      buildbotDir = mkOption {
-        default = "/var/lib/aur-buildbot/worker";
-        type = types.path;
-        description = "Specifies the AUR Buildbot directory.";
+      stateDirectory = mkOption {
+        default = "aur-buildbot/worker";
+        type = types.str;
+        description = "Specifies the AUR Buildbot directory below /var/lib";
       };
 
       workerUser = mkOption {
@@ -122,7 +122,7 @@ in {
     users.extraUsers."aur-buildbot-worker" = {
       description = "AUR Buildbot Worker user";
       isSystemUser = true;
-      home = cfg.buildbotDir;
+      home = "/var/lib/${cfg.stateDirectory}";
       group = "aur-buildbot";
     };
 
@@ -133,23 +133,27 @@ in {
       path = with pkgs; [ "/run/wrappers" pythonPackages.twisted git ];
 
       preStart = ''
-        mkdir -p "${cfg.buildbotDir}/info"
-        chmod 0750 "${cfg.buildbotDir}"
-        chown aur-buildbot-worker:aur-buildbot "${cfg.buildbotDir}"
-        ln -sf "${pkgs.writeText "aur-buildbot-worker-host" cfg.hostMessage}" "${cfg.buildbotDir}/info/host"
-        ln -sf "${pkgs.writeText "aur-buildbot-worker-admin" cfg.adminMessage}" "${cfg.buildbotDir}/info/admin"
+        mkdir -p "/var/lib/${cfg.stateDirectory}/info"
+        ln -sf "${pkgs.writeText "aur-buildbot-worker-host" cfg.hostMessage}" "/var/lib/${cfg.stateDirectory}/info/host"
+        ln -sf "${pkgs.writeText "aur-buildbot-worker-admin" cfg.adminMessage}" "/var/lib/${cfg.stateDirectory}/info/admin"
       '';
 
       serviceConfig = {
         Type = "simple";
         User = "aur-buildbot-worker";
         Group = "aur-buildbot";
-        WorkingDirectory = cfg.buildbotDir;
-        PermissionsStartOnly = true;
-        Environment = "PYTHONPATH=${cfg.package}/lib/python${pythonVersion}/site-packages:${pythonPackages.future}/lib/python3.6/site-packages";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        WorkingDirectory = "/run/aur-buildbot/worker";
+        RuntimeDirectory = "aur-buildbot/worker";
+        RuntimeDirectoryMode = "0700";
+        StateDirectory = cfg.stateDirectory;
+        StateDirectoryMode = "0700";
+        Environment = "PYTHONPATH=${cfg.package}/${python.sitePackages}:${pythonPackages.future}/${python.sitePackages}";
 
         # NOTE: call twistd directly with stdout logging for systemd
-        #ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
+        #ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon /var/lib/${cfg.stateDirectory}";
         ExecStart = "${pythonPackages.twisted}/bin/twistd -n -l - -y ${tacFile}";
       };
 
