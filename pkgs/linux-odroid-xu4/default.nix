@@ -1,15 +1,15 @@
 { stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 buildLinux (args // rec {
-  version = "4.14.55-146";
-  modDirVersion = "4.14.55";
+  version = "4.14.66-147";
+  modDirVersion = "4.14.66";
   extraMeta.branch = "4.14";
 
   src = fetchFromGitHub {
     owner = "hardkernel";
     repo = "linux";
     rev = version;
-    sha256 = "1bm1njng4rwfylgnqv06vabkvybm9rikqj1lsb7p9qcs3y1kw6mh";
+    sha256 = "1bm1njng5rwfylgnqv06vabkvybm9rikqj1lsb7p9qcs3y1kw6mh";
   };
 
   defconfig = "odroidxu4_defconfig";
