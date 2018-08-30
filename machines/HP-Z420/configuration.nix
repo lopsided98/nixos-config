@@ -47,43 +47,54 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
-    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ];
+    # "ip=:::::eth0:dhcp"
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ];
   };
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
-  modules.openvpnClientHomeNetwork = {
-    enable = true;
-    macAddress = "a0:d3:c1:20:da:3f";
-  };
+  #modules.openvpnClientHomeNetwork = {
+  #  enable = true;
+  #  macAddress = "a0:d3:c1:20:da:3f";
+  #};
   systemd.network = {
     enable = true;
 
-    networks.openvpn-client-home-network = {
-      address = [ "${address}/24" ];
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=false
-      '';
-    };
-
-    # Home network
-    #networks."${interface}" = {
+    # Dartmouth network
+    #networks."50-${interface}" = {
     #  name = interface;
+    #  DHCP = "v4";
+    #};
+
+    #networks.openvpn-client-home-network = {
     #  address = [ "${address}/24" ];
-    #  gateway = [ gateway ];
-    #  dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
     #  extraConfig = ''
     #    [IPv6AcceptRA]
-    #    UseDNS=no
+    #    UseDNS=false
     #  '';
     #};
 
-    # Dartmouth network
-    networks."50-${interface}" = {
+    # Home network
+    networks."${interface}" = {
       name = interface;
-      DHCP = "v4";
+      address = [ "${address}/24" ];
+      gateway = [ gateway ];
+      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
+    };
+
+    netdevs."50-${interface}".netdevConfig = {
+      Name = interface;
+      Kind = "bridge";
+      MACAddress = "a0:d3:c1:20:da:3f";
+    };
+
+    networks."50-eth0" = {
+      name = "eth0";
+      networkConfig.Bridge = interface;
     };
     # Use a different MAC address on physical interface, because the normal MAC
     # is used on the VPN in order to get the same IPv6 address as when at home.
@@ -95,30 +106,11 @@ in rec {
       };
       linkConfig.MACAddress = "ea:d3:5b:d6:a0:6b";
     };
-
-    netdevs."50-${interface}".netdevConfig = {
-      Name = interface;
-      Kind = "bridge";
-    };
-    networks."50-eth0" = {
-      name = "eth0";
-      networkConfig.Bridge = interface;
-    };
   };
   networking.hostName = "HP-Z420"; # Define your hostname.
   networking.hostId = "5e9c1aa3";
   # Enable telegraf metrics for this interface
   services.telegraf.inputs.net.interfaces = [ interface ];
-
-  # ARM binfmt-misc support
-  #environment.etc = {
-  #  "binfmt.d/qemu-aarch64.conf".text = ''
-  #    :qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff:${pkgs.qemu}/bin/qemu-aarch64:OC
-  #  '';
-  #  "binfmt.d/qemu-armv7l.conf".text = ''
-  #    :qemu-armv7l:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:${pkgs.qemu}/bin/qemu-arm:
-  #  '';
-  #};
 
   environment.systemPackages = with pkgs; [
   ];
