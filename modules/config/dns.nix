@@ -16,7 +16,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        19         ; Serial
+                        20         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -25,6 +25,8 @@
     }
     { name = "benwolsieffer.com."; class = "IN"; type = "NS"; data = "ns2.afraid.org."; }
     { name = "benwolsieffer.com."; class = "IN"; type = "NS"; data = "puck.nether.net."; }
+
+    { name = "benwolsieffer.com."; class = "IN"; type = "CAA"; data = "0 issue \"letsencrypt.org\""; }
 
     # Email forwarding
     { name = "@"; class = "IN"; type = "MX"; data = "10  mx1.improvmx.com."; }
@@ -49,8 +51,8 @@
     { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7829:225:64ff:febd:bdbc"; }
 
     # HP-Z420
-    { name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.109.112"; }
-    #{ name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
+    #{ name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.109.112"; }
+    { name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "hp-z420"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7829:a2d3:c1ff:fe20:da3f"; }
     { name = "hackerhats"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "arch"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
