@@ -46,6 +46,10 @@ in rec {
 
   audioRecorder = self.python3Packages.callPackage ./audio-recorder {};
 
+  nixUnstable = super.nixUnstable.overrideAttrs (old: {
+    patches = [ ./nix-fix-xz-decompression.patch ];
+  });
+
   sanoid = super.callPackage ./sanoid/default.nix {
     inherit (perlPackages) ConfigIniFiles;
     mbufferSupport = true;
