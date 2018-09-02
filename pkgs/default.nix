@@ -34,18 +34,6 @@ in rec {
     '';
   });
 
-  buildbot-pkg = super.buildbot-pkg.override {
-    inherit (self.python3Packages) buildPythonPackage fetchPypi setuptools;
-  };
-
-  buildbot-plugins = mapAttrs (n: p: p.override {
-    pythonPackages = self.python3Packages;
-  }) super.buildbot-plugins;
-
-  buildbot-worker = super.buildbot-worker.override {
-    pythonPackages = self.python3Packages;
-  };
-
   pacman = super.callPackage ./pacman/default.nix {};
 
   hacker-hats = super.callPackage ./hacker-hats/default.nix {};
@@ -67,7 +55,7 @@ in rec {
     parallelGzipSupport = true;
   };
 
-  python3 = super.python3.override {
+  python36 = super.python36.override {
     packageOverrides = pySelf: pySuper: with pySuper; {
       aur = pySelf.callPackage ./python-modules/aur { };
 
@@ -77,15 +65,11 @@ in rec {
 
       netdisco = pySelf.callPackage ./python-modules/netdisco { };
 
-      pyalpm = pySelf.callPackage ./python-modules/pyalpm{
+      pyalpm = pySelf.callPackage ./python-modules/pyalpm {
         inherit (self) libarchive;
       };
 
       pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio { };
-
-      sqlalchemy_migrate = pySuper.sqlalchemy_migrate.overridePythonAttrs (oldAttrs: {
-        patches = [ ./sqlachemy-migrate-use-raw-strings.patch ];
-      });
 
       upnpclient = pySelf.callPackage ./python-modules/upnpclient { };
 
