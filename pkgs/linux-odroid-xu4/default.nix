@@ -9,7 +9,7 @@ buildLinux (args // rec {
     owner = "hardkernel";
     repo = "linux";
     rev = version;
-    sha256 = "1bm1njng5rwfylgnqv06vabkvybm9rikqj1lsb7p9qcs3y1kw6mh";
+    sha256 = "06v38jl4i7l8gl8zcpyp9vmjjhaqhbp7by15f82rxa724zppxi9x";
   };
 
   defconfig = "odroidxu4_defconfig";
