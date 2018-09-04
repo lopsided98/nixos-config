@@ -31,84 +31,85 @@ let
     };
   in pkgs.releaseTools.channel (args // { inherit src; });
 
-  jobs = {
-    inherit (pkgs)
-      dnsupdate
-      aur-buildbot
-      pacman
-      hacker-hats
-      tinyssh
-      tinyssh-convert
-      sanoid;
+in {
+  inherit (pkgs)
+    dnsupdate
+    aur-buildbot
+    pacman
+    hacker-hats
+    tinyssh
+    tinyssh-convert
+    sanoid;
 
-    perlPackages = {
-      inherit (pkgs.perlPackages)
-        ConfigIniFiles;
-    };
+  perlPackages = {
+    inherit (pkgs.perlPackages)
+      ConfigIniFiles;
+  };
 
-    linuxPackages_latest = {
-      inherit (pkgs.linuxPackages_latest)
-        tmon;
-    };
+  linuxPackages_latest = {
+    inherit (pkgs.linuxPackages_latest)
+      tmon;
+  };
 
-    linuxPackages = {
-      inherit (pkgs.linuxPackages)
-        tmon;
-    };
+  linuxPackages = {
+    inherit (pkgs.linuxPackages)
+      tmon;
+  };
 
-  } // mapTestOn {
+} // mapTestOn {
 
-    # Fancy shortcut to generate one attribute per supported platform.
-    dnsupdate = hostSystems;
-    aur-buildbot = hostSystems;
-    pacman = hostSystems;
-    hacker-hats = hostSystems;
-    tinyssh = hostSystems;
-    tinyssh-convert = hostSystems;
-    sanoid = hostSystems;
-    libcreate = hostSystems;
+  # Fancy shortcut to generate one attribute per supported platform.
+  dnsupdate = hostSystems;
+  aur-buildbot = hostSystems;
+  pacman = hostSystems;
+  hacker-hats = hostSystems;
+  tinyssh = hostSystems;
+  tinyssh-convert = hostSystems;
+  sanoid = hostSystems;
+  libcreate = hostSystems;
 
-    perlPackages = {
-      ConfigIniFiles = hostSystems;
-    };
+  perlPackages = {
+    ConfigIniFiles = hostSystems;
+  };
 
-    python3Packages = {
-      pyalpm = hostSystems;
-      xcgf = hostSystems;
-      memoizedb = hostSystems;
-      xcpf = hostSystems;
-      aur = hostSystems;
-      pyalsaaudio = hostSystems;
-    };
+  python3Packages = {
+    pyalpm = hostSystems;
+    xcgf = hostSystems;
+    memoizedb = hostSystems;
+    xcpf = hostSystems;
+    aur = hostSystems;
+    pyalsaaudio = hostSystems;
+  };
 
-    linuxPackages_latest = {
-      tmon = hostSystems;
-    };
+  linuxPackages_latest = {
+    tmon = hostSystems;
+  };
 
-    linuxPackages = {
-      tmon = hostSystems;
-    };
+  linuxPackages = {
+    tmon = hostSystems;
+  };
 
-  } /*// (lib.optionalAttrs (builtins.elem "armv7l-linux" hostSystems) ( {
-    inherit (pkgs) linux_odroid_xu4;
+} /*// (lib.optionalAttrs (builtins.elem "armv7l-linux" hostSystems) ( {
+  inherit (pkgs) linux_odroid_xu4;
 
-    linuxPackages_odroid_xu4 = {
-      inherit (pkgs.linuxPackages)
-        tmon;
-    };
-  } // mapTestOnCross (lib.systems.examples.armv7l-hf-multiplatform // { platform = machines."ODROID-XU4".config.nixpkgs.config.platform; }) {
-    linux_odroid_xu4 = [ "x86_64-linux" ];
+  linuxPackages_odroid_xu4 = {
+    inherit (pkgs.linuxPackages)
+      tmon;
+  };
+} // mapTestOnCross (lib.systems.examples.armv7l-hf-multiplatform // { platform = machines."ODROID-XU4".config.nixpkgs.config.platform; }) {
+  linux_odroid_xu4 = [ "x86_64-linux" ];
 
-    linuxPackages_odroid_xu4 = {
-      tmon = [ "x86_64-linux" ];
-    };
-  }))*/;
-in jobs // {
-  channels = {
-    machines = lib.mapAttrs (name: c: channelWithNixpkgs {
+  linuxPackages_odroid_xu4 = {
+    tmon = [ "x86_64-linux" ];
+  };
+}))*/ // {
+  machines = lib.mapAttrs (name: c: {
+    channel = channelWithNixpkgs {
       inherit name;
       constituents = [ c.config.system.build.toplevel ];
       src = localpkgs;
-    }) machines;
-  };
+    };
+  } // lib.optionalAttrs (c.config.system.build ? sdImage) {
+    inherit (c.config.system.build) sdImage;
+  }) machines;
 }

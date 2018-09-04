@@ -88,7 +88,7 @@
     binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
     
     nixPath = let 
-      machineChannel = "/nix/var/nix/profiles/per-user/root/channels/channels.machines.${config.networking.hostName}";
+      machineChannel = "/nix/var/nix/profiles/per-user/root/channels/machines.${config.networking.hostName}.channel";
     in [
       "nixpkgs=${machineChannel}/nixpkgs"
       "localpkgs=${machineChannel}"
