@@ -35,7 +35,6 @@ in {
   inherit (pkgs)
     dnsupdate
     aur-buildbot
-    pacman
     hacker-hats
     tinyssh
     tinyssh-convert
