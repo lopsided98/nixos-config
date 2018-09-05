@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nixos-secrets
+#!nix-shell -i bash -p nixos-secrets -p openssh -p rsync
 
 # See https://gist.github.com/tvlooy/cbfbdb111a4ebad8b93e
 nixos_root="$(dirname $(readlink -f "$0"))"
