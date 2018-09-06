@@ -92,7 +92,7 @@
     in [
       "nixpkgs=${machineChannel}/nixpkgs"
       "localpkgs=${machineChannel}"
-      "nixos-config=${machineChannel}/machines/${config.networking.hostName}/configuration.nix"
+      "nixos-config=${machineChannel}/machines/${config.networking.hostName}"
       "nixpkgs-overlays=${machineChannel}/overlays"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
@@ -174,6 +174,19 @@
     useDHCP = false;
     # Enable systemd predictable network names
     usePredictableInterfaceNames = true;
+
+    # Don't use hostnames because DNSSEC fails unless the time is correct
+    timeServers = [
+      "129.6.15.27"
+      "129.6.15.28"
+      "129.6.15.29"
+      "129.6.15.30"
+      "2610:20:6F15:15::27"
+      "132.163.97.1"
+      "2610:20:6f97:97::4"
+      "132.163.96.1"
+      "2610:20:6f96:96::4"
+    ];
   };
 
   # Delete old logs after 3 months
@@ -203,7 +216,6 @@
     users = {
       ben = {
         isNormalUser = true;
-        home = "/home/ben";
         extraGroups = [ "wheel" ];
         uid = 1000;
         hashedPassword = "$6$7kgb.Sjp3Z5G$dvj96191PzKF/ODL9gzKHxmcyApYBZOeABnwGNgeX0hBhCaKdPp2Js31mQ4rqk4HnXvDohBmUVqV4Hy3tjE661";
