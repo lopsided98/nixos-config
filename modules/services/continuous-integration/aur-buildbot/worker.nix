@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.aur-buildbot-worker;
 
-  inherit (config.services.buildbot-worker.package) python;
+  python = cfg.package.pythonModule;
 in {
   options = {
     services.aur-buildbot-worker = {
