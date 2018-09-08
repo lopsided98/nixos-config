@@ -14,30 +14,50 @@
     loader = {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
+      /*raspberryPi = {
+        enable = true;
+        version = 3;
+        firmwareConfig = ''
+          initramfs initrd followkernel
+          dtoverlay=lirc-rpi,gpio_out_pin=22
+        '';
+      };*/
     };
     kernelParams = [ "cma=32M" ];
-    kernelPackages = lib.mkForce pkgs.linuxPackages_4_13;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
+  };
+
+  hardware.enableRedistributableFirmware = true;
+
+  networking.wireless = {
+    enable = true;
   };
 
   systemd.network = {
     enable = true;
-    networks.eth0 = {
-      name = "eth0";
-      DHCP = "v4";
-      dhcpConfig.UseDNS = false;
-      dns = ["192.168.1.2"];
+    networks = {
+      eth0 = {
+        name = "eth0";
+        DHCP = "v4";
+        dhcpConfig.UseDNS = false;
+        dns = ["192.168.1.2"];
+      };
+      wlan0 = {
+        name = "wlan0";
+        DHCP = "v4";
+        dhcpConfig.UseDNS = false;
+        dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+        extraConfig = ''
+          [IPv6AcceptRA]
+          UseDNS=no
+        '';
+      };
     };
   };
   networking.hostName = "Roomba"; # Define your hostname.
-  
-  environment.systemPackages = with pkgs; with rosPackages; [
-  ];
-  
+
   # List services that you want to enable:
 
-  # Set SSH port
-  services.openssh.ports = [22];
-  
   services.avahi = {
     enable = true;
     publish = {
@@ -45,12 +65,14 @@
       addresses = true;
     };
   };
-  
+
+  sound.enable = true;
+
   # Enable SD card TRIM
   services.fstrim.enable = true;
 
   # Override OpenBLAS to support aarch64
-  nixpkgs.config.packageOverrides = pkgs: rec {
+  /*nixpkgs.config.packageOverrides = pkgs: rec {
     openblas = pkgs.openblas.overrideAttrs (oldAttrs: rec {
       makeFlags =
         [
@@ -66,5 +88,13 @@
           "USE_OPENMP=1"
         ];
     });
+  };*/
+
+  networking.firewall.allowedTCPPorts = [
+    8080 # Streaming
+  ];
+
+  environment.secrets = secrets.mkSecret secrets.Roomba.wpaSupplicantConf {
+    target = "wpa_supplicant.conf";
   };
 }
