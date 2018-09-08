@@ -1,4 +1,4 @@
-{
+{ config, ... }: {
   _module.args = {
     secrets = {
       # Utility functions
@@ -8,9 +8,9 @@
         } // options;
       };
 
-      getSecret = name: "/etc/secrets/" + name;
+      getSecret = name: "/etc/" + config.environment.secrets."${name}".target;
 
-      getBootSecret = name: "/boot/secrets/" + name;
+      getBootSecret = name: "/boot/secrets/" + config.boot.secrets."${name}".target;
     } // (import ../../secrets);
   };
 }
