@@ -136,7 +136,7 @@ in {
     };
   };
 
-  environment.systemPackages = with pkgs; [ sox /* tmux */ ];
+  environment.systemPackages = with pkgs; [ sox tmux ];
 
   # List services that you want to enable:
 
@@ -155,7 +155,15 @@ in {
 
   # Audio recording service
   sound.enable = true;
-  modules.audioRecorder.enable = true;
+  modules.audioRecorder = {
+    enable = true;
+    devices = map (d: optionalString (d != hostName) "http://${toLower d}.local") [
+      "AudioRecorder1"
+      "AudioRecorder2"
+      "AudioRecorder3"
+      "AudioRecorder4"
+    ];
+  };
 
   # Samba file sharing
   services.samba = {

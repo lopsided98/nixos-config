@@ -88,27 +88,16 @@ in {
     tmon = hostSystems;
   };
 
-} /*// (lib.optionalAttrs (builtins.elem "armv7l-linux" hostSystems) ( {
-  inherit (pkgs) linux_odroid_xu4;
-
-  linuxPackages_odroid_xu4 = {
-    inherit (pkgs.linuxPackages)
-      tmon;
-  };
-} // mapTestOnCross (lib.systems.examples.armv7l-hf-multiplatform // { platform = machines."ODROID-XU4".config.nixpkgs.config.platform; }) {
-  linux_odroid_xu4 = [ "x86_64-linux" ];
-
-  linuxPackages_odroid_xu4 = {
-    tmon = [ "x86_64-linux" ];
-  };
-}))*/ // {
+} // {
   machines = lib.mapAttrs (name: c: {
     channel = channelWithNixpkgs {
       inherit name;
       constituents = [ c.config.system.build.toplevel ];
       src = localpkgs;
     };
-  } // lib.optionalAttrs (c.config.system.build ? sdImage) {
+  } /*
+   # We don't build SD images automatically because there are too many of them
+   // lib.optionalAttrs (c.config.system.build ? sdImage) {
     inherit (c.config.system.build) sdImage;
-  }) machines;
+  } */) machines;
 }

@@ -1,4 +1,9 @@
 self: super: with super.lib; let
+  armv6lPackages = super.forceCross {
+    system = "x86_64-linux";
+    platform = systems.platforms.pc64;
+  } systems.examples.raspberryPi;
+
   armv7lPackages = super.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
@@ -9,10 +14,12 @@ self: super: with super.lib; let
     platform = systems.platforms.pc64;
   } systems.examples.aarch64-multiplatform;
 
-  crossPackages = if super.stdenv.hostPlatform.system == "armv7l-linux" then armv7lPackages
+in {
+
+  crossPackages = if super.stdenv.hostPlatform.system == "armv6l-linux" then armv6lPackages
+                  else if super.stdenv.hostPlatform.system == "armv7l-linux" then armv7lPackages
                   else if super.stdenv.hostPlatform.system == "aarch64-linux" then aarch64Packages
                   else super;
-in rec {
 
   dnsupdate = super.callPackage ./dnsupdate/default.nix {
     inherit (self.python3Packages) buildPythonApplication requests pyyaml beautifulsoup4 netifaces;
@@ -49,7 +56,7 @@ in rec {
   });
 
   sanoid = super.callPackage ./sanoid/default.nix {
-    inherit (perlPackages) ConfigIniFiles;
+    inherit (self.perlPackages) ConfigIniFiles;
     mbufferSupport = true;
     pvSupport = true;
     lzoSupport = true;
@@ -118,11 +125,7 @@ in rec {
     enableLibpulseaudio = false;
   };
 
-  linux_4_16 = if super.stdenv.hostPlatform.isArm then crossPackages.linux_4_16 else super.linux_4_16;
-  linux_rpi = crossPackages.linux_rpi;
-  linux_testing = crossPackages.linux_testing;
-
-  linux_odroid_xu4 = crossPackages.callPackage ./linux-odroid-xu4 {
+  linux_odroid_xu4 = super.callPackage ./linux-odroid-xu4 {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
