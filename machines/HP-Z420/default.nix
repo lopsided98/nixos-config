@@ -47,35 +47,35 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=:::::eth0:dhcp"
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ];
+    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
+    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ];
   };
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
-  #modules.openvpnClientHomeNetwork = {
-  #  enable = true;
-  #  macAddress = "a0:d3:c1:20:da:3f";
-  #};
+  modules.openvpnClientHomeNetwork = {
+    enable = true;
+    macAddress = "a0:d3:c1:20:da:3f";
+  };
   systemd.network = {
     enable = true;
 
     # Dartmouth network
-    #networks."50-${interface}" = {
-    #  name = interface;
-    #  DHCP = "v4";
-    #};
+    networks."50-${interface}" = {
+      name = interface;
+      DHCP = "v4";
+    };
 
-    #networks.openvpn-client-home-network = {
-    #  address = [ "${address}/24" ];
-    #  extraConfig = ''
-    #    [IPv6AcceptRA]
-    #    UseDNS=false
-    #  '';
-    #};
+    networks.openvpn-client-home-network = {
+      address = [ "${address}/24" ];
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=false
+      '';
+    };
 
     # Home network
-    networks."${interface}" = {
+    /*networks."${interface}" = {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];
@@ -84,7 +84,7 @@ in rec {
         [IPv6AcceptRA]
         UseDNS=no
       '';
-    };
+    };*/
 
     netdevs."50-${interface}".netdevConfig = {
       Name = interface;
