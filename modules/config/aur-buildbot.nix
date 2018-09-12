@@ -93,50 +93,53 @@ in {
         qdriverstation-git: {}
 
         # Other packages
-        python-keras: {}
-        pacaur: {}
-        arm-linux-gnueabihf-gcc: {}
-        redeclipse: {}
-        flightgear: {}
-        flightgear-data: {}
-        python-scikit-image: {}
-        keepass-plugin-traytotp: {}
-        keepass-plugin-rpc: {}
-        zotero: {}
-        solaar-git: {}
-        clion: {}
-        pycharm-professional: {}
-        gnome-mpv: {}
-        cutecom: {}
-        webstorm: {}
         android-studio: {}
         android-studio-canary: {}
-        ghetto-skype: {}
-        genymotion: {}
-        sbupdate-git: {}
+        arm-linux-gnueabihf-gcc: {}
+        aurman: {}
+        binfmt-qemu-static: {}
         chrome-gnome-shell-git: {}
+        chromium-vaapi: {}
+        clion: {}
+        cutecom: {}
+        dex2jar: {}
         dislocker: {}
         dmg2img: {}
         dropbox: {}
-        dex2jar: {}
-        lejos-nxj: {}
         eagle: {}
-        python-v4l2capture: {}
-        heimdall-git: {}
+        flightgear: {}
+        flightgear-data: {}
+        genymotion: {}
+        ghetto-skype: {}
+        gnome-mpv: {}
         grpc: {}
+        heimdall-git: {}
+        intellij-idea-ultimate-edition: {}
         jd-gui:
           dependencies: [jdk8-openjdk]
-        chromium-vaapi: {}
+        keepass-plugin-rpc: {}
+        keepass-plugin-traytotp: {}
         lcov: {}
-        slapi-nis: {}
-        logisim: {}
+        lejos-nxj: {}
         lib32-tk: {}
-        xca: {}
+        logisim: {}
         nix: {}
-        intellij-idea-ultimate-edition: {}
+        pacaur: {}
+        puddletag: {}
+        pycharm-professional: {}
+        python-flask-cors: {}
+        python-keras: {}
         python-pyalsaaudio: {}
+        python-scikit-image: {}
+        python-v4l2capture: {}
         qemu-user-static: {}
-        binfmt-qemu-static: {}
+        redeclipse: {}
+        sbupdate-git: {}
+        slapi-nis: {}
+        solaar-git: {}
+        webstorm: {}
+        xca: {}
+        zotero: {}
     '';
   };
 
