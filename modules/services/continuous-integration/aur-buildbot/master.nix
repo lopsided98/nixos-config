@@ -63,6 +63,8 @@ in {
       environment = {
           PYTHONPATH = mkForce "${pkgs.aur-buildbot}/master:${(python.withPackages (self: [
             cfg.package
+            self.pyyaml
+            self.requests
             self.future
             self.aur
             self.pyxdg
