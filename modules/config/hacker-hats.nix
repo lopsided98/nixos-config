@@ -1,4 +1,4 @@
-{ config, pkgs, secrets, ... }: let
+{ config, lib, pkgs, secrets, ... }: with lib; let
   cfgFile = pkgs.writeText "HackerHats.cfg" ''
     with open('${secrets.getSecret secrets.hackerHats.secretKey}', 'r') as passwd_file:
         SECRET_KEY = passwd_file.read().strip('\r\n')
@@ -17,17 +17,18 @@ in {
     user = "nginx";
     group = "nginx";
     plugins = [ "python3" ];
-    instance = {
-      type = "emperor";
-      vassals = {
-        hacker-hats = {
-          type = "normal";
-          pythonPackages = self: with self; [ flask ];
+    type = "emperor";
+    vassals = {
+      hacker-hats = {
+        pythonPackages = self: with self; [ flask ];
+        env = {
+          HACKER_HATS_SETTINGS = cfgFile;
+        };
+        extraConfig = {
           socket = "${config.services.uwsgi.runDir}/HackerHats.sock";
           chdir = "${pkgs.hacker-hats}";
           module = "runserver";
           callable = "app";
-          env = [ "HACKER_HATS_SETTINGS=${cfgFile}" ];
         };
       };
     };

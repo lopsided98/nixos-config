@@ -7,6 +7,7 @@
     ./system/boot/initrd-tinyssh.nix
     ./system/boot/initrd-decryptssh.nix
     ./system/secrets.nix
+    ./services/audio/audio-recorder.nix
     ./services/backup/sanoid.nix
     ./services/backup/syncoid.nix
     ./services/backup/syncthing-backup.nix
