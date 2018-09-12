@@ -11,9 +11,9 @@
   ];
 
   boot = {
-    # Use the latest kernel. Some ARM systems and those with ZFS might use a 
+    # Use the latest (cross-compiled) kernel. Some ARM systems and those with ZFS might use a
     # different kernel
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.crossPackages.linuxPackages_latest;
 
     # Enable a shell if boot fails. This is disabled by default because it
     # gives root access, but someone with access to this shell would also have
