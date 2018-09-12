@@ -19,4 +19,6 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   "KittyCop" = callMachine ./KittyCop "armv6l-linux";
   "AudioRecorder1" = callMachine ./AudioRecorder1 "armv6l-linux";
   "AudioRecorder2" = callMachine ./AudioRecorder2 "armv6l-linux";
+  "AudioRecorder3" = callMachine ./AudioRecorder3 "armv6l-linux";
+  "AudioRecorder4" = callMachine ./AudioRecorder4 "armv6l-linux";
 }

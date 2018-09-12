@@ -21,7 +21,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.linuxPackages_odroid_xu4;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_odroid_xu4;
   };
 
   systemd.network = {

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }: {
+{ lib, config, pkgs, secrets, ... }: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -13,15 +13,15 @@
   boot = {
     loader = {
       grub.enable = false;
-      generic-extlinux-compatible.enable = true;
-      /*raspberryPi = {
+      #generic-extlinux-compatible.enable = true;
+      raspberryPi = {
         enable = true;
         version = 3;
         firmwareConfig = ''
           initramfs initrd followkernel
           dtoverlay=lirc-rpi,gpio_out_pin=22
         '';
-      };*/
+      };
     };
     kernelParams = [ "cma=32M" ];
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
