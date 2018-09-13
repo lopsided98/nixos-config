@@ -16,7 +16,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        22         ; Serial
+                        23         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -61,6 +61,10 @@
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "rock64"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7829:84e0:c0ff:feea:faa9"; }
+    
+    # KittyCop
+    { name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.103"; }
+    { name = "doorman"; class = "IN"; type = "CNAME"; data = "kittycop"; }
   ];
 
   internalRecords = [

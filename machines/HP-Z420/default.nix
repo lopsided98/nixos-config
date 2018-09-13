@@ -238,8 +238,6 @@ in rec {
     ];
   };*/
 
-  modules.doorman.enable = true;
-
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
     22000 # Syncthing port
