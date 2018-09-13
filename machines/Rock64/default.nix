@@ -11,7 +11,6 @@ in {
 
     ../../modules/config/zfs-backup.nix
     ../../modules/config/telegraf.nix
-    ../../modules/config/nginx.nix
 
     ../../modules
   ];

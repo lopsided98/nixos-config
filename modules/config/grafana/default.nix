@@ -2,10 +2,6 @@
   socketDir = "/var/run/grafana";
   socket = "${socketDir}/grafana.sock";
 in {
-  imports = [
-    ../nginx.nix
-  ];
-
   services.grafana = {
     enable = true;
 
@@ -42,14 +38,17 @@ in {
 
   users.extraGroups.grafana.gid = 196;
 
-  services.nginx.virtualHosts."grafana.benwolsieffer.com" = {
-    http2 = true;
+  services.nginx = {
+    enable = true;
+    virtualHosts."grafana.benwolsieffer.com" = {
+      http2 = true;
 
-    forceSSL = true;
-    sslCertificate = ./server.pem;
-    sslCertificateKey = secrets.getSecret secrets.grafana.sslCertificateKey;
+      forceSSL = true;
+      sslCertificate = ./server.pem;
+      sslCertificateKey = secrets.getSecret secrets.grafana.sslCertificateKey;
 
-    locations."/".proxyPass = "http://unix:${socket}";
+      locations."/".proxyPass = "http://unix:${socket}";
+    };
   };
 
   environment.secrets = secrets.mkSecret secrets.grafana.sslCertificateKey { user = "grafana"; };

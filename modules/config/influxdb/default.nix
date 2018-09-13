@@ -3,9 +3,6 @@
   socket = "${socketDir}/influxdb.sock";
   influxdbPort = 8086;
 in {
-  imports = [
-    ../nginx.nix
-  ];
 
   services.influxdb = {
     enable = true;
@@ -20,7 +17,7 @@ in {
       };
     };
   };
-  
+
   # Setup influxdb socket permissions
   systemd.services.influxdb = let cfg = config.services.influxdb; in {
     path = [ pkgs.acl ];
@@ -38,8 +35,9 @@ in {
       setfacl -bm u:nginx:rw "${socket}"
     '';
   };
-  
+
   services.nginx = {
+    enable = true;
     virtualHosts.influxdb = {
       http2 = true;
       listen = [
@@ -54,11 +52,11 @@ in {
           ssl = true;
         }
       ];
-      
+
       addSSL = true;
       sslCertificate = ./server.pem;
       sslCertificateKey = secrets.getSecret secrets.influxdb.sslCertificateKey;
-      
+
       locations."/" = {
         proxyPass = "http://unix:${socket}";
         
@@ -66,7 +64,7 @@ in {
           proxy_set_header Authorization "Basic $influxdb_authorization";
         '';
       };
-      
+
       extraConfig = ''
         access_log off;
 
@@ -74,19 +72,19 @@ in {
         ssl_crl ${./client_ca_crl.pem};
         ssl_verify_depth 2;
         ssl_verify_client optional;
-        
+
         if ($ssl_client_i_dn != "CN=InfluxDB Client CA") {
           return 401;
         }
       '';
     };
-    
+
     appendHttpConfig = ''
       # Get username from the organization field of the client certificate
       map $ssl_client_s_dn $influxdb_username {
         "~O=(?<u>[^,]+)(,|$)" $u;
       }
-      
+
       # If the certificate organization field contains an allowed username, 
       # automatically authenticate that user. Otherwise, pass the basic auth
       # header through.
@@ -95,7 +93,7 @@ in {
       }
     '';
   };
-  
+
   environment.secrets = 
     secrets.mkSecret secrets.influxdb.sslCertificateKey { user = "nginx"; } //
     secrets.mkSecret secrets.influxdb.passwordMap { user = "nginx"; };

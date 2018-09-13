@@ -17,8 +17,6 @@ in {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
 
-    ../../modules/config/nginx.nix
-
     ../../modules
   ];
 

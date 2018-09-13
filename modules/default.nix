@@ -17,6 +17,8 @@
     ./services/networking/doorman.nix
     ./services/networking/openvpn/client-home-network.nix
     ./services/monitoring/telegraf.nix
+    ./services/web-apps/hacker-hats.nix
+    ./services/web-servers/nginx.nix
     ./tasks/filesystems/zfs.nix
 
     ../overlays/nixos-secrets/secrets.nix

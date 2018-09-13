@@ -1,9 +1,5 @@
 { config, lib, pkgs, secrets, ... }: {
 
-  imports = [
-    ./nginx.nix
-  ];
-
   services.hydra = {
     enable = true;
     hydraURL = "http://hydra.benwolsieffer.com";

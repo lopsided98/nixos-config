@@ -6,11 +6,6 @@
   '';
 in {
 
-  imports = [
-    ./nginx.nix
-    ../services/web-apps/hacker-hats.nix
-  ];
-
   services.hacker-hats.enable = true;
   services.uwsgi = {
     enable = true;

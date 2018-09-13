@@ -62,22 +62,25 @@ in {
       '';
     };
 
-    services.nginx.virtualHosts."${cfg.virtualHost}" = {
-      http2 = true;
+    services.nginx = {
+      enable = true;
+      virtualHosts."${cfg.virtualHost}" = {
+        http2 = true;
 
-      forceSSL = true;
-      sslCertificate = cfg.sslCertificate;
-      sslCertificateKey = sslCertificateKey;
+        forceSSL = true;
+        sslCertificate = cfg.sslCertificate;
+        sslCertificateKey = sslCertificateKey;
 
-      locations."/".proxyPass = "https://localhost:8384";
+        locations."/".proxyPass = "https://localhost:8384";
 
-      extraConfig = ''
-        proxy_read_timeout 600s;
-        proxy_send_timeout 600s;
-        proxy_ssl_trusted_certificate "${cfg.sslCertificate}";
-        # TODO: figure out elegant way to verify certificate
-        proxy_ssl_verify off;
-      '';
+        extraConfig = ''
+          proxy_read_timeout 600s;
+          proxy_send_timeout 600s;
+          proxy_ssl_trusted_certificate "${cfg.sslCertificate}";
+          # TODO: figure out elegant way to verify certificate
+          proxy_ssl_verify off;
+        '';
+      };
     };
 
     environment.secrets = secrets.mkSecret cfg.sslCertificateKeySecret { user = cfg.user; };
