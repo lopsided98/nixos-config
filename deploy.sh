@@ -23,6 +23,7 @@ ssh_control_path="~/.ssh/master-%r@%h:%p.sock"
 nixos-secrets check "${nixos_root}/secrets"
 
 ssh_host="${1}"
+shift
 
 ssh -fN -oControlMaster=auto -oControlPath="${ssh_control_path}" -oControlPersist=1m "${ssh_host}"
 
@@ -32,5 +33,5 @@ echo
 rsync -e "ssh -oControlPath=\"${ssh_control_path}\"" --rsync-path="echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo rsync" -r --delete "${nixos_root}/" "${ssh_host}:/etc/nixos"
 
 if [ "${rebuild}" -eq 1 ]; then
-    ssh -oControlPath=\"${ssh_control_path}\" "${ssh_host}" "echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo nixos-rebuild switch -I nixos-config=/etc/nixos/machines/${ssh_host} -I localpkgs=/etc/nixos"
+    ssh -oControlPath=\"${ssh_control_path}\" "${ssh_host}" "echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo nixos-rebuild switch -I nixos-config=/etc/nixos/machines/${ssh_host} -I localpkgs=/etc/nixos $@"
 fi
