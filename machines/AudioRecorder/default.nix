@@ -39,7 +39,6 @@ in {
       raspberrypi-builder =
         import <nixpkgs/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix> {
           inherit pkgs configTxt;
-          version = 1;
         };
     in ''
       pushd ${pkgs.raspberrypifw}/share/raspberrypi/boot
@@ -54,7 +53,7 @@ in {
       grub.enable = false;
       raspberryPi = {
         enable = true;
-        version = 1;
+        version = 0;
         firmwareConfig = extraFirmwareConfig;
       };
     };
