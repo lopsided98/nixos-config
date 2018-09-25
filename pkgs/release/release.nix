@@ -60,7 +60,6 @@ in {
   # Fancy shortcut to generate one attribute per supported platform.
   dnsupdate = hostSystems;
   aur-buildbot = hostSystems;
-  pacman = hostSystems;
   hacker-hats = hostSystems;
   tinyssh = hostSystems;
   tinyssh-convert = hostSystems;
