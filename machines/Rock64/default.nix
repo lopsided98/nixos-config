@@ -62,7 +62,7 @@ in {
 
   # uPnP router traffic monitoring (this should be rewritten as a telegraf
   # plugin to be more efficient)
-  /*services.telegraf.inputs.exec = {
+  services.telegraf.inputs.exec = {
     name_override = "upnp";
 
     commands = [ "${./telegraf/upnp.py}" ];
@@ -73,7 +73,7 @@ in {
   in {
     path = [ pyEnv ];
     environment.PYTHONPATH = "${pyEnv}/${pkgs.python3.sitePackages}";
-  };*/
+  };
 
   services.sanoid = {
     datasets = {
