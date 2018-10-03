@@ -24,11 +24,6 @@
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
   };
 
-  # Use ARM binary cache
-  # Currently broken
-  # nix.binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
-  nix.binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
-
   # Serve binary cache
   services.nginx = {
     enable = true;

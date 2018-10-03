@@ -84,8 +84,12 @@
     '';
 
     # Use my binary cache
-    binaryCaches = [ https://cache.nixos.org/ ] ++ lib.optional (!config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com") https://hydra.benwolsieffer.com;
-    binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
+    binaryCaches = let
+      isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
+    in [ https://cache.nixos.org/ ] ++
+      lib.optional (!isHydra) https://hydra.benwolsieffer.com ++
+      lib.optional (isHydra || pkgs.stdenv.hostPlatform.isAarch32) http://nixos-arm.dezgeg.me/channel;
+    binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
     
     nixPath = let 
       machineChannel = "/nix/var/nix/profiles/per-user/root/channels/machines.${config.networking.hostName}.channel";
