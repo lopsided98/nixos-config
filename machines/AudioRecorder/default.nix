@@ -9,7 +9,6 @@ with lib;
 
 let
   extraFirmwareConfig = ''
-    initramfs initrd followkernel
     dtoverlay=fe-pi-audio
     dtparam=audio=off
   '';
@@ -57,7 +56,7 @@ in {
         firmwareConfig = extraFirmwareConfig;
       };
     };
-    kernelPackages = lib.mkForce pkgs.linuxPackages_rpi;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
   };
 
   nixpkgs.config.platform = lib.systems.platforms.raspberrypi;
