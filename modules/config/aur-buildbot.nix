@@ -123,8 +123,10 @@ in {
         lejos-nxj: {}
         lib32-tk: {}
         logisim: {}
+        multipath-tools: {}
         nix: {}
         pacaur: {}
+        platformio: {}
         puddletag: {}
         pycharm-professional: {}
         python-flask-cors: {}
@@ -134,9 +136,11 @@ in {
         python-v4l2capture: {}
         qemu-user-static: {}
         redeclipse: {}
+        saleae-logic: {}
         sbupdate-git: {}
         slapi-nis: {}
         solaar-git: {}
+        vmware-horizon-client: {}
         webstorm: {}
         xca: {}
         zotero: {}
