@@ -8,7 +8,7 @@
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
       access_log syslog:server=unix:/dev/log,nohostname,tag= access;
-      error_log stderr info;
+      error_log syslog:server=unix:/dev/log,nohostname,tag= info;
       
       client_body_buffer_size 1M;
     '';
