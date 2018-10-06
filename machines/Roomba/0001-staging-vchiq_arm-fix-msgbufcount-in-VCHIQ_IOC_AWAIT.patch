@@ -1,0 +1,59 @@
+From 7833c21133a99a66eaa53fbf4fdf9b06faf69704 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sat, 22 Sep 2018 00:01:31 -0400
+Subject: [PATCH] staging: vchiq_arm: fix msgbufcount in
+ VCHIQ_IOC_AWAIT_COMPLETION compat ioctl
+
+The compatibility ioctl wrapper for VCHIQ_IOC_AWAIT_COMPLETION assumes that
+the native ioctl always uses a message buffer and decrements msgbufcount.
+Certain message types do not use a message buffer and in this case
+msgbufcount is not decremented, and completion->header for the message is
+NULL. Because the wrapper unconditionally decrements msgbufcount, the
+calling process may assume that a message buffer has been used even when
+it has not.
+
+This results in a memory leak in the userspace code that interfaces with
+this driver. When msgbufcount is decremented, the userspace code assumes
+that the buffer can be freed though the reference in completion->header,
+which cannot happen when the reference is NULL.
+
+This patch causes the wrapper to only decrement msgbufcount when the
+native ioctl decrements it. Note that we cannot simply copy the native
+ioctl's value of msgbufcount, because the wrapper only retrieves messages
+from the native ioctl one at a time, while userspace may request multiple
+messages.
+
+Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
+---
+ .../staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index bc05c69383b8..c6984f3f4ae6 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -1787,6 +1787,7 @@ vchiq_compat_ioctl_await_completion(struct file *file,
+ 	struct vchiq_await_completion32 args32;
+ 	struct vchiq_completion_data32 completion32;
+ 	unsigned int *msgbufcount32;
++	unsigned int msgbufcounttemp;
+ 	compat_uptr_t msgbuf32;
+ 	void *msgbuf;
+ 	void **msgbufptr;
+@@ -1898,7 +1899,12 @@ vchiq_compat_ioctl_await_completion(struct file *file,
+ 			 sizeof(completion32)))
+ 		return -EFAULT;
+ 
+-	args32.msgbufcount--;
++	if (get_user(msgbufcounttemp, &args->msgbufcount))
++		return -EFAULT;
++
++	/* Only decrement the buffer count if the ioctl used a buffer */
++	if (!msgbufcounttemp)
++		args32.msgbufcount--;
+ 
+ 	msgbufcount32 =
+ 		&((struct vchiq_await_completion32 __user *)arg)->msgbufcount;
+-- 
+2.19.0
+

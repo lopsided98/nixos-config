@@ -13,25 +13,29 @@
   boot = {
     loader = {
       grub.enable = false;
-      #generic-extlinux-compatible.enable = true;
       raspberryPi = {
         enable = true;
         version = 3;
         firmwareConfig = ''
-          initramfs initrd followkernel
           dtoverlay=lirc-rpi,gpio_out_pin=22
         '';
       };
     };
     kernelParams = [ "cma=32M" ];
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
+    kernelPatches = [ {
+      patch = ./0001-staging-vchiq_arm-fix-msgbufcount-in-VCHIQ_IOC_AWAIT.patch;
+      name = "staging-vchiq_arm-fix-msgbufcount";
+    } ];
+    # Fix dropped webcam frames
+    extraModprobeConfig = ''
+      options uvcvideo nodrop=1 timeout=1000
+    '';
   };
 
   hardware.enableRedistributableFirmware = true;
 
-  networking.wireless = {
-    enable = true;
-  };
+  networking.wireless.enable = true;
 
   systemd.network = {
     enable = true;
@@ -57,6 +61,8 @@
   networking.hostName = "Roomba"; # Define your hostname.
 
   # List services that you want to enable:
+
+  services.kittyCam.enable = true;
 
   services.avahi = {
     enable = true;
@@ -91,7 +97,7 @@
   };*/
 
   networking.firewall.allowedTCPPorts = [
-    8080 # Streaming
+    1935 # RTMP Streaming
   ];
 
   environment.secrets = secrets.mkSecret secrets.Roomba.wpaSupplicantConf {

@@ -18,6 +18,7 @@
     ./services/networking/openvpn/client-home-network.nix
     ./services/monitoring/telegraf.nix
     ./services/web-apps/hacker-hats.nix
+    ./services/web-apps/kitty-cam
     ./services/web-servers/nginx.nix
     ./tasks/filesystems/zfs.nix
 

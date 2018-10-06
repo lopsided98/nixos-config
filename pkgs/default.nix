@@ -1,24 +1,26 @@
 self: super: with super.lib; let
-  armv6lPackages = super.forceCross {
+  pkgsArmv6lLinuxCross = super.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.raspberryPi;
 
-  armv7lPackages = super.forceCross {
+  pkgsArmv7lLinuxCross = super.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.armv7l-hf-multiplatform;
 
-  aarch64Packages = super.forceCross {
+  pkgsAarch64LinuxCross = super.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.aarch64-multiplatform;
 
 in {
 
-  crossPackages = if super.stdenv.hostPlatform.system == "armv6l-linux" then armv6lPackages
-                  else if super.stdenv.hostPlatform.system == "armv7l-linux" then armv7lPackages
-                  else if super.stdenv.hostPlatform.system == "aarch64-linux" then aarch64Packages
+  pkgsArmv7lLinux = super.customSystem { system = "armv7l-linux"; };
+
+  crossPackages = if super.stdenv.hostPlatform.system == "armv6l-linux" then pkgsArmv6lLinuxCross
+                  else if super.stdenv.hostPlatform.system == "armv7l-linux" then pkgsArmv7lLinuxCross
+                  else if super.stdenv.hostPlatform.system == "aarch64-linux" then pkgsAarch64LinuxCross
                   else super;
 
   dnsupdate = super.callPackage ./dnsupdate/default.nix {
@@ -26,20 +28,6 @@ in {
   };
 
   aur-buildbot = super.callPackage ./aur-buildbot/default.nix {};
-
-  buildbot = (super.buildbot.override {
-    pythonPackages = self.python3Packages;
-    inherit (self) buildbot-worker;
-  }).overridePythonAttrs (oldAttrs: rec {
-
-    # 7 tests fail because of some stupid ascii/utf-8 conversion issue, and I
-    # don't use the failing modules anyway
-    doCheck = false;
-    LC_ALL = "en_US.UTF-8";
-    preCheck = ''
-      export PYTHONIOENCODING=utf8
-    '';
-  });
 
   hacker-hats = super.callPackage ./hacker-hats/default.nix {};
 
@@ -50,6 +38,8 @@ in {
   libcreate = super.callPackage ./libcreate {};
 
   audioRecorder = self.python3Packages.callPackage ./audio-recorder {};
+
+  kittyCam = self.python3Packages.callPackage ./kitty-cam {};
 
   nixUnstable = super.nixUnstable.overrideAttrs (old: {
     patches = [ ./nix-fix-xz-decompression.patch ];
@@ -69,6 +59,8 @@ in {
       aur = pySelf.callPackage ./python-modules/aur { };
 
       grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools { };
+
+      lirc = pySelf.toPythonModule self.lirc;
 
       memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
 
@@ -90,10 +82,10 @@ in {
 
   perlPackages = super.perlPackages // {
     ConfigIniFiles = with self.perlPackages; buildPerlModule rec {
-      name = "Config-IniFiles-2.94";
+      name = "Config-IniFiles-3.000000";
       src = super.fetchurl {
         url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-        sha256 = "1d4la72fpsf61hcpslmn03ajm5rfy8hm50piqmsfi7d7dm0qmlyn";
+        sha256 = "0acv3if31s639iy7rcg86nwa5f6s55hiw7r5ysmh6gmay6vzd4nd";
       };
       propagatedBuildInputs = [ IOStringy ];
       meta = {
@@ -117,6 +109,51 @@ in {
     libpulseaudio = null; # Pulseaudio input support
   };
 
+  gst_all_1 = super.gst_all_1 // {
+    gst-plugins-base = (super.gst_all_1.gst-plugins-base.override {
+      inherit (self.gst_all_1) gstreamer;
+    }).overrideAttrs (old: rec {
+      name = "gst-plugins-base-1.14.3";
+      src = self.fetchurl {
+        url = "${old.meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
+        sha256 = "0lkr1fm3bz21nqq9vi5v74mlxw6dd6i7piw00fhc5zz0dg1ikczh";
+      };
+    });
+    gst-plugins-bad = (super.gst_all_1.gst-plugins-bad.override {
+      inherit (self.gst_all_1) gst-plugins-base;
+    }).overrideAttrs (old: rec {
+      buildInputs = old.buildInputs ++ [ self.rtmpdump ];
+      name = "gst-plugins-bad-1.14.3";
+      src = self.fetchurl {
+        url = "${old.meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
+        sha256 = "1mczcna91f3kkk3yv5fkfa8nmqdr9d93aq9z4d8sv18vkiflw8mj";
+      };
+    });
+    gst-plugins-good = (super.gst_all_1.gst-plugins-good.override {
+      inherit (self.gst_all_1) gst-plugins-base;
+    }).overrideAttrs (old: rec {
+      name = "gst-plugins-good-1.14.3";
+      src = self.fetchurl {
+        url = "${old.meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
+        sha256 = "0pgzgfqbfp8lz2ns68797xfxdr0cr5rpi93wd1h2grhbmzkbq4ji";
+      };
+    });
+    gstreamer = super.gst_all_1.gstreamer.overrideAttrs (old: rec {
+      name = "gstreamer-1.14.3";
+      src = self.fetchurl {
+        url = "${old.meta.homepage}/src/gstreamer/${name}.tar.xz";
+        sha256 = "0mh4755an4gk0z3ygqhjpdjk0r2cwswbpwfgl0x6qmnln4757bhk";
+      };
+    });
+    gst-omx = super.callPackage ./gst-omx {
+      inherit (self.gst_all_1) gst-plugins-base;
+    };
+  };
+
+  orc = super.orc.overrideAttrs (old: {
+    doCheck = old.doCheck && !super.stdenv.hostPlatform.isAarch32;
+  });
+
   libao = super.libao.override {
     usePulseAudio = false;
   };
@@ -124,6 +161,12 @@ in {
   sox = super.sox.override {
     enableLibpulseaudio = false;
   };
+
+  lirc = super.lirc.overrideAttrs (old: {
+    buildInputs = with self; [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ];
+    nativeBuildInputs = old.nativeBuildInputs ++ (with self; [ autoreconfHook (python3.withPackages (p: with p; [ pyyaml setuptools ])) ]);
+    patches = [ ./lirc-fix-python-bindings.patch ];
+  });
 
   linux_odroid_xu4 = super.callPackage ./linux-odroid-xu4 {
     kernelPatches =

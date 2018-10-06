@@ -1,0 +1,42 @@
+From 6ef1b3e3c08801d176705c6d1a29a851b9ea8f0b Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sat, 15 Sep 2018 23:46:57 -0400
+Subject: [PATCH] Fix Python bindings.
+
+---
+ Makefile.am              | 5 ++---
+ python-pkg/lirc/paths.py | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 12814718..ecfb3ccf 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -84,9 +84,8 @@ dist_py_pkg_DATA        = python-pkg/setup.py \
+ py_pkg_lircdir          = $(pkgdatadir)/python-pkg/lirc
+ py_PYTHON               = python-pkg/lirc/__init__.py \
+                           python-pkg/lirc/database.py \
+-                          python-pkg/lirc/paths.py
+-
+-nodist_py_pkg_PYTHON    = python-pkg/lirc/config.py
++                          python-pkg/lirc/paths.py \
++                          python-pkg/lirc/config.py
+ 
+ if HAVE_PYTHON35
+ py_PYTHON               += python-pkg/lirc/async_client.py \
+diff --git a/python-pkg/lirc/paths.py b/python-pkg/lirc/paths.py
+index a3a92277..1679dafb 100644
+--- a/python-pkg/lirc/paths.py
++++ b/python-pkg/lirc/paths.py
+@@ -12,7 +12,7 @@ if HERE not in sys.path:
+ if os.path.exists(os.path.join(HERE, '_client.so')):
+     try:
+         os.unlink(os.path.join(HERE, '_client.so'))
+-    except PermissionError:
++    except (OSError, PermissionError):
+         pass
+ if os.path.exists(os.path.join(HERE, '..', 'lib', '.libs', '_client.so')):
+     if not os.path.exists(os.path.join(HERE, '_client.so')):
+-- 
+2.19.0
+
