@@ -168,17 +168,6 @@ in {
     patches = [ ./lirc-fix-python-bindings.patch ];
   });
 
-  linux_odroid_xu4 = super.callPackage ./linux-odroid-xu4 {
-    kernelPatches =
-      [ self.kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        self.kernelPatches.cpu-cgroup-v2."4.11"
-        self.kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-  linuxPackages_odroid_xu4 = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_odroid_xu4);
-
   linux_rock64_mainline = super.callPackage ./linux-rock64-mainline {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper

@@ -21,7 +21,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_odroid_xu4;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_hardkernel_4_14;
   };
 
   systemd.network = {
@@ -39,16 +39,9 @@ in {
   };
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
-  nix = {
-    # Use ARM binary cache
-    # Currently broken
-    # binaryCaches = [ "http://nixos-arm.dezgeg.me/channel" ];
-    # binaryCachePublicKeys = [ "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
-
-    extraOptions = ''
-      extra-platforms = armv6l-linux
-    '';
-  };
+  nix.extraOptions = ''
+    extra-platforms = armv6l-linux
+  '';
   
   environment.systemPackages = with pkgs; [
     pkgs.linuxPackages_latest.tmon
