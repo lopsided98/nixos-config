@@ -74,6 +74,7 @@ in {
           ]))}/${python.sitePackages}";
           AUR_BUILDBOT_CONFIG = pkgs.writeText "aur-buildbot-config.yml" cfg.configFile;
       };
+      serviceConfig.TimeoutStartSec = "300";
     };
   };
 
