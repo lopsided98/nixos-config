@@ -1,4 +1,4 @@
-From 7833c21133a99a66eaa53fbf4fdf9b06faf69704 Mon Sep 17 00:00:00 2001
+From b1bdf77e0eca9b651724c508817a3670a9c5983e Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Sat, 22 Sep 2018 00:01:31 -0400
 Subject: [PATCH] staging: vchiq_arm: fix msgbufcount in
@@ -23,33 +23,35 @@ ioctl's value of msgbufcount, because the wrapper only retrieves messages
 from the native ioctl one at a time, while userspace may request multiple
 messages.
 
+Fixes: 5569a12 ("staging: vchiq_arm: Add compatibility wrappers for ioctls")
+
 Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
 ---
  .../staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 8 +++++++-
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index bc05c69383b8..c6984f3f4ae6 100644
+index d67987fbf25e..3026c4aa5ce2 100644
 --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
 +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -1787,6 +1787,7 @@ vchiq_compat_ioctl_await_completion(struct file *file,
+@@ -1461,6 +1461,7 @@ vchiq_compat_ioctl_await_completion(struct file *file,
  	struct vchiq_await_completion32 args32;
  	struct vchiq_completion_data32 completion32;
  	unsigned int *msgbufcount32;
-+	unsigned int msgbufcounttemp;
++	unsigned int msgbufcount_native;
  	compat_uptr_t msgbuf32;
  	void *msgbuf;
  	void **msgbufptr;
-@@ -1898,7 +1899,12 @@ vchiq_compat_ioctl_await_completion(struct file *file,
+@@ -1572,7 +1573,12 @@ vchiq_compat_ioctl_await_completion(struct file *file,
  			 sizeof(completion32)))
  		return -EFAULT;
  
 -	args32.msgbufcount--;
-+	if (get_user(msgbufcounttemp, &args->msgbufcount))
++	if (get_user(msgbufcount_native, &args->msgbufcount))
 +		return -EFAULT;
 +
-+	/* Only decrement the buffer count if the ioctl used a buffer */
-+	if (!msgbufcounttemp)
++	/* Only decrement the buffer count if the native ioctl used a buffer */
++	if (!msgbufcount_native)
 +		args32.msgbufcount--;
  
  	msgbufcount32 =
