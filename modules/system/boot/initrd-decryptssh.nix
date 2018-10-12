@@ -12,11 +12,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    boot.initrd = {
-      network.tinyssh = {
-        enable = true;
-        shell = "/bin/cryptsetup-askpass";
-      };
+    boot.initrd.network.tinyssh = {
+      enable = true;
+      shell = "/bin/cryptsetup-askpass";
     };
   };
 }
