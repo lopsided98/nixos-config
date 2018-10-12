@@ -86,18 +86,22 @@ in rec {
       '';
     };*/
 
+    # Use physical interface MAC on bridge to get same IPs
     netdevs."50-${interface}".netdevConfig = {
       Name = interface;
       Kind = "bridge";
       MACAddress = "a0:d3:c1:20:da:3f";
     };
 
+    # Attach the physical interface to the bridge
     networks."50-eth0" = {
       name = "eth0";
       networkConfig.Bridge = interface;
     };
     # Use a different MAC address on physical interface, because the normal MAC
-    # is used on the VPN in order to get the same IPv6 address as when at home.
+    # is used on the VPN and bridge in order to get consistent IPs.
+    # This does not currently have any effect, but it seems to work even with
+    # a duplicate MAC.
     links."50-eth0" = {
       matchConfig = {
         MACAddress = "a0:d3:c1:20:da:3f";
@@ -224,19 +228,6 @@ in rec {
     enable = true;
     virtualHost = "syncthing.hp-z420.benwolsieffer.com";
   };
-
-  /*services.dnsupdate = {
-    enable = true;
-    addressProvider = {
-      ipv4 = {
-        type = "Local";
-        args.interface = "eth0";
-      };
-    };
-
-    dnsServices = [
-    ];
-  };*/
 
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
