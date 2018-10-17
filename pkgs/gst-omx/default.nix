@@ -2,7 +2,7 @@
   gst-plugins-base, raspberrypi-tools}:
 
 stdenv.mkDerivation rec {
-  name = "gst-omx-1.14.3";
+  name = "gst-omx-1.14.4";
 
   meta = with stdenv.lib; {
     description = "GStreamer OpenMAX IL wrapper plugin";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-omx/${name}.tar.xz";
-    sha256 = "1cccf2dkbg0wyfl95xhqdl4fw4idm3hnsp2vckm95q5wm9fdr9vb";
+    sha256 = "1m53iqkaw7gmcv2b0vlpzpxkmz1j54n0wlw3hxpwjx8zbkkp164n";
   };
 
   patches = [ ./0001-Fix-fragmented-buffers-on-Raspberry-Pi.patch ];
