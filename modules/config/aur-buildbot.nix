@@ -98,6 +98,7 @@ in {
         arm-linux-gnueabihf-gcc: {}
         aurman: {}
         binfmt-qemu-static: {}
+        bumblebee-git: {}
         chrome-gnome-shell-git: {}
         chromium-vaapi: {}
         clion: {}
