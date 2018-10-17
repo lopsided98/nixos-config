@@ -110,41 +110,9 @@ in {
   };
 
   gst_all_1 = super.gst_all_1 // {
-    gst-plugins-base = (super.gst_all_1.gst-plugins-base.override {
-      inherit (self.gst_all_1) gstreamer;
-    }).overrideAttrs (old: rec {
-      name = "gst-plugins-base-1.14.3";
-      src = self.fetchurl {
-        url = "${old.meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-        sha256 = "0lkr1fm3bz21nqq9vi5v74mlxw6dd6i7piw00fhc5zz0dg1ikczh";
-      };
-    });
-    gst-plugins-bad = (super.gst_all_1.gst-plugins-bad.override {
-      inherit (self.gst_all_1) gst-plugins-base;
-    }).overrideAttrs (old: rec {
+    gst-plugins-bad = (super.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
       buildInputs = old.buildInputs ++ [ self.rtmpdump ];
-      name = "gst-plugins-bad-1.14.3";
-      src = self.fetchurl {
-        url = "${old.meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-        sha256 = "1mczcna91f3kkk3yv5fkfa8nmqdr9d93aq9z4d8sv18vkiflw8mj";
-      };
-    });
-    gst-plugins-good = (super.gst_all_1.gst-plugins-good.override {
-      inherit (self.gst_all_1) gst-plugins-base;
-    }).overrideAttrs (old: rec {
-      name = "gst-plugins-good-1.14.3";
-      src = self.fetchurl {
-        url = "${old.meta.homepage}/src/gst-plugins-good/${name}.tar.xz";
-        sha256 = "0pgzgfqbfp8lz2ns68797xfxdr0cr5rpi93wd1h2grhbmzkbq4ji";
-      };
-    });
-    gstreamer = super.gst_all_1.gstreamer.overrideAttrs (old: rec {
-      name = "gstreamer-1.14.3";
-      src = self.fetchurl {
-        url = "${old.meta.homepage}/src/gstreamer/${name}.tar.xz";
-        sha256 = "0mh4755an4gk0z3ygqhjpdjk0r2cwswbpwfgl0x6qmnln4757bhk";
-      };
-    });
+    }));
     gst-omx = super.callPackage ./gst-omx {
       inherit (self.gst_all_1) gst-plugins-base;
     };
@@ -161,12 +129,6 @@ in {
   sox = super.sox.override {
     enableLibpulseaudio = false;
   };
-
-  lirc = super.lirc.overrideAttrs (old: {
-    buildInputs = with self; [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ];
-    nativeBuildInputs = old.nativeBuildInputs ++ (with self; [ autoreconfHook (python3.withPackages (p: with p; [ pyyaml setuptools ])) ]);
-    patches = [ ./lirc-fix-python-bindings.patch ];
-  });
 
   linux_rock64_mainline = super.callPackage ./linux-rock64-mainline {
     kernelPatches =
