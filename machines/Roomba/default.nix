@@ -40,13 +40,17 @@
   systemd.network = {
     enable = true;
     networks = {
-      eth0 = {
+      "50-eth0" = {
         name = "eth0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
-        dns = ["192.168.1.2"];
+        dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+        extraConfig = ''
+          [IPv6AcceptRA]
+          UseDNS=no
+        '';
       };
-      wlan0 = {
+      "50-wlan0" = {
         name = "wlan0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
@@ -76,25 +80,6 @@
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
-
-  # Override OpenBLAS to support aarch64
-  /*nixpkgs.config.packageOverrides = pkgs: rec {
-    openblas = pkgs.openblas.overrideAttrs (oldAttrs: rec {
-      makeFlags =
-        [
-          "FC=gfortran"
-          "PREFIX=\"$(out)\""
-          "NUM_THREADS=64"
-          "INTERFACE64=0"
-          "NO_STATIC=1"
-          "BINARY=64"
-          "TARGET=ARMV8"
-          "DYNAMIC_ARCH=0"
-          "CC=gcc"
-          "USE_OPENMP=1"
-        ];
-    });
-  };*/
 
   networking.firewall.allowedTCPPorts = [
     1935 # RTMP Streaming
