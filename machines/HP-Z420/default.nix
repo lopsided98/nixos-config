@@ -116,9 +116,6 @@ in rec {
   # Enable telegraf metrics for this interface
   services.telegraf.inputs.net.interfaces = [ interface ];
 
-  environment.systemPackages = with pkgs; [
-  ];
-
   # List services that you want to enable:
 
   # Set SSH port
