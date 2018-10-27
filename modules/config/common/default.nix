@@ -70,7 +70,6 @@
   };
 
   nix = {
-    package = pkgs.nixUnstable;
     # Build packages in sandbox
     useSandbox = true;
 
