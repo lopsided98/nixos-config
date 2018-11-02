@@ -145,10 +145,7 @@ in {
       '';
       configs = [ (readFile ./lego_combo_pwm.conf) ];
     };
-    systemd.services.lircd.serviceConfig = {
-      PrivateTmp = true;
-      RuntimeDirectoryPreserve = true;
-    };
+    systemd.services.lircd.serviceConfig.PrivateTmp = true;
 
     sound.enable = true;
 
