@@ -94,7 +94,8 @@ in {
 
         # Other packages
         android-studio: {}
-        android-studio-canary: {}
+        android-sdk-build-tools: {}
+        android-sdk-platform-tools: {}
         arm-linux-gnueabihf-gcc: {}
         aurman: {}
         binfmt-qemu-static: {}
