@@ -127,7 +127,7 @@ in {
         default = "root";
         example = "backup";
         description = ''
-          The user for the service. ZFS priveledge delegation must be set up to
+          The user for the service. ZFS privilege delegation must be set up to
           use a user other than root.
         '';
       };

@@ -34,7 +34,7 @@ in {
       };
       
       hostMessage = mkOption {
-        default = "AUR Buildbot Worker on ${config.networking.hostName}";
+        default = "AUR Buildbot Worker";
         type = types.str;
         description = "Description of this worker";
       };
@@ -60,6 +60,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    services.aur-buildbot-worker.hostMessage = mkDefault "AUR Buildbot Worker on ${config.networking.hostName}";
+
     security.sudo = {
       enable = true;
       extraConfig = with pkgs; ''

@@ -6,7 +6,7 @@
   '';
 in {
 
-  services.hacker-hats.enable = true;
+  services.hackerHats.enable = true;
   services.uwsgi = {
     enable = true;
     user = "nginx";
@@ -30,7 +30,7 @@ in {
   };
   # Configure hostname and SSL
   services.nginx = {
-    virtualHosts."${config.services.hacker-hats.virtualHost}" = {
+    virtualHosts."${config.services.hackerHats.virtualHost}" = {
       serverName = "hackerhats.benwolsieffer.com";
       enableACME = true;
       forceSSL = true;

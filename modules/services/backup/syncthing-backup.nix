@@ -1,6 +1,6 @@
 { config, lib, pkgs, secrets, ... }: with lib; let 
   cfg = config.modules.syncthingBackup;
-  sslCertificateKey = secrets.getSecret cfg.sslCertificateKeySecret;
+  sslCertificateKeySecret = secrets."${config.networking.hostName}".syncthing.sslCertificateKey;
 in {
   options.modules.syncthingBackup = {
     enable = mkEnableOption "Syncthing backup synchronization";
@@ -30,18 +30,22 @@ in {
 
     sslCertificate = mkOption {
       type = types.path;
-      default = ../../../machines + "/${config.networking.hostName}/syncthing/server.pem";
       description = "SSL certificate to use for Syncthing and nginx";
     };
 
-    sslCertificateKeySecret = mkOption {
+    sslCertificateKey = mkOption {
       type = types.str;
-      default = secrets."${config.networking.hostName}".syncthing.sslCertificateKey;
       description = "SSL certificate key to use for Syncthing and nginx";
     };
   };
 
   config = mkIf cfg.enable {
+
+    modules.syncthingBackup = {
+      sslCertificate = mkDefault (../../../machines + "/${config.networking.hostName}/syncthing/server.pem");
+      sslCertificateKey = mkDefault (secrets.getSecret sslCertificateKeySecret);
+    };
+
     services.syncthing = {
       enable = true;
       user = cfg.user;
@@ -57,7 +61,7 @@ in {
       unitConfig.ConditionPathIsMountPoint = cfg.backupMountpoint;
       preStart = ''
         # Install SSL certificates
-        install -o ${cfg.user} -g ${cfg.group} -m 0400 "${sslCertificateKey}" "${config.services.syncthing.dataDir}/https-key.pem"
+        install -o ${cfg.user} -g ${cfg.group} -m 0400 "${cfg.sslCertificateKey}" "${config.services.syncthing.dataDir}/https-key.pem"
         install -o ${cfg.user} -g ${cfg.group} -m 0644 "${cfg.sslCertificate}" "${config.services.syncthing.dataDir}/https-cert.pem"
       '';
     };
@@ -69,7 +73,7 @@ in {
 
         forceSSL = true;
         sslCertificate = cfg.sslCertificate;
-        sslCertificateKey = sslCertificateKey;
+        sslCertificateKey = cfg.sslCertificateKey;
 
         locations."/".proxyPass = "https://localhost:8384";
 
@@ -83,6 +87,6 @@ in {
       };
     };
 
-    environment.secrets = secrets.mkSecret cfg.sslCertificateKeySecret { user = cfg.user; };
+    environment.secrets = secrets.mkSecret sslCertificateKeySecret { user = cfg.user; };
   };
 }

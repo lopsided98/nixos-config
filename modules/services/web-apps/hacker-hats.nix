@@ -3,13 +3,13 @@
 with lib;
 
 let
-  cfg = config.services.hacker-hats;
+  cfg = config.services.hackerHats;
 
 in {
 
   # Interface
 
-  options.services.hacker-hats = {
+  options.services.hackerHats = {
     enable = mkEnableOption "HackerHats website";
 
     virtualHost = mkOption {
@@ -23,7 +23,6 @@ in {
 
     uwsgiSocket = mkOption {
       type = types.str;
-      default = "${config.services.uwsgi.runDir}/HackerHats.sock";
       description = ''
         Socket file used to communicate between nginx and uwsgi.
       '';
@@ -33,6 +32,8 @@ in {
   # Implementation
 
   config = mkIf cfg.enable {
+    services.hackerHats.uwsgiSocket = mkDefault "${config.services.uwsgi.runDir}/HackerHats.sock";
+
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
       virtualHosts = {
