@@ -94,20 +94,12 @@ in rec {
     };
 
     # Attach the physical interface to the bridge
+    #
+    # Use a different MAC address on physical interface, because the normal MAC
+    # is used on the VPN and bridge in order to get consistent IPs.
     networks."50-eth0" = {
       name = "eth0";
       networkConfig.Bridge = interface;
-    };
-    # Use a different MAC address on physical interface, because the normal MAC
-    # is used on the VPN and bridge in order to get consistent IPs.
-    # This does not currently have any effect, but it seems to work even with
-    # a duplicate MAC.
-    links."50-eth0" = {
-      matchConfig = {
-        MACAddress = "a0:d3:c1:20:da:3f";
-        # VPN interface has the same MAC, so also match the driver
-        Driver = "e1000e";
-      };
       linkConfig.MACAddress = "ea:d3:5b:d6:a0:6b";
     };
   };
