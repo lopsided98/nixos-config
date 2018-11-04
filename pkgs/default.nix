@@ -41,10 +41,6 @@ in {
 
   kittyCam = self.python3Packages.callPackage ./kitty-cam {};
 
-  nixUnstable = super.nixUnstable.overrideAttrs (old: {
-    patches = [ ./nix-fix-xz-decompression.patch ];
-  });
-
   sanoid = super.callPackage ./sanoid/default.nix {
     inherit (self.perlPackages) ConfigIniFiles;
     mbufferSupport = true;
@@ -59,8 +55,6 @@ in {
       aur = pySelf.callPackage ./python-modules/aur { };
 
       grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools { };
-
-      lirc = pySelf.toPythonModule self.lirc;
 
       memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
 
