@@ -75,8 +75,8 @@
 
     trustedUsers = [ "build" ];
     distributedBuilds = true;
+    autoOptimiseStore = true;
     extraOptions = ''
-      auto-optimise-store = true
       builders-use-substitutes = true
       tarball-ttl = 10
       netrc-file = ${secrets.getSecret secrets.hydra.netrc}
