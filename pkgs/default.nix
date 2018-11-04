@@ -14,6 +14,48 @@ self: super: with super.lib; let
     platform = systems.platforms.pc64;
   } systems.examples.aarch64-multiplatform;
 
+  pythonOverridesFor = python: python.override (old: {
+    packageOverrides = pySelf: pySuper: {
+      aur = pySelf.callPackage ./python-modules/aur { };
+
+      grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools { };
+
+      memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
+
+      netdisco = pySelf.callPackage ./python-modules/netdisco { };
+
+      pyalpm = pySelf.callPackage ./python-modules/pyalpm {
+        inherit (self) libarchive;
+      };
+
+      pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio { };
+
+      upnpclient = pySelf.callPackage ./python-modules/upnpclient { };
+
+      xcgf = pySelf.callPackage ./python-modules/xcgf { };
+
+      xcpf = pySelf.callPackage ./python-modules/xcpf { };
+    };
+  });
+
+  perlOverridesFor = perlPackages: perlPackages.override (old: {
+    overrides = with perlPackages; {
+      ConfigIniFiles = buildPerlModule rec {
+        name = "Config-IniFiles-3.000000";
+        src = super.fetchurl {
+          url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+          sha256 = "0acv3if31s639iy7rcg86nwa5f6s55hiw7r5ysmh6gmay6vzd4nd";
+        };
+        propagatedBuildInputs = [ IOStringy ];
+        meta = {
+          description = "A module for reading and writing .ini-style configuration files";
+          homepage = https://github.com/shlomif/perl-Config-IniFiles;
+          license = [ super.lib.licenses.gpl2 ];
+        };
+      };
+    };
+  });
+
 in {
 
   pkgsArmv7lLinux = super.customSystem { system = "armv7l-linux"; };
@@ -50,45 +92,12 @@ in {
     parallelGzipSupport = true;
   };
 
-  python36 = super.python36.override {
-    packageOverrides = pySelf: pySuper: with pySuper; {
-      aur = pySelf.callPackage ./python-modules/aur { };
+  python36 = pythonOverridesFor super.python36;
+  python37 = pythonOverridesFor super.python37;
 
-      grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools { };
-
-      memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
-
-      netdisco = pySelf.callPackage ./python-modules/netdisco { };
-
-      pyalpm = pySelf.callPackage ./python-modules/pyalpm {
-        inherit (self) libarchive;
-      };
-
-      pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio { };
-
-      upnpclient = pySelf.callPackage ./python-modules/upnpclient { };
-
-      xcgf = pySelf.callPackage ./python-modules/xcgf { };
-
-      xcpf = pySelf.callPackage ./python-modules/xcpf { };
-    };
-  };
-
-  perlPackages = super.perlPackages // {
-    ConfigIniFiles = with self.perlPackages; buildPerlModule rec {
-      name = "Config-IniFiles-3.000000";
-      src = super.fetchurl {
-        url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-        sha256 = "0acv3if31s639iy7rcg86nwa5f6s55hiw7r5ysmh6gmay6vzd4nd";
-      };
-      propagatedBuildInputs = [ IOStringy ];
-      meta = {
-        description = "A module for reading and writing .ini-style configuration files";
-        homepage = https://github.com/shlomif/perl-Config-IniFiles;
-        license = [ super.lib.licenses.gpl2 ];
-      };
-    };
-  };
+  perl526Packages = perlOverridesFor super.perl526Packages;
+  perl528Packages = perlOverridesFor super.perl528Packages;
+  perldevelPackages = perlOverridesFor super.perldevelPackages;
 
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
@@ -103,14 +112,12 @@ in {
     libpulseaudio = null; # Pulseaudio input support
   };
 
-  gst_all_1 = super.gst_all_1 // {
-    gst-plugins-bad = (super.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
+  gst_all_1 = super.gst_all_1.extend (gstSelf: gstSuper: {
+    gst-plugins-bad = gstSuper.gst-plugins-bad.overrideAttrs (old: rec {
       buildInputs = old.buildInputs ++ [ self.rtmpdump ];
-    }));
-    gst-omx = super.callPackage ./gst-omx {
-      inherit (self.gst_all_1) gst-plugins-base;
-    };
-  };
+    });
+    gst-omx = gstSelf.callPackage ./gst-omx { };
+  });
 
   orc = super.orc.overrideAttrs (old: {
     doCheck = old.doCheck && !super.stdenv.hostPlatform.isAarch32;
