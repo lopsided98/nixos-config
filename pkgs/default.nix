@@ -22,8 +22,6 @@ self: super: with super.lib; let
 
       memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
 
-      netdisco = pySelf.callPackage ./python-modules/netdisco { };
-
       pyalpm = pySelf.callPackage ./python-modules/pyalpm {
         inherit (self) libarchive;
       };
