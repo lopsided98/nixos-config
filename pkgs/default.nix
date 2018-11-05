@@ -18,8 +18,6 @@ self: super: with super.lib; let
     packageOverrides = pySelf: pySuper: {
       aur = pySelf.callPackage ./python-modules/aur { };
 
-      grpcio-tools = pySelf.callPackage ./python-modules/grpcio-tools { };
-
       memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
 
       pyalpm = pySelf.callPackage ./python-modules/pyalpm {
