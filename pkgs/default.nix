@@ -81,11 +81,6 @@ in {
 
   sanoid = super.callPackage ./sanoid/default.nix {
     inherit (self.perlPackages) ConfigIniFiles;
-    mbufferSupport = true;
-    pvSupport = true;
-    lzoSupport = true;
-    gzipSupport = true;
-    parallelGzipSupport = true;
   };
 
   python36 = pythonOverridesFor super.python36;

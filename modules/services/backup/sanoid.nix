@@ -97,8 +97,6 @@ let
 
   configDir = pkgs.runCommand "sanoid-config" {} '' 
     mkdir -p "$out"
-    # Sanoid requires a default configuration file, so symlink it from the package
-    ln -s "${pkgs.sanoid}/conf/sanoid.defaults.conf" "$out"
     ln -s "${pkgs.writeText "sanoid.conf" configFile}" "$out/sanoid.conf"
   '';
 
