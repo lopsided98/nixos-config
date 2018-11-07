@@ -4,10 +4,15 @@
 { config, lib, pkgs, ... }:
 
 {
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/35003c68-484a-4f31-8ec6-c44c987b0ae3";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/35003c68-484a-4f31-8ec6-c44c987b0ae3";
+    fsType = "ext4";
+  };
+
+  swapDevices = lib.singleton {
+    device = "/swap";
+    size = 1024;
+  };
 
   nix.maxJobs = lib.mkDefault 4;
   nix.buildCores = lib.mkDefault 4;
