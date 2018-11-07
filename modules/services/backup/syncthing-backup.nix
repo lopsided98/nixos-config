@@ -51,7 +51,8 @@ in {
       user = cfg.user;
       group = cfg.group;
       openDefaultPorts = true;
-      dataDir = "${cfg.backupMountpoint}/syncthing";
+      dataDir = "${cfg.backupMountpoint}";
+      configDir = "${cfg.backupMountpoint}/syncthing";
     };
 
     # Increase inotify watch limit
