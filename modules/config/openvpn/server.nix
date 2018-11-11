@@ -203,6 +203,12 @@
       # in order for this to work properly).
       push "redirect-gateway def1 bypass-dhcp"
       push "dhcp-option DNS 192.168.1.2"
+      
+      # Push a null route for IPv6 to prevent leaks
+      tun-ipv6
+      push tun-ipv6
+      server-ipv6 ::1/64
+      push "route-ipv6 ::/128 ::1"
 
       # Uncomment this directive to allow different
       # clients to be able to "see" each other.
