@@ -1,15 +1,16 @@
 { stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 buildLinux (args // rec {
-  version = "4.18.0-rc8-1060";
-  modDirVersion = "4.18.0-rc8";
-  extraMeta.branch = "4.18";
+  name = "linux-rock64";
+  version = "4.19.4";
+  modDirVersion = "4.19.4";
+  extraMeta.branch = "4.19";
 
   src = fetchFromGitHub {
-    owner = "ayufan-rock64";
-    repo = "linux-mainline-kernel";
-    rev = "${version}-ayufan";
-    sha256 = "1nmn1ffz7ynb7snc6wn8db9d8hxlmxbhgjfwv6f0w3hnd7xr3k4j";
+    owner = "lopsided98";
+    repo = "linux";
+    rev = "a0de9629ebc4ddebb325ec9db5d352dad04f458a";
+    sha256 = "1bj9y1rp5pcv5bfr0zsfzhzv7a13jg63v8gxsq3mwx2v6yrbmbbf";
   };
 
 } // (args.argsOverride or {}))
