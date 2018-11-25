@@ -14,12 +14,6 @@ in {
 
     ../../modules
   ];
-    
-  #nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform // {
-  #  name = "rock64";
-  #  kernelBaseConfig = "rockchip_linux_defconfig";
-  #  kernelAutoModules = false;
-  #};
 
   boot = {
     loader = {
