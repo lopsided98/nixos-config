@@ -1,4 +1,6 @@
-{ services, ... }:
+{ lib, services, ... }:
+
+with lib;
 
 {
   # Enable the OpenSSH daemon.
@@ -6,5 +8,7 @@
     enable = true;
     permitRootLogin = "no";
     passwordAuthentication = false;
+    # Don't allow users to manage their own authorized keys
+    authorizedKeysFiles = mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
   };
 }

@@ -113,6 +113,11 @@ in rec {
   # Set SSH port
   services.openssh.ports = [4245];
 
+  # Restricted key for use with sftp only (from my phone)
+  # sshd is configured to not use ~/.ssh/authorized_keys, so this can't be
+  # bypassed by adding a new key to that file
+  users.users.ben.openssh.authorizedKeys.keys = [ "restrict,command=\"${pkgs.openssh}/libexec/sftp-server\" ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDAex1EmjrC/chhr58KDRLWwLD4AtVLArdN82hMT6mhWQF5TqKidRheoEhzlkBQ/yTa2AMB9SY6TxlaHbYD0iJbUePHGAtGqiig7A52z+r+Q3+8Gm7LAEHbaXN80aEbnUA0Rr39zVUwM9LwGiVjKmSqL7Fbn2t+1qvj8g4yOF40dIYz/WXCUBLr/JRUFNDK02KScEYEe5b8eCNS+FoT2xhQuZKsC9z0zYuEhGffIVX9OT7IDO6tI+mXOsuukRMiEmb/ocSOmD4LrAMrhSWUvbh2FahaB166xLBCns+fX8/CwSGdyoQrquI5QiyvO/PsK9b2bn7OK72NFoNwZG3zQ/XWDFo+HF79KXQ5QngU7gTx9O5poghGMqtXz37sWJWI3l7EhYN83/CfnaytebJ8wfPcEnVyi1QAlG8S8yaw961uTzFPbQEyB+O9uI0+yPv9cN5W2cEGwDSSmdNi8bJpxkEh3eFno1yAm5GRq5aYboMhZ/VkRNCvgfrSNIpda/xLVF2Bu7umbS63YCDnWW8fUpZJEZ4BWXo4wBzO+kgPqHXxi6eTGdRxYBAIxH+cZ7eX/dd5s3fcXrHWpJKXxHMqiRXXun5SzMtC4jyHsrH2qX/hWtwVsJl1I4Mk5cbmjJ3S45hAU+d5h0lLT65zi6kXnYlsyZkHBVgHvetfOwRyz2ceKQ== ce:84:83:be:0c:ab:55:67:74:84:17:6d:e3:a9:e3:92 GalaxyS5_sftp.id_rsa" ];
+
   services.aur-buildbot-worker = {
     enable = true;
     workerPassFile = secrets.getSecret secrets.HP-Z420.aurBuildbot.password;
