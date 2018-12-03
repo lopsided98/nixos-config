@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, secrets, ... }:
 
 {
   imports = [
@@ -51,13 +51,27 @@
     };
   };
 
+  # Enable wifi firmware
+  hardware.firmware = [ pkgs.firmwareLinuxNonfree ];
+
+  networking.wireless = {
+    enable = true;
+    interfaces = [ "wlan0" ];
+  };
+
   systemd.network = {
     enable = true;
     networks.eth0 = {
-      name = "eth0";
       DHCP = "v4";
-      #dhcpConfig.UseDNS = false;
-      #dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      dhcpConfig.UseDNS = false;
+      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      linkConfig.RequiredForOnline = false;
+    };
+
+    networks.wlan0 = {
+      DHCP = "v4";
+      dhcpConfig.UseDNS = false;
+      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
     };
   };
   networking.hostName = "KittyCop"; # Define your hostname.
@@ -67,13 +81,13 @@
   # Set SSH port
   services.openssh.ports = [4247];
 
-  /*services.avahi = {
+  services.avahi = {
     enable = true;
     publish = {
       enable = true;
       addresses = true;
     };
-  };*/
+  };
 
   modules.doorman = {
     enable = true;
@@ -86,4 +100,8 @@
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
+
+  environment.secrets = secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
+    target = "wpa_supplicant.conf";
+  };
 }
