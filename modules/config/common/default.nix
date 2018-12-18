@@ -86,8 +86,8 @@
     binaryCaches = let
       isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
     in [ https://cache.nixos.org/ ] ++
-      lib.optional (!isHydra) https://hydra.benwolsieffer.com ++
-      lib.optional (isHydra || pkgs.stdenv.hostPlatform.isAarch32) http://nixos-arm.dezgeg.me/channel;
+      lib.optional (!isHydra) https://hydra.benwolsieffer.com /*++
+      lib.optional (isHydra || pkgs.stdenv.hostPlatform.isAarch32) http://nixos-arm.dezgeg.me/channel*/; # Lots of timeouts make it almost unusable
     binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
     
     nixPath = let 
