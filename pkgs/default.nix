@@ -1,15 +1,15 @@
 self: super: with super.lib; let
-  pkgsArmv6lLinuxCross = super.forceCross {
+  pkgsArmv6lLinuxCross = self.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.raspberryPi;
 
-  pkgsArmv7lLinuxCross = super.forceCross {
+  pkgsArmv7lLinuxCross = self.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.armv7l-hf-multiplatform;
 
-  pkgsAarch64LinuxCross = super.forceCross {
+  pkgsAarch64LinuxCross = self.forceCross {
     system = "x86_64-linux";
     platform = systems.platforms.pc64;
   } systems.examples.aarch64-multiplatform;
@@ -54,32 +54,35 @@ self: super: with super.lib; let
 
 in {
 
-  pkgsArmv7lLinux = super.customSystem { system = "armv7l-linux"; };
+  pkgsArmv7lLinux = self.customSystem { system = "armv7l-linux"; };
 
-  crossPackages = if super.stdenv.hostPlatform.system == "armv6l-linux" then pkgsArmv6lLinuxCross
-                  else if super.stdenv.hostPlatform.system == "armv7l-linux" then pkgsArmv7lLinuxCross
-                  else if super.stdenv.hostPlatform.system == "aarch64-linux" then pkgsAarch64LinuxCross
-                  else super;
+  crossPackages = if self.stdenv.hostPlatform.system == "armv6l-linux" then pkgsArmv6lLinuxCross
+                  else if self.stdenv.hostPlatform.system == "armv7l-linux" then pkgsArmv7lLinuxCross
+                  else if self.stdenv.hostPlatform.system == "aarch64-linux" then pkgsAarch64LinuxCross
+                  else self;
 
-  dnsupdate = super.callPackage ./dnsupdate/default.nix {
+  dnsupdate = self.callPackage ./dnsupdate/default.nix {
     inherit (self.python3Packages) buildPythonApplication requests pyyaml beautifulsoup4 netifaces;
   };
 
-  aur-buildbot = super.callPackage ./aur-buildbot/default.nix {};
+  aur-buildbot = self.callPackage ./aur-buildbot/default.nix {};
 
-  hacker-hats = super.callPackage ./hacker-hats/default.nix {};
+  hacker-hats = self.callPackage ./hacker-hats/default.nix {};
 
-  tinyssh = super.callPackage ./tinyssh/default.nix {};
+  tinyssh = self.callPackage ./tinyssh/default.nix {};
 
-  tinyssh-convert = super.callPackage ./tinyssh-convert/default.nix {};
+  tinyssh-convert = self.callPackage ./tinyssh-convert/default.nix {};
 
-  libcreate = super.callPackage ./libcreate {};
+  libcreate = self.callPackage ./libcreate {};
 
-  audioRecorder = self.python3Packages.callPackage ./audio-recorder {};
+  audio-recorder = {
+    audio-server = self.callPackage ./audio-recorder/audio-server.nix {};
+    web-interface = self.python3Packages.callPackage ./audio-recorder/web-interface.nix {};
+  };
 
   kittyCam = self.python3Packages.callPackage ./kitty-cam {};
 
-  sanoid = super.callPackage ./sanoid/default.nix {
+  sanoid = self.callPackage ./sanoid/default.nix {
     inherit (self.perlPackages) ConfigIniFiles;
   };
 
@@ -122,7 +125,7 @@ in {
     enableLibpulseaudio = false;
   };
 
-  linux_rock64_mainline = super.callPackage ./linux-rock64-mainline {
+  linux_rock64_mainline = self.callPackage ./linux-rock64-mainline {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
@@ -131,5 +134,9 @@ in {
         self.kernelPatches.modinst_arg_list_too_long
       ];
   };
-  linuxPackages_rock64_mainline = super.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
+  linuxPackages_rock64_mainline = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
+
+  # No need for kernelPatches because we are overriding an existing kernel
+  linux_rpi_4_19 = self.callPackage ./linux-rpi-4.19 { };
+  linuxPackages_rpi_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_4_19);
 }

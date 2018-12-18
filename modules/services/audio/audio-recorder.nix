@@ -34,6 +34,12 @@ in {
       default = [ "" ];
       description = "Addresses of devices to display in the web interface";
     };
+    
+    clockMaster = mkOption {
+      type = types.bool;
+      default = false;
+      description = "If true, this device serves time to the others";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -46,22 +52,22 @@ in {
       groups.audio-recorder = {};
     };
 
-    systemd.services.audio-server = let
-      pyEnv = pkgs.python3.withPackages(ps: [ pkgs.audioRecorder ]);
-    in {
+    systemd.services.audio-server = {
+      path = [ "/run/wrappers" pkgs.systemd ];
       environment = {
-        PYTHONPATH="${pyEnv}/${pkgs.python3.sitePackages}/";
-        AUDIO_SERVER_SETTINGS = pkgs.writeText "audio-server-settings.yaml" ''
-          audio_dir: "/var/lib/${cfg.audioDir}"
-          card_index: ${builtins.toString cfg.cardIndex}
-          control: "${cfg.control}"
-        '';
+        RUST_LOG = "debug";
+        AUDIO_SERVER_SETTINGS = pkgs.writeText "audio-server-settings.yaml" (builtins.toJSON {
+          systemd_logging = true;
+          audio_dir = "/var/lib/${cfg.audioDir}";
+          control = cfg.control;
+          clock_master = cfg.clockMaster;
+        });
       };
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         User = "audio-server";
         Group = "audio-recorder";
-        ExecStart = "${pkgs.python3.interpreter} -m audio_server.server";
+        ExecStart = "${pkgs.audio-recorder.audio-server}/bin/audio_server";
         AmbientCapabilities = "CAP_SYS_TIME";
         StateDirectory = cfg.audioDir;
         StateDirectoryMode = "0770";
@@ -73,6 +79,10 @@ in {
       extraConfig = with pkgs; ''
         Defaults:nginx secure_path="${systemd}/bin"
         nginx ALL=(root) NOPASSWD: ${systemd}/bin/poweroff
+        
+        Defaults:audio-server secure_path="${systemd}/bin:${chrony}/bin"
+        audio-server ALL=(root) NOPASSWD: ${systemd}/bin/systemctl start chronyd
+        audio-server ALL=(chrony) NOPASSWD: ${chrony}/bin/chronyc *
       '';
     };
 
@@ -83,17 +93,17 @@ in {
       plugins = [ "python3" ];
       type = "emperor";
       vassals.audio-recorder = {
-        pythonPackages = self: with self; [ pkgs.audioRecorder ];
+        pythonPackages = self: with self; [ pkgs.audio-recorder.web-interface ];
         env = {
           PATH = "/run/wrappers/bin";
           AUDIO_RECORDER_SETTINGS = pkgs.writeText "audio-recorder-settings.py" ''
             DEVICES=[${concatMapStrings (d: "\"${escape ["\""] d}\",") cfg.devices}]
           '';
-          PYTHONPATH = pkgs.python3.withPackages(ps: [ pkgs.audioRecorder ]);
+          PYTHONPATH = pkgs.python3.withPackages(ps: [ pkgs.audio-recorder.web-interface ]);
         };
         extraConfig = {
           socket = uwsgiSocket;
-          module = "web_interface";
+          module = "audio_recorder.web_interface";
           callable = "app";
           processes = 2;
           threads = 4;
@@ -123,13 +133,12 @@ in {
           };
 
           "/static/" = {
-            root = "${pkgs.audioRecorder}/${pkgs.python3.sitePackages}/web_interface";
+            root = "${pkgs.audio-recorder.web-interface}/${pkgs.python3.sitePackages}/audio_recorder/web_interface";
+            extraConfig = ''
+              expires 300;
+            '';
           };
         };
-
-        extraConfig = ''
-          expires 300;
-        '';
       };
     };
   };

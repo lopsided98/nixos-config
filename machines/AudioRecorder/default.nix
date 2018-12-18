@@ -32,6 +32,8 @@ in {
         # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
         # when attempting to show low-voltage or overtemperature warnings.
         avoid_warnings=1
+        kernel=kernel.img
+        initramfs initrd followkernel
         ${extraFirmwareConfig}
       '';
 
@@ -56,7 +58,11 @@ in {
         firmwareConfig = extraFirmwareConfig;
       };
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi_4_19;
+    kernelPatches = [ {
+      name = "i2c-output-source-selection";
+      patch = ./0001-ASoC-sgtl5000-add-I2S-output-source-selection.patch;
+    } ];
   };
 
   nixpkgs.config.platform = lib.systems.platforms.raspberrypi;
@@ -147,6 +153,31 @@ in {
       enable = true;
       addresses = true;
     };
+    nssmdns = true;
+  };
+  
+  # Time synchronization
+  services.chrony = {
+    enable = true;
+    servers = optional (!ap) "audiorecorder1.local";
+    initstepslew = {
+      enabled = !ap;
+      threshold = 0.1;
+      servers = config.services.chrony.servers;
+    };
+    extraConfig = optionalString ap ''
+      local stratum 8
+      manual
+      allow all
+      # Always allow time to be stepped (using settime)
+      makestep 1 -1
+      # Don't allow any frequency offset (this clock is authoritative)
+      maxdrift 0
+    '';
+  };
+  # Don't start on boot except for master
+  systemd.services.chronyd = optionalAttrs (!ap) {
+    wantedBy = mkForce [];
   };
 
   # Audio recording service
@@ -159,6 +190,7 @@ in {
       "AudioRecorder3"
       "AudioRecorder4"
     ];
+    clockMaster = ap;
   };
 
   # Samba file sharing
@@ -181,6 +213,19 @@ in {
       disable spoolss = yes
     '';
   };
+  
+  # Disable HDMI
+  systemd.services.disable-hdmi = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.raspberrypi-tools}/bin/tvservice -o";
+      ExecStop = "${pkgs.raspberrypi-tools}/bin/tvservice -p";
+    };
+
+    description = "Disable HDMI port";
+  };
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
@@ -190,10 +235,10 @@ in {
       34876 # Allow access to audio server for debugging
       139 445 # SMB
     ];
-    allowedUDPPorts = mkIf ap [
+    allowedUDPPorts = mkIf ap ([
       67 # DHCP server
       137 128 # NetBIOS
-    ];
+    ] ++ optional ap 123); # NTP
   };
 
   environment.secrets = mkMerge [
