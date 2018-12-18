@@ -2,14 +2,14 @@
 
 linux_rpi.override (old: args // {
   buildLinux = a: buildLinux (a // rec {
-    version = "${modDirVersion}-20181204";
-    modDirVersion = "4.19.7";
+    version = "${modDirVersion}";
+    modDirVersion = "4.19.10";
 
     src = fetchFromGitHub {
       owner = "raspberrypi";
       repo = "linux";
-      rev = "172a80a6804086350ee594765d43047a69f4755f";
-      sha256 = "06axrwcgmyhd2j1grvlmri7nqqnirqs6dsl6yarb46114r6kc7gf";
+      rev = "9a2e2d98ae5154ecef23aac28ca4d3165ac002ee";
+      sha256 = "1fx24phag7nhpyqrhha7kzg1kjv6jr22gcsizh7jxh06kd9vnpn7";
     };
   });
 })
