@@ -59,7 +59,11 @@ in {
         AUDIO_SERVER_SETTINGS = pkgs.writeText "audio-server-settings.yaml" (builtins.toJSON {
           systemd_logging = true;
           audio_dir = "/var/lib/${cfg.audioDir}";
-          control = cfg.control;
+          mixer_control = cfg.control;
+          mixer_enums = [ {
+            control = "Capture Mux";
+            value = "LINE_IN";
+          } ];
           clock_master = cfg.clockMaster;
         });
       };
