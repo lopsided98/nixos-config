@@ -4,13 +4,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "sanoid-09-03-2018";
+  pname = "sanoid";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
-    owner = "lopsided98";
-    repo = "sanoid";
-    rev = "5dcef011ff39f6076e199133ae4d960ea426a16e";
-    sha256 = "17j24jywa4kvsiffb9vqy1y1r365x6ikb0f4sf74bfijw56662vc";
+    owner = "jimsalterjrs";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "142s74srx7ayyrkm8c31lp81zwwjwj4z14xmvylc6qfk3vih9rwy";
   };
 
   nativeBuildInputs = [ makeWrapper ];
