@@ -21,7 +21,7 @@ in {
       generic-extlinux-compatible.enable = true;
     };
     kernelParams = [ "earlycon=uart8250,mmio32,0xff130000 coherent_pool=1M ethaddr=\${ethaddr} eth1addr=\${eth1addr} serial=\${serial#}" ];
-    kernelPackages = lib.mkForce pkgs.linuxPackages_rock64_mainline;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_mainline;
   };
 
   # Workaround checksumming bug
