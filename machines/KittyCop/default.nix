@@ -65,6 +65,7 @@
       DHCP = "v4";
       dhcpConfig.UseDNS = false;
       dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      networkConfig.MulticastDNS = "yes";
       linkConfig.RequiredForOnline = false;
     };
 
@@ -72,6 +73,7 @@
       DHCP = "v4";
       dhcpConfig.UseDNS = false;
       dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      networkConfig.MulticastDNS = "yes";
     };
   };
   networking.hostName = "KittyCop"; # Define your hostname.
@@ -81,13 +83,9 @@
   # Set SSH port
   services.openssh.ports = [4247];
 
-  services.avahi = {
-    enable = true;
-    publish = {
-      enable = true;
-      addresses = true;
-    };
-  };
+  services.resolved.extraConfig = ''
+    MulticastDNS=true
+  '';
 
   modules.doorman = {
     enable = true;
@@ -100,6 +98,10 @@
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
+
+  networking.firewall.allowedUDPPorts = [
+    5353 # mDNS
+  ];
 
   environment.secrets = secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
     target = "wpa_supplicant.conf";
