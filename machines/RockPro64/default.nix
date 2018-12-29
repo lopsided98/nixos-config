@@ -30,7 +30,7 @@ in {
 
   systemd.network = {
     enable = true;
-    networks."${interface}" = {
+    networks."30-${interface}" = {
       name = interface;
       # DHCP=v4
       address = [ "192.168.1.7/24" ];

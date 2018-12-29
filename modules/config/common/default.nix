@@ -63,8 +63,14 @@
     };
     "Rock64" = machine {
       systems = [ "aarch64-linux" ];
-      maxJobs = 4;
+      maxJobs = 2;
       speedFactor = 2;
+      supportedFeatures = [ ];
+    };
+    "RockPro64" = machine {
+      systems = [ "aarch64-linux" ];
+      maxJobs = 6;
+      speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
     };
   };
@@ -149,6 +155,11 @@
         name = "Rock64";
         port = 4246;
         hostName = "rock64.benwolsieffer.com";
+      }) +
+      (host {
+        name = "RockPro64";
+        port = 4247;
+        hostName = "rockpro64.benwolsieffer.com";
       });
 
     knownHosts = [
@@ -168,13 +179,18 @@
         hostNames = [ "rock64.benwolsieffer.com" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC0Z7O2FoK57gx5H/AvojXVXuO6OWJhN9HUAhKTJYMSS";
       }
+      {
+        hostNames = [ "rockpro64.benwolsieffer.com" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
+      }
     ];
   };
 
   networking = {
     firewall.enable = true;
-    # Disable NixOS standard network configuration because I use systemd-networkd
+    # I configure my networks directly using networkd
     useDHCP = false;
+    useNetworkd = true;
     # Enable systemd predictable network names
     usePredictableInterfaceNames = true;
 

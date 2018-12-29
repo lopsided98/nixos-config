@@ -26,7 +26,7 @@ in {
 
   systemd.network = {
     enable = true;
-    networks."${interface}" = {
+    networks."30-${interface}" = {
       name = interface;
       address = [ "192.168.1.3/24" ];
       gateway = [ "192.168.1.1" ];

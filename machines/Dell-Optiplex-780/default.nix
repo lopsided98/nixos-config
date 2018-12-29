@@ -53,7 +53,7 @@ in rec {
 
   systemd.network = {
     enable = true;
-    networks."${interface}" = {
+    networks."30-${interface}" = {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];

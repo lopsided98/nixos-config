@@ -40,7 +40,7 @@
   systemd.network = {
     enable = true;
     networks = {
-      "50-eth0" = {
+      "30-eth0" = {
         name = "eth0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
@@ -51,7 +51,7 @@
           UseDNS=no
         '';
       };
-      "50-wlan0" = {
+      "30-wlan0" = {
         name = "wlan0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;

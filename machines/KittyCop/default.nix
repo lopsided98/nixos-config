@@ -61,7 +61,7 @@
 
   systemd.network = {
     enable = true;
-    networks.eth0 = {
+    networks."30-eth0" = {
       DHCP = "v4";
       dhcpConfig.UseDNS = false;
       dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
@@ -69,7 +69,7 @@
       linkConfig.RequiredForOnline = false;
     };
 
-    networks.wlan0 = {
+    networks."30-wlan0" = {
       DHCP = "v4";
       dhcpConfig.UseDNS = false;
       dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
