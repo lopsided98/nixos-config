@@ -16,7 +16,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        25         ; Serial
+                        26         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -61,7 +61,11 @@
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "rock64"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7829:84e0:c0ff:feea:faa9"; }
-    
+
+    # RockPro64
+    { name = "rockpro64"; class = "IN"; type = "A"; data = externalIPv4; }
+    { name = "rockpro64"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7829:b05e:efff:fe50:6aff"; }
+
     # KittyCop
     #{ name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.103"; }
     #{ name = "doorman"; class = "IN"; type = "CNAME"; data = "kittycop"; }
@@ -74,6 +78,7 @@
     { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = "192.168.1.4"; }
     { name = "hp-z420"; class = "IN"; type = "A"; data = "192.168.1.5"; }
     { name = "rock64"; class = "IN"; type = "A"; data = "192.168.1.6"; }
+    { name = "rockpro64"; class = "IN"; type = "A"; data = "192.168.1.7"; }
 
     { name = "influxdb"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "grafana"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
