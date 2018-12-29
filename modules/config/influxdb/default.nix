@@ -15,6 +15,8 @@ in {
         unix-socket-enabled = true;
         bind-socket = socket;
       };
+      # Disable collectd because I don't use it and it does not currently build
+      collectd = [];
     };
   };
 
