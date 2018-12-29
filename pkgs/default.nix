@@ -137,6 +137,6 @@ in {
   linuxPackages_rock64_mainline = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
 
   # No need for kernelPatches because we are overriding an existing kernel
-  linux_rpi_4_19 = self.callPackage ./linux-rpi-4.19 { };
-  linuxPackages_rpi_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_4_19);
+  linux_rpi_4_20 = self.callPackage ./linux-rpi-4.20 { };
+  linuxPackages_rpi_4_20 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_4_20);
 }
