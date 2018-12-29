@@ -3,7 +3,7 @@
   ({
     # Use a supported kernel version
     # Lower priority than mkForce to allow devices to use custom kernels
-    # boot.kernelPackages = mkOverride 75 pkgs.linuxPackages;
+    boot.kernelPackages = mkOverride 75 pkgs.linuxPackages_4_19;
   })
   (mkIf config.virtualisation.docker.enable {
     virtualisation.docker.storageDriver = "zfs";
