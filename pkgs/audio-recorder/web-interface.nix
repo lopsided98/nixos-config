@@ -8,7 +8,7 @@ buildPythonPackage rec {
   src = fetchurlBoot {
     name = "audio_recorder-${version}.tar.gz";
     url = "https://hydra.benwolsieffer.com/job/audio-recorder/release/web-interface.tarball/latest/download-by-type/file/source-dist";
-    sha256 = "55f82fbec3d19aa1b119f74c50847c005adef4f0db760e3387979957d3b05fa3";
+    sha256 = "fa3c45084ea7ca150953bcd83589919fc487d987f6d8643855fdf2d8e18181f8";
   };
 
   nativeBuildInputs = [

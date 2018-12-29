@@ -58,11 +58,11 @@ in {
         firmwareConfig = extraFirmwareConfig;
       };
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi_4_19;
-    kernelPatches = [ {
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
+    /*kernelPatches = [ {
       name = "i2c-output-source-selection";
       patch = ./0001-ASoC-sgtl5000-add-I2S-output-source-selection.patch;
-    } ];
+    } ];*/
   };
 
   nixpkgs.config.platform = lib.systems.platforms.raspberrypi;
@@ -89,16 +89,26 @@ in {
       wpa_psk_file=${secrets.getSecret secrets.AudioRecorder.hostapd.wpaPsk}
     '';
   };
+  systemd.services.hostapd = mkIf ap {
+    wantedBy = [ "network.target" ];
+    before = [ "wpa_supplicant.service" ];
+    # Hack to wait before starting wpa_supplicant
+    serviceConfig.ExecStartPost = "${pkgs.coreutils}/bin/sleep 5";
+  };
 
   systemd.network = {
     enable = true;
     networks = {
       # Home network
-      wlan0 = {
+      "30-wlan0" = {
         name = "wlan0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
         dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+        networkConfig = {
+          LLMNR = "yes";
+          MulticastDNS = "yes";
+        };
         extraConfig = ''
           [IPv6AcceptRA]
           UseDNS=no
@@ -106,12 +116,14 @@ in {
       };
 
       # Access point
-      ap0 = {
+      "30-ap0" = {
         name = "ap0";
         address = [ "10.9.0.1/24" ];
         networkConfig = {
-          DHCPServer = "yes";
-          IPv6PrefixDelegation = "yes";
+          DHCPServer = true;
+          IPv6PrefixDelegation = true;
+          LLMNR = "yes";
+          MulticastDNS = "yes";
         };
         extraConfig = ''
           [DHCPServer]
@@ -147,15 +159,13 @@ in {
     { type = "ed25519"; path = secrets.getSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key; }
   ];
 
-  services.avahi = {
-    enable = true;
-    publish = {
-      enable = true;
-      addresses = true;
-    };
-    nssmdns = true;
+  services.resolved = {
+    llmnr = "true";
+    extraConfig = ''
+      MulticastDNS=true
+    '';
   };
-  
+
   # Time synchronization
   services.chrony = {
     enable = true;
@@ -213,7 +223,7 @@ in {
       disable spoolss = yes
     '';
   };
-  
+
   # Disable HDMI
   systemd.services.disable-hdmi = {
     wantedBy = [ "multi-user.target" ];
@@ -227,6 +237,31 @@ in {
     description = "Disable HDMI port";
   };
 
+  # Save/restore time
+  systemd.services.fake-hwclock = {
+    before = [ "sysinit.target" "shutdown.target" ];
+    after = [ "local-fs.target" ];
+    wantedBy = [ "sysinit.target" ];
+    conflicts = [ "shutdown.target" ];
+    unitConfig.DefaultDependencies = false;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      StateDirectory = "fake-hwclock";
+      ExecStart = pkgs.writeScript "fake-hwclock-start" ''
+        #!${pkgs.stdenv.shell}
+
+        if [ -e /var/lib/fake-hwclock/clock ]; then
+          ${pkgs.coreutils}/bin/date -s "$(cat /var/lib/fake-hwclock/clock)"
+        fi
+      '';
+      ExecStop = pkgs.writeScript "fake-hwclock-stop" ''
+        #!${pkgs.stdenv.shell}
+        ${pkgs.coreutils}/bin/date > /var/lib/fake-hwclock/clock
+      '';
+    };
+  };
+
   # Enable SD card TRIM
   services.fstrim.enable = true;
 
@@ -234,11 +269,16 @@ in {
     allowedTCPPorts = [
       34876 # Allow access to audio server for debugging
       139 445 # SMB
+      5355 # LLMNR
     ];
-    allowedUDPPorts = mkIf ap ([
-      67 # DHCP server
+    allowedUDPPorts = [
       137 128 # NetBIOS
-    ] ++ optional ap 123); # NTP
+      5353 # mDNS
+      5355 # LLMNR
+    ] ++ optionals ap [
+      67 # DHCP server
+      123 # NTP
+    ];
   };
 
   environment.secrets = mkMerge [
