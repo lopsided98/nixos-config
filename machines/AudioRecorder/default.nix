@@ -199,6 +199,10 @@ in {
       "AudioRecorder2"
       "AudioRecorder3"
       "AudioRecorder4"
+      "AudioRecorder5"
+      "AudioRecorder6"
+      "AudioRecorder7"
+      "AudioRecorder8"
     ];
     clockMaster = ap;
   };
