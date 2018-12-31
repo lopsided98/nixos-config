@@ -20,6 +20,11 @@
         sha256 = "70e39caef8c8efcce402252e8ca630a446b615feef7c65b8f80eb2fc9f8e9d3b";
       };
       extraRustcOpts = [ "--edition=2018" ];
+
+      postInstall = ''
+        # Results in a huge closure otherwise
+        rm -rf $out/lib
+      '';
     };
   };
 })
