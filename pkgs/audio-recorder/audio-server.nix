@@ -17,7 +17,7 @@
       src = fetchurlBoot {
         name = "audio_server-${oldAttrs.version}.tar.gz";
         url = "https://hydra.benwolsieffer.com/job/audio-recorder/release/audio-server.tarball/latest/download/1";
-        sha256 = "70e39caef8c8efcce402252e8ca630a446b615feef7c65b8f80eb2fc9f8e9d3b";
+        sha256 = "efbad246197eb7b86000e8a7d87f714553e5adde97da40ed75e1d2efd3061c0c";
       };
       extraRustcOpts = [ "--edition=2018" ];
 
