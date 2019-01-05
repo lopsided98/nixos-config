@@ -145,7 +145,7 @@ in {
       };
     };
 
-    systemd.network.networks.openvpn-client-home-network = {
+    systemd.network.networks."50-openvpn-client-home-network" = {
       name = cfg.interface;
       dhcpConfig.UseDNS = false;
       dns = cfg.dns;
