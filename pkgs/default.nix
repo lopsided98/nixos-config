@@ -125,16 +125,23 @@ in {
     enableLibpulseaudio = false;
   };
 
-  linux_rock64_mainline = self.callPackage ./linux-rock64-mainline {
+  linux_rock64_4_19 = self.callPackage ./linux-rock64-4.19 {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
-        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-        # when adding a new linux version
-        # self.kernelPatches.cpu-cgroup-v2."4.11"
         self.kernelPatches.modinst_arg_list_too_long
+        self.kernelPatches.revert-vfs-dont-open-real
       ];
   };
-  linuxPackages_rock64_mainline = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_mainline);
+  linuxPackages_rock64_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_19);
+
+  linux_rock64_4_20 = self.callPackage ./linux-rock64-4.20 {
+    kernelPatches =
+      [ self.kernelPatches.bridge_stp_helper
+        self.kernelPatches.modinst_arg_list_too_long
+        self.kernelPatches.revert-vfs-dont-open-real
+      ];
+  };
+  linuxPackages_rock64_4_20 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_20);
 
   # No need for kernelPatches because we are overriding an existing kernel
   linux_rpi_4_20 = self.callPackage ./linux-rpi-4.20 { };
