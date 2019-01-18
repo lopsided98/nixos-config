@@ -190,7 +190,8 @@
     firewall.enable = true;
     # I configure my networks directly using networkd
     useDHCP = false;
-    useNetworkd = true;
+    # Networkd backend is kind of broken right now
+    useNetworkd = false;
     # Enable systemd predictable network names
     usePredictableInterfaceNames = true;
 
