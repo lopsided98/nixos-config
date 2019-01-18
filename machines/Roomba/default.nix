@@ -17,16 +17,12 @@
         enable = true;
         version = 3;
         firmwareConfig = ''
-          dtoverlay=lirc-rpi,gpio_out_pin=22
+          dtoverlay=gpio-ir-tx,gpio_pin=22
         '';
       };
     };
     kernelParams = [ "cma=32M" ];
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
-    kernelPatches = [ {
-      patch = ./0001-staging-vchiq_arm-fix-msgbufcount-in-VCHIQ_IOC_AWAIT.patch;
-      name = "staging-vchiq_arm-fix-msgbufcount";
-    } ];
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi_4_20;
     # Fix dropped webcam frames
     extraModprobeConfig = ''
       options uvcvideo nodrop=1 timeout=1000
