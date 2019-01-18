@@ -2,15 +2,15 @@
 
 buildLinux (args // rec {
   name = "linux-rock64";
-  version = "4.20.0";
-  modDirVersion = "4.20.0";
+  version = "4.20.3";
+  modDirVersion = "4.20.3";
   extraMeta.branch = "4.20";
 
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "linux";
-    rev = "2d8bb5e84110cdcd69d835b55c79eec2cf4a8261";
-    sha256 = "11p5z0xyn8iz74whj1bg8y78n6z5k2n9l9hby2lgigiprag4wpm5";
+    rev = "164474d8571657ee7c744fbefab8fd4e48a1f073";
+    sha256 = "0n0bzjhskqgl195jn8605zcskczq462aw7l3grx1y5yp3f6az5in";
   };
 
 } // (args.argsOverride or {}))
