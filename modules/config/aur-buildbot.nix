@@ -91,6 +91,7 @@ in {
         python-sphinx-autobuild: {}
         qdriverstation: {}
         qdriverstation-git: {}
+        slapi-nis: {}
 
         # Other packages
         android-studio: {}
@@ -127,7 +128,6 @@ in {
         logisim: {}
         multipath-tools: {}
         nix: {}
-        pacaur: {}
         platformio: {}
         puddletag: {}
         pycharm-professional: {}
@@ -140,12 +140,27 @@ in {
         redeclipse: {}
         saleae-logic: {}
         sbupdate-git: {}
-        slapi-nis: {}
         solaar-git: {}
         vmware-horizon-client: {}
         webstorm: {}
         xca: {}
         zotero: {}
+
+        # ROS
+        ros-kinetic-robot: {}
+        ros-kinetic-urdf:
+          dependencies: [ros-kinetic-rostest]
+        ros-kinetic-gazebo-ros-pkgs: {}
+        ros-kinetic-gazebo-ros:
+          dependencies: [ignition-cmake, ignition-math, ogre-1.9]
+        ros-kinetic-gazebo-plugins:
+          dependencies: [ignition-cmake, ignition-math, ogre-1.9]
+        ros-kinetic-opencv3-native: {}
+        sdformat:
+          dependencies: [ignition-cmake]
+        ros-kinetic-geographic-msgs: {}
+        ros-kinetic-tf2-geometry-msgs: {}
+        ros-kinetic-rosbridge-server: {}
     '';
   };
 
