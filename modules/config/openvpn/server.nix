@@ -14,21 +14,21 @@
   # Bridge configuration for tap VPN
   systemd.network = {
     netdevs = {
-      br0.netdevConfig = {
+      "30-br0".netdevConfig = {
         Name = "br0";
         Kind = "bridge";
       };
-      vpn0.netdevConfig = {
+      "30-vpn0".netdevConfig = {
         Name = "vpn0";
         Kind = "tap";
       };
     };
     networks = {
-      eth0 = {
+      "30-eth0" = {
         name = "eth0";
         networkConfig.Bridge = "br0";
       };
-      vpn0 = {
+      "30-vpn0" = {
         name = "vpn0";
         networkConfig.Bridge = "br0";
       };
