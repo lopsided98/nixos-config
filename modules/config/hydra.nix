@@ -2,7 +2,7 @@
 
   services.hydra = {
     enable = true;
-    hydraURL = "http://hydra.benwolsieffer.com";
+    hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@benwolsieffer.com";
     #smtpHost = "smtp.gmail.com";
     #extraEnv = {
@@ -52,11 +52,23 @@
               proxy_cache hydra;
 
               add_header X-Cache $upstream_cache_status;
-
+            '';
+          };
+          # Nix is broken and won't pass authentication to these URLs
+          "= /nix-cache-info" = {
+            inherit proxyPass;
+            extraConfig = ''
+              satisfy any;
+              allow all;
+            '';
+          };
+          "/log/" = {
+            inherit proxyPass;
+            extraConfig = ''
               # Allow access from local network without password
               satisfy any;
               allow 192.168.1.0/24;
-              allow 2601:18a:0:7829::/64;
+              allow 2601:18a:0:7723::/64;
               deny all;
             '';
           };
