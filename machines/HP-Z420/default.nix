@@ -47,8 +47,8 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=:::::eth0:dhcp"
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ];
+    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
+    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ];
   };
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
