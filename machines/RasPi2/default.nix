@@ -21,6 +21,13 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
+    kernelPatches = [ {
+      name = "stm32-thermal-typo";
+      patch = pkgs.fetchpatch {
+        url = https://github.com/torvalds/linux/commit/5a78ad6d9c1b2c3c3226528346e9794ed3504381.patch;
+        sha256 = "1lwwpzpgh09hgnz43xxwz2zwnsg52vi01yvy8vgfzpwk8jm4nq8j";
+      };
+    } ];
   };
 
   systemd.network = {
@@ -57,6 +64,7 @@ in {
       "hp-z420.benwolsieffer.com"
       "dell-optiplex-780.benwolsieffer.com"
       "rock64.benwolsieffer.com"
+      "rockpro64.benwolsieffer.com"
     ];
 
     # The only metric used in the dashboard
