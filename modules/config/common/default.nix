@@ -130,11 +130,11 @@
           IdentityFile ${secrets.getSecret secrets.build.sshKey}
     '';
   in {
-    extraConfig = 
+    extraConfig =
       (host {
-        name = "HP-Z420";
-        port = 4245;
-        hostName = "hp-z420.benwolsieffer.com";
+        name = "RasPi2";
+        port = 4242;
+        hostName = "raspi2.benwolsieffer.com";
       }) +
       (host {
         name = "ODROID-XU4";
@@ -147,9 +147,9 @@
         hostName = "dell-optiplex-780.benwolsieffer.com";
       }) +
       (host {
-        name = "RasPi2";
-        port = 4242;
-        hostName = "raspi2.benwolsieffer.com";
+        name = "HP-Z420";
+        port = 4245;
+        hostName = "hp-z420.benwolsieffer.com";
       }) +
       (host {
         name = "Rock64";
@@ -164,23 +164,27 @@
 
     knownHosts = [
       {
-        hostNames = [ "hp-z420.benwolsieffer.com" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
+        hostNames = [ "[raspi2.benwolsieffer.com]:4242" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
       }
       {
-        hostNames = [ "odroid-xu4.benwolsieffer.com" ];
+        hostNames = [ "[odroid-xu4.benwolsieffer.com]:4243" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
       }
       {
-        hostNames = [ "dell-optiplex-780.benwolsieffer.com" ];
+        hostNames = [ "[dell-optiplex-780.benwolsieffer.com]:4244" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODxgNjFuareM/XZEo7ZZrGddVj2Bx6RfaOTK1/DyNBJ";
       }
       {
-        hostNames = [ "rock64.benwolsieffer.com" ];
+        hostNames = [ "[hp-z420.benwolsieffer.com]:4245" ];
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
+      }
+      {
+        hostNames = [ "[rock64.benwolsieffer.com]:4246" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC0Z7O2FoK57gx5H/AvojXVXuO6OWJhN9HUAhKTJYMSS";
       }
       {
-        hostNames = [ "rockpro64.benwolsieffer.com" ];
+        hostNames = [ "[rockpro64.benwolsieffer.com]:4247" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
       }
     ];
