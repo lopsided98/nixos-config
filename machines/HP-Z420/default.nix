@@ -134,9 +134,9 @@ in rec {
         useTemplate = [ "local" ];
       };
       "root/vm" = {
+        useTemplate = [ "local" ];
         recursive = true;
         processChildrenOnly = true;
-        useTemplate = [ "local" ];
       };
       # Each backup node takes its own snapshots of data
       "backup/data" = {

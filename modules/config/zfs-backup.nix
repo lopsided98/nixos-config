@@ -12,7 +12,6 @@
         monthly = 12;
         yearly = 0;
 
-        recursive = false;
         autosnap = true;
         autoprune = true;
       };
@@ -23,13 +22,8 @@
         monthly = 24;
         yearly = 10;
 
-        recursive = false;
         autosnap = false;
         autoprune = true;
-      };
-
-      default = {
-        minPercentFree = 20;
       };
     };
     extraArgs = "--verbose";
