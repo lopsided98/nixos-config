@@ -54,7 +54,7 @@ in {
           };
 
           "/static/" = {
-            root = "${pkgs.kittyCam}/${pkgs.python3.sitePackages}/kitty_cam";
+            root = "${pkgs.kitty-cam}/${pkgs.python3.sitePackages}/kitty_cam";
           };
 
           "/hls" = {
@@ -115,7 +115,7 @@ in {
       plugins = [ "python3" ];
       type = "emperor";
       vassals.kitty-cam = {
-        pythonPackages = self: with self; [ pkgs.kittyCam ];
+        pythonPackages = self: with self; [ pkgs.kitty-cam ];
         env = {
           KITTY_CAM_SETTINGS = pkgs.writeText "kitty-cam-settings.py" ''
           '';

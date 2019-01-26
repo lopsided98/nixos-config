@@ -80,7 +80,7 @@ in {
     web-interface = self.python3Packages.callPackage ./audio-recorder/web-interface.nix {};
   };
 
-  kittyCam = self.python3Packages.callPackage ./kitty-cam {};
+  kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
 
   sanoid = self.callPackage ./sanoid/default.nix {
     inherit (self.perlPackages) ConfigIniFiles;
