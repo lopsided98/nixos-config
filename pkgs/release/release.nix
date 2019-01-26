@@ -31,62 +31,35 @@ let
     };
   in pkgs.releaseTools.channel (args // { inherit src; });
 
-in {
-  inherit (pkgs)
-    dnsupdate
-    aur-buildbot
-    hacker-hats
-    tinyssh
-    tinyssh-convert
-    sanoid;
-
-  perlPackages = {
-    inherit (pkgs.perlPackages)
-      ConfigIniFiles;
-  };
-
-  linuxPackages_latest = {
-    inherit (pkgs.linuxPackages_latest)
-      tmon;
-  };
-
-  linuxPackages = {
-    inherit (pkgs.linuxPackages)
-      tmon;
-  };
-
-} // mapTestOn {
-
+in mapTestOn {
   # Fancy shortcut to generate one attribute per supported platform.
   dnsupdate = hostSystems;
-  aur-buildbot = hostSystems;
-  hacker-hats = hostSystems;
+  libcreate = hostSystems;
+  sanoid = hostSystems;
   tinyssh = hostSystems;
   tinyssh-convert = hostSystems;
-  sanoid = hostSystems;
-  libcreate = hostSystems;
-
-  perlPackages = {
-    ConfigIniFiles = hostSystems;
-  };
 
   python3Packages = {
-    pyalpm = hostSystems;
-    xcgf = hostSystems;
-    memoizedb = hostSystems;
-    xcpf = hostSystems;
     aur = hostSystems;
+    memoizedb = hostSystems;
+    pyalpm = hostSystems;
     pyalsaaudio = hostSystems;
+    upnpclient = hostSystems;
+    xcgf = hostSystems;
+    xcpf = hostSystems;
   };
-
-  linuxPackages_latest = {
-    tmon = hostSystems;
-  };
-
-  linuxPackages = {
-    tmon = hostSystems;
-  };
-
+  
+  linuxPackages_latest.tmon = hostSystems;
+  linuxPackages.tmon = hostSystems;
+} // lib.optionalAttrs (lib.elem "armv7l-linux" hostSystems) {
+  inherit (pkgs.pkgsCross.armv7l-hf-multiplatform)
+    ubootRaspberryPi2
+    ubootOdroidXU3;
+} // lib.optionalAttrs (lib.elem "aarch64-linux" hostSystems) {
+  inherit (pkgs.pkgsCross.aarch64-multiplatform)
+    ubootRaspberryPi3_64bit
+    ubootRock64
+    ubootRockPro64;
 } // {
   machines = lib.mapAttrs (name: c: {
     channel = channelWithNixpkgs {
