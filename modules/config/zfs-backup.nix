@@ -8,9 +8,9 @@
     templates = {
       local = {
         hourly = 48;
-        daily = 60;
-        monthly = 12;
-        yearly = 0;
+        daily = 10;
+        monthly = 1;
+        yearly = 1;
 
         autosnap = true;
         autoprune = true;

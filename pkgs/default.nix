@@ -86,10 +86,19 @@ in {
     inherit (self.perlPackages) ConfigIniFiles;
   };
 
+  hydra = (super.hydra.override {
+    # Darcs is currently broken
+    darcs = self.writeShellScriptBin "darcs" ''
+      echo "Darcs is not supported"
+      exit 1
+    '';
+  }).overrideAttrs (attrs: {
+    doCheck = false; # Tries to check darcs
+  });
+
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
 
-  perl526Packages = perlOverridesFor super.perl526Packages;
   perl528Packages = perlOverridesFor super.perl528Packages;
   perldevelPackages = perlOverridesFor super.perldevelPackages;
 
