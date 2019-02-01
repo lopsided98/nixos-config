@@ -2,8 +2,8 @@
 
 buildLinux (args // rec {
   name = "linux-rock64";
-  version = "4.20.5";
-  modDirVersion = "4.20.5";
+  version = "4.20.6";
+  modDirVersion = "4.20.6";
   extraMeta.branch = "4.20";
 
   src = fetchFromGitHub {
