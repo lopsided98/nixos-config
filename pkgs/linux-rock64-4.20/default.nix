@@ -9,8 +9,8 @@ buildLinux (args // rec {
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "linux";
-    rev = "05ff2fe76d4ebab6d27fe4a2ef7a8d1b52a9d795";
-    sha256 = "0nqpw42jy7nj8v7k71gf27z1g3a0gql109s8ib1m56ancmg8si60";
+    rev = "6ced941cdac284d3396c1c5d70c2b79b70fa9f3a";
+    sha256 = "0hcbghkcadx3xjhcv8z54ppacdix82h1rqn448mvidjniwm250nl";
   };
 
 } // (args.argsOverride or {}))
