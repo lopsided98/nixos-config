@@ -155,12 +155,15 @@ in {
           dependencies: [ignition-cmake, ignition-math, ogre-1.9]
         ros-kinetic-gazebo-plugins:
           dependencies: [ignition-cmake, ignition-math, ogre-1.9]
+        ros-kinetic-hector-gazebo-plugins:
+          dependencies: [ignition-cmake, ignition-math, ogre-1.9]
         ros-kinetic-opencv3-native: {}
         sdformat:
           dependencies: [ignition-cmake]
         ros-kinetic-geographic-msgs: {}
         ros-kinetic-tf2-geometry-msgs: {}
         ros-kinetic-rosbridge-server: {}
+        ros-kinetic-geodesy: {}
     '';
   };
 
