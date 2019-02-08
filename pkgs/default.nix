@@ -86,16 +86,6 @@ in {
     inherit (self.perlPackages) ConfigIniFiles;
   };
 
-  hydra = (super.hydra.override {
-    # Darcs is currently broken
-    darcs = self.writeShellScriptBin "darcs" ''
-      echo "Darcs is not supported"
-      exit 1
-    '';
-  }).overrideAttrs (attrs: {
-    doCheck = false; # Tries to check darcs
-  });
-
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
 
@@ -138,7 +128,6 @@ in {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         self.kernelPatches.modinst_arg_list_too_long
-        self.kernelPatches.revert-vfs-dont-open-real
       ];
   };
   linuxPackages_rock64_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_19);
@@ -147,7 +136,6 @@ in {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         self.kernelPatches.modinst_arg_list_too_long
-        self.kernelPatches.revert-vfs-dont-open-real
       ];
   };
   linuxPackages_rock64_4_20 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_20);
