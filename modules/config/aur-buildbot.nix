@@ -102,7 +102,6 @@ in {
         binfmt-qemu-static: {}
         bumblebee-git: {}
         chrome-gnome-shell-git: {}
-        chromium-vaapi: {}
         clion: {}
         cutecom: {}
         dex2jar: {}
@@ -164,6 +163,10 @@ in {
         ros-kinetic-tf2-geometry-msgs: {}
         ros-kinetic-rosbridge-server: {}
         ros-kinetic-geodesy: {}
+        ros-kinetic-qt-gui-cpp:
+          dependencies: [python2-sip, sip]
+        ros-kinetic-rqt-plot: {}
+        ros-kinetic-rqt-multiplot: {}
     '';
   };
 
