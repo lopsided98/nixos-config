@@ -105,12 +105,12 @@ in {
     libpulseaudio = null; # Pulseaudio input support
   };
 
-  gst_all_1 = super.gst_all_1.extend (gstSelf: gstSuper: {
-    gst-plugins-bad = gstSuper.gst-plugins-bad.overrideAttrs (old: rec {
+  gst_all_1 = super.gst_all_1 // {
+    /*gst-plugins-bad = super.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
       buildInputs = old.buildInputs ++ [ self.rtmpdump ];
-    });
-    gst-omx = gstSelf.callPackage ./gst-omx { };
-  });
+    });*/
+    gst-omx = super.gst_all_1.callPackage ./gst-omx { };
+  };
 
   orc = super.orc.overrideAttrs (old: {
     doCheck = old.doCheck && !super.stdenv.hostPlatform.isAarch32;
@@ -132,13 +132,13 @@ in {
   };
   linuxPackages_rock64_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_19);
 
-  linux_rock64_4_20 = self.callPackage ./linux-rock64-4.20 {
+  linux_rock64_5_0 = self.callPackage ./linux-rock64-5.0 {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         self.kernelPatches.modinst_arg_list_too_long
       ];
   };
-  linuxPackages_rock64_4_20 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_20);
+  linuxPackages_rock64_5_0 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_0);
 
   # No need for kernelPatches because we are overriding an existing kernel
   linux_rpi_4_20 = self.callPackage ./linux-rpi-4.20 { };
