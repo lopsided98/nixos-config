@@ -19,7 +19,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_4_20;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_0;
   };
 
   # Workaround checksumming bug
@@ -34,7 +34,7 @@ in {
       # DHCP=v4
       address = [ "192.168.1.7/24" ];
       gateway = [ "192.168.1.1" ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no

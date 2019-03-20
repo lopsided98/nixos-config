@@ -40,7 +40,7 @@
         name = "eth0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+        dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
         linkConfig.RequiredForOnline = false;
         extraConfig = ''
           [IPv6AcceptRA]
@@ -51,7 +51,7 @@
         name = "wlan0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+        dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
         extraConfig = ''
           [IPv6AcceptRA]
           UseDNS=no

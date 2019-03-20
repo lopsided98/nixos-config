@@ -36,7 +36,7 @@ in {
       # DHCP=v4
       address = [ "192.168.1.6/24" ];
       gateway = [ "192.168.1.1" ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no
