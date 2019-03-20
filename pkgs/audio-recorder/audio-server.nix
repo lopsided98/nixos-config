@@ -17,9 +17,8 @@
       src = stdenv.fetchurlBoot {
         name = "audio_server-${oldAttrs.version}.tar.gz";
         url = "https://hydra.benwolsieffer.com/job/audio-recorder/release/audio-server.tarball/latest/download/1";
-        sha256 = "efbad246197eb7b86000e8a7d87f714553e5adde97da40ed75e1d2efd3061c0c";
+        sha256 = "930f2d7f64e5a60932bed51a22c3f59762508d1cd0df393b43e5bae9dbf0ec75";
       };
-      extraRustcOpts = [ "--edition=2018" ];
 
       postInstall = ''
         # Results in a huge closure otherwise

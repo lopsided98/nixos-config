@@ -1,4 +1,5 @@
-{ stdenv, buildPythonPackage, grpcio-tools, flask, flask-cors, grpcio, pyyaml, numpy, pyalsaaudio, pyserial }:
+{ stdenv, buildPythonPackage, grpcio-tools, flask, flask-cors, grpcio, pyyaml
+, numpy, pyalsaaudio, pyserial }:
   
 buildPythonPackage rec {
   pname = "audio_recorder";
@@ -8,7 +9,7 @@ buildPythonPackage rec {
   src = stdenv.fetchurlBoot {
     name = "audio_recorder-${version}.tar.gz";
     url = "https://hydra.benwolsieffer.com/job/audio-recorder/release/web-interface.tarball/latest/download-by-type/file/source-dist";
-    sha256 = "92d9dd9cf08b5a3982079d50a385a961c5bbe48dd009ad8d2214ad3f307394f6";
+    sha256 = "65d53974efe9f848d9fb7268ca169471d990390336cb8831c30c428282f88e38";
   };
 
   nativeBuildInputs = [
