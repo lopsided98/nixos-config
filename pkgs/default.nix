@@ -109,7 +109,9 @@ in {
     /*gst-plugins-bad = super.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
       buildInputs = old.buildInputs ++ [ self.rtmpdump ];
     });*/
-    gst-omx = super.gst_all_1.callPackage ./gst-omx { };
+    gst-omx = self.callPackage ./gst-omx {
+      inherit (self.gst_all_1) gst-plugins-base;
+    };
   };
 
   orc = super.orc.overrideAttrs (old: {
@@ -141,6 +143,6 @@ in {
   linuxPackages_rock64_5_0 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_0);
 
   # No need for kernelPatches because we are overriding an existing kernel
-  linux_rpi_4_20 = self.callPackage ./linux-rpi-4.20 { };
-  linuxPackages_rpi_4_20 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_4_20);
+  linux_rpi_5_0 = self.callPackage ./linux-rpi-5.0 { };
+  linuxPackages_rpi_5_0 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_5_0);
 }
