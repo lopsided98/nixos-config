@@ -1,4 +1,4 @@
-{ localpkgs ? ../..,
+{ localpkgs ? ../.,
   nixpkgs ? <nixpkgs>,
   buildSystems ? [ "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ],
   hostSystems ? [ "x86_64-linux" ] }:
