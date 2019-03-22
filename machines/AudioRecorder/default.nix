@@ -65,7 +65,18 @@ in {
     } ];*/
   };
 
-  nixpkgs.config.platform = lib.systems.platforms.raspberrypi;
+  nixpkgs.config = {
+    platform = lib.systems.platforms.raspberrypi;
+    packageOverrides = super: {
+      avahi = super.avahi.overrideDerivation ({
+        patches ? [], ...
+      }: {
+        # Prevent avahi from ever detecting mDNS conflicts. This works around
+        # https://github.com/lathiat/avahi/issues/117
+        patches = patches ++ [ ./avahi-disable-conflicts.patch ];
+      });
+    };
+  };
 
   # Enable wifi firmware
   hardware.enableRedistributableFirmware = true;
@@ -107,7 +118,6 @@ in {
         dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
         networkConfig = {
           LLMNR = "yes";
-          MulticastDNS = "yes";
         };
         extraConfig = ''
           [IPv6AcceptRA]
@@ -123,7 +133,6 @@ in {
           DHCPServer = true;
           IPv6PrefixDelegation = true;
           LLMNR = "yes";
-          MulticastDNS = "yes";
         };
         extraConfig = ''
           [DHCPServer]
@@ -159,11 +168,16 @@ in {
     { type = "ed25519"; path = secrets.getSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key; }
   ];
 
-  services.resolved = {
-    llmnr = "true";
-    extraConfig = ''
-      MulticastDNS=true
-    '';
+  services.resolved.llmnr = "true";
+
+  # mDNS
+  services.avahi = {
+    enable = true;
+    publish = {
+      enable = true;
+      addresses = true;
+    };
+    nssmdns = true;
   };
 
   # Time synchronization

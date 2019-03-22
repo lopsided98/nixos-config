@@ -1,0 +1,34 @@
+From 3a6860ad85d527aaebf2df55eafd4bf3b0ef6335 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Wed, 20 Mar 2019 19:54:48 -0400
+Subject: [PATCH] HACK: remove conflict detection because it is broken with
+ IPv6
+
+---
+ avahi-core/server.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/avahi-core/server.c b/avahi-core/server.c
+index a2580e3..c8e7cdd 100644
+--- a/avahi-core/server.c
++++ b/avahi-core/server.c
+@@ -304,16 +304,12 @@ static int handle_conflict(AvahiServer *s, AvahiInterface *i, AvahiRecord *recor
+             if (avahi_entry_is_registered(s, e, i)) {
+ 
+                 /* A conflict => we have to return to probe mode */
+-                conflict = 1;
+-                conflicting_entry = e;
+ 
+             } else if (avahi_entry_is_probing(s, e, i)) {
+ 
+                 /* We are currently registering a matching record, but
+                  * someone else already claimed it, so let's
+                  * withdraw */
+-                conflict = 1;
+-                withdraw_immediately = 1;
+             }
+         }
+     }
+-- 
+2.21.0
+
