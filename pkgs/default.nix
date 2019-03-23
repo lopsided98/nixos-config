@@ -61,17 +61,17 @@ in {
                   else if self.stdenv.hostPlatform.system == "aarch64-linux" then pkgsAarch64LinuxCross
                   else self;
 
-  dnsupdate = self.callPackage ./dnsupdate/default.nix {
+  dnsupdate = self.callPackage ./dnsupdate {
     inherit (self.python3Packages) buildPythonApplication requests pyyaml beautifulsoup4 netifaces;
   };
 
-  aur-buildbot = self.callPackage ./aur-buildbot/default.nix {};
+  aur-buildbot = self.callPackage ./aur-buildbot {};
 
-  hacker-hats = self.callPackage ./hacker-hats/default.nix {};
+  hacker-hats = self.callPackage ./hacker-hats {};
 
-  tinyssh = self.callPackage ./tinyssh/default.nix {};
+  tinyssh = self.callPackage ./tinyssh {};
 
-  tinyssh-convert = self.callPackage ./tinyssh-convert/default.nix {};
+  tinyssh-convert = self.callPackage ./tinyssh-convert {};
 
   libcreate = self.callPackage ./libcreate {};
 
