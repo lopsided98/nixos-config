@@ -30,6 +30,7 @@ in {
       address = [ "192.168.1.2/24" ];
       gateway = [ "192.168.1.1" ];
       dns = [ "127.0.0.1" "::1" ];
+      dhcpConfig.UseDNS = false;
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no

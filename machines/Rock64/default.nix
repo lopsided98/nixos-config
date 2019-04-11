@@ -33,10 +33,10 @@ in {
     enable = true;
     networks."30-${interface}" = {
       name = interface;
-      # DHCP=v4
       address = [ "192.168.1.6/24" ];
       gateway = [ "192.168.1.1" ];
       dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
+      dhcpConfig.UseDNS = false;
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no
