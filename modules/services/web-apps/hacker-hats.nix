@@ -53,7 +53,7 @@ in {
               root = "${pkgs.hacker-hats}/HackerHats";
             };
 
-            "/favicon.ico" = {
+            "= /favicon.ico" = {
               alias = "${pkgs.hacker-hats}/HackerHats/static/img/favicons/favicon.ico";
             };
           };
