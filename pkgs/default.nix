@@ -35,7 +35,7 @@ self: super: with super.lib; let
   });
 
   perlOverridesFor = perlPackages: perlPackages.override (old: {
-    overrides = with perlPackages; {
+    overrides = _: with perlPackages; {
       ConfigIniFiles = buildPerlModule rec {
         name = "Config-IniFiles-3.000000";
         src = super.fetchurl {
