@@ -62,8 +62,8 @@ in {
       unitConfig.ConditionPathIsMountPoint = cfg.backupMountpoint;
       preStart = ''
         # Install SSL certificates
-        install -o ${cfg.user} -g ${cfg.group} -m 0400 "${cfg.sslCertificateKey}" "${config.services.syncthing.dataDir}/https-key.pem"
-        install -o ${cfg.user} -g ${cfg.group} -m 0644 "${cfg.sslCertificate}" "${config.services.syncthing.dataDir}/https-cert.pem"
+        install -o ${cfg.user} -g ${cfg.group} -m 0600 "${cfg.sslCertificateKey}" "${config.services.syncthing.configDir}/https-key.pem"
+        install -o ${cfg.user} -g ${cfg.group} -m 0644 "${cfg.sslCertificate}" "${config.services.syncthing.configDir}/https-cert.pem"
       '';
     };
 
