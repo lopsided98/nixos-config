@@ -21,22 +21,15 @@ in {
   };
 
   # Setup influxdb socket permissions
-  systemd.services.influxdb = let cfg = config.services.influxdb; in {
-    path = [ pkgs.acl ];
-    preStart = ''
-      # Setup socket directory
-      install -o ${cfg.user} -g ${cfg.group} -m 0750 -d "${socketDir}"
-      setfacl -bm u:nginx:rx "${socketDir}"
-      # Setup data directory
-      install -o ${cfg.user} -g ${cfg.group} -m 0750 -d "${cfg.dataDir}"
-    '';
-    postStart = mkForce ''
-      # Wait for socket to be created
-      while [ ! -S "${socket}" ]; do sleep 1; done
-      # Make socket writable by nginx
-      setfacl -bm u:nginx:rw "${socket}"
-    '';
-  };
+  systemd.tmpfiles.rules = let cfg = config.services.influxdb; in [
+    "d '${socketDir}' 0750 ${cfg.user} ${cfg.group} - -"
+    "a '${socketDir}' - - - - u:nginx:rx"
+  ];
+
+  systemd.services.influxdb.postStart = mkForce ''
+    # Wait for socket to be created
+    while [ ! -S "${socket}" ]; do sleep 1; done
+  '';
 
   services.nginx = {
     enable = true;
