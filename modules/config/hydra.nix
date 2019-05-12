@@ -22,6 +22,11 @@
   services.postgresql = {
     package = pkgs.postgresql96;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
+    extraConfig = ''
+      max_connections = 250
+      work_mem = 8MB
+      shared_buffers = 512MB
+    '';
   };
 
   # Serve binary cache
