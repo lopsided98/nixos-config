@@ -44,10 +44,10 @@
   };
 
   system.buildMachines = let
-    machine = m: m // {
+    machine = m: {
       sshUser = "build";
       sshKey = secrets.getSecret secrets.build.sshKey;
-    };
+    } // m;
   in {
     "HP-Z420" = machine {
       systems = [ "x86_64-linux" ];
@@ -72,6 +72,83 @@
       maxJobs = 6;
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
+    };
+    "babylon1" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon2" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon3" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon4" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon5" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon6" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon7" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon8" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "bear" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 8;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "benwolsieffer";
+    };
+    "flume" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 10;
+      speedFactor = 12;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "benwolsieffer";
+    };
+    "tahoe" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 8;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "benwolsieffer";
     };
   };
 
@@ -123,7 +200,7 @@
 
   # Global SSH configuration for distributed builds
   programs.ssh = let
-    host = { name, port, hostName }: ''
+    host = { name, port ? 22, hostName }: ''
       Host ${name}
           Port ${toString port}
           HostName ${hostName}
@@ -160,6 +237,50 @@
         name = "RockPro64";
         port = 4247;
         hostName = "rockpro64.benwolsieffer.com";
+      }) +
+      (host {
+        name = "babylon1";
+        hostName = "babylon1.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon2";
+        hostName = "babylon2.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon3";
+        hostName = "babylon3.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon4";
+        hostName = "babylon4.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon5";
+        hostName = "babylon5.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon6";
+        hostName = "babylon6.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon7";
+        hostName = "babylon7.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "babylon8";
+        hostName = "babylon8.thayer.dartmouth.edu";
+      }) +
+      (host {
+        name = "bear";
+        hostName = "bear.cs.dartmouth.edu";
+      }) +
+      (host {
+        name = "flume";
+        hostName = "flume.cs.dartmouth.edu";
+      }) +
+      (host {
+        name = "tahoe";
+        hostName = "tahoe.cs.dartmouth.edu";
       });
 
     knownHosts = [
@@ -186,6 +307,50 @@
       {
         hostNames = [ "[rockpro64.benwolsieffer.com]:4247" ];
         publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
+      }
+      {
+        hostNames = [ "babylon1.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBP4kFknlR2wSVMEQpkKaF94oQknPSC1tn2LYQOmRaOfpTvHlriMdTxmJmLXQXJ9+sJDQjFER82pdHkUARkdixgw=";
+      }
+      {
+        hostNames = [ "babylon2.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC/9qHbvq9MusqH3Hfg8IR12y4Ke7asjW8m2H1TG28LQFtqwS5wAeTZ+5rOvxYDGksuv+xn4rDdQ97BgeAl8igo=";
+      }
+      {
+        hostNames = [ "babylon3.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBF3JJkf9cYLO72VM16cAkJ6Odpv2fndns5EyhXH1vhHF7qzBOh0owxNztglQQju1WV2T9/oFNmDCOkQrq8ooIzM=";
+      }
+      {
+        hostNames = [ "babylon4.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNFhs+i6NZvPfS+z1rPcZ0AO8BkZMwcGRfcOj6VoA8i3AMbeSLs9L0euCuGF3G7qVUXXs8cfJl16tjVqjXVqKvU=";
+      }
+      {
+        hostNames = [ "babylon5.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIAkBc0Up3SrXSl5Ubd0dr61gF4FTp4NnrTGw0NcKqIXHo0KMbsMTCFyq4bN1nyo5IWop7eFF4FvGgnNzk2lOvM=";
+      }
+      {
+        hostNames = [ "babylon6.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMd4NLcm9Gv2hUB35KK4Lb2T49kl2apWfTiqlLlydc3PTGYCfMm3rOL3LgW9atqT8pn2FWg6B2KZjHM8mZcy6O0=";
+      }
+      {
+        hostNames = [ "babylon7.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPORxS4Hg9so30ktT2Dk5JrTMmkJp3rllfG9xXsFvX6C7hrMd1Aaiv4V0B2MNLBsvKEAkF+kDKoNmZ2kvVuYQzs=";
+      }
+      {
+        hostNames = [ "babylon8.thayer.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaH1x8SIinN8wMbafHc/fZBbTl0w2cJfzNHmlAD2gGt9iookORXMEvS4XW9zFKtKTGZjW0xO0iVj7rSa9SRtQU=";
+      }
+      {
+        hostNames = [ "bear.cs.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI1q3WedIIRk5zZTxfxE8HZQBvTD5eARHEkQ4jpiCvy+5+hILMMMdNAPGFasXivCM6fgoNRhBYz+zC2iWXH416U=";
+      }
+      {
+        hostNames = [ "flume.cs.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDpOEp1zfF9mKLza6VlGO5TX/vJ1wlapEQC9Lb7dke2CeMy61ytgnaBqpAcfiHP4BnCGeb37usHfTYiHyZd3UBs=";
+      }
+      {
+        hostNames = [ "tahoe.cs.dartmouth.edu" ];
+        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHcGnvXB8fBeLdIMTYolAuxE+WTQH2JOeQPFwwfPh5ahYSk8bOkaWhRhinv3krWNter8HxNKcnwaBrFrCNOp28I=";
       }
     ];
   };
@@ -269,5 +434,5 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.03"; # Did you read the comment?
+  system.stateVersion = "19.09"; # Did you read the comment?
 }
