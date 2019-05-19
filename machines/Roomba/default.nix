@@ -82,7 +82,7 @@
     1935 # RTMP Streaming
   ];
 
-  environment.secrets = secrets.mkSecret secrets.Roomba.wpaSupplicantConf {
+  environment.secrets = secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
     target = "wpa_supplicant.conf";
   };
 }
