@@ -1,5 +1,5 @@
 { lib, config, secrets, pkgs, ... }: with lib; let
-  socketDir = "/var/run/influxdb";
+  socketDir = "/run/influxdb";
   socket = "${socketDir}/influxdb.sock";
   influxdbPort = 8086;
 in {
