@@ -161,7 +161,6 @@
     autoOptimiseStore = true;
     extraOptions = ''
       builders-use-substitutes = true
-      tarball-ttl = 10
       netrc-file = ${secrets.getSecret secrets.hydra.netrc}
     '';
 
@@ -204,7 +203,6 @@
       Host ${name}
           Port ${toString port}
           HostName ${hostName}
-          IdentityFile ${secrets.getSecret secrets.build.sshKey}
     '';
   in {
     extraConfig =
