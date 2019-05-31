@@ -19,7 +19,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_0;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_1;
   };
 
   # Workaround checksumming bug
