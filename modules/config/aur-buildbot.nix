@@ -120,7 +120,7 @@ in {
         jd-gui:
           dependencies: [jdk8-openjdk]
         keepass-plugin-rpc: {}
-        keepass-plugin-traytotp: {}
+        keepass-plugin-keetraytotp: {}
         lcov: {}
         lejos-nxj: {}
         lib32-tk: {}
