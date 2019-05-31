@@ -18,6 +18,9 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   "RockPro64" = callMachine ./RockPro64 "aarch64-linux";
   "Roomba" = callMachine ./Roomba "aarch64-linux";
   "KittyCop" = callMachine ./KittyCop "armv6l-linux";
+  "turtlebot12" = callMachine ./turtlebot12 "aarch64-linux";
+  "turtlebot14" = callMachine ./turtlebot14 "aarch64-linux";
+  "turtlebot3" = callMachine ./turtlebot3 "aarch64-linux";
   "AudioRecorder1" = callMachine ./AudioRecorder1 "armv6l-linux";
   "AudioRecorder2" = callMachine ./AudioRecorder2 "armv6l-linux";
   "AudioRecorder3" = callMachine ./AudioRecorder3 "armv6l-linux";
