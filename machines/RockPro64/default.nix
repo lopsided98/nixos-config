@@ -22,11 +22,6 @@ in {
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_1;
   };
 
-  # Workaround checksumming bug
-  networking.localCommands = ''
-    ${pkgs.ethtool}/bin/ethtool -K eth0 rx off tx off
-  '';
-
   systemd.network = {
     enable = true;
     networks."30-${interface}" = {
@@ -41,13 +36,18 @@ in {
       '';
     };
   };
-  networking.hostName = "RockPro64"; # Define your hostname.
-  networking.hostId = "67b35626";
+  networking = {
+    hostName = "RockPro64";
+    hostId = "67b35626";
+  };
 
   environment.systemPackages = with pkgs; [
   ];
 
   # List services that you want to enable:
+
+  # Use the same speed as the bootloader/early console
+  services.mingetty.serialSpeed = [ 1500000 ];
 
   # Set SSH port
   services.openssh.ports = [4247];
