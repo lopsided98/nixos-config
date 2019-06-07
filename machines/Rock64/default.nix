@@ -24,11 +24,6 @@ in {
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_4_19;
   };
 
-  # Workaround checksumming bug
-  networking.localCommands = ''
-    ${pkgs.ethtool}/bin/ethtool -K eth0 rx off tx off
-  '';
-
   systemd.network = {
     enable = true;
     networks."30-${interface}" = {
@@ -50,6 +45,9 @@ in {
   ];
 
   # List services that you want to enable:
+
+  # Use the same speed as the bootloader/early console
+  services.mingetty.serialSpeed = [ 1500000 ];
 
   # Set SSH port
   services.openssh.ports = [4246];
