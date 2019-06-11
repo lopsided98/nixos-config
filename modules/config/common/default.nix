@@ -73,7 +73,7 @@
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
     };
-    "babylon1" = machine {
+    /*"babylon1" = machine {
       systems = [ "x86_64-linux" ];
       maxJobs = 12;
       speedFactor = 20;
@@ -149,7 +149,7 @@
       speedFactor = 8;
       supportedFeatures = [ "big-parallel" ];
       sshUser = "benwolsieffer";
-    };
+    };*/
   };
 
   nix = {
@@ -198,89 +198,37 @@
   '';
 
   # Global SSH configuration for distributed builds
-  programs.ssh = let
-    host = { name, port ? 22, hostName }: ''
-      Host ${name}
-          Port ${toString port}
-          HostName ${hostName}
-    '';
-  in {
-    extraConfig =
-      (host {
-        name = "RasPi2";
-        port = 4242;
-        hostName = "raspi2.benwolsieffer.com";
-      }) +
-      (host {
-        name = "ODROID-XU4";
-        port = 4243;
-        hostName = "odroid-xu4.benwolsieffer.com";
-      }) +
-      (host {
-        name = "Dell-Optiplex-780";
-        port = 4244;
-        hostName = "dell-optiplex-780.benwolsieffer.com";
-      }) +
-      (host {
-        name = "HP-Z420";
-        port = 4245;
-        hostName = "hp-z420.benwolsieffer.com";
-      }) +
-      (host {
-        name = "Rock64";
-        port = 4246;
-        hostName = "rock64.benwolsieffer.com";
-      }) +
-      (host {
-        name = "RockPro64";
-        port = 4247;
-        hostName = "rockpro64.benwolsieffer.com";
-      }) +
-      (host {
-        name = "babylon1";
-        hostName = "babylon1.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon2";
-        hostName = "babylon2.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon3";
-        hostName = "babylon3.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon4";
-        hostName = "babylon4.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon5";
-        hostName = "babylon5.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon6";
-        hostName = "babylon6.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon7";
-        hostName = "babylon7.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "babylon8";
-        hostName = "babylon8.thayer.dartmouth.edu";
-      }) +
-      (host {
-        name = "bear";
-        hostName = "bear.cs.dartmouth.edu";
-      }) +
-      (host {
-        name = "flume";
-        hostName = "flume.cs.dartmouth.edu";
-      }) +
-      (host {
-        name = "tahoe";
-        hostName = "tahoe.cs.dartmouth.edu";
-      });
+  programs.ssh = {
+    extraConfig = ''
+      CanonicalizeHostname yes
+      CanonicalizeMaxDots 0
+      CanonicalDomains benwolsieffer.com thayer.dartmouth.edu cs.dartmouth.edu
 
+      Host HP-Z420
+        Port 4245
+
+      Host ODROID-XU4
+        Port 4243
+
+      Host Dell-Optiplex-780
+        Port 4244
+
+      Host RasPi2
+        Port 4242
+
+      Host Rock64
+        Port 4246
+
+      Host RockPro64
+        Port 4247
+
+      Host *.cs.dartmouth.edu
+        User benwolsieffer
+        IdentityFile /etc/nix/build.id_ed25519
+
+      Host *.thayer.dartmouth.edu
+        ProxyJump tahoe.cs.dartmouth.edu
+    '';
     knownHosts = [
       {
         hostNames = [ "[raspi2.benwolsieffer.com]:4242" ];
