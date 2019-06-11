@@ -16,7 +16,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        31         ; Serial
+                        32         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -51,8 +51,8 @@
     { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:225:64ff:febd:bdbc"; }
 
     # HP-Z420
-    { name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.93.13"; }
-    #{ name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
+    #{ name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.93.13"; }
+    { name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "hp-z420"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:a2d3:c1ff:fe20:da3f"; }
     { name = "hackerhats"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "arch"; class = "IN"; type = "CNAME"; data = "hp-z420"; }

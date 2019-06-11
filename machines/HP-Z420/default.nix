@@ -47,21 +47,21 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
-    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ];
+    # "ip=:::::eth0:dhcp" "intel_iommu=on"
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" ];
   };
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
-  modules.openvpnClientHomeNetwork = {
+  /*modules.openvpnClientHomeNetwork = {
     enable = true;
     macAddress = "a0:d3:c1:20:da:3f";
-  };
+  };*/
   systemd.network = {
     enable = true;
 
     # Dartmouth network
-    networks."50-${interface}" = {
+    /*networks."50-${interface}" = {
       name = interface;
       DHCP = "v4";
     };
@@ -72,20 +72,20 @@ in rec {
         [IPv6AcceptRA]
         UseDNS=false
       '';
-    };
+    };*/
 
     # Home network
-    /*networks."50-${interface}" = {
+    networks."50-${interface}" = {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:7829:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
       dhcpConfig.UseDNS = false;
       extraConfig = ''
         [IPv6AcceptRA]
         UseDNS=no
       '';
-    };*/
+    };
 
     # Use physical interface MAC on bridge to get same IPs
     netdevs."50-${interface}".netdevConfig = {
@@ -104,8 +104,10 @@ in rec {
       linkConfig.MACAddress = "ea:d3:5b:d6:a0:6b";
     };
   };
-  networking.hostName = "HP-Z420"; # Define your hostname.
-  networking.hostId = "5e9c1aa3";
+  networking = {
+    hostName = "HP-Z420"; # Define your hostname.
+    hostId = "5e9c1aa3";
+  };
   # Enable telegraf metrics for this interface
   services.telegraf.inputs.net.interfaces = [ interface ];
 
