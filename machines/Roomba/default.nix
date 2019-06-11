@@ -21,8 +21,6 @@
         '';
       };
     };
-    kernelParams = [ "cma=32M" ];
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi_5_0;
     # Fix dropped webcam frames
     extraModprobeConfig = ''
       options uvcvideo nodrop=1 timeout=1000
@@ -62,6 +60,9 @@
   networking.hostName = "Roomba"; # Define your hostname.
 
   # List services that you want to enable:
+
+  # Allow faac (non-redistributable) for AAC encoding
+  nixpkgs.config.allowUnfree = true;
 
   services.kittyCam.enable = true;
 
