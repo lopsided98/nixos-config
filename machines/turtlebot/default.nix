@@ -43,12 +43,9 @@ with lib;
     '';
   };
 
-  boot = {
-    loader = {
-      grub.enable = false;
-      generic-extlinux-compatible.enable = true;
-    };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_latest;
+  boot.loader = {
+    grub.enable = false;
+    generic-extlinux-compatible.enable = true;
   };
 
   nixpkgs.config.platform = lib.systems.platforms.aarch64-multiplatform;
