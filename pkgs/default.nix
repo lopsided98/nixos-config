@@ -114,10 +114,6 @@ in {
     };
   };
 
-  orc = super.orc.overrideAttrs (old: {
-    doCheck = old.doCheck && !super.stdenv.hostPlatform.isAarch32;
-  });
-
   libao = super.libao.override {
     usePulseAudio = false;
   };
@@ -126,7 +122,7 @@ in {
     enableLibpulseaudio = false;
   };
 
-  linux_rock64_4_19 = self.callPackage ./linux-rock64-4.19 {
+  linux_rock64_4_19 = self.callPackage ./linux-rock64/4.19.nix {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         self.kernelPatches.modinst_arg_list_too_long
@@ -134,16 +130,16 @@ in {
   };
   linuxPackages_rock64_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_19);
 
-  linux_rock64_5_1 = self.callPackage ./linux-rock64-5.1 {
+  linux_rock64_5_2 = self.callPackage ./linux-rock64/5.2.nix {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         self.kernelPatches.modinst_arg_list_too_long
         self.kernelPatches.export_kernel_fpu_functions
       ];
   };
-  linuxPackages_rock64_5_1 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_1);
+  linuxPackages_rock64_5_2 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_2);
 
   # No need for kernelPatches because we are overriding an existing kernel
-  linux_rpi_5_0 = self.callPackage ./linux-rpi-5.0 { };
-  linuxPackages_rpi_5_0 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_5_0);
+  linux_rpi_5_2 = self.callPackage ./linux-rpi-5.2 { };
+  linuxPackages_rpi_5_2 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_5_2);
 }
