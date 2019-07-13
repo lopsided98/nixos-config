@@ -16,7 +16,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        32         ; Serial
+                        33         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -69,6 +69,9 @@
     # KittyCop
     { name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.241"; }
     { name = "doorman"; class = "IN"; type = "CNAME"; data = "kittycop"; }
+
+    # maine-pi
+    { name = "maine-pi"; class = "IN"; type = "CNAME"; data = "maine-pi.awsmppl.com."; }
   ];
 
   internalRecords = [
