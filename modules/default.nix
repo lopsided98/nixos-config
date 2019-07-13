@@ -15,7 +15,7 @@
     ./services/continuous-integration/aur-buildbot/master.nix
     ./services/networking/dnsupdate.nix
     ./services/networking/doorman.nix
-    ./services/networking/openvpn/client-home-network.nix
+    ./services/networking/openvpn/client-home-network
     ./services/networking/tinyssh.nix
     ./services/monitoring/telegraf.nix
     ./services/web-apps/hacker-hats.nix

@@ -137,9 +137,13 @@ in {
     assertions = [(addressProviderCheck cfg.addressProvider)] ++
       (map (d: addressProviderCheck d.addressProvider) cfg.dnsServices);
   
-    users.extraUsers.dnsupdate = {
-      isSystemUser = true;
-      description = "dnsupdate user";
+    users = {
+      users.dnsupdate = {
+        isSystemUser = true;
+        description = "dnsupdate user";
+        group = "dnsupdate";
+      };
+      groups.dnsupdate = {};
     };
   
     systemd.services.dnsupdate = {
@@ -147,6 +151,7 @@ in {
       serviceConfig = {
         Type = "oneshot";
         User = "dnsupdate";
+        Group = "dnsupdate";
         ExecStart = "${pkgs.dnsupdate}/bin/dnsupdate ${pkgs.writeText "dnsupdate.conf" (configFile cfg)}";
       };
     };

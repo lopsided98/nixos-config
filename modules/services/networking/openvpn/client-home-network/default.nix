@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, secrets, ... }:
 
 with lib;
 
@@ -27,6 +27,16 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = "MAC address of the VPN interface. Leave empty to use the default.";
+    };
+
+    certificate = mkOption {
+      type = types.path;
+      description = "Client certificate file";
+    };
+
+    privateKey = mkOption {
+      type = types.path;
+      description = "Client certificate private key file";
     };
   };
 
@@ -75,8 +85,8 @@ in {
           nobind
 
           # Downgrade privileges after initialization
-          user nobody
-          group nobody
+          user openvpn
+          group openvpn
 
           # Try to preserve some state across restarts.
           persist-key
@@ -93,9 +103,9 @@ in {
           # a separate .crt/.key file pair
           # for each client.  A single ca
           # file can be used for all clients.
-          ca /var/lib/openvpn/ca.crt
-          cert /var/lib/openvpn/${config.networking.hostName}.crt
-          key /var/lib/openvpn/${config.networking.hostName}.key
+          ca ${./ca.crt}
+          cert ${cfg.certificate}
+          key ${cfg.privateKey}
 
           # Verify server certificate by checking
           # that the certicate has the nsCertType
@@ -112,7 +122,7 @@ in {
 
           # If a tls-auth key is used on the server
           # then every client must also have the key.
-          tls-auth /var/lib/openvpn/ta.key 1
+          tls-auth ${secrets.getSecret secrets.openvpn.hmacKey} 1
 
           # Select a cryptographic cipher.
           # If the cipher option is used on the server
@@ -147,10 +157,14 @@ in {
 
     systemd.network.networks."50-openvpn-client-home-network" = {
       name = cfg.interface;
-      dhcpConfig.UseDNS = false;
       dns = cfg.dns;
       # Make the VPN dns override all others
       domains = ["~."];
+      dhcpConfig.UseDNS = false;
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=false
+      '';
     };
 
     systemd.services.openvpn-client-home-network = {
@@ -160,7 +174,18 @@ in {
       };
     };
 
+    users = {
+      users.openvpn = {
+        isSystemUser = true;
+        description = "OpenVPN user";
+        group = "openvpn";
+      };
+      groups.openvpn = {};
+    };
+
     # Monitor VPN with telegraf
     services.telegraf.inputs.net.interfaces = [ cfg.interface ];
+
+    environment.secrets = secrets.mkSecret secrets.openvpn.hmacKey {};
   };
 }

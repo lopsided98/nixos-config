@@ -213,7 +213,7 @@ in rec {
     enable = true;
     onShutdown = "shutdown";
   };
-  users.extraUsers.ben.extraGroups = [ "libvirtd" ];
+  users.users.ben.extraGroups = [ "libvirtd" ];
 
   # VFIO/PCI Passthrough
   # These modules must come before early modesetting

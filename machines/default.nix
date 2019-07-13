@@ -27,4 +27,5 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   "AudioRecorder4" = callMachine ./AudioRecorder4 "armv6l-linux";
   # 5-8 are not included because they would just waste time, since I rarely
   # update them and usually just generate an SD image
+  "maine-pi" = callMachine ./maine-pi "armv6l-linux";
 }
