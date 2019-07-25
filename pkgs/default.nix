@@ -37,9 +37,10 @@ self: super: with super.lib; let
   perlOverridesFor = perlPackages: perlPackages.override (old: {
     overrides = _: with perlPackages; {
       ConfigIniFiles = buildPerlModule rec {
-        name = "Config-IniFiles-3.000000";
+        pname = "Config-IniFiles";
+        version = "3.000000";
         src = super.fetchurl {
-          url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+          url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${pname}-${version}.tar.gz";
           sha256 = "0acv3if31s639iy7rcg86nwa5f6s55hiw7r5ysmh6gmay6vzd4nd";
         };
         propagatedBuildInputs = [ IOStringy ];
