@@ -52,21 +52,6 @@ in {
   # Set SSH port
   services.openssh.ports = [4246];
 
-  # uPnP router traffic monitoring (this should be rewritten as a telegraf
-  # plugin to be more efficient)
-  services.telegraf.inputs.exec = {
-    name_override = "upnp";
-
-    commands = [ "${./telegraf/upnp.py}" ];
-    data_format = "json";
-  };
-  systemd.services.telegraf = let
-    pyEnv = pkgs.python3.withPackages (p: with p; [ upnpclient ]);
-  in {
-    path = [ pyEnv ];
-    environment.PYTHONPATH = "${pyEnv}/${pkgs.python3.sitePackages}";
-  };
-
   services.sanoid = {
     datasets = {
       # Each backup node takes its own snapshots of data
@@ -84,7 +69,7 @@ in {
       };
     };
   };
-  
+
   services.syncoid = let
     remote = "backup@hp-z420.benwolsieffer.com";
   in {
