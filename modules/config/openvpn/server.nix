@@ -60,7 +60,7 @@
       # (see "pkcs12" directive in man page).
       ca ${./ca.crt}
       cert ${./. + "/${config.networking.hostName}.crt"}
-      key ${secrets.getSecret secrets."${config.networking.hostName}".openvpn.privateKey}
+      key ${secrets.getSecret secrets."${config.networking.hostName}".vpn.home.privateKey}
 
       # Diffie hellman parameters.
       # Generate your own with:
@@ -85,7 +85,7 @@
       # a copy of this key.
       # The second parameter should be '0'
       # on the server and '1' on the clients.
-      tls-auth ${secrets.getSecret secrets.openvpn.hmacKey} 0 # This file is secret
+      tls-auth ${secrets.getSecret secrets.vpn.home.hmacKey} 0
       tls-version-min 1.2
       tls-cipher TLS-DHE-RSA-WITH-AES-256-GCM-SHA384:TLS-DHE-RSA-WITH-AES-128-GCM-SHA256:TLS-DHE-RSA-WITH-AES-256-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-256-CBC-SHA:TLS-DHE-RSA-WITH-AES-128-CBC-SHA:TLS-DHE-RSA-WITH-CAMELLIA-128-CBC-SHA
 
@@ -203,7 +203,7 @@
       # in order for this to work properly).
       push "redirect-gateway def1 bypass-dhcp"
       push "dhcp-option DNS 192.168.1.2"
-      
+
       # Push a null route for IPv6 to prevent leaks
       tun-ipv6
       push tun-ipv6
@@ -234,6 +234,6 @@
   };
 
   environment.secrets =
-    secrets.mkSecret secrets.openvpn.hmacKey {} //
+    secrets.mkSecret secrets.vpn.home.hmacKey {} //
     secrets.mkSecret secrets."${config.networking.hostName}".openvpn.privateKey {};
 }

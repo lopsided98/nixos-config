@@ -65,7 +65,7 @@ in {
       name = "wlan0";
       DHCP = "v4";
     };
-    networks."50-openvpn-client-home-network".DHCP = "v4";
+    networks."50-vpn-home-tap-client".DHCP = "v4";
   };
   networking.hostName = "maine-pi";
 
@@ -81,20 +81,20 @@ in {
     ];
   };
 
-  modules.openvpnClientHomeNetwork = {
+  local.networking.vpn.home.tap.client = {
     enable = true;
-    certificate = ./openvpn/client.crt;
-    privateKey = secrets.getSecret secrets.maine-pi.openvpn.privateKey;
+    certificate = ./vpn/home/client.crt;
+    privateKey = secrets.getSecret secrets.maine-pi.vpn.home.privateKey;
   };
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
-  
+
   environment.secrets = mkMerge [
     (secrets.mkSecret secrets.maine-pi.wpaSupplicantConf {
       target = "wpa_supplicant.conf";
     })
-    (secrets.mkSecret secrets.maine-pi.openvpn.privateKey {})
+    (secrets.mkSecret secrets.maine-pi.vpn.home.privateKey {})
     (secrets.mkSecret secrets.maine-pi.ssh.hostRsaKey {})
     (secrets.mkSecret secrets.maine-pi.ssh.hostEd25519Key {})
   ];

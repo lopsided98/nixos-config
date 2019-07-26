@@ -53,9 +53,13 @@ in rec {
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
-  /*modules.openvpnClientHomeNetwork = {
+  local.networking.vpn.dartmouth.enable = true;
+
+  /*local.networking.vpn.home.tap.client = {
     enable = true;
     macAddress = "a0:d3:c1:20:da:3f";
+    certificate = ./vpn/home/client.crt;
+    privateKey = secrets.getSecret secrets.HP-Z420.vpn.home.privateKey;
   };*/
   systemd.network = {
     enable = true;
@@ -66,7 +70,7 @@ in rec {
       DHCP = "v4";
     };
 
-    networks."50-openvpn-client-home-network" = {
+    networks."50-vpn-home-tap-client" = {
       address = [ "${address}/24" ];
       extraConfig = ''
         [IPv6AcceptRA]
@@ -230,4 +234,6 @@ in rec {
     8086 # InfluxDB
     22000 # Syncthing port
   ];
+
+  environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey {};
 }
