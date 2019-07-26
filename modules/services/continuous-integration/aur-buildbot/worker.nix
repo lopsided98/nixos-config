@@ -32,13 +32,13 @@ in {
         type = types.path;
         description = "File used to store the AUR Buildbot worker password";
       };
-      
+
       hostMessage = mkOption {
         default = "AUR Buildbot Worker";
         type = types.str;
         description = "Description of this worker";
       };
-      
+
       adminMessage = mkOption {
         default = "";
         type = types.str;
@@ -50,7 +50,7 @@ in {
         type = types.str;
         description = "Specifies the AUR Buildbot master hostname.";
       };
-      
+
       masterPort = mkOption {
         default = 7192;
         type = types.int;
@@ -69,7 +69,7 @@ in {
         aur-buildbot-worker ALL=(root) NOPASSWD: ${aur-buildbot}/worker/build-package *
       '';
     };
-    
+
     users.extraGroups."aur-buildbot" = {};
     users.extraUsers."aur-buildbot-worker" = {
       description = "AUR Buildbot Worker user";
