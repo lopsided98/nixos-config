@@ -63,14 +63,9 @@ in {
       extraConfig = ''
         access_log off;
 
-        ssl_client_certificate ${../common/root_ca.pem};
+        ssl_client_certificate ${./client_ca.pem};
         ssl_crl ${./client_ca_crl.pem};
-        ssl_verify_depth 2;
-        ssl_verify_client optional;
-
-        if ($ssl_client_i_dn != "CN=InfluxDB Client CA") {
-          return 401;
-        }
+        ssl_verify_client on;
       '';
     };
 
