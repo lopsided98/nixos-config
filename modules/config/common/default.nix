@@ -11,8 +11,8 @@
   ];
 
   boot = {
-    # Use the latest (cross-compiled) kernel. Some ARM systems and those with ZFS might use a
-    # different kernel
+    # Use the latest (cross-compiled) kernel. Some ARM systems and those with
+    # ZFS might use a different kernel
     kernelPackages = pkgs.crossPackages.linuxPackages_latest;
 
     # Enable a shell if boot fails. This is disabled by default because it
@@ -50,10 +50,16 @@
     } // m;
   in {
     "HP-Z420" = machine {
-      systems = [ "x86_64-linux" ];
+      systems = [ "x86_64-linux" "i686-linux" ];
       maxJobs = 8;
       speedFactor = 8;
       supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
+    };
+    "Dell-Optiplex-780" = machine {
+      systems = [ "x86_64-linux" "i686-linux" ];
+      maxJobs = 2;
+      speedFactor = 2;
+      supportedFeatures = [ "nixos-test" "kvm" ];
     };
     "ODROID-XU4" = machine {
       systems = [ "armv6l-linux" "armv7l-linux" ];
@@ -73,7 +79,7 @@
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
     };
-    /*"babylon1" = machine {
+    "babylon1" = machine {
       systems = [ "x86_64-linux" ];
       maxJobs = 12;
       speedFactor = 20;
@@ -129,7 +135,7 @@
       supportedFeatures = [ "big-parallel" ];
       sshUser = "f002w9k";
     };
-    "bear" = machine {
+    /*"bear" = machine {
       systems = [ "x86_64-linux" ];
       maxJobs = 6;
       speedFactor = 8;
@@ -168,11 +174,10 @@
     binaryCaches = let
       isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
     in [ https://cache.nixos.org/ ] ++
-      lib.optional (!isHydra) https://hydra.benwolsieffer.com /*++
-      lib.optional (isHydra || pkgs.stdenv.hostPlatform.isAarch32) http://nixos-arm.dezgeg.me/channel*/; # Lots of timeouts make it almost unusable
+      lib.optional (!isHydra) https://hydra.benwolsieffer.com;
     binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
-    
-    nixPath = let 
+
+    nixPath = let
       machineChannel = "/nix/var/nix/profiles/per-user/root/channels/machines.${config.networking.hostName}.channel";
     in [
       "nixpkgs=${machineChannel}/nixpkgs"
@@ -182,20 +187,6 @@
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
-
-  # Public key for nix-copy-closure (might not be necessary with Nix 1.12?)
-  # The private key is stored in Ansible Vault
-  environment.etc."nix/signing-key.pub".text = ''
-    -----BEGIN PUBLIC KEY-----
-    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1WFiLIaZVGL0/1Dk8ie
-    dfACcBEEr94zZNrTRbGzlyyD1pGjwqzPTcEXCc97JzTucNqtQnTiW+rxD0yU/ZO7
-    W3+1KBQPl93XHvezIItYVxEB4Rjf4GxHYqjZ/ahSesM3sK6jcbLuu1kAwrNiWBso
-    qoBKfjHZW2TInUCGaFDX84T6KoXde/VcGqLghoT0D61Gmt0eTkIOpKK+FiJD8Ale
-    6BahM0sMB2Z2z4WqkdNkL6b6IbFwuwd6y6OfWy5dQPxixoxU5CsZXH8xtFHjbvFD
-    TCHMhkOb9YPuM/ltMKGU8/8lK+Bu9bdrTL2c3mf4UD2FAm01eZwFPDTjR8Rj+UAA
-    ywIDAQAB
-    -----END PUBLIC KEY-----
-  '';
 
   # Global SSH configuration for distributed builds
   programs.ssh = {
@@ -224,10 +215,9 @@
 
       Host *.cs.dartmouth.edu
         User benwolsieffer
-        IdentityFile /etc/nix/build.id_ed25519
 
       Host *.thayer.dartmouth.edu
-        ProxyJump tahoe.cs.dartmouth.edu
+        User f002w9k
     '';
     knownHosts = [
       {
@@ -302,13 +292,10 @@
   };
 
   networking = {
-    firewall.enable = true;
     # I configure my networks directly using networkd
     useDHCP = false;
     # Networkd backend is kind of broken right now
     useNetworkd = false;
-    # Enable systemd predictable network names
-    usePredictableInterfaceNames = true;
 
     # Don't use hostnames because DNSSEC fails unless the time is correct
     timeServers = [
@@ -344,6 +331,9 @@
         ;;
     esac
   '';
+
+  # Disable UDisks by default (significantly reduces system closure size)
+  services.udisks2.enable = lib.mkDefault false;
 
   users = {
     # Don't allow normal user management
