@@ -1,0 +1,81 @@
+From 462c6c0c5f51af78dff746b393273bee5ef35efd Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sun, 28 Jul 2019 12:24:57 -0400
+Subject: [PATCH] Use correct 'ar' invocation when cross-compiling.
+
+---
+ conf-ar           |  1 +
+ make-tinysshcc.sh | 28 +++++++++++++++++++++++++---
+ 2 files changed, 26 insertions(+), 3 deletions(-)
+ create mode 100644 conf-ar
+
+diff --git a/conf-ar b/conf-ar
+new file mode 100644
+index 0000000..13beaee
+--- /dev/null
++++ b/conf-ar
+@@ -0,0 +1 @@
++ar
+diff --git a/make-tinysshcc.sh b/make-tinysshcc.sh
+index 879eef7..8fbfa96 100755
+--- a/make-tinysshcc.sh
++++ b/make-tinysshcc.sh
+@@ -69,6 +69,28 @@ mkdir -p "${work}"
+ compiler=`head -1 "${work}/compiler"`
+ log1 "finishing"
+ 
++log1 "obtaining ar"
++rm -rf "${work}"
++mkdir -p "${work}"
++(
++  cd "${work}"
++  (
++    if [ x"${AR}" != x ]; then
++      echo "${AR} "
++    fi
++    cat "${top}/conf-ar"
++  ) | while read ar
++  do
++    touch test.o
++    ${ar} cr test.a test.o || { log2 "${ar} failed"; continue; }
++    log2 "${ar} ok"
++    echo "${ar}" > ar
++    break
++  done
++)
++ar=`head -1 "${work}/ar"`
++log1 "finishing"
++
+ log1 "checking compiler options"
+ rm -rf "${work}"
+ mkdir -p "${work}"
+@@ -139,7 +161,7 @@ cp -pr sysdep/* "${work}"
+     while read target source
+     do
+       [ -f "${include}/${target}" ] && continue
+-      rm -f "${source}" "${target}.tmp" 
++      rm -f "${source}" "${target}.tmp"
+       [ -f "${source}.out" ] || continue
+       ${compiler} -O0 -o "${source}" "${source}.c" ${libs} || continue
+       cp "${source}.out" "${include}/${target}"
+@@ -160,7 +182,7 @@ cp -pr crypto/* "${work}"
+   do
+     ${compiler} -I"${include}" -c "${x}.c" || { log2 "libtinynacl.a failed ... see the log ${log}"; exit 111; }
+   done || exit 111
+-  ar cr "${lib}/libtinynacl.a" `cat CRYPTOLIBS` || exit 0
++  ${ar} cr "${lib}/libtinynacl.a" `cat CRYPTOLIBS` || exit 0
+ )
+ log2 "libtinynacl.a ok"
+ log1 "finishing"
+@@ -199,7 +221,7 @@ cp -pr tinyssh/* "${work}"
+     ${compiler} "-DCOMPILER=\"${compilerorig}\"" "-DVERSION=\"${version}\"" -I"${include}" -c "${x}.c" || { log2 "${x}.o failed ... see the log ${log}"; exit 111; }
+     log2 "${x}.o ok"
+   done || exit 111
+-  ar cr libtinyssh.a `cat LIBS` || exit 111
++  ${ar} cr libtinyssh.a `cat LIBS` || exit 111
+   log1 "finishing"
+ 
+   log1 "starting tinyssh"
+-- 
+2.22.0
+
