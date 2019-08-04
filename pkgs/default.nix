@@ -62,30 +62,28 @@ in {
                   else if self.stdenv.hostPlatform.system == "aarch64-linux" then pkgsAarch64LinuxCross
                   else self;
 
-  dnsupdate = self.callPackage ./dnsupdate {
-    inherit (self.python3Packages) buildPythonApplication requests pyyaml beautifulsoup4 netifaces;
-  };
-
-  aur-buildbot = self.callPackage ./aur-buildbot {};
-
-  hacker-hats = self.callPackage ./hacker-hats {};
-
-  tinyssh = self.callPackage ./tinyssh {};
-
-  tinyssh-convert = self.callPackage ./tinyssh-convert {};
-
-  libcreate = self.callPackage ./libcreate {};
-
   audio-recorder = {
     audio-server = self.callPackage ./audio-recorder/audio-server.nix {};
     web-interface = self.python3Packages.callPackage ./audio-recorder/web-interface.nix {};
   };
 
+  aur-buildbot = self.callPackage ./aur-buildbot {};
+
+  dnsupdate = self.python3Packages.callPackage ./dnsupdate { };
+
+  hacker-hats = self.callPackage ./hacker-hats {};
+
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
+
+  libcreate = self.callPackage ./libcreate {};
 
   sanoid = self.callPackage ./sanoid/default.nix {
     inherit (self.perlPackages) ConfigIniFiles;
   };
+
+  tinyssh = self.callPackage ./tinyssh {};
+
+  tinyssh-convert = self.callPackage ./tinyssh-convert {};
 
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
