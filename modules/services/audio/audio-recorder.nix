@@ -34,7 +34,7 @@ in {
       default = [ "" ];
       description = "Addresses of devices to display in the web interface";
     };
-    
+
     clockMaster = mkOption {
       type = types.bool;
       default = false;
@@ -83,7 +83,7 @@ in {
       extraConfig = with pkgs; ''
         Defaults:nginx secure_path="${systemd}/bin"
         nginx ALL=(root) NOPASSWD: ${systemd}/bin/poweroff
-        
+
         Defaults:audio-server secure_path="${systemd}/bin:${chrony}/bin"
         audio-server ALL=(root) NOPASSWD: ${systemd}/bin/systemctl start chronyd
         audio-server ALL=(chrony) NOPASSWD: ${chrony}/bin/chronyc *

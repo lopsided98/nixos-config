@@ -13,7 +13,7 @@ in {
     addressProvider = {
       ipv4.type = "Web";
     };
-    
+
     dnsServices = [
       (googleDomains "raspi2.benwolsieffer.com")
       (googleDomains "dell-optiplex-780.benwolsieffer.com")
@@ -22,8 +22,8 @@ in {
       (googleDomains "rock64.benwolsieffer.com")
     ];
   };
-  
-  environment.secrets = 
+
+  environment.secrets =
     secrets.mkSecret secrets.dnsupdate."raspi2.benwolsieffer.com".username { user = "dnsupdate"; } //
     secrets.mkSecret secrets.dnsupdate."raspi2.benwolsieffer.com".password { user = "dnsupdate"; } //
     secrets.mkSecret secrets.dnsupdate."dell-optiplex-780.benwolsieffer.com".username { user = "dnsupdate"; } //

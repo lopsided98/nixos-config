@@ -8,7 +8,7 @@ buildPythonPackage rec {
   src = stdenv.fetchurlBoot {
     name = "kitty-cam-${version}.tar.gz";
     url = "https://hydra.benwolsieffer.com/job/kitty-cam/release/tarball/latest/download/1";
-    sha256 = "13s4g24rpgbajnhpj2n9ihxk4b5gih9zmpkqfqpbigcp0svynnhw";
+    sha256 = "1kbvnij6nksmn4xz2lymjf1ic0jjddz230icmfv2dc5xypmzdbkw";
   };
 
   propagatedBuildInputs = [ flask flask-cors lirc ];
