@@ -6,18 +6,25 @@ with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = build
 let
   machines = import (builtins.toPath "${localpkgs}/machines") { inherit hostSystems; };
 
-  channelWithNixpkgs = { name, src, ... }@args: let
+  channelTarballWithNixpkgs = { src, ... }@args: let
     nixpkgsRevCount = nixpkgs.revCount or 12345;
     nixpkgsShortRev = nixpkgs.shortRev or "abcdefg";
     nixpkgsVersion = "pre${toString nixpkgsRevCount}.${nixpkgsShortRev}-localpkgs";
+  in pkgs.stdenv.mkDerivation ({
+      name = "nixexprs.tar.xz";
 
-    src = pkgs.stdenv.mkDerivation {
-      inherit (args) name src;
-      phases = [ "unpackPhase" "installPhase" ];
+      phases = [ "installPhase" ];
+
       installPhase = ''
+        mkdir tar
+        cd tar
+
+        cp -Tr --no-preserve=ownership "$src" .
         cp -r --no-preserve=ownership "${nixpkgs}/" nixpkgs
-        # denote nixpkgs versioning
-        chmod -R u+w nixpkgs
+        chmod -R u+w .
+
+        touch .update-on-nixos-rebuild
+
         if [ -e nixpkgs/.version-suffix ]; then
           echo "echo \"$(cat nixpkgs/.version-suffix)\"" > nixpkgs/nixos/modules/installer/tools/get-version-suffix
         else
@@ -26,10 +33,41 @@ let
         if [ ! -e nixpkgs/.git-revision ]; then
           echo -n ${nixpkgs.rev or nixpkgsShortRev} > nixpkgs/.git-revision
         fi
-        cp -r . $out
+
+        tar cJf "$out" \
+          --owner=0 --group=0 --mtime="1970-01-01 00:00:00 UTC" \
+          --transform='s!^\.!nixexprs!' .
       '';
-    };
-  in pkgs.releaseTools.channel (args // { inherit src; });
+    } // args);
+
+  channel = { tarball, constituents ? [], meta ? {}, ... }@args:
+    pkgs.stdenv.mkDerivation ({
+      preferLocalBuild = true;
+      _hydraAggregate = true;
+
+      phases = [ "installPhase" ];
+
+      installPhase = ''
+        mkdir -p $out/{tarballs,nix-support}
+        ln -s '${tarball}' "$out/tarballs/nixexprs.tar.xz"
+        echo "channel - $out/tarballs/nixexprs.tar.xz" > "$out/nix-support/hydra-build-products"
+        echo $constituents > "$out/nix-support/hydra-aggregate-constituents"
+        # Propagate build failures.
+        for i in $constituents; do
+          if [ -e "$i/nix-support/failed" ]; then
+            touch "$out/nix-support/failed"
+          fi
+        done
+      '';
+
+      meta = meta // {
+        isHydraChannel = true;
+      };
+    } // removeAttrs args [ "meta" ]);
+
+  localpkgsTarball = channelTarballWithNixpkgs {
+      src = localpkgs;
+  };
 
 in mapTestOn {
   # Fancy shortcut to generate one attribute per supported platform.
@@ -48,7 +86,7 @@ in mapTestOn {
     xcgf = hostSystems;
     xcpf = hostSystems;
   };
-  
+
   linuxPackages_latest.tmon = hostSystems;
   linuxPackages.tmon = hostSystems;
 } // lib.optionalAttrs (lib.elem "armv7l-linux" hostSystems) {
@@ -62,14 +100,10 @@ in mapTestOn {
     ubootRockPro64;
 } // {
   machines = lib.mapAttrs (name: c: {
-    channel = channelWithNixpkgs {
+    channel = channel {
       inherit name;
       constituents = [ c.config.system.build.toplevel ];
-      src = localpkgs;
+      tarball = localpkgsTarball;
     };
-  } /*
-   # We don't build SD images automatically because there are too many of them
-   // lib.optionalAttrs (c.config.system.build ? sdImage) {
-    inherit (c.config.system.build) sdImage;
-  } */) machines;
+  }) machines;
 }
