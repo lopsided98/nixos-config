@@ -85,6 +85,8 @@ in {
 
   tinyssh-convert = self.callPackage ./tinyssh-convert {};
 
+  water-level-base-station = self.callPackage ./water-level-base-station { };
+
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
 
