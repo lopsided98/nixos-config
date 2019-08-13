@@ -235,5 +235,5 @@
 
   environment.secrets =
     secrets.mkSecret secrets.vpn.home.hmacKey {} //
-    secrets.mkSecret secrets."${config.networking.hostName}".openvpn.privateKey {};
+    secrets.mkSecret secrets."${config.networking.hostName}".vpn.home.privateKey {};
 }
