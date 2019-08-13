@@ -41,6 +41,10 @@
     virtualHosts = {
       "hydra.benwolsieffer.com" = let
         proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+        cacheConfig = ''
+          proxy_cache hydra;
+          add_header X-Cache $upstream_cache_status;
+        '';
       in {
         enableACME = true;
         forceSSL = true;
@@ -51,13 +55,17 @@
           "/" = {
             inherit proxyPass;
           };
-          "~* \.nar(info|\.xz)$" = {
+          "/nar/" = {
             inherit proxyPass;
-            extraConfig = ''
-              proxy_cache hydra;
-
-              add_header X-Cache $upstream_cache_status;
-            '';
+            extraConfig = cacheConfig;
+          };
+          "~* \.narinfo$" = {
+            inherit proxyPass;
+            extraConfig = cacheConfig;
+          };
+          "~* ^/build/\d+/download/" = {
+            inherit proxyPass;
+            extraConfig = cacheConfig;
           };
           # Nix is broken and won't pass authentication to these URLs
           "= /nix-cache-info" = {
@@ -79,8 +87,11 @@
           };
         };
         extraConfig = ''
+          proxy_force_ranges on;
+          # Would be necessary if Hydra supported range requests; in any case it
+          # doesn't hurt.
+          proxy_http_version 1.1;
           proxy_cache_valid 200 1w;
-          proxy_ignore_headers Set-Cookie;
         '';
       };
     };
