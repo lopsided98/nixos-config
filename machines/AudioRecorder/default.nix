@@ -1,6 +1,6 @@
 { hostName,
   ap ? false,
-  bootPartitionID,
+  firmwarePartitionID,
   rootPartitionUUID }:
 
 { lib, config, pkgs, secrets, ... }:
@@ -14,49 +14,22 @@ let
   '';
 in {
   imports = [
-    <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
-
     ../../modules
+    ../../modules/local/machine/raspberry-pi.nix
   ];
 
   sdImage = {
-    inherit bootPartitionID rootPartitionUUID;
-
-    imageBaseName = "${hostName}-sd-image";
-
-    populateBootCommands = let
-      configTxt = pkgs.writeText "config.txt" ''
-        # U-Boot used to need this to work, regardless of whether UART is actually used or not.
-        # TODO: check when/if this can be removed.
-        enable_uart=1
-        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-        # when attempting to show low-voltage or overtemperature warnings.
-        avoid_warnings=1
-        kernel=kernel.img
-        initramfs initrd followkernel
-        ${extraFirmwareConfig}
-      '';
-
-      raspberrypi-builder =
-        import <nixpkgs/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix> {
-          inherit pkgs configTxt;
-        };
-    in ''
-      pushd ${pkgs.raspberrypifw}/share/raspberrypi/boot
-      cp -r overlays $NIX_BUILD_TOP/boot/
-      popd
-      ${raspberrypi-builder} -c ${config.system.build.toplevel} -d ./boot
-    '';
+    inherit firmwarePartitionID rootPartitionUUID;
   };
 
   boot = {
-    loader = {
-      grub.enable = false;
-      raspberryPi = {
-        enable = true;
-        version = 0;
-        firmwareConfig = extraFirmwareConfig;
-      };
+    loader.raspberryPi = {
+      enable = true;
+      version = 0;
+      firmwareConfig = ''
+        dtoverlay=fe-pi-audio
+        dtparam=audio=off
+      '';
     };
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
     /*kernelPatches = [ {
@@ -68,7 +41,7 @@ in {
   nixpkgs.config = {
     platform = lib.systems.platforms.raspberrypi;
     packageOverrides = super: {
-      avahi = super.avahi.overrideDerivation ({
+      avahi = super.avahi.overrideAttrs ({
         patches ? [], ...
       }: {
         # Prevent avahi from ever detecting mDNS conflicts. This works around
