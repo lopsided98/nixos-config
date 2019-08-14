@@ -1,10 +1,16 @@
-{ hostSystems ? [ "x86_64-linux" "armv7l-linux" ], ... }:
+{ hostSystems ? [ "x86_64-linux" "armv7l-linux" ], buildSystem ? null }:
 with import <nixpkgs/lib>;
 let
   # Evaluate the configuration for a machine
   callMachine = path: system: import <nixpkgs/nixos/lib/eval-config.nix> {
-    modules = [ {  _module.args = { inherit system; }; } path ];
-    inherit system;
+    modules = [ path ({
+      nixpkgs = if buildSystem == null then {
+        localSystem.system = system;
+      } else {
+        crossSystem.system = system;
+        localSystem.system = buildSystem;
+      };
+    }) ];
   };
 
   realSystem = n: if n.crossSystem != null then n.crossSystem.system else n.localSystem.system;

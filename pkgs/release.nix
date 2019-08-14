@@ -1,10 +1,10 @@
 { localpkgs ? ../.,
   nixpkgs ? <nixpkgs>,
-  buildSystems ? [ "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ],
-  hostSystems ? [ "x86_64-linux" ] }:
-with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = buildSystems; });
+  hostSystems ? [ "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ],
+  buildSystem ? null }:
+with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = hostSystems; });
 let
-  machines = import (builtins.toPath "${localpkgs}/machines") { inherit hostSystems; };
+  machines = import (builtins.toPath "${localpkgs}/machines") { inherit hostSystems buildSystem; };
 
   channelTarballWithNixpkgs = { src, ... }@args: let
     nixpkgsRevCount = nixpkgs.revCount or 12345;
@@ -81,7 +81,6 @@ in mapTestOn {
     aur = hostSystems;
     memoizedb = hostSystems;
     pyalpm = hostSystems;
-    pyalsaaudio = hostSystems;
     upnpclient = hostSystems;
     xcgf = hostSystems;
     xcpf = hostSystems;
