@@ -34,7 +34,15 @@
 
   # Standard set of packages
   environment.systemPackages = with pkgs; [
-    htop iotop linuxPackages_latest.tmon git file vim screen usbutils
+    htop
+    iotop
+    linuxPackages_latest.tmon
+    bmon
+    git
+    file
+    vim
+    screen
+    usbutils
   ];
 
   # Select internationalisation properties.
@@ -334,6 +342,12 @@
 
   # Disable UDisks by default (significantly reduces system closure size)
   services.udisks2.enable = lib.mkDefault false;
+
+  # Automatically run garbage collection once a week
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+  };
 
   users = {
     # Don't allow normal user management
