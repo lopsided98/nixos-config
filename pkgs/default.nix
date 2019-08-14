@@ -24,8 +24,6 @@ self: super: with super.lib; let
         inherit (self) libarchive;
       };
 
-      pyalsaaudio = pySelf.callPackage ./python-modules/pyalsaaudio { };
-
       upnpclient = pySelf.callPackage ./python-modules/upnpclient { };
 
       xcgf = pySelf.callPackage ./python-modules/xcgf { };
