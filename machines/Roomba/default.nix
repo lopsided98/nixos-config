@@ -4,27 +4,24 @@
 
 { lib, config, pkgs, secrets, ... }: {
   imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-
     ../../modules
+    ../../modules/local/machine/raspberry-pi.nix
   ];
 
+  sdImage = {
+    firmwarePartitionID = "0x0980df14";
+    rootPartitionUUID = "b12d092c-fc79-4d6d-8879-0be220bc1ad2";
+  };
+
   boot = {
-    loader = {
-      grub.enable = false;
-      raspberryPi = {
-        enable = true;
-        version = 3;
-        firmwareConfig = ''
-          dtoverlay=gpio-ir-tx,gpio_pin=22
-        '';
-      };
+    loader.raspberryPi = {
+      enable = true;
+      version = 3;
+      firmwareConfig = ''
+        dtoverlay=gpio-ir-tx,gpio_pin=22
+      '';
     };
-    # Fix dropped webcam frames
-    extraModprobeConfig = ''
-      options uvcvideo nodrop=1 timeout=1000
-    '';
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
   };
 
   hardware.enableRedistributableFirmware = true;
