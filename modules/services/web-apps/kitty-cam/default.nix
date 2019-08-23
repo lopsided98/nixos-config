@@ -4,7 +4,7 @@
 in {
   options.services.kittyCam = {
     enable = mkEnableOption "KittyCam server";
-    
+
     audioDevice = mkOption {
       type = types.str;
       default = "hw:1,0";
@@ -13,7 +13,7 @@ in {
       '';
     };
   };
-  
+
   config = mkIf cfg.enable {
 
     users = {
@@ -31,13 +31,13 @@ in {
         vchiq = {};
       };
     };
-  
+
     services.nginx = {
       enable = true;
       package = mkForce (pkgs.nginxMainline.override {
         modules = [ pkgs.nginxModules.rtmp ];
       });
-      
+
       virtualHosts.kitty-cam = {
         locations = {
           "/" = {
@@ -82,7 +82,7 @@ in {
           };
         };
       };
-      
+
       appendConfig = ''
         rtmp {
           server {
@@ -105,7 +105,7 @@ in {
         }
       '';
     };
-    
+
     services.uwsgi = {
       enable = true;
       user = "nginx";
@@ -127,12 +127,12 @@ in {
         };
       };
     };
-    
+
     services.udev.extraRules = ''
       SUBSYSTEM=="vchiq", GROUP="vchiq", MODE="0660"
       KERNEL=="lirc[0-9]*", SUBSYSTEM=="lirc", OWNER="lirc", MODE="0660"
     '';
-    
+
     services.lirc = {
       enable = true;
       options = ''
@@ -161,9 +161,9 @@ in {
             export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
             export GST_OMX_CONFIG_DIR=${pkgs.pkgsArmv7lLinux.gst_all_1.gst-omx}/etc/xdg
             hls_dir=/run/kitty-cam/hls
-            
+
             mkdir -p "$hls_dir"
-            
+
             ${pkgs.pkgsArmv7lLinux.gst_all_1.gstreamer.dev}/bin/gst-launch-1.0 \
               v4l2src ! \
               queue ! \
