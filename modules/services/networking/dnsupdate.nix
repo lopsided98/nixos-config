@@ -152,6 +152,7 @@ in {
         Type = "oneshot";
         User = "dnsupdate";
         Group = "dnsupdate";
+        CacheDirectory = "dnsupdate";
         ExecStart = "${pkgs.dnsupdate}/bin/dnsupdate ${pkgs.writeText "dnsupdate.conf" (configFile cfg)}";
       };
     };
