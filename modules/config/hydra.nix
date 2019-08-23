@@ -91,7 +91,8 @@
           # Would be necessary if Hydra supported range requests; in any case it
           # doesn't hurt.
           proxy_http_version 1.1;
-          proxy_cache_valid 200 1w;
+          proxy_cache_valid 1w;
+          proxy_cache_valid any 0m;
         '';
       };
     };
