@@ -2,50 +2,25 @@
 
 with lib;
 
-let
-  extraFirmwareConfig = ''
-    # Use the minimum amount of GPU memory
-    gpu_mem=16
-  '';
-in {
+{
   imports = [
-    <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>
-
     ../../modules
+    ../../modules/local/machine/raspberry-pi.nix
   ];
 
-  sdImage = let
-    configTxt = pkgs.writeText "config.txt" config.boot.loader.raspberryPi.firmwareConfig;
-    raspberrypi-uboot-builder =
-      import <nixpkgs/nixos/modules/system/boot/loader/raspberrypi/uboot-builder.nix> {
-        version = 0;
-        inherit pkgs configTxt;
-      };
-  in {
+  sdImage = {
     firmwarePartitionID = "0x2a7208bc";
     rootPartitionUUID = "79cd7c77-b355-4d2b-b1d5-fa9207e944f2";
-
-    imageBaseName = "${config.networking.hostName}-sd-image";
-
-    populateFirmwareCommands = ''
-      "${raspberrypi-uboot-builder}" -t 3 -c "${config.system.build.toplevel}" -d ./files/boot
-    '';
-    populateRootCommands = ''
-      mkdir -p ./files/boot
-      "${raspberrypi-uboot-builder}" -t 3 -c "${config.system.build.toplevel}" -d ./files/boot
-    '';
   };
 
-  boot = {
-    loader = {
-      grub.enable = false;
-      raspberryPi = {
-        enable = true;
-        version = 0;
-        firmwareConfig = extraFirmwareConfig;
-        uboot.enable = true;
-      };
-    };
+  boot.loader.raspberryPi = {
+    enable = true;
+    version = 0;
+    firmwareConfig = ''
+      # Use the minimum amount of GPU memory
+      gpu_mem=16
+    '';
+    uboot.enable = true;
   };
 
   hardware = {
@@ -69,8 +44,6 @@ in {
   };
   networking.hostName = "maine-pi";
 
-  #environment.systemPackages = [ pkgs.rustc ];
-
   # Services to enable
 
   services.openssh = {
@@ -87,10 +60,36 @@ in {
     privateKey = secrets.getSecret secrets.maine-pi.vpn.home.privateKey;
   };
 
+  services.dnsupdate = {
+    enable = true;
+    addressProvider = {
+      ipv4.type = "Web";
+    };
+
+    dnsServices = singleton {
+      type = "NSUpdate";
+      args.hostname = "maine-pi.awsmppl.com";
+      includeArgs.secret_key = secrets.getSecret secrets.maine-pi.dnsupdate.secretKey;
+    };
+  };
+
+  services.watchdog = {
+    enable = true;
+    watchdogDevice = "/dev/watchdog0";
+    watchdogTimeout = 10;
+    realtime = true;
+  };
+
+  local.services.waterLevelMonitor = {
+    enable = true;
+    influxdb.certificateSecret = secrets.maine-pi.waterLevelMonitor.influxdbCertificate;
+  };
+
   # Enable SD card TRIM
   services.fstrim.enable = true;
 
   environment.secrets = mkMerge [
+    (secrets.mkSecret secrets.maine-pi.dnsupdate.secretKey { user = "dnsupdate"; })
     (secrets.mkSecret secrets.maine-pi.wpaSupplicantConf {
       target = "wpa_supplicant.conf";
     })

@@ -17,6 +17,7 @@
     ./services/networking/doorman.nix
     ./services/networking/tinyssh.nix
     ./services/monitoring/telegraf.nix
+    ./services/monitoring/watchdog.nix
     ./services/web-apps/hacker-hats.nix
     ./services/web-apps/kitty-cam
     ./services/web-servers/nginx.nix
@@ -24,6 +25,7 @@
 
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
+    ./local/services/water-level-monitor.nix
 
     ../overlays/nixos-secrets/secrets.nix
   ];
