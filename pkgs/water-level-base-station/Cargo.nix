@@ -79,19 +79,19 @@ rec {
     nodrop = "0.1.13";
   };
   deps.atty."0.2.13" = {
-    libc = "0.2.60";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
-  deps.autocfg."0.1.5" = {};
-  deps.backtrace."0.3.34" = {
+  deps.autocfg."0.1.6" = {};
+  deps.backtrace."0.3.35" = {
     backtrace_sys = "0.1.31";
     cfg_if = "0.1.9";
-    libc = "0.2.60";
-    rustc_demangle = "0.1.15";
+    libc = "0.2.62";
+    rustc_demangle = "0.1.16";
   };
   deps.backtrace_sys."0.1.31" = {
-    libc = "0.2.60";
-    cc = "1.0.38";
+    libc = "0.2.62";
+    cc = "1.0.40";
   };
   deps.base64."0.10.1" = {
     byteorder = "1.3.2";
@@ -104,17 +104,17 @@ rec {
     iovec = "0.1.2";
   };
   deps.c2_chacha."0.2.2" = {
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
     ppv_lite86 = "0.2.5";
   };
-  deps.cc."1.0.38" = {};
+  deps.cc."1.0.40" = {};
   deps.cfg_if."0.1.9" = {};
   deps.clap."2.33.0" = {
     atty = "0.2.13";
     bitflags = "1.1.0";
     strsim = "0.8.0";
     textwrap = "0.11.0";
-    unicode_width = "0.1.5";
+    unicode_width = "0.1.6";
     vec_map = "0.8.1";
     ansi_term = "0.11.0";
   };
@@ -131,7 +131,7 @@ rec {
     idna = "0.1.5";
     log = "0.4.8";
     publicsuffix = "1.5.2";
-    serde = "1.0.98";
+    serde = "1.0.99";
     serde_json = "1.0.40";
     time = "0.1.42";
     try_from = "0.3.2";
@@ -139,7 +139,7 @@ rec {
   };
   deps.core_foundation."0.6.4" = {
     core_foundation_sys = "0.6.2";
-    libc = "0.2.60";
+    libc = "0.2.62";
   };
   deps.core_foundation_sys."0.6.2" = {};
   deps.crc32fast."1.2.0" = {
@@ -153,7 +153,7 @@ rec {
     arrayvec = "0.4.11";
     cfg_if = "0.1.9";
     crossbeam_utils = "0.6.6";
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
     memoffset = "0.5.1";
     scopeguard = "1.0.0";
   };
@@ -162,10 +162,10 @@ rec {
   };
   deps.crossbeam_utils."0.6.6" = {
     cfg_if = "0.1.9";
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
   };
   deps.dbus."0.6.5" = {
-    libc = "0.2.60";
+    libc = "0.2.62";
     libdbus_sys = "0.2.0";
   };
   deps.dtoa."0.4.4" = {};
@@ -181,23 +181,23 @@ rec {
     termcolor = "1.0.5";
   };
   deps.error_chain."0.12.1" = {
-    backtrace = "0.3.34";
+    backtrace = "0.3.35";
     version_check = "0.1.5";
   };
   deps.failure."0.1.5" = {
-    backtrace = "0.3.34";
+    backtrace = "0.3.35";
     failure_derive = "0.1.5";
   };
   deps.failure_derive."0.1.5" = {
     proc_macro2 = "0.4.30";
     quote = "0.6.13";
-    syn = "0.15.42";
+    syn = "0.15.44";
     synstructure = "0.10.2";
   };
-  deps.flate2."1.0.9" = {
+  deps.flate2."1.0.11" = {
     crc32fast = "1.2.0";
-    libc = "0.2.60";
-    miniz_oxide_c_api = "0.2.3";
+    libc = "0.2.62";
+    miniz_oxide = "0.3.2";
   };
   deps.fnv."1.0.6" = {};
   deps.foreign_types."0.3.2" = {
@@ -215,9 +215,10 @@ rec {
     futures = "0.1.28";
     num_cpus = "1.10.1";
   };
-  deps.getrandom."0.1.7" = {
+  deps.getrandom."0.1.11" = {
     cfg_if = "0.1.9";
-    libc = "0.2.60";
+    libc = "0.2.62";
+    wasi = "0.5.0";
   };
   deps.h2."0.1.26" = {
     byteorder = "1.3.2";
@@ -225,7 +226,7 @@ rec {
     fnv = "1.0.6";
     futures = "0.1.28";
     http = "0.1.18";
-    indexmap = "1.0.2";
+    indexmap = "1.1.0";
     log = "0.4.8";
     slab = "0.4.2";
     string = "0.2.1";
@@ -282,9 +283,9 @@ rec {
     unicode_bidi = "0.3.4";
     unicode_normalization = "0.1.8";
   };
-  deps.indexmap."1.0.2" = {};
+  deps.indexmap."1.1.0" = {};
   deps.iovec."0.1.2" = {
-    libc = "0.2.60";
+    libc = "0.2.62";
     winapi = "0.2.8";
   };
   deps.itertools."0.8.0" = {
@@ -295,8 +296,8 @@ rec {
     winapi = "0.2.8";
     winapi_build = "0.1.1";
   };
-  deps.lazy_static."1.3.0" = {};
-  deps.libc."0.2.60" = {};
+  deps.lazy_static."1.4.0" = {};
+  deps.libc."0.2.62" = {};
   deps.libdbus_sys."0.2.0" = {
     pkg_config = "0.3.15";
   };
@@ -316,18 +317,12 @@ rec {
   deps.mime."0.3.13" = {
     unicase = "2.4.0";
   };
-  deps.mime_guess."2.0.0" = {
+  deps.mime_guess."2.0.1" = {
     mime = "0.3.13";
     unicase = "2.4.0";
   };
-  deps.miniz_oxide."0.3.0" = {
+  deps.miniz_oxide."0.3.2" = {
     adler32 = "1.0.3";
-  };
-  deps.miniz_oxide_c_api."0.2.3" = {
-    crc32fast = "1.2.0";
-    libc = "0.2.60";
-    miniz_oxide = "0.3.0";
-    cc = "1.0.38";
   };
   deps.mio."0.6.19" = {
     iovec = "0.1.2";
@@ -336,7 +331,7 @@ rec {
     slab = "0.4.2";
     fuchsia_zircon = "0.3.3";
     fuchsia_zircon_sys = "0.3.3";
-    libc = "0.2.60";
+    libc = "0.2.62";
     kernel32_sys = "0.2.2";
     miow = "0.2.1";
     winapi = "0.2.8";
@@ -348,39 +343,39 @@ rec {
     ws2_32_sys = "0.2.1";
   };
   deps.native_tls."0.2.3" = {
-    lazy_static = "1.3.0";
-    libc = "0.2.60";
+    lazy_static = "1.4.0";
+    libc = "0.2.62";
     security_framework = "0.3.1";
     security_framework_sys = "0.3.1";
     tempfile = "3.1.0";
     log = "0.4.8";
     openssl = "0.10.24";
     openssl_probe = "0.1.2";
-    openssl_sys = "0.9.48";
+    openssl_sys = "0.9.49";
     schannel = "0.1.15";
   };
   deps.net2."0.2.33" = {
     cfg_if = "0.1.9";
-    libc = "0.2.60";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
   deps.nodrop."0.1.13" = {};
   deps.num_cpus."1.10.1" = {
-    libc = "0.2.60";
+    libc = "0.2.62";
   };
   deps.openssl."0.10.24" = {
     bitflags = "1.1.0";
     cfg_if = "0.1.9";
     foreign_types = "0.3.2";
-    lazy_static = "1.3.0";
-    libc = "0.2.60";
-    openssl_sys = "0.9.48";
+    lazy_static = "1.4.0";
+    libc = "0.2.62";
+    openssl_sys = "0.9.49";
   };
   deps.openssl_probe."0.1.2" = {};
-  deps.openssl_sys."0.9.48" = {
-    libc = "0.2.60";
-    autocfg = "0.1.5";
-    cc = "1.0.38";
+  deps.openssl_sys."0.9.49" = {
+    libc = "0.2.62";
+    autocfg = "0.1.6";
+    cc = "1.0.40";
     pkg_config = "0.3.15";
   };
   deps.owning_ref."0.4.0" = {
@@ -394,7 +389,7 @@ rec {
     rand = "0.6.5";
     smallvec = "0.6.10";
     rustc_version = "0.2.3";
-    libc = "0.2.60";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
   deps.percent_encoding."1.0.1" = {};
@@ -403,10 +398,13 @@ rec {
   deps.proc_macro2."0.4.30" = {
     unicode_xid = "0.1.0";
   };
+  deps.proc_macro2."1.0.1" = {
+    unicode_xid = "0.2.0";
+  };
   deps.publicsuffix."1.5.2" = {
     error_chain = "0.12.1";
     idna = "0.1.5";
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
     regex = "1.2.1";
     url = "1.7.2";
   };
@@ -414,39 +412,42 @@ rec {
   deps.quote."0.6.13" = {
     proc_macro2 = "0.4.30";
   };
+  deps.quote."1.0.2" = {
+    proc_macro2 = "1.0.1";
+  };
   deps.rand."0.6.5" = {
     rand_chacha = "0.1.1";
-    rand_core = "0.4.0";
+    rand_core = "0.4.2";
     rand_hc = "0.1.0";
     rand_isaac = "0.1.1";
     rand_jitter = "0.1.4";
     rand_os = "0.1.3";
     rand_pcg = "0.1.2";
     rand_xorshift = "0.1.1";
-    autocfg = "0.1.5";
-    libc = "0.2.60";
+    autocfg = "0.1.6";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
   deps.rand."0.7.0" = {
     rand_core = "0.5.0";
     rand_chacha = "0.2.1";
     rand_hc = "0.2.0";
-    libc = "0.2.60";
+    libc = "0.2.62";
   };
   deps.rand_chacha."0.1.1" = {
     rand_core = "0.3.1";
-    autocfg = "0.1.5";
+    autocfg = "0.1.6";
   };
   deps.rand_chacha."0.2.1" = {
     c2_chacha = "0.2.2";
     rand_core = "0.5.0";
   };
   deps.rand_core."0.3.1" = {
-    rand_core = "0.4.0";
+    rand_core = "0.4.2";
   };
-  deps.rand_core."0.4.0" = {};
+  deps.rand_core."0.4.2" = {};
   deps.rand_core."0.5.0" = {
-    getrandom = "0.1.7";
+    getrandom = "0.1.11";
   };
   deps.rand_hc."0.1.0" = {
     rand_core = "0.3.1";
@@ -458,21 +459,21 @@ rec {
     rand_core = "0.3.1";
   };
   deps.rand_jitter."0.1.4" = {
-    rand_core = "0.4.0";
-    libc = "0.2.60";
+    rand_core = "0.4.2";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
   deps.rand_os."0.1.3" = {
-    rand_core = "0.4.0";
+    rand_core = "0.4.2";
     rdrand = "0.4.0";
     cloudabi = "0.0.3";
     fuchsia_cprng = "0.1.1";
-    libc = "0.2.60";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
   deps.rand_pcg."0.1.2" = {
-    rand_core = "0.4.0";
-    autocfg = "0.1.5";
+    rand_core = "0.4.2";
+    autocfg = "0.1.6";
   };
   deps.rand_xorshift."0.1.1" = {
     rand_core = "0.3.1";
@@ -491,22 +492,22 @@ rec {
   deps.remove_dir_all."0.5.2" = {
     winapi = "0.3.7";
   };
-  deps.reqwest."0.9.19" = {
+  deps.reqwest."0.9.20" = {
     base64 = "0.10.1";
     bytes = "0.4.12";
     cookie = "0.12.0";
     cookie_store = "0.7.0";
     encoding_rs = "0.8.17";
-    flate2 = "1.0.9";
+    flate2 = "1.0.11";
     futures = "0.1.28";
     http = "0.1.18";
     hyper = "0.12.33";
     hyper_tls = "0.3.2";
     log = "0.4.8";
     mime = "0.3.13";
-    mime_guess = "2.0.0";
+    mime_guess = "2.0.1";
     native_tls = "0.2.3";
-    serde = "1.0.98";
+    serde = "1.0.99";
     serde_json = "1.0.40";
     serde_urlencoded = "0.5.5";
     time = "0.1.42";
@@ -519,13 +520,13 @@ rec {
     uuid = "0.7.4";
     winreg = "0.6.2";
   };
-  deps.rustc_demangle."0.1.15" = {};
+  deps.rustc_demangle."0.1.16" = {};
   deps.rustc_version."0.2.3" = {
     semver = "0.9.0";
   };
   deps.ryu."1.0.0" = {};
   deps.schannel."0.1.15" = {
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
     winapi = "0.3.7";
   };
   deps.scopeguard."0.3.3" = {};
@@ -533,7 +534,7 @@ rec {
   deps.security_framework."0.3.1" = {
     core_foundation = "0.6.4";
     core_foundation_sys = "0.6.2";
-    libc = "0.2.60";
+    libc = "0.2.62";
     security_framework_sys = "0.3.1";
   };
   deps.security_framework_sys."0.3.1" = {
@@ -543,29 +544,29 @@ rec {
     semver_parser = "0.7.0";
   };
   deps.semver_parser."0.7.0" = {};
-  deps.serde."1.0.98" = {
-    serde_derive = "1.0.98";
+  deps.serde."1.0.99" = {
+    serde_derive = "1.0.99";
   };
-  deps.serde_derive."1.0.98" = {
-    proc_macro2 = "0.4.30";
-    quote = "0.6.13";
-    syn = "0.15.42";
+  deps.serde_derive."1.0.99" = {
+    proc_macro2 = "1.0.1";
+    quote = "1.0.2";
+    syn = "1.0.5";
   };
   deps.serde_json."1.0.40" = {
     itoa = "0.4.4";
     ryu = "1.0.0";
-    serde = "1.0.98";
+    serde = "1.0.99";
   };
   deps.serde_urlencoded."0.5.5" = {
     dtoa = "0.4.4";
     itoa = "0.4.4";
-    serde = "1.0.98";
+    serde = "1.0.99";
     url = "1.7.2";
   };
   deps.serde_yaml."0.8.9" = {
     dtoa = "0.4.4";
     linked_hash_map = "0.5.2";
-    serde = "1.0.98";
+    serde = "1.0.99";
     yaml_rust = "0.4.3";
   };
   deps.slab."0.4.2" = {};
@@ -575,15 +576,20 @@ rec {
     bytes = "0.4.12";
   };
   deps.strsim."0.8.0" = {};
-  deps.syn."0.15.42" = {
+  deps.syn."0.15.44" = {
     proc_macro2 = "0.4.30";
     quote = "0.6.13";
     unicode_xid = "0.1.0";
   };
+  deps.syn."1.0.5" = {
+    proc_macro2 = "1.0.1";
+    quote = "1.0.2";
+    unicode_xid = "0.2.0";
+  };
   deps.synstructure."0.10.2" = {
     proc_macro2 = "0.4.30";
     quote = "0.6.13";
-    syn = "0.15.42";
+    syn = "0.15.44";
     unicode_xid = "0.1.0";
   };
   deps.tempfile."3.1.0" = {
@@ -591,20 +597,20 @@ rec {
     rand = "0.7.0";
     remove_dir_all = "0.5.2";
     redox_syscall = "0.1.56";
-    libc = "0.2.60";
+    libc = "0.2.62";
     winapi = "0.3.7";
   };
   deps.termcolor."1.0.5" = {
-    wincolor = "1.0.1";
+    wincolor = "1.0.2";
   };
   deps.textwrap."0.11.0" = {
-    unicode_width = "0.1.5";
+    unicode_width = "0.1.6";
   };
   deps.thread_local."0.3.6" = {
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
   };
   deps.time."0.1.42" = {
-    libc = "0.2.60";
+    libc = "0.2.62";
     redox_syscall = "0.1.56";
     winapi = "0.3.7";
   };
@@ -642,7 +648,7 @@ rec {
   deps.tokio_reactor."0.1.9" = {
     crossbeam_utils = "0.6.6";
     futures = "0.1.28";
-    lazy_static = "1.3.0";
+    lazy_static = "1.4.0";
     log = "0.4.8";
     mio = "0.6.19";
     num_cpus = "1.10.1";
@@ -694,15 +700,16 @@ rec {
   deps.unicode_normalization."0.1.8" = {
     smallvec = "0.6.10";
   };
-  deps.unicode_width."0.1.5" = {};
+  deps.unicode_width."0.1.6" = {};
   deps.unicode_xid."0.1.0" = {};
+  deps.unicode_xid."0.2.0" = {};
   deps.url."1.7.2" = {
     idna = "0.1.5";
     matches = "0.1.8";
     percent_encoding = "1.0.1";
   };
   deps.url_serde."0.2.0" = {
-    serde = "1.0.98";
+    serde = "1.0.99";
     url = "1.7.2";
   };
   deps.uuid."0.7.4" = {
@@ -716,6 +723,7 @@ rec {
     log = "0.4.8";
     try_lock = "0.2.2";
   };
+  deps.wasi."0.5.0" = {};
   deps.water_level_base_station."0.1.0" = {
     byteorder = "1.3.2";
     clap = "2.33.0";
@@ -724,8 +732,8 @@ rec {
     failure = "0.1.5";
     itertools = "0.8.0";
     log = "0.4.8";
-    reqwest = "0.9.19";
-    serde = "1.0.98";
+    reqwest = "0.9.20";
+    serde = "1.0.99";
     serde_yaml = "0.8.9";
     url = "1.7.2";
     url_serde = "0.2.0";
@@ -741,7 +749,7 @@ rec {
     winapi = "0.3.7";
   };
   deps.winapi_x86_64_pc_windows_gnu."0.4.0" = {};
-  deps.wincolor."1.0.1" = {
+  deps.wincolor."1.0.2" = {
     winapi = "0.3.7";
     winapi_util = "0.1.2";
   };
