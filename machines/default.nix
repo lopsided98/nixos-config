@@ -1,4 +1,5 @@
-{ hostSystems ? [ "x86_64-linux" "armv7l-linux" ], buildSystem ? null }:
+{ hostSystems ? [ "x86_64-linux" "armv7l-linux" ], buildSystem ? null
+, modules ? [] }:
 with import <nixpkgs/lib>;
 let
   # Evaluate the configuration for a machine
@@ -10,7 +11,7 @@ let
         crossSystem.system = system;
         localSystem.system = buildSystem;
       };
-    }) ];
+    }) ] ++ modules;
   };
 
   realSystem = n: if n.crossSystem != null then n.crossSystem.system else n.localSystem.system;
