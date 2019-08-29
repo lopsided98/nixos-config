@@ -171,11 +171,6 @@ in rec {
         autosnap = true;
         recursive = true;
       };
-      "backup/backups/P-3400" = {
-        useTemplate = [ "backup" ];
-        autosnap = true;
-        recursive = true;
-      };
     };
   };
 
@@ -204,10 +199,6 @@ in rec {
     } {
       source = "backup/backups/Dell-Inspiron-15-Windows";
       target = "${remote}:backup/backups/Dell-Inspiron-15-Windows";
-      recursive = true;
-    } {
-      source = "backup/backups/P-3400";
-      target = "${remote}:backup/backups/P-3400";
       recursive = true;
     } ];
   };

@@ -67,6 +67,13 @@ in {
         recursive = true;
         processChildrenOnly = true;
       };
+
+      # Snapshots of non-ZFS devices that backup to this node
+      "backup/backups/P-3400" = {
+        useTemplate = [ "backup" ];
+        autosnap = true;
+        recursive = true;
+      };
     };
   };
 
@@ -77,6 +84,10 @@ in {
     commands = [ {
       source = "backup/backups/Dell-Optiplex-780";
       target = "${remote}:backup/backups/Dell-Optiplex-780";
+      recursive = true;
+    } {
+      source = "backup/backups/P-3400";
+      target = "${remote}:backup/backups/P-3400";
       recursive = true;
     } ];
   };
