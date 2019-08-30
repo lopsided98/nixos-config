@@ -167,9 +167,6 @@
   };
 
   nix = {
-    # Build packages in sandbox
-    useSandbox = true;
-
     trustedUsers = [ "build" ];
     distributedBuilds = true;
     autoOptimiseStore = true;
@@ -183,15 +180,27 @@
       isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
     in [ https://cache.nixos.org/ ] ++
       lib.optional (!isHydra) https://hydra.benwolsieffer.com;
-    binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" "nixos-arm.dezgeg.me-1:xBaUKS3n17BZPKeyxL4JfbTqECsT+ysbDJz29kLFRW0=%" ];
+    binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
 
     nixPath = let
-      machineChannel = "/nix/var/nix/profiles/per-user/root/channels/machines.${config.networking.hostName}.channel";
+      nixpkgs = builtins.path {
+        inherit (pkgs) path;
+        name = "nixpkgs";
+        # Leave enough of the git repo to determine the revision, but remove the
+        # large objects directory
+        filter = path: type: type != "directory" || !lib.hasSuffix ".git/objects" path;
+      };
+
+      localpkgs = builtins.path {
+        path = ../../..;
+        name = "localpkgs";
+        filter = path: type: type != "directory" || baseNameOf path != ".git";
+      };
     in [
-      "nixpkgs=${machineChannel}/nixpkgs"
-      "localpkgs=${machineChannel}"
-      "nixos-config=${machineChannel}/machines/${config.networking.hostName}"
-      "nixpkgs-overlays=${machineChannel}/overlays"
+      "nixpkgs=${nixpkgs}"
+      "localpkgs=${localpkgs}"
+      "nixos-config=${localpkgs}/machines/${config.networking.hostName}"
+      "nixpkgs-overlays=${localpkgs}/overlays"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
