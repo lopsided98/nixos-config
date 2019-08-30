@@ -19,6 +19,7 @@
       version = 3;
       firmwareConfig = ''
         dtoverlay=gpio-ir-tx,gpio_pin=22
+        dtoverlay=pi3-disable-bt
       '';
     };
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
