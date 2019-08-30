@@ -155,6 +155,7 @@ in {
         Type = "simple";
         User = "kitty-cam";
         Group = "kitty-cam";
+        Restart = "on-failure";
         ExecStart = pkgs.runCommand "stream-hls.sh" {
           text = ''
             #!${pkgs.stdenv.shell}
