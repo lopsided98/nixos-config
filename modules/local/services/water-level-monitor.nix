@@ -85,6 +85,7 @@ in {
     in {
       environment.RUST_LOG = "debug";
       wantedBy = [ "multi-user.target" ];
+      after = [ "bluetooth.target" ];
       serviceConfig = {
         User = "water-level";
         Group = "water-level";
