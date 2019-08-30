@@ -67,7 +67,6 @@
             inherit proxyPass;
             extraConfig = cacheConfig;
           };
-          # Nix is broken and won't pass authentication to these URLs
           "= /nix-cache-info" = {
             inherit proxyPass;
             extraConfig = ''
@@ -92,7 +91,9 @@
           # doesn't hurt.
           proxy_http_version 1.1;
           proxy_cache_valid 1w;
-          proxy_cache_valid any 0m;
+          # Ignore cache headers from Hydra; they cause caching of error
+          # responses
+          proxy_ignore_headers Expires Cache-Control;
         '';
       };
     };
@@ -100,8 +101,9 @@
 
   environment.secrets = {
     "${secrets.build.sshKey}" = {
+      user = "hydra-queue-runner";
       group = "hydra";
-      mode = "0440";
+      mode = "0400";
     };
   } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; };
 }
