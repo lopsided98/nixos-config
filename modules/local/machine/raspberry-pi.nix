@@ -1,6 +1,6 @@
-# This module does not have an enable option because the sdCard module does not
-# either and there is no way to do conditional imports. Any machine that uses
-# this configuration must manually include it.
+# This module does not have an enable option because the sd-image module does
+# not either and there is no way to do conditional imports. Any machine that
+# uses this configuration must manually include it.
 
 { config, lib, pkgs, ... }:
 
@@ -43,7 +43,7 @@ in {
       '' + optionalString (!ubootEnabled) ''
         # This should probably be done by raspberrypi-builder.sh
         cp -r ${pkgs.raspberrypifw}/share/raspberrypi/boot/overlays ./firmware
-        '${raspberryPiBuilder}' -c '${config.system.build.toplevel}' -d ./firmware 
+        '${raspberryPiBuilder}' -c '${config.system.build.toplevel}' -d ./firmware
       '';
       populateRootCommands = optionalString ubootEnabled ''
         mkdir -p ./files/boot
