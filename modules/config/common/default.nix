@@ -180,7 +180,11 @@
       isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
     in [ https://cache.nixos.org/ ] ++
       lib.optional (!isHydra) https://hydra.benwolsieffer.com;
-    binaryCachePublicKeys = [ "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI=" ];
+    binaryCachePublicKeys = [
+      "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
+      # Old key, will be removed once no longer used in cache
+      "nix-cache.benwolsieffer.com-1:fv34TjwD6LKli0BqclR4wRjj21WUry4eaXuaStzvpeI="
+    ];
 
     nixPath = let
       nixpkgs = builtins.path {
