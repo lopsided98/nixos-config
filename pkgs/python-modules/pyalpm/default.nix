@@ -1,24 +1,34 @@
-{ lib, fetchgit, buildPythonPackage,
+{ lib, fetchPypi, fetchpatch, buildPythonPackage,
   pacman, libarchive, nose }:
 
 buildPythonPackage rec {
   pname = "pyalpm";
-  version = "0.8.2";
-  name = "${pname}-${version}";
+  version = "0.8.5";
 
-  src = fetchgit {
-    url = "https://git.archlinux.org/pyalpm.git";
-    rev = "6f0787ef74fc342c3eb0a9b24ab7aea0087bb27a";
-    sha256 = "078m79zzmgm3a49jrx6pdl5g53f6gcchwf49x6jb97hjhh8ysmhb";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1ibnim7gwc0gw5n803l76w9kli91xrpsavpkrvxz3g7ghs9rkm13";
   };
-  
+
+  patches = [
+    # Revert memleak patch which causes 'random' segfauts since the handle is
+    # still used while it's already cleaned up.
+    (fetchpatch {
+      url = "https://git.archlinux.org/pyalpm.git/patch/?id=c02555c5d83e63b1a308e7c165d5615198e6d813";
+      sha256 = "1i4n26vzkinlc09yfn2vknxnii1kjjw98pmj7apb55pmc59qsjsq";
+      revert = true;
+    })
+  ];
+
   buildInputs = [ pacman libarchive nose ];
 
   # Tests only run on Arch Linux
   doCheck = false;
 
-  meta = {
+  meta = with lib; {
     description = "Libalpm bindings for Python 3";
-    homepage = https://git.archlinux.org/pyalpm.git/;
+    homepage = "https://git.archlinux.org/pyalpm.git";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ lopsided98 ];
   };
 }
