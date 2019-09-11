@@ -1,25 +1,25 @@
-{ fetchurl, buildPythonPackage,
-  pyalpm, xcgf, xcpf, pyxdg }:
+{ lib, fetchurl, buildPythonPackage, pyalpm, xcgf, xcpf, pyxdg }:
 
 buildPythonPackage rec {
   pname = "aur";
-  version = "2018";
-  name = "${pname}-${version}";
+  version = "2018.8";
 
   src = fetchurl {
     url = "http://xyne.archlinux.ca/projects/python3-${pname}/src/python3-${pname}-${version}.tar.xz";
-    sha256 = "1v1xfvb6q78nk8bgzj958q90q6y9qk9b9d9sy0l1hmks2dcycwmw";
+    sha256 = "09if4a32dzg0j3haqxis6c90sknng9s2zs90mmp3z9dk0h9h3vni";
   };
-  
+
   propagatedBuildInputs = [ pyalpm xcgf xcpf pyxdg ];
-  
+
   postInstall = ''
     mkdir -p "$out/bin"
     cp aur* "$out/bin"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "AUR-related modules and helper utilities (aurploader, aurquery, aurtomatic)";
     homepage = http://xyne.archlinux.ca/projects/python3-aur;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ lopsided98 ];
   };
 }
