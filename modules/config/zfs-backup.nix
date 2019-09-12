@@ -15,7 +15,7 @@
         autosnap = true;
         autoprune = true;
       };
-      
+
       backup = {
         hourly = 48;
         daily = 60;
@@ -35,10 +35,15 @@
     sshKey = secrets.getSecret secrets."${config.networking.hostName}".backup.sshKey;
     defaultArguments = "--no-privilege-elevation --no-sync-snap";
   };
-  
-  users.extraGroups.backup = {
-    gid = 994;
+  systemd = {
+    notifyFailed.enable = true;
+    services = {
+      sanoid.notifyFailed = true;
+      syncoid.notifyFailed = true;
+    };
   };
+
+  users.extraGroups.backup.gid = 994;
   users.extraUsers.backup = {
     description = "Backup user";
     isSystemUser = true;
@@ -53,6 +58,6 @@
     ];
     packages = [ pkgs.lzop pkgs.mbuffer ];
   };
-  
+
   environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".backup.sshKey { user = "backup"; };
 }
