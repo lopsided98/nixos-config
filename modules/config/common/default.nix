@@ -194,17 +194,11 @@
         # large objects directory
         filter = path: type: type != "directory" || !lib.hasSuffix ".git/objects" path;
       };
-
-      localpkgs = builtins.path {
-        path = ../../..;
-        name = "localpkgs";
-        filter = path: type: type != "directory" || baseNameOf path != ".git";
-      };
     in [
       "nixpkgs=${nixpkgs}"
-      "localpkgs=${localpkgs}"
-      "nixos-config=${localpkgs}/machines/${config.networking.hostName}"
-      "nixpkgs-overlays=${localpkgs}/overlays"
+      "localpkgs=/etc/nixos"
+      "nixos-config=/etc/nixos/machines/${config.networking.hostName}"
+      "nixpkgs-overlays=/etc/nixos/overlays"
       "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };

@@ -3,14 +3,16 @@
 set -eu
 
 usage() {
-  echo "$0 [-n] <machine>"
+  echo "$0 [-ns] <machine>"
 }
 
-rebuild=1 # Whether to rebuild configuration
+deploy=1
+sync=0 # Whether to synchronize configuration to the machine
 
-while getopts "n" opt; do
+while getopts "ns" opt; do
     case "$opt" in
-        n) rebuild=0 ;;
+        n) deploy=0; sync=1 ;;
+        s) sync=1 ;;
         \?) usage ;;
     esac
 done
@@ -25,13 +27,35 @@ nixos-secrets check "${nixos_root}/secrets"
 ssh_host="${1}"
 shift
 
-ssh -fN -oControlMaster=auto -oControlPath="${ssh_control_path}" -oControlPersist=1m "${ssh_host}"
+if [ "${deploy}" -eq 1 ]; then
+    toplevel_drv_link="${ssh_host}.system.drv"
+    toplevel_link="${ssh_host}.system"
+
+    toplevel_drv_link=$(nix-instantiate --add-root "${toplevel_drv_link}" --indirect --show-trace \
+        "${nixos_root}/machines" -A "${ssh_host}.config.system.build.toplevel")
+
+    toplevel_drv="$(readlink "${toplevel_drv_link}")"
+
+    nix copy --to "ssh://${ssh_host}" "${toplevel_drv}"
+
+    toplevel_link=$(ssh -oControlMaster=auto -oControlPath=\"${ssh_control_path}\" "${ssh_host}" -- \
+        nix-store -r --add-root "${toplevel_link}" --indirect "${toplevel_drv}")
+fi
 
 read -sp "[sudo] password for ${USER}: " sudo_password
 echo
 
-rsync -e "ssh -oControlPath=\"${ssh_control_path}\"" --rsync-path="echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo rsync" -rlpt --delete "${nixos_root}/" "${ssh_host}:/etc/nixos"
+if [ "${sync}" -eq 1 ]; then
+    rsync -e "ssh -oControlPath=\"${ssh_control_path}\"" --rsync-path="echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo rsync" -rlpt --delete "${nixos_root}/" "${ssh_host}:/etc/nixos"
+fi
 
-if [ "${rebuild}" -eq 1 ]; then
-    ssh -oControlPath=\"${ssh_control_path}\" "${ssh_host}" "echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo nixos-rebuild switch -I nixos-config=/etc/nixos/machines/${ssh_host} -I localpkgs=/etc/nixos $@"
+if [ "${deploy}" -eq 1 ]; then
+    ssh -oControlMaster=auto -oControlPath=\"${ssh_control_path}\" "${ssh_host}" -- \
+        sudo -Sv 2>/dev/null \; \
+        sudo -n nix-env -p /nix/var/nix/profiles/system --set "${toplevel_drv}" \; \
+        sudo -n "${toplevel_link}/bin/switch-to-configuration" switch \; \
+        rm -f "${toplevel_link}" \
+        <<< "${sudo_password}"
+
+    rm -f "${toplevel_drv_link}"
 fi

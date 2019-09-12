@@ -1,4 +1,5 @@
-{ hostSystems ? [ "x86_64-linux" "armv7l-linux" ], buildSystem ? null
+{ hostSystems ? [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ]
+, buildSystem ? null
 , modules ? [] }:
 with import <nixpkgs/lib>;
 let
