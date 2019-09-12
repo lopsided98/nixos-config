@@ -6,6 +6,7 @@
     ./system/build-machines.nix
     ./system/boot/initrd-tinyssh.nix
     ./system/boot/initrd-decryptssh.nix
+    ./system/boot/systemd-notify-failed.nix
     ./system/secrets.nix
     ./services/audio/audio-recorder.nix
     ./services/backup/sanoid.nix
@@ -25,6 +26,7 @@
 
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
+    ./local/services/mail.nix
     ./local/services/water-level-monitor.nix
 
     ../overlays/nixos-secrets/secrets.nix
