@@ -3,18 +3,11 @@
   services.hydra = {
     enable = true;
     hydraURL = "https://hydra.benwolsieffer.com";
-    notificationSender = "hydra@benwolsieffer.com";
-    #smtpHost = "smtp.gmail.com";
-    #extraEnv = {
-    #  EMAIL_SENDER_TRANSPORT_port = "465";
-    #  EMAIL_SENDER_TRANSPORT_ssl = "ssl";
-    #  EMAIL_SENDER_TRANSPORT_sasl_username = "benwolsieffer@gmail.com";
-    #  EMAIL_SENDER_TRANSPORT_sasl_password = ""; # Previous password was revoked
-    #};
+    notificationSender = "hydra@hydra.benwolsieffer.com";
     port = 8080;
     extraConfig = ''
-      store_uri = daemon?secret-key=/var/lib/hydra/nix-cache.benwolsieffer.com-1
-      binary_cache_secret_key_file=/var/lib/hydra/nix-cache.benwolsieffer.com-1
+      store_uri = daemon?secret-key=${secrets.getSecret secrets.hydra.binaryCacheSecretKey}
+      binary_cache_secret_key_file=${secrets.getSecret secrets.hydra.binaryCacheSecretKey}
     '';
     useSubstitutes = true;
   };
@@ -105,5 +98,6 @@
       group = "hydra";
       mode = "0400";
     };
-  } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; };
+  } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; }
+    // secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-server"; };
 }
