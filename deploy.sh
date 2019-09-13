@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p nixos-secrets
-set -eu
+set -euo pipefail
 
 # See https://gist.github.com/tvlooy/cbfbdb111a4ebad8b93e
 nixos_root="$(dirname $(readlink -f "$0"))"
