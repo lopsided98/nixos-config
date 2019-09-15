@@ -27,7 +27,6 @@ in mapTestOn {
     aur = hostSystems;
     memoizedb = hostSystems;
     pyalpm = hostSystems;
-    upnpclient = hostSystems;
     xcgf = hostSystems;
     xcpf = hostSystems;
   };

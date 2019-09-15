@@ -24,8 +24,6 @@ self: super: with super.lib; let
         inherit (self) libarchive;
       };
 
-      upnpclient = pySelf.callPackage ./python-modules/upnpclient { };
-
       xcgf = pySelf.callPackage ./python-modules/xcgf { };
 
       xcpf = pySelf.callPackage ./python-modules/xcpf { };
