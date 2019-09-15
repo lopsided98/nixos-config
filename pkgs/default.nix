@@ -73,8 +73,6 @@ in {
 
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
 
-  libcreate = self.callPackage ./libcreate {};
-
   sanoid = self.callPackage ./sanoid/default.nix {
     inherit (self.perlPackages) ConfigIniFiles;
   };

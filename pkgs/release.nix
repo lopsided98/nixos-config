@@ -7,7 +7,7 @@ let
   machines = import (localpkgs + "/machines") {
     inherit hostSystems buildSystem;
     modules = lib.singleton {
-      system.nixos = lib.optionalAttrs (nixpkgs ? shortRev) (let 
+      system.nixos = lib.optionalAttrs (nixpkgs ? shortRev) (let
         revision = builtins.substring 0 7 nixpkgs.rev;
       in {
         inherit revision;
@@ -19,7 +19,6 @@ let
 in mapTestOn {
   # Fancy shortcut to generate one attribute per supported platform.
   dnsupdate = hostSystems;
-  libcreate = hostSystems;
   sanoid = hostSystems;
   tinyssh = hostSystems;
   tinyssh-convert = hostSystems;
