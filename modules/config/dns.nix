@@ -16,7 +16,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        33         ; Serial
+                        35         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -51,12 +51,13 @@
     { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:225:64ff:febd:bdbc"; }
 
     # HP-Z420
-    #{ name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.93.13"; }
-    { name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
+    { name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.92.145"; }
+    #{ name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "hp-z420"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:a2d3:c1ff:fe20:da3f"; }
     { name = "hackerhats"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "arch"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "hydra"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
+    { name = "doorman"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
 
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
@@ -68,7 +69,6 @@
 
     # KittyCop
     { name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.241"; }
-    { name = "doorman"; class = "IN"; type = "CNAME"; data = "kittycop"; }
 
     # maine-pi
     { name = "maine-pi"; class = "IN"; type = "CNAME"; data = "maine-pi.awsmppl.com."; }
