@@ -96,8 +96,7 @@
     "${secrets.build.sshKey}" = {
       user = "hydra-queue-runner";
       group = "hydra";
-      mode = "0400";
     };
   } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; }
-    // secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-server"; };
+    // secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; };
 }
