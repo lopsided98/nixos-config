@@ -32,8 +32,8 @@ machine_jobset() {
 machine_ssh() {
   local machine="${1}"
   shift
-  ssh -oControlMaster=auto -oControlPath=\"${ssh_control_path}\" "${machine}" \
-    -- "${@}"
+  ssh -oControlMaster=auto -oControlPath=\"${ssh_control_path}\" \
+    -oControlPersist=10m "${machine}" -- "${@}"
 }
 
 realize_ssh() {
@@ -47,7 +47,7 @@ realize_ssh() {
   local toplevel_drv="$(readlink "${toplevel_drv_link}")"
 
   # Copy instantiated (but not realized config) to machine
-  nix copy --to "ssh://${machine}" "${toplevel_drv}"
+  nix copy --to "ssh://${machine}" "${toplevel_drv}" 1>&2
 
   machine_ssh "${machine}" nix-store --realize "${toplevel_drv}" \
     --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null
