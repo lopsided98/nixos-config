@@ -154,7 +154,7 @@
       # To force clients to only see the server, you
       # will also need to appropriately firewall the
       # server's TUN/TAP interface.
-      ;client-to-client
+      client-to-client
 
       # MTU optimization
       fragment 1472
