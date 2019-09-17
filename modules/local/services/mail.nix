@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.local.services.mail;
   nullmailerCfg = config.services.nullmailer;
-  
+
   sendmail = pkgs.writeScriptBin "sendmail" ''
     #!${pkgs.runtimeShell}
     exec /run/wrappers/bin/sudo -nu '${nullmailerCfg.user}' '${pkgs.nullmailer}/bin/sendmail' "$@"
@@ -13,7 +13,7 @@ let
 in {
   options.local.services.mail = {
     enable = mkEnableOption "email sending";
-    
+
     sendmail = mkOption {
       type = types.path;
       readOnly = true;
