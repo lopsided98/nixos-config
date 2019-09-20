@@ -19,7 +19,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_2;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_3;
   };
 
   systemd.network = {
