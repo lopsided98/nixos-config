@@ -127,16 +127,12 @@ in {
   };
   linuxPackages_rock64_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_19);
 
-  linux_rock64_5_2 = self.callPackage ./linux-rock64/5.2.nix {
+  linux_rock64_5_3 = self.callPackage ./linux-rock64/5.3.nix {
     kernelPatches =
       [ self.kernelPatches.bridge_stp_helper
         self.kernelPatches.modinst_arg_list_too_long
         self.kernelPatches.export_kernel_fpu_functions
       ];
   };
-  linuxPackages_rock64_5_2 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_2);
-
-  # No need for kernelPatches because we are overriding an existing kernel
-  linux_rpi_5_2 = self.callPackage ./linux-rpi-5.2 { };
-  linuxPackages_rpi_5_2 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rpi_5_2);
+  linuxPackages_rock64_5_3 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_3);
 }
