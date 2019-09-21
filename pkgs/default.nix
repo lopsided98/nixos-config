@@ -72,7 +72,7 @@ in {
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
 
   sanoid = self.callPackage ./sanoid/default.nix {
-    inherit (self.perlPackages) ConfigIniFiles;
+    inherit (self.perlPackages) ConfigIniFiles CaptureTiny;
   };
 
   tinyssh = self.callPackage ./tinyssh {};
@@ -128,11 +128,7 @@ in {
   linuxPackages_rock64_4_19 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_4_19);
 
   linux_rock64_5_3 = self.callPackage ./linux-rock64/5.3.nix {
-    kernelPatches =
-      [ self.kernelPatches.bridge_stp_helper
-        self.kernelPatches.modinst_arg_list_too_long
-        self.kernelPatches.export_kernel_fpu_functions
-      ];
+    kernelPatches = [ self.kernelPatches.bridge_stp_helper ];
   };
   linuxPackages_rock64_5_3 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_3);
 }
