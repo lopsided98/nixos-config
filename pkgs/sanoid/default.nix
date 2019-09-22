@@ -1,21 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, zfs, perl, procps, 
-  which, ConfigIniFiles, openssh, sudo, mbuffer, pv, lzop, gzip, pigz }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, coreutils, zfs, perl, procps
+, which, ConfigIniFiles, CaptureTiny, openssh, sudo, mbuffer, pv, lzop, gzip
+, pigz }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   pname = "sanoid";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "142s74srx7ayyrkm8c31lp81zwwjwj4z14xmvylc6qfk3vih9rwy";
+    sha256 = "09cgchhpprr8yyx9kabwz3y7lz9kzn6wfdsqq3zam7c7yck672xa";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ConfigIniFiles ];
+  buildInputs = [ perl ConfigIniFiles CaptureTiny ];
 
   installPhase = ''
     mkdir -p "$out/bin"
