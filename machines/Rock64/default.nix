@@ -52,6 +52,8 @@ in {
   # Set SSH port
   services.openssh.ports = [4246];
 
+  local.services.deluge.enable = true;
+
   services.sanoid = {
     datasets = {
       # Each backup node takes its own snapshots of data

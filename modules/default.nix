@@ -26,6 +26,7 @@
 
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
+    ./local/services/deluge.nix
     ./local/services/mail.nix
     ./local/services/water-level-monitor.nix
 
