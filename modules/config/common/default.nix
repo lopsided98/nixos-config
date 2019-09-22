@@ -143,7 +143,7 @@
       supportedFeatures = [ "big-parallel" ];
       sshUser = "f002w9k";
     };
-    /*"bear" = machine {
+    "bear" = machine {
       systems = [ "x86_64-linux" ];
       maxJobs = 6;
       speedFactor = 8;
@@ -163,7 +163,7 @@
       speedFactor = 8;
       supportedFeatures = [ "big-parallel" ];
       sshUser = "benwolsieffer";
-    };*/
+    };
   };
 
   nix = {
