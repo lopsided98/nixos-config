@@ -35,15 +35,6 @@
     ports = [ 4248 ];
   };
 
-  modules.doorman = {
-    enable = true;
-    device = "/dev/doorman";
-  };
-
-  services.udev.extraRules = ''
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="doorman"
-  '';
-
   # Enable SD card TRIM
   services.fstrim.enable = true;
 
