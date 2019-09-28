@@ -31,7 +31,7 @@ in {
         dtparam=audio=off
       '';
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi0;
     /*kernelPatches = [ {
       name = "i2c-output-source-selection";
       patch = ./0001-ASoC-sgtl5000-add-I2S-output-source-selection.patch;
