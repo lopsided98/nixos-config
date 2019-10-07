@@ -8,11 +8,11 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    
+
     # Modules without configuration options
     ../../modules/config/telegraf.nix
     ../../modules/config/openvpn/server.nix
-    
+
     ../../modules
   ];
 
@@ -30,7 +30,7 @@ in {
       name = interface;
       address = [ "192.168.1.3/24" ];
       gateway = [ "192.168.1.1" ];
-      dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
       dhcpConfig.UseDNS = false;
       extraConfig = ''
         [IPv6AcceptRA]
@@ -43,11 +43,11 @@ in {
   nix.extraOptions = ''
     extra-platforms = armv6l-linux
   '';
-  
+
   environment.systemPackages = with pkgs; [
     pkgs.linuxPackages_latest.tmon
   ];
-  
+
   # List services that you want to enable:
 
   # Serial terminal
@@ -70,7 +70,7 @@ in {
   };
   # Add lm_sensors for temperature monitoring
   systemd.services.telegraf.path = [ pkgs.lm_sensors ];
-  
+
   # Enable SD card TRIM
   services.fstrim.enable = true;
 }

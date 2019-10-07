@@ -12,11 +12,13 @@
   mergeRecords = parent: child: attrValues (recursiveUpdate (recordAttrs parent) (recordAttrs child));
 
   externalIPv4 = "73.149.219.1";
+  ipv6Prefix = "2601:18a:0:ff60";
+
   externalRecords = [
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        35         ; Serial
+                        36         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -40,20 +42,20 @@
 
     # RasPi2
     { name = "raspi2"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "raspi2"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:ba27:ebff:fe5e:6b6e"; }
+    { name = "raspi2"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:ba27:ebff:fe5e:6b6e"; }
 
     # ODROID-XU4
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:b416:dcff:fe31:cbeb"; }
+    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:b416:dcff:fe31:cbeb"; }
 
     # Dell-Optiplex-780
     { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:225:64ff:febd:bdbc"; }
+    { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:225:64ff:febd:bdbc"; }
 
     # HP-Z420
     { name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.92.145"; }
     #{ name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "hp-z420"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:a2d3:c1ff:fe20:da3f"; }
+    { name = "hp-z420"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:a2d3:c1ff:fe20:da3f"; }
     { name = "hackerhats"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "arch"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "hydra"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
@@ -61,11 +63,11 @@
 
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "rock64"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:84e0:c0ff:feea:faa9"; }
+    { name = "rock64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:84e0:c0ff:feea:faa9"; }
 
     # RockPro64
     { name = "rockpro64"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "rockpro64"; class = "IN"; type = "AAAA"; data = "2601:18a:0:7723:b05e:efff:fe50:6aff"; }
+    { name = "rockpro64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:b05e:efff:fe50:6aff"; }
 
     # KittyCop
     { name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.241"; }

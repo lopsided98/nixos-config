@@ -16,7 +16,7 @@ in rec {
       ../../modules/config/telegraf.nix
       ../../modules/config/zfs-backup.nix
       ../../modules/config/docker.nix
-      
+
       ../../modules
     ];
 
@@ -57,7 +57,7 @@ in rec {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
       dhcpConfig.UseDNS = false;
       extraConfig = ''
         [IPv6AcceptRA]
@@ -71,7 +71,7 @@ in rec {
     interface = interface;
     method = "magicpacket";
   };
-  
+
   # Enable telegraf metrics for this interface
   services.telegraf.inputs.net.interfaces = [ interface ];
 
@@ -79,10 +79,10 @@ in rec {
   ];
 
   # List services that you want to enable:
-  
+
   # Serial terminal
   systemd.services."serial-getty@ttyS0".enable = true;
-  
+
   # Set SSH port
   services.openssh = {
     ports = [4244];
@@ -99,7 +99,7 @@ in rec {
       };
     };
   };
-  
+
   services.syncoid = let
     remote = "backup@rock64.benwolsieffer.com";
   in {

@@ -88,7 +88,7 @@ in {
         name = "wlan0";
         DHCP = "v4";
         dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:7723:ba27:ebff:fe5e:6b6e" ];
+        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
         networkConfig = {
           LLMNR = "yes";
         };
