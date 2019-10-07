@@ -4,7 +4,7 @@ with lib;
 
 buildLinux (args // rec {
   name = "linux-rock64";
-  version = "5.3";
+  version = "5.3.4";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
@@ -16,8 +16,8 @@ buildLinux (args // rec {
     name = "${name}-${version}-source";
     owner = "lopsided98";
     repo = "linux";
-    rev = "a8ee91a7b2d1b392c153c3fbb138321633402102";
-    sha256 = "07fyh0iyr3g7swd8j5p1znna097329hi8fgvzgj5pdfn0dlly2zf";
+    rev = "49c44491ecc0250b82cf50bcd9ef974440731e88";
+    sha256 = "0kmh1na4ci8m15lbih7n93v1ha30vxvwl3vn6168gvmi6hj48929";
   };
 
 } // (args.argsOverride or {}))
