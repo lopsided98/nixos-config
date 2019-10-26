@@ -35,13 +35,21 @@ let
     };
 
     autoprune = mkOption {
+      description = "Whether to automatically prune old snapshots.";
       type = types.nullOr types.bool;
       default = null;
     };
 
     autosnap = mkOption {
+      description = "Whether to automatically take snapshots.";
       type = types.nullOr types.bool;
       default = null;
+    };
+
+    extraConfig = mkOption {
+      description = "Extra configuration for this template/dataset";
+      type = types.lines;
+      default = "";
     };
   };
 
@@ -54,7 +62,7 @@ let
 
     recursive = mkOption {
       description = "Whether to recursively snapshot dataset children";
-      type = types.nullOr types.bool;
+      type = types.nullOr (types.enum [ true false "zfs" ]);
       default = null;
     };
 
@@ -85,6 +93,7 @@ let
 
       ${configBoolPrint (v.recursive or null) "recursive"}
       ${configBoolPrint (v.processChildrenOnly or null) "process_children_only"}
+      ${v.extraConfig}
     '') blocks);
 
   configFile = ''
@@ -93,7 +102,7 @@ let
     ${configBlocks cfg.templates "template_"}
   '';
 
-  configDir = pkgs.runCommand "sanoid-config" {} '' 
+  configDir = pkgs.runCommand "sanoid-config" {} ''
     mkdir -p "$out"
     ln -s "${pkgs.writeText "sanoid.conf" configFile}" "$out/sanoid.conf"
   '';
@@ -135,7 +144,7 @@ in {
         default = {};
         description = "Templates for datasets";
       };
-      
+
       extraArgs = mkOption {
         description = "Extra arguments to pass to sanoid";
         type = types.separatedString " ";
@@ -146,23 +155,11 @@ in {
     # Implementation
 
     config = mkIf cfg.enable {
-
       systemd.services.sanoid = {
         description = "Sanoid snapshot service";
-        unitConfig = {
-          After = "zfs.target";
-        };
-        serviceConfig = {
-          Type = "oneshot";
-          ExecStart = "${pkgs.sanoid}/bin/sanoid --cron --configdir=${configDir} ${cfg.extraArgs}";
-        };
-      };
-
-      systemd.timers.sanoid = {
-        description = "Sanoid timer";
-        partOf = [ "sanoid.service" ];
-        wantedBy = [ "timers.target" ];
-        timerConfig.OnCalendar = cfg.interval;
+        serviceConfig.ExecStart = "${pkgs.sanoid}/bin/sanoid --cron --configdir=${configDir} ${cfg.extraArgs}";
+        after = [ "zfs.target" ];
+        startAt = cfg.interval;
       };
     };
   }
