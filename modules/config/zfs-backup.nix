@@ -41,6 +41,9 @@
       sanoid.notifyFailed = true;
       syncoid.notifyFailed = true;
     };
+    # Prevent syncoid on multiple machines from running at the same time and
+    # failing with "<dataset> is already target of a zfs receive process."
+    timers.syncoid.timerConfig.RandomizedDelaySec = "10m";
   };
 
   users.extraGroups.backup.gid = 994;
