@@ -1,19 +1,4 @@
 self: super: with super.lib; let
-  pkgsArmv6lLinuxCross = self.forceCross {
-    system = "x86_64-linux";
-    platform = systems.platforms.pc64;
-  } systems.examples.raspberryPi;
-
-  pkgsArmv7lLinuxCross = self.forceCross {
-    system = "x86_64-linux";
-    platform = systems.platforms.pc64;
-  } systems.examples.armv7l-hf-multiplatform;
-
-  pkgsAarch64LinuxCross = self.forceCross {
-    system = "x86_64-linux";
-    platform = systems.platforms.pc64;
-  } systems.examples.aarch64-multiplatform;
-
   pythonOverridesFor = python: python.override (old: {
     packageOverrides = pySelf: pySuper: {
       aur = pySelf.callPackage ./python-modules/aur { };
@@ -50,13 +35,7 @@ self: super: with super.lib; let
   });
 
 in {
-
   pkgsArmv7lLinux = self.customSystem { system = "armv7l-linux"; };
-
-  crossPackages = if self.stdenv.hostPlatform.system == "armv6l-linux" then pkgsArmv6lLinuxCross
-                  else if self.stdenv.hostPlatform.system == "armv7l-linux" then pkgsArmv7lLinuxCross
-                  else if self.stdenv.hostPlatform.system == "aarch64-linux" then pkgsAarch64LinuxCross
-                  else self;
 
   audio-recorder = {
     audio-server = self.callPackage ./audio-recorder/audio-server.nix {};
