@@ -1,4 +1,4 @@
-{ config, pkgs, secrets, ... }: {
+{ config, lib, pkgs, secrets, ... }: {
 
   # Enable ZFS
   boot.supportedFilesystems = [ "zfs" ];
@@ -39,7 +39,13 @@
     notifyFailed.enable = true;
     services = {
       sanoid.notifyFailed = true;
-      syncoid.notifyFailed = true;
+      syncoid = {
+        # Hack to ignore all exit codes except the last because some of the
+        # commands return an error because there are no snapshots for a parent
+        # dataset.
+        script = lib.mkBefore "set +e";
+        notifyFailed = true;
+      };
     };
     # Prevent syncoid on multiple machines from running at the same time and
     # failing with "<dataset> is already target of a zfs receive process."

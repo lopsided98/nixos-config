@@ -107,7 +107,6 @@ in {
         default = [];
         description = "Syncoid commands to run.";
       };
-
     };
 
     # Implementation
