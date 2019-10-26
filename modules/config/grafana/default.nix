@@ -11,7 +11,7 @@ in {
 
     extraOptions."SERVER_SOCKET" = socket;
 
-    certFile = builtins.toString ./server.pem;
+    certFile = "${./server.pem}";
     certKey = secrets.getSecret secrets.grafana.sslCertificateKey;
   };
 
