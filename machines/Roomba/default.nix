@@ -22,7 +22,7 @@
         dtoverlay=pi3-disable-bt
       '';
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi3;
   };
 
   hardware.enableRedistributableFirmware = true;
