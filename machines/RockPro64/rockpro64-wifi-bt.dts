@@ -5,60 +5,52 @@
 /plugin/;
 
 /{
-  compatible = "pine64,rockpro64";
+	compatible = "pine64,rockpro64";
 
-  fragment@0 {
-    target-path = "/pinctrl/sdio-pwrseq";
-    __overlay__ {
-      bt_host_wake_l: bt-host-wake-l {
-        rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
-      };
+	fragment@0 {
+		target-path = "/pinctrl/sdio-pwrseq";
+		__overlay__ {
+			bt_host_wake_l: bt-host-wake-l {
+				rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>;
+			};
 
-      bt_reg_on_h: bt-reg-on-h {
-	      /* external pullup to VCC1V8_PMUPLL */
-	      rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
-      };
+			bt_reg_on_h: bt-reg-on-h {
+				/* external pullup to VCC1V8_PMUPLL */
+				rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
+			};
 
-      bt_wake_l: bt-wake-l {
-	      rockchip,pins = <2 RK_PD3 RK_FUNC_GPIO &pcfg_pull_none>;
-      };
+			bt_wake_l: bt-wake-l {
+				rockchip,pins = <2 RK_PD3 RK_FUNC_GPIO &pcfg_pull_none>;
+			};
 		};
 	};
 
-  fragment@1 {
-    target = <&uart0>;
-    __overlay__ {
-      bluetooth {
-        compatible = "brcm,bcm43438-bt";
-        clocks = <&rk808 1>;
-        clock-names = "lpo";
-        device-wakeup-gpios = <&gpio2 RK_PD3 GPIO_ACTIVE_HIGH>;
-        host-wakeup-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_HIGH>;
-        shutdown-gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_HIGH>;
-        max-speed = <4000000>;
-        pinctrl-names = "default";
-        pinctrl-0 = <&bt_reg_on_h &bt_host_wake_l &bt_wake_l>;
-        vbat-supply = <&vcc3v3_sys>;
-        vddio-supply = <&vcc_1v8>;
-      };
-    };
-  };
-  
-  fragment@2 {
-    target = <&sdio0>;
-    __overlay__ {
-      brcmf: wifi@1 {
-		    reg = <1>;
-		    compatible = "brcm,bcm4329-fmac";
-	    };
-    };
-  };
-  
-  fragment@3 {
-    target = <&uart0_rts>;
-    __overlay__ {
-      rockchip,pins =
-					<2 RK_PC3 1 &pcfg_pull_up>;
+	fragment@1 {
+		target = <&uart0>;
+		__overlay__ {
+			bluetooth {
+				compatible = "brcm,bcm43438-bt";
+				clocks = <&rk808 1>;
+				clock-names = "lpo";
+				device-wakeup-gpios = <&gpio2 RK_PD3 GPIO_ACTIVE_HIGH>;
+				host-wakeup-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_HIGH>;
+				shutdown-gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_HIGH>;
+				max-speed = <4000000>;
+				pinctrl-names = "default";
+				pinctrl-0 = <&bt_reg_on_h &bt_host_wake_l &bt_wake_l>;
+				vbat-supply = <&vcc3v3_sys>;
+				vddio-supply = <&vcc_1v8>;
+			};
+		};
+	};
+
+	fragment@2 {
+		target = <&sdio0>;
+		__overlay__ {
+			brcmf: wifi@1 {
+				reg = <1>;
+				compatible = "brcm,bcm4329-fmac";
+			};
 		};
 	};
 };
