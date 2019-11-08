@@ -3,6 +3,8 @@ self: super: with super.lib; let
     packageOverrides = pySelf: pySuper: {
       aur = pySelf.callPackage ./python-modules/aur { };
 
+      galileo = pySelf.callPackage ./python-modules/galileo { };
+
       memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
 
       pyalpm = pySelf.callPackage ./python-modules/pyalpm {
