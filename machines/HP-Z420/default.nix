@@ -118,7 +118,7 @@ in rec {
   # List services that you want to enable:
 
   # Set SSH port
-  services.openssh.ports = [4245];
+  services.openssh.ports = [ 4245 ];
 
   services.aur-buildbot-worker = {
     enable = true;
@@ -181,7 +181,7 @@ in rec {
   services.syncoid = let
     remote = "backup@rock64.benwolsieffer.com";
   in {
-    defaultArguments = "--sshport 4246";
+    commonArgs = [ "--sshport" "4246" ];
     commands = [ {
       source = "root/root";
       target = "backup/backups/HP-Z420/root";

@@ -75,9 +75,6 @@ in rec {
   # Enable telegraf metrics for this interface
   services.telegraf.inputs.net.interfaces = [ interface ];
 
-  environment.systemPackages = with pkgs; [
-  ];
-
   # List services that you want to enable:
 
   # Serial terminal
@@ -103,7 +100,7 @@ in rec {
   services.syncoid = let
     remote = "backup@rock64.benwolsieffer.com";
   in {
-    defaultArguments = "--sshport 4246";
+    commonArgs = [ "--sshport" "4246" ];
     commands = [ {
       source = "root/root";
       target = "${remote}:backup/backups/Dell-Optiplex-780/root";

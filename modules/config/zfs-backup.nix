@@ -26,14 +26,14 @@
         autoprune = true;
       };
     };
-    extraArgs = "--verbose";
+    extraArgs = [ "--verbose" ];
   };
   services.syncoid = {
     enable = true;
     interval = "*-*-* *:15:00";
     user = "backup";
     sshKey = secrets.getSecret secrets."${config.networking.hostName}".backup.sshKey;
-    defaultArguments = "--no-privilege-elevation --no-sync-snap";
+    commonArgs = [ "--no-privilege-elevation" "--no-sync-snap" ];
   };
   systemd = {
     notifyFailed.enable = true;

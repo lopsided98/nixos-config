@@ -82,7 +82,7 @@ in {
   services.syncoid = let
     remote = "backup@hp-z420.benwolsieffer.com";
   in {
-    defaultArguments = "--sshport 4245";
+    commonArgs = [ "--sshport" "4245" ];
     commands = [ {
       source = "backup/backups/Dell-Optiplex-780";
       target = "${remote}:backup/backups/Dell-Optiplex-780";

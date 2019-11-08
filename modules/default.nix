@@ -9,8 +9,6 @@
     ./system/boot/systemd-notify-failed.nix
     ./system/secrets.nix
     ./services/audio/audio-recorder.nix
-    ./services/backup/sanoid.nix
-    ./services/backup/syncoid.nix
     ./services/backup/syncthing-backup.nix
     ./services/continuous-integration/aur-buildbot/worker.nix
     ./services/continuous-integration/aur-buildbot/master.nix

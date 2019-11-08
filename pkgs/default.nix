@@ -15,25 +15,6 @@ self: super: with super.lib; let
     };
   });
 
-  perlOverridesFor = perlPackages: perlPackages.override (old: {
-    overrides = _: with perlPackages; {
-      ConfigIniFiles = buildPerlModule rec {
-        pname = "Config-IniFiles";
-        version = "3.000000";
-        src = super.fetchurl {
-          url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${pname}-${version}.tar.gz";
-          sha256 = "0acv3if31s639iy7rcg86nwa5f6s55hiw7r5ysmh6gmay6vzd4nd";
-        };
-        propagatedBuildInputs = [ IOStringy ];
-        meta = {
-          description = "A module for reading and writing .ini-style configuration files";
-          homepage = https://github.com/shlomif/perl-Config-IniFiles;
-          license = [ super.lib.licenses.gpl2 ];
-        };
-      };
-    };
-  });
-
 in {
   pkgsArmv7lLinux = self.customSystem { system = "armv7l-linux"; };
 
@@ -50,10 +31,6 @@ in {
 
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
 
-  sanoid = self.callPackage ./sanoid/default.nix {
-    inherit (self.perlPackages) ConfigIniFiles CaptureTiny;
-  };
-
   tinyssh = self.callPackage ./tinyssh {};
 
   tinyssh-convert = self.callPackage ./tinyssh-convert {};
@@ -62,11 +39,9 @@ in {
 
   water-level-base-station = self.callPackage ./water-level-base-station { };
 
+  python27 = pythonOverridesFor super.python27;
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
-
-  perl528Packages = perlOverridesFor super.perl528Packages;
-  perldevelPackages = perlOverridesFor super.perldevelPackages;
 
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
