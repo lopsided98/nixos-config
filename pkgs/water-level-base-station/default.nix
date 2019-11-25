@@ -16,11 +16,6 @@
       preConfigure = ''
         cd base_station
       '';
-
-      postInstall = ''
-        # Results in a huge closure otherwise
-        rm -rf $out/lib
-      '';
     };
   };
 })

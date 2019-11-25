@@ -19,11 +19,6 @@
         url = "https://hydra.benwolsieffer.com/job/audio-recorder/release/audio-server.tarball/latest/download/1";
         sha256 = "0beb08ff6bd861eeec324d07628a7c988997e87cae0a4ae114086f990f99993a";
       };
-
-      postInstall = ''
-        # Results in a huge closure otherwise
-        rm -rf $out/lib
-      '';
     };
   };
 })
