@@ -179,6 +179,8 @@
     extraOptions = ''
       builders-use-substitutes = true
       netrc-file = ${secrets.getSecret secrets.hydra.netrc}
+      min-free = ${toString (1024 * 1024 * 1024)}
+      max-free = ${toString (4096 * 1024 * 1024)}
     '';
 
     # Use my binary cache
