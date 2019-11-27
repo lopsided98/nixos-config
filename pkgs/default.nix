@@ -20,7 +20,6 @@ self: super: with super.lib; let
   });
 
 in {
-  pkgsArmv7lLinux = self.customSystem { system = "armv7l-linux"; };
 
   audio-recorder = {
     audio-server = self.callPackage ./audio-recorder/audio-server.nix {};
@@ -58,15 +57,6 @@ in {
     libxcbshapeExtlib = false; # X11 grabbing shape rendering
     libXv = null; # Xlib support
     libpulseaudio = null; # Pulseaudio input support
-  };
-
-  gst_all_1 = super.gst_all_1 // {
-    /*gst-plugins-bad = super.gst_all_1.gst-plugins-bad.overrideAttrs (old: rec {
-      buildInputs = old.buildInputs ++ [ self.rtmpdump ];
-    });*/
-    gst-omx = self.callPackage ./gst-omx {
-      inherit (self.gst_all_1) gst-plugins-base;
-    };
   };
 
   libao = super.libao.override {
