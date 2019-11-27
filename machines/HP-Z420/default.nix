@@ -47,28 +47,28 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=${address}::${gateway}:255.255.255.0::eth0:none"
-    kernelParams = [ "ip=:::::eth0:dhcp" "intel_iommu=on" ];
+    # "ip=:::::eth0:dhcp"
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ];
   };
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
-  # local.networking.vpn.dartmouth.enable = true;
+  local.networking.vpn.dartmouth.enable = true;
 
-  local.networking.vpn.home.tap.client = {
+  /*local.networking.vpn.home.tap.client = {
     enable = true;
     macAddress = "a0:d3:c1:20:da:3f";
     certificate = ./vpn/home/client.crt;
     privateKey = secrets.getSecret secrets.HP-Z420.vpn.home.privateKey;
-  };
+  };*/
   systemd.network = {
     enable = true;
 
     # Dartmouth network
-    networks."50-${interface}" = {
+    /*networks."50-${interface}" = {
       name = interface;
       DHCP = "v4";
-    };
+    };*/
 
     networks."50-vpn-home-tap-client" = {
       address = [ "${address}/24" ];
@@ -79,7 +79,7 @@ in rec {
     };
 
     # Home network
-    /*networks."50-${interface}" = {
+    networks."50-${interface}" = {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];
@@ -89,7 +89,7 @@ in rec {
         [IPv6AcceptRA]
         UseDNS=no
       '';
-    };*/
+    };
 
     # Use physical interface MAC on bridge to get same IPs
     netdevs."50-${interface}".netdevConfig = {
