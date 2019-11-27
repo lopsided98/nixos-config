@@ -128,7 +128,6 @@ in {
         multipath-tools: {}
         nix: {}
         platformio: {}
-        puddletag: {}
         pycharm-professional: {}
         python-flask-cors: {}
         python-keras: {}
@@ -144,29 +143,6 @@ in {
         webstorm: {}
         xca: {}
         zotero: {}
-
-        # ROS
-        ros-kinetic-robot: {}
-        ros-kinetic-urdf:
-          dependencies: [ros-kinetic-rostest]
-        ros-kinetic-gazebo-ros-pkgs: {}
-        ros-kinetic-gazebo-ros:
-          dependencies: [ignition-cmake, ignition-math, ogre-1.9]
-        ros-kinetic-gazebo-plugins:
-          dependencies: [ignition-cmake, ignition-math, ogre-1.9]
-        ros-kinetic-hector-gazebo-plugins:
-          dependencies: [ignition-cmake, ignition-math, ogre-1.9]
-        ros-kinetic-opencv3-native: {}
-        sdformat:
-          dependencies: [ignition-cmake]
-        ros-kinetic-geographic-msgs: {}
-        ros-kinetic-tf2-geometry-msgs: {}
-        ros-kinetic-rosbridge-server: {}
-        ros-kinetic-geodesy: {}
-        ros-kinetic-qt-gui-cpp:
-          dependencies: [python2-sip, sip]
-        ros-kinetic-rqt-plot: {}
-        ros-kinetic-rqt-multiplot: {}
     '';
   };
 
