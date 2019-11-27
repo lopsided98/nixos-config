@@ -22,14 +22,11 @@ in {
           isSystemUser = true;
           description = "KittyCam user";
           group = "kitty-cam";
-          extraGroups = [ "vchiq" "video" "audio" ];
+          extraGroups = [ "video" "audio" ];
         };
         nginx.extraGroups = [ "lirc" ];
       };
-      groups = {
-        kitty-cam = {};
-        vchiq = {};
-      };
+      groups.kitty-cam = {};
     };
 
     services.nginx = {
@@ -40,9 +37,7 @@ in {
 
       virtualHosts.kitty-cam = {
         locations = {
-          "/" = {
-            tryFiles = "$uri @kitty_cam";
-          };
+          "/".tryFiles = "$uri @kitty_cam";
 
           "@kitty_cam" = {
             extraConfig = ''
@@ -50,9 +45,7 @@ in {
             '';
           };
 
-          "/static/" = {
-            root = "${pkgs.kitty-cam}/${pkgs.python3.sitePackages}/kitty_cam";
-          };
+          "/static/".root = "${pkgs.kitty-cam}/${pkgs.python3.sitePackages}/kitty_cam";
 
           "/hls" = {
             root = "/run/kitty-cam";
@@ -129,7 +122,6 @@ in {
     };
 
     services.udev.extraRules = ''
-      SUBSYSTEM=="vchiq", GROUP="vchiq", MODE="0660"
       KERNEL=="lirc[0-9]*", SUBSYSTEM=="lirc", OWNER="lirc", MODE="0660"
     '';
 
@@ -152,7 +144,7 @@ in {
       after = [ "nginx.service" ];
       wantedBy = [ "nginx.service" ];
       serviceConfig = {
-        Type = "simple";
+        Type = "exec";
         User = "kitty-cam";
         Group = "kitty-cam";
         Restart = "on-failure";
@@ -160,22 +152,19 @@ in {
           text = ''
             #!${pkgs.stdenv.shell}
             export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
-            export GST_OMX_CONFIG_DIR=${pkgs.pkgsArmv7lLinux.gst_all_1.gst-omx}/etc/xdg
             hls_dir=/run/kitty-cam/hls
 
             mkdir -p "$hls_dir"
 
-            ${pkgs.pkgsArmv7lLinux.gst_all_1.gstreamer.dev}/bin/gst-launch-1.0 \
+            ${pkgs.gst_all_1.gstreamer.dev}/bin/gst-launch-1.0 \
               v4l2src ! \
-              queue ! \
               image/jpeg,width=960,height=544,framerate=30/1 !\
-              omxmjpegdec ! \
-              videorate ! video/x-raw,framerate=30/1 ! \
-              omxh264enc target-bitrate=3000000 control-rate=variable interval-intraframes=15 ! \
+              jpegdec ! videoconvert !\
+              v4l2h264enc extra-controls="encode,h264_i_frame_period=15,video_bitrate=3000000;" ! \
               video/x-h264,profile=high ! \
               tee name=h264_tee ! \
               h264parse config-interval=1 ! \
-              flvmux name=flv_mux latency=1003333333 streamable=true ! \
+              flvmux name=flv_mux latency=1000000000 streamable=true ! \
               rtmpsink location='rtmp://localhost:1935/stream/stream live=1 buffer=100' \
               \
               h264_tee. ! h264parse config-interval=1 ! \
@@ -185,7 +174,6 @@ in {
               alsasrc device='${cfg.audioDevice}' ! \
               queue ! \
               faac ! \
-              audio/mpeg ! \
               tee name=audio_tee ! \
               aacparse ! \
               audio/mpeg, mpegversion=4 ! mpegts_mux. \
@@ -194,9 +182,8 @@ in {
               audio/mpeg, mpegversion=4 ! flv_mux.
           '';
           passAsFile = [ "text" ];
-          buildInputs = with pkgs.pkgsArmv7lLinux.gst_all_1; [
+          buildInputs = with pkgs.gst_all_1; [
             gstreamer
-            gst-omx
             gst-plugins-base
             gst-plugins-good
             (gst-plugins-bad.override {
