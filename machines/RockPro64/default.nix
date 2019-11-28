@@ -1,8 +1,8 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+{ lib, config, pkgs, secrets, ... }:
 
-{ lib, config, pkgs, secrets, ... }: let
+with lib;
+
+let
   interface = "eth0";
 in {
   imports = [
@@ -102,13 +102,22 @@ in {
   # Use the same speed as the bootloader/early console
   services.mingetty.serialSpeed = [ 1500000 ];
 
-  # Set SSH port
-  services.openssh.ports = [ 4247 ];
+  services.openssh = {
+    ports = [ 4247 ];
+    hostKeys = [
+      { type = "rsa"; bits = 4096; path = secrets.getSecret secrets.RockPro64.ssh.hostRsaKey; }
+      { type = "ed25519"; path = secrets.getSecret secrets.RockPro64.ssh.hostEd25519Key; }
+    ];
+  };
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
 
-  environment.secrets = secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
-    target = "wpa_supplicant.conf";
-  };
+  environment.secrets = mkMerge [
+    (secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
+      target = "wpa_supplicant.conf";
+    })
+    (secrets.mkSecret secrets.RockPro64.ssh.hostRsaKey {})
+    (secrets.mkSecret secrets.RockPro64.ssh.hostEd25519Key {})
+  ];
 }
