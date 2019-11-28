@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, future, lxml }:
+{ lib, buildPythonPackage, fetchPypi, future, lxml }:
 
 buildPythonPackage rec {
   pname = "pymavlink";
