@@ -65,6 +65,11 @@ in {
     usePulseAudio = false;
   };
 
+  # 1.39.0 is broken on ARM right now (https://github.com/rust-lang/rust/issues/62896)
+  rustPackages = if self.stdenv.isAarch32
+    then self.rustPackages_1_38_0
+    else super.rustPackages;
+
   sox = super.sox.override {
     enableLibpulseaudio = false;
   };
