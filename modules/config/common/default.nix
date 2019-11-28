@@ -257,7 +257,7 @@
       }
       {
         hostNames = [ "[rock64.benwolsieffer.com]:4246" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC0Z7O2FoK57gx5H/AvojXVXuO6OWJhN9HUAhKTJYMSS";
+        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeI22j7yJpTJcRpHms2V1xMbDq8DF/zmoG02HNOYWjH";
       }
       {
         hostNames = [ "[rockpro64.benwolsieffer.com]:4247" ];
