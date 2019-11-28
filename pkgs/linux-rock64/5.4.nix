@@ -20,6 +20,7 @@ buildLinux (args // rec {
     sha256 = "1ppizhs76qydrdx0p39gp19xwz6v2dkw0053vimic4l70zma7dcx";
   };
   
+  # https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647#commitcomment-36174386
   extraConfig = ''
     CRYPTO_AEGIS128_SIMD n
   '' + (args.extraConfig or "");
