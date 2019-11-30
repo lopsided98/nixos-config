@@ -25,6 +25,7 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   "Rock64" = callMachine ./Rock64 "aarch64-linux";
   "RockPro64" = callMachine ./RockPro64 "aarch64-linux";
   "Roomba" = callMachine ./Roomba "aarch64-linux";
+  "octoprint" = callMachine ./octoprint "aarch64-linux";
   "KittyCop" = callMachine ./KittyCop "armv6l-linux";
   "AudioRecorder1" = callMachine ./AudioRecorder1 "armv6l-linux";
   "AudioRecorder2" = callMachine ./AudioRecorder2 "armv6l-linux";
