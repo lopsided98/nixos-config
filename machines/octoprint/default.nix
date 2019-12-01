@@ -52,7 +52,15 @@
   # Allow access to printer serial port
   users.users.${config.services.octoprint.user}.extraGroups = [ "dialout" ];
 
-  networking.firewall.allowedTCPPorts = [ 80 ];
+  services.mjpg-streamer = {
+    enable = true;
+    inputPlugin = "input_uvc.so -r 1280x720";
+  };
+
+  networking.firewall.allowedTCPPorts = [
+    80 # OctoPrint
+    5050 # mjpg-streamer
+  ];
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
