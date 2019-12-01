@@ -45,6 +45,10 @@
   services.octoprint = {
     enable = true;
     port = 80;
+    extraConfig.webcam = {
+      snapshot = "http://localhost:5050?action=snapshot";
+      stream = "http://octoprint.local:5050?action=stream";
+    };
   };
   # Allow binding to port 80
   systemd.services.octoprint.serviceConfig.AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
