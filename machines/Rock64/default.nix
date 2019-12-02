@@ -9,7 +9,6 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
 
-    ../../modules/config/zfs-backup.nix
     ../../modules/config/telegraf.nix
 
     ../../modules
@@ -50,9 +49,18 @@ in {
   services.mingetty.serialSpeed = [ 1500000 ];
 
   # Set SSH port
-  services.openssh.ports = [4246];
+  services.openssh.ports = [ 4246 ];
 
   local.services.deluge.enable = true;
+
+  local.services.backup = {
+    server = {
+      enable = true;
+      device = "/dev/disk/by-uuid/fea46c86-192a-40e4-a871-ae7f5d9b1840";
+    };
+    sanoid.enable = true;
+    syncthing.virtualHost = "syncthing.rock64.benwolsieffer.com";
+  };
 
   services.sanoid = {
     datasets = {
@@ -92,11 +100,6 @@ in {
       target = "${remote}:backup/backups/P-3400";
       recursive = true;
     } ];
-  };
-
-  modules.syncthingBackup = {
-    enable = true;
-    virtualHost = "syncthing.rock64.benwolsieffer.com";
   };
 
   # Enable SD card TRIM

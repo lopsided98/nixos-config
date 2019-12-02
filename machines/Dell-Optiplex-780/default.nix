@@ -14,7 +14,6 @@ in rec {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/config/telegraf.nix
-      ../../modules/config/zfs-backup.nix
       ../../modules/config/docker.nix
 
       ../../modules
@@ -81,10 +80,9 @@ in rec {
   systemd.services."serial-getty@ttyS0".enable = true;
 
   # Set SSH port
-  services.openssh = {
-    ports = [4244];
-    gatewayPorts = "clientspecified";
-  };
+  services.openssh.ports = [ 4244 ];
+
+  local.services.backup.sanoid.enable = true;
 
   services.sanoid = {
     datasets = {

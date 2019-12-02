@@ -1,8 +1,12 @@
-{ config, lib, pkgs, secrets, ... }: with lib; let 
-  cfg = config.modules.syncthingBackup;
+{ config, lib, pkgs, secrets, ... }:
+
+with lib;
+
+let
+  cfg = config.local.services.backup.syncthing;
   sslCertificateKeySecret = secrets."${config.networking.hostName}".syncthing.sslCertificateKey;
 in {
-  options.modules.syncthingBackup = {
+  options.local.services.backup.syncthing = {
     enable = mkEnableOption "Syncthing backup synchronization";
 
     virtualHost = mkOption {
@@ -41,8 +45,8 @@ in {
 
   config = mkIf cfg.enable {
 
-    modules.syncthingBackup = {
-      sslCertificate = mkDefault (../../../machines + "/${config.networking.hostName}/syncthing/server.pem");
+    local.services.backup.syncthing = {
+      sslCertificate = mkDefault (../../../../machines + "/${config.networking.hostName}/syncthing/server.pem");
       sslCertificateKey = mkDefault (secrets.getSecret sslCertificateKeySecret);
     };
 
@@ -62,8 +66,8 @@ in {
       unitConfig.ConditionPathIsMountPoint = cfg.backupMountpoint;
       preStart = ''
         # Install SSL certificates
-        install -o ${cfg.user} -g ${cfg.group} -m 0600 "${cfg.sslCertificateKey}" "${config.services.syncthing.configDir}/https-key.pem"
-        install -o ${cfg.user} -g ${cfg.group} -m 0644 "${cfg.sslCertificate}" "${config.services.syncthing.configDir}/https-cert.pem"
+        install -o '${cfg.user}' -g '${cfg.group}' -m 0600 '${cfg.sslCertificateKey}' '${config.services.syncthing.configDir}/https-key.pem'
+        install -o '${cfg.user}' -g '${cfg.group}' -m 0644 '${cfg.sslCertificate}' '${config.services.syncthing.configDir}/https-cert.pem'
       '';
     };
 
@@ -87,6 +91,10 @@ in {
         '';
       };
     };
+
+    networking.firewall.allowedTCPPorts = [
+      22000 # Syncthing
+    ];
 
     environment.secrets = secrets.mkSecret sslCertificateKeySecret { user = cfg.user; };
   };

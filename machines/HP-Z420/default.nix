@@ -14,7 +14,6 @@ in rec {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../modules/config/telegraf.nix
-    ../../modules/config/zfs-backup.nix
     ../../modules/config/docker.nix
     ../../modules/config/hydra.nix
     ../../modules/config/hacker-hats.nix
@@ -68,7 +67,7 @@ in rec {
     /*networks."50-${interface}" = {
       name = interface;
       DHCP = "v4";
-    };*/
+    };
 
     networks."50-vpn-home-tap-client" = {
       address = [ "${address}/24" ];
@@ -76,7 +75,7 @@ in rec {
         [IPv6AcceptRA]
         UseDNS=false
       '';
-    };
+    };*/
 
     # Home network
     networks."50-${interface}" = {
@@ -135,6 +134,15 @@ in rec {
   services.udev.extraRules = ''
     SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="doorman"
   '';
+
+  local.services.backup = {
+    server = {
+      enable = true;
+      device = "/dev/disk/by-uuid/8ca1949f-18bc-47b7-927f-183f925881ed";
+    };
+    sanoid.enable = true;
+    syncthing.virtualHost = "syncthing.hp-z420.benwolsieffer.com";
+  };
 
   services.sanoid = {
     datasets = {
@@ -220,14 +228,8 @@ in rec {
   # Quadro K4000
   boot.extraModprobeConfig ="options vfio-pci ids=10de:11fa,10de:0e0b";
 
-  modules.syncthingBackup = {
-    enable = true;
-    virtualHost = "syncthing.hp-z420.benwolsieffer.com";
-  };
-
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
-    22000 # Syncthing port
   ];
 
   environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey {};
