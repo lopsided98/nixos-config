@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p "$out/bin"
-    cp aur* "$out/bin"
+    mv aur* "$out/bin"
   '';
 
   meta = with lib; {
     description = "AUR-related modules and helper utilities (aurploader, aurquery, aurtomatic)";
-    homepage = http://xyne.archlinux.ca/projects/python3-aur;
+    homepage = "https://xyne.archlinux.ca/projects/python3-aur/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lopsided98 ];
   };
