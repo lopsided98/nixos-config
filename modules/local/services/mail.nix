@@ -22,7 +22,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    local.services.mail.sendmail = "${sendmail}/bin/sendmail";
+    local.services.mail.sendmail = mkDefault "${sendmail}/bin/sendmail";
 
     services.nullmailer = {
       enable = true;
