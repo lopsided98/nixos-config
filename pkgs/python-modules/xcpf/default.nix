@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "xcpf";
-  version = "2019";
+  version = "2019.11";
 
   src = fetchurl {
     url = "http://xyne.archlinux.ca/projects/python3-xcpf/src/python3-${pname}-${version}.tar.xz";
-    sha256 = "0lbf5gw6cx6cp4i7n2cjwyjf82pclbrxkyqc5n7ascmaajqdvn8k";
+    sha256 = "1kgl31ljrhn6h4ah8wzmylblx2im02jjrih3nlga20gg4n6hm164";
   };
 
   propagatedBuildInputs = [ pyalpm memoizedb pyxdg xcgf ];
