@@ -47,6 +47,8 @@ in {
   python27 = pythonOverridesFor super.python27;
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
+  python38 = pythonOverridesFor super.python38;
+  python39 = pythonOverridesFor super.python39;
 
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
