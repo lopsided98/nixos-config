@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "pyalpm";
-  version = "0.8.5";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ibnim7gwc0gw5n803l76w9kli91xrpsavpkrvxz3g7ghs9rkm13";
+    sha256 = "0l4dhayl0j8vqxczccbizh3jgyhkwrazd6j210lf3ksjb1x3wqyp";
   };
 
   patches = [
