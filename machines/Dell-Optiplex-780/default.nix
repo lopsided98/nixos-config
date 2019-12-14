@@ -99,12 +99,9 @@ in rec {
     remote = "backup@rock64.benwolsieffer.com";
   in {
     commonArgs = [ "--sshport" "4246" ];
-    commands = [ {
-      source = "root/root";
-      target = "${remote}:backup/backups/Dell-Optiplex-780/root";
-    } {
-      source = "root/home";
-      target = "${remote}:backup/backups/Dell-Optiplex-780/home";
-    } ];
+    commands = {
+      "root/root".target = "${remote}:backup/backups/Dell-Optiplex-780/root";
+      "root/home".target = "${remote}:backup/backups/Dell-Optiplex-780/home";
+    };
   };
 }

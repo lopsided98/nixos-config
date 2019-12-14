@@ -190,29 +190,26 @@ in rec {
     remote = "backup@rock64.benwolsieffer.com";
   in {
     commonArgs = [ "--sshport" "4246" ];
-    commands = [ {
-      source = "root/root";
-      target = "backup/backups/HP-Z420/root";
-    } {
-      source = "root/home";
-      target = "backup/backups/HP-Z420/home";
-    } {
-      source = "root/vm";
-      target = "backup/backups/HP-Z420/vm";
-      recursive = true;
-    } {
-      source = "backup/backups/HP-Z420";
-      target = "${remote}:backup/backups/HP-Z420";
-      recursive = true;
-    } {
-      source = "backup/backups/Dell-Inspiron-15";
-      target = "${remote}:backup/backups/Dell-Inspiron-15";
-      recursive = true;
-    } {
-      source = "backup/backups/Dell-Inspiron-15-Windows";
-      target = "${remote}:backup/backups/Dell-Inspiron-15-Windows";
-      recursive = true;
-    } ];
+    commands = {
+      "root/root".target = "backup/backups/HP-Z420/root";
+      "root/home".target = "backup/backups/HP-Z420/home";
+      "root/vm" = {
+        target = "backup/backups/HP-Z420/vm";
+        recursive = true;
+      };
+      "backup/backups/HP-Z420" = {
+        target = "${remote}:backup/backups/HP-Z420";
+        recursive = true;
+      };
+      "backup/backups/Dell-Inspiron-15" = {
+        target = "${remote}:backup/backups/Dell-Inspiron-15";
+        recursive = true;
+      };
+      "backup/backups/Dell-Inspiron-15-Windows" = {
+        target = "${remote}:backup/backups/Dell-Inspiron-15-Windows";
+        recursive = true;
+      };
+    };
   };
 
   # Libvirt

@@ -91,15 +91,16 @@ in {
     remote = "backup@hp-z420.benwolsieffer.com";
   in {
     commonArgs = [ "--sshport" "4245" ];
-    commands = [ {
-      source = "backup/backups/Dell-Optiplex-780";
-      target = "${remote}:backup/backups/Dell-Optiplex-780";
-      recursive = true;
-    } {
-      source = "backup/backups/P-3400";
-      target = "${remote}:backup/backups/P-3400";
-      recursive = true;
-    } ];
+    commands = {
+      "backup/backups/Dell-Optiplex-780" = {
+        target = "${remote}:backup/backups/Dell-Optiplex-780";
+        recursive = true;
+      };
+      "backup/backups/P-3400" = {
+        target = "${remote}:backup/backups/P-3400";
+        recursive = true;
+      };
+    };
   };
 
   # Enable SD card TRIM
