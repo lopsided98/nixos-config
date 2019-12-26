@@ -5,15 +5,11 @@ self: super: with super.lib; let
 
       galileo = pySelf.callPackage ./python-modules/galileo { };
 
-      mavproxy = pySelf.callPackage ./python-modules/mavproxy { };
-
       memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
 
       pyalpm = pySelf.callPackage ./python-modules/pyalpm {
         inherit (self) libarchive;
       };
-
-      pymavlink = pySelf.callPackage ./python-modules/pymavlink { };
 
       xcgf = pySelf.callPackage ./python-modules/xcgf { };
 
