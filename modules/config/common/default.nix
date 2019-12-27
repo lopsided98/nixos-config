@@ -53,10 +53,8 @@
   ];
 
   # Select internationalisation properties.
-  i18n = {
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
-  };
+  console.keyMap = "us";
+  i18n.defaultLocale = "en_US.UTF-8";
 
   system.buildMachines = let
     machine = m: {
@@ -172,6 +170,9 @@
       sshUser = "benwolsieffer";
     };*/
   };
+
+  # Set local maxJobs based on remote builder configuration.
+  nix.maxJobs = config.system.buildMachines.${config.networking.hostName}.maxJobs;
 
   nix = {
     trustedUsers = [ "build" ];
