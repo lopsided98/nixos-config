@@ -10,9 +10,6 @@ in {
     rootUrl = "https://%(domain)s/";
 
     extraOptions."SERVER_SOCKET" = socket;
-
-    certFile = "${./server.pem}";
-    certKey = secrets.getSecret secrets.grafana.sslCertificateKey;
   };
 
   systemd.services.grafana = {
@@ -36,8 +33,6 @@ in {
     '';
   };
 
-  users.extraGroups.grafana.gid = 196;
-
   services.nginx = {
     enable = true;
     virtualHosts."grafana.benwolsieffer.com" = {
@@ -51,5 +46,5 @@ in {
     };
   };
 
-  environment.secrets = secrets.mkSecret secrets.grafana.sslCertificateKey { user = "grafana"; };
+  environment.secrets = secrets.mkSecret secrets.grafana.sslCertificateKey { user = "nginx"; };
 }
