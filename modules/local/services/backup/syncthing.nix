@@ -57,19 +57,16 @@ in {
       openDefaultPorts = true;
       dataDir = "${cfg.backupMountpoint}";
       configDir = "${cfg.backupMountpoint}/syncthing";
+      declarative = {
+        cert = "${cfg.sslCertificate}";
+        key = cfg.sslCertificateKey;
+      };
     };
 
     # Increase inotify watch limit
     boot.kernel.sysctl."fs.inotify.max_user_watches" = 204800;
 
-    systemd.services.syncthing = {
-      unitConfig.ConditionPathIsMountPoint = cfg.backupMountpoint;
-      preStart = ''
-        # Install SSL certificates
-        install -o '${cfg.user}' -g '${cfg.group}' -m 0600 '${cfg.sslCertificateKey}' '${config.services.syncthing.configDir}/https-key.pem'
-        install -o '${cfg.user}' -g '${cfg.group}' -m 0644 '${cfg.sslCertificate}' '${config.services.syncthing.configDir}/https-cert.pem'
-      '';
-    };
+    systemd.services.syncthing.unitConfig.ConditionPathIsMountPoint = cfg.backupMountpoint;
 
     services.nginx = {
       enable = true;
@@ -96,6 +93,6 @@ in {
       22000 # Syncthing
     ];
 
-    environment.secrets = secrets.mkSecret sslCertificateKeySecret { user = cfg.user; };
+    environment.secrets = secrets.mkSecret sslCertificateKeySecret { inherit (config.services.nginx) user; };
   };
 }
