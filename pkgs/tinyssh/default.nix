@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Skip-channeltest.patch
-    ./0001-Use-correct-ar-invocation-when-cross-compiling.patch
+    (fetchpatch {
+      url = "https://github.com/janmojzis/tinyssh/commit/f69d3b773ffe93ad6c74a4d1c75ba43366bb64f8.patch";
+      sha256 = "1y7rfy65qkm60ivzmj28i0lil77axpdhny8al7lxv3xn61v2rxiy";
+    })
     (fetchpatch {
       url = "https://github.com/janmojzis/tinyssh/commit/656a6b0313286bfe097c222a91b3a4b51b795b5a.patch";
       sha256 = "1zddvsflppac8f97r0ccafdl2b1nsql6irvw89g1mr631xh74cx7";
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A minimalistic SSH server";
-    homepage = https://tinyssh.org/;
+    homepage = "https://tinyssh.org";
     license = licenses.cc0;
     maintainers = [ maintainers.lopsided98 ];
   };
