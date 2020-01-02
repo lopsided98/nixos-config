@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }: let
+{ lib, config, pkgs, secrets, ... }: let
   interface = "eth0";
 in {
   imports = [
@@ -59,7 +59,13 @@ in {
       device = "/dev/disk/by-uuid/fea46c86-192a-40e4-a871-ae7f5d9b1840";
     };
     sanoid.enable = true;
-    syncthing.virtualHost = "syncthing.rock64.benwolsieffer.com";
+    syncthing = {
+      virtualHost = "syncthing.rock64.benwolsieffer.com";
+      certificate = ./syncthing/cert.pem;
+      certificateKeySecret = secrets.Rock64.syncthing.certificateKey;
+      httpsCertificate = ./syncthing/https-cert.pem;
+      httpsCertificateKeySecret = secrets.Rock64.syncthing.httpsCertificateKey;
+    };
   };
 
   services.sanoid = {

@@ -32,6 +32,6 @@
     ./local/services/mail.nix
     ./local/services/water-level-monitor.nix
 
-    ../overlays/nixos-secrets/secrets.nix
+    ../pkgs/nixos-secrets/secrets.nix
   ];
 }

@@ -141,7 +141,13 @@ in rec {
       device = "/dev/disk/by-uuid/8ca1949f-18bc-47b7-927f-183f925881ed";
     };
     sanoid.enable = true;
-    syncthing.virtualHost = "syncthing.hp-z420.benwolsieffer.com";
+    syncthing = {
+      virtualHost = "syncthing.hp-z420.benwolsieffer.com";
+      certificate = ./syncthing/cert.pem;
+      certificateKeySecret = secrets.HP-Z420.syncthing.certificateKey;
+      httpsCertificate = ./syncthing/https-cert.pem;
+      httpsCertificateKeySecret = secrets.HP-Z420.syncthing.httpsCertificateKey;
+    };
   };
 
   services.sanoid = {
@@ -229,5 +235,5 @@ in rec {
     8086 # InfluxDB
   ];
 
-  environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey {};
+  environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey { };
 }

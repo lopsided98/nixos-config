@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.local.services.backup.syncthing;
-  sslCertificateKeySecret = secrets."${config.networking.hostName}".syncthing.sslCertificateKey;
 in {
   options.local.services.backup.syncthing = {
     enable = mkEnableOption "Syncthing backup synchronization";
@@ -32,23 +31,28 @@ in {
       description = "Path where the backup drive is mounted";
     };
 
-    sslCertificate = mkOption {
+    certificate = mkOption {
       type = types.path;
-      description = "SSL certificate to use for Syncthing and nginx";
+      description = "Certificate to use for Syncthing protocol";
     };
 
-    sslCertificateKey = mkOption {
+    certificateKeySecret = mkOption {
       type = types.str;
-      description = "SSL certificate key to use for Syncthing and nginx";
+      description = "Certificate key to use for Syncthing protocol";
+    };
+
+    httpsCertificate = mkOption {
+      type = types.path;
+      description = "Certificate to use for Syncthing web interface";
+    };
+
+    httpsCertificateKeySecret = mkOption {
+      type = types.str;
+      description = "Certificate key to use for Syncthing web interface";
     };
   };
 
   config = mkIf cfg.enable {
-
-    local.services.backup.syncthing = {
-      sslCertificate = mkDefault (../../../../machines + "/${config.networking.hostName}/syncthing/server.pem");
-      sslCertificateKey = mkDefault (secrets.getSecret sslCertificateKeySecret);
-    };
 
     services.syncthing = {
       enable = true;
@@ -57,6 +61,10 @@ in {
       openDefaultPorts = true;
       dataDir = "${cfg.backupMountpoint}";
       configDir = "${cfg.backupMountpoint}/syncthing";
+      declarative = {
+        cert = "${cfg.certificate}";
+        key = secrets.getSecret cfg.certificateKeySecret;
+      };
     };
 
     # Increase inotify watch limit
@@ -70,15 +78,15 @@ in {
         http2 = true;
 
         forceSSL = true;
-        sslCertificate = cfg.sslCertificate;
-        sslCertificateKey = cfg.sslCertificateKey;
+        sslCertificate = cfg.httpsCertificate;
+        sslCertificateKey = secrets.getSecret cfg.httpsCertificateKeySecret;
 
         locations."/".proxyPass = "https://localhost:8384";
 
         extraConfig = ''
           proxy_read_timeout 600s;
           proxy_send_timeout 600s;
-          proxy_ssl_trusted_certificate "${cfg.sslCertificate}";
+          proxy_ssl_trusted_certificate "${cfg.httpsCertificate}";
           # TODO: figure out elegant way to verify certificate
           proxy_ssl_verify off;
         '';
@@ -90,6 +98,9 @@ in {
       allowedUDPPorts = [ 22000 ];
     };
 
-    environment.secrets = secrets.mkSecret sslCertificateKeySecret { inherit (config.services.nginx) user; };
+    environment.secrets = mkMerge [
+      (secrets.mkSecret cfg.certificateKeySecret { })
+      (secrets.mkSecret cfg.httpsCertificateKeySecret { inherit (config.services.nginx) user; })
+    ];
   };
 }
