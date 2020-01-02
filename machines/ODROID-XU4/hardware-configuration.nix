@@ -13,7 +13,4 @@
     device = "/swap";
     size = 1024;
   };
-
-  nix.maxJobs = lib.mkDefault 4;
-  nix.buildCores = lib.mkDefault 4;
 }

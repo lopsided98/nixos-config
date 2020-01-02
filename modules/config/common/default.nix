@@ -172,7 +172,7 @@
   };
 
   # Set local maxJobs based on remote builder configuration.
-  nix.maxJobs = config.system.buildMachines.${config.networking.hostName}.maxJobs;
+  nix.maxJobs = lib.mkDefault (config.system.buildMachines.${config.networking.hostName}.maxJobs or 1);
 
   nix = {
     trustedUsers = [ "build" ];
@@ -205,7 +205,6 @@
       "localpkgs=/etc/nixos"
       "nixos-config=/etc/nixos/machines/${config.networking.hostName}"
       "nixpkgs-overlays=/etc/nixos/overlays"
-      "/nix/var/nix/profiles/per-user/root/channels"
     ];
   };
 
