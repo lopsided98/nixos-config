@@ -57,10 +57,6 @@ in {
       openDefaultPorts = true;
       dataDir = "${cfg.backupMountpoint}";
       configDir = "${cfg.backupMountpoint}/syncthing";
-      declarative = {
-        cert = "${cfg.sslCertificate}";
-        key = cfg.sslCertificateKey;
-      };
     };
 
     # Increase inotify watch limit
@@ -89,9 +85,10 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = [
-      22000 # Syncthing
-    ];
+    networking.firewall = {
+      allowedTCPPorts = [ 22000 ];
+      allowedUDPPorts = [ 22000 ];
+    };
 
     environment.secrets = secrets.mkSecret sslCertificateKeySecret { inherit (config.services.nginx) user; };
   };

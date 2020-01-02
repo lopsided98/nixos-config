@@ -49,10 +49,11 @@ in {
       services = {
         sanoid.notifyFailed = true;
         syncoid = {
-          # Hack to ignore all exit codes except the last because some of the
-          # commands return an error because there are no snapshots for a parent
-          # dataset.
+          # Hack to ignore exit code returned when there are no snapshots for a
+          # parent dataset as well as continue if any command returns a
+          # non-zero exit code.
           script = lib.mkBefore "set +e";
+          serviceConfig.SuccessExitStatus = "2";
           notifyFailed = true;
         };
       };
