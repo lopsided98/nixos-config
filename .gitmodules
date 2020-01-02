@@ -1,5 +1,5 @@
-[submodule "overlays/nixos-secrets"]
-	path = overlays/nixos-secrets
+[submodule "pkgs/nixos-secrets"]
+	path = pkgs/nixos-secrets
 	url = git@github.com:lopsided98/nixos-secrets.git
 [submodule "secrets"]
 	path = secrets

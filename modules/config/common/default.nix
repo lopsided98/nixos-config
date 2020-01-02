@@ -7,7 +7,6 @@
   # Include overlays
   nixpkgs.overlays = [
     (import ../../../pkgs)
-    (import ../../../overlays/nixos-secrets)
     (self: super: {
       crossPackages = self.forceCross {
         system = "x86_64-linux";

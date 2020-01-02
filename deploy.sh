@@ -98,7 +98,7 @@ while getopts "nps" opt; do
 done
 shift "$(($OPTIND -1))"
 
-nixos-secrets check "${nixos_root}/secrets"
+nixos-secrets -c "${nixos_root}/secrets" check
 
 machine="${1}"
 shift

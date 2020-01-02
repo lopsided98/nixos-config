@@ -1,16 +1,21 @@
-{ config, ... }: {
+{ config, lib, ... }: let
+  # Allow a secret attrset to be coerced to a string containing its path
+  secrets = lib.mapAttrsRecursiveCond (as: !as ? path) (p: val: if val ? path
+    then val // { __toString = secret: secret.path; }
+    else val) (import ../../secrets).secrets;
+in {
   _module.args = {
-    secrets = {
+    secrets = rec {
       # Utility functions
-      mkSecret = name: options: {
-        "${name}" = {
-          source = ../../secrets/. + "/${name}";
+      mkSecret = secret: options: {
+        "${secret}" = {
+          source = ../../secrets/. + "/${secret}";
         } // options;
       };
 
-      getSecret = name: "/etc/" + config.environment.secrets."${name}".target;
+      getSecret = secret: "/etc/" + config.environment.secrets."${secret}".target;
 
-      getBootSecret = name: "/boot/secrets/" + config.boot.secrets."${name}".target;
-    } // (import ../../secrets);
+      getBootSecret = secret: "/boot/secrets/" + config.boot.secrets."${secret}".target;
+    } // secrets;
   };
 }

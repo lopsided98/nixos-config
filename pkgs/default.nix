@@ -32,6 +32,8 @@ in {
 
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
 
+  nixos-secrets = self.python3Packages.callPackage ./nixos-secrets { };
+
   tinyssh = self.callPackage ./tinyssh {};
 
   tinyssh-convert = self.callPackage ./tinyssh-convert {};
