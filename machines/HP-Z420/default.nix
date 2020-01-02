@@ -225,9 +225,40 @@ in rec {
   # Quadro K4000
   boot.extraModprobeConfig ="options vfio-pci ids=10de:11fa,10de:0e0b";
 
+  # Temporary Samba sharing of backup drive
+  users.users.gary = {
+    isNormalUser = true;
+    uid = 1001;
+    hashedPassword = "$6$aC3UnQWVt$y.uMfBSzkcdasHj.aWjtRvqJIRhi3OuervlLcyDiZmsF5rFPClOUTP5NaXdBPhMVLPUAEOIov/6pyTob2r0qx.";
+  };
+
+  services.samba = {
+    enable = true;
+    enableWinbindd = false;
+    shares.backup = {
+      path = "/mnt/gary_backup";
+      "valid users" = "ben, gary";
+      writable = "no";
+    };
+    extraConfig = ''
+      workgroup = MSHOME
+      passdb backend = smbpasswd:${secrets.getSecret secrets.AudioRecorder.samba.smbpasswd}
+
+      # Disable printing
+      load printers = no
+      printing = bsd
+      printcap name = /dev/null
+      disable spoolss = yes
+    '';
+  };
+
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
+    139 445 # SMB
   ];
 
-  environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey {};
+  environment.secrets = lib.mkMerge [
+    (secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey {})
+    (secrets.mkSecret secrets.AudioRecorder.samba.smbpasswd {})
+  ];
 }
