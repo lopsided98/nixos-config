@@ -5,7 +5,7 @@
 { lib, config, pkgs, secrets, ... }:
 let
 
-interface = "eth0";
+interface = "enp0s25";
 address = "192.168.1.4";
 gateway = "192.168.1.1";
 
@@ -35,7 +35,10 @@ in rec {
         tinyssh = {
           port = lib.head services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
-          hostEd25519Key = secrets.getBootSecret secrets.Dell-Optiplex-780.tinyssh.hostKey;
+          hostEd25519Key = {
+            publicKey = "${./tinyssh/ed25519.pk}";
+            privateKey = secrets.getBootSecret secrets.Dell-Optiplex-780.tinyssh.hostEd25519Key;
+          };
         };
         decryptssh = {
           enable = true;
@@ -43,12 +46,10 @@ in rec {
       };
     };
     kernelParams = [
-      "ip=${address}::${gateway}:255.255.255.0::${interface}:none"
+      "ip=${address}::${gateway}:255.255.255.0::eth0:none"
       "console=ttyS0,115200n8" # Serial boot console
     ];
   };
-
-  boot.secrets = secrets.mkSecret secrets.Dell-Optiplex-780.tinyssh.hostKey {};
 
   systemd.network = {
     enable = true;
@@ -104,4 +105,6 @@ in rec {
       "root/home".target = "${remote}:backup/backups/Dell-Optiplex-780/home";
     };
   };
+
+  boot.secrets = secrets.mkSecret secrets.Dell-Optiplex-780.tinyssh.hostEd25519Key {};
 }

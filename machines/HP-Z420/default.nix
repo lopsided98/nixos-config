@@ -41,7 +41,10 @@ in rec {
         tinyssh = {
           port = lib.head config.services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
-          hostEd25519Key = secrets.getBootSecret secrets.HP-Z420.tinyssh.hostKey;
+          hostEd25519Key = {
+            publicKey = "${./tinyssh/ed25519.pk}";
+            privateKey = secrets.getBootSecret secrets.HP-Z420.tinyssh.hostEd25519Key;
+          };
         };
         decryptssh.enable = true;
       };
@@ -49,8 +52,6 @@ in rec {
     # "ip=:::::eth0:dhcp"
     kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ];
   };
-
-  boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostKey {};
 
   local.networking.vpn.dartmouth.enable = true;
 
@@ -101,8 +102,8 @@ in rec {
     #
     # Use a different MAC address on physical interface, because the normal MAC
     # is used on the VPN and bridge in order to get consistent IPs.
-    networks."50-eth0" = {
-      name = "eth0";
+    networks."50-eno1" = {
+      name = "eno1";
       networkConfig.Bridge = interface;
       linkConfig.MACAddress = "ea:d3:5b:d6:a0:6b";
     };
@@ -235,5 +236,6 @@ in rec {
     8086 # InfluxDB
   ];
 
+  boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostEd25519Key {};
   environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey { };
 }
