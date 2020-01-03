@@ -92,6 +92,90 @@
     };
   };
 
+  # Only use these builders on the Hydra machine because they require special
+  # network configuration.
+  system.buildMachines = let
+    machine = m: { sshKey = secrets.getSecret secrets.build.sshKey; } // m;
+  in {
+    "babylon1" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon2" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon3" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon4" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 12;
+      speedFactor = 20;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon5" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon6" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon7" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    "babylon8" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 10;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "f002w9k";
+    };
+    /*"bear" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 8;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "benwolsieffer";
+    };
+    "flume" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 10;
+      speedFactor = 12;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "benwolsieffer";
+    };
+    "tahoe" = machine {
+      systems = [ "x86_64-linux" ];
+      maxJobs = 6;
+      speedFactor = 8;
+      supportedFeatures = [ "big-parallel" ];
+      sshUser = "benwolsieffer";
+    };*/
+  };
+
   environment.secrets = {
     "${secrets.build.sshKey}" = {
       user = "hydra-queue-runner";
