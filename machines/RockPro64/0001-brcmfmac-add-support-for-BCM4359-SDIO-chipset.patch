@@ -55,14 +55,6 @@ index 1ec48c4f4d4a..7d639b5187d1 100644
  		return 0x160000;
  	default:
  		brcmf_err("unknown chip: %s\n", ci->pub.name);
-@@ -1360,6 +1360,7 @@ bool brcmf_chip_sr_capable(struct brcmf_chip *pub)
- 		reg = chip->ops->read32(chip->ctx, addr);
- 		return (reg & CC_SR_CTL0_ENABLE_MASK) != 0;
- 	case CY_CC_43012_CHIP_ID:
-+	case BRCM_CC_4359_CHIP_ID:
- 		addr = CORE_CC_REG(pmu->base, retention_ctl);
- 		reg = chip->ops->read32(chip->ctx, addr);
- 		return (reg & (PMU_RCTL_MACPHY_DISABLE_MASK |
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
 index 629140b6d7e2..a642c173ae1c 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
