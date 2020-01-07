@@ -26,33 +26,23 @@
   };
 
   hardware.enableRedistributableFirmware = true;
-
-  networking.wireless.enable = true;
+  local.networking.wireless.home = {
+    enable = true;
+    interface = "wlan0";
+  };
 
   systemd.network = {
     enable = true;
-    networks = {
-      "30-eth0" = {
-        name = "eth0";
-        DHCP = "v4";
-        dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-        linkConfig.RequiredForOnline = false;
-        extraConfig = ''
-          [IPv6AcceptRA]
-          UseDNS=no
-        '';
-      };
-      "30-wlan0" = {
-        name = "wlan0";
-        DHCP = "v4";
-        dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-        extraConfig = ''
-          [IPv6AcceptRA]
-          UseDNS=no
-        '';
-      };
+    networks."30-eth0" = {
+      name = "eth0";
+      DHCP = "v4";
+      dhcpConfig.UseDNS = false;
+      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
+      linkConfig.RequiredForOnline = false;
+      extraConfig = ''
+        [IPv6AcceptRA]
+        UseDNS=no
+      '';
     };
   };
   networking.hostName = "Roomba"; # Define your hostname.
@@ -80,8 +70,4 @@
   networking.firewall.allowedTCPPorts = [
     1935 # RTMP Streaming
   ];
-
-  environment.secrets = secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
-    target = "wpa_supplicant.conf";
-  };
 }
