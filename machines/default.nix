@@ -35,4 +35,5 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   # update them and usually just generate an SD image
   "maine-pi" = callMachine ./maine-pi "armv6l-linux";
   "atomic-pi" = callMachine ./atomic-pi "x86_64-linux";
+  "zybo-z7" = callMachine ./zybo-z7 "armv7l-linux";
 }
