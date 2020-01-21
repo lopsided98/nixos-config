@@ -21,7 +21,6 @@ in mapTestOn {
   dnsupdate = hostSystems;
   sanoid = hostSystems;
   tinyssh = hostSystems;
-  tinyssh-convert = hostSystems;
 
   python3Packages = {
     aur = hostSystems;
