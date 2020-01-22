@@ -4,7 +4,7 @@ with lib;
 
 buildLinux (args // rec {
   name = "linux-rock64";
-  version = "5.4.0";
+  version = "5.4.13";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
   modDirVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
@@ -16,13 +16,7 @@ buildLinux (args // rec {
     name = "${name}-${version}-source";
     owner = "lopsided98";
     repo = "linux";
-    rev = "259c605f68587b29209f661b7a564708be0a05ba";
-    sha256 = "1ppizhs76qydrdx0p39gp19xwz6v2dkw0053vimic4l70zma7dcx";
+    rev = "a412085e8be2e99343cd69f077ae456ea7dcafcf";
+    sha256 = "1vc14jdncg03sln9vkqi0g48ygv1fi36mmjw6ikv51m7ikq16rhm";
   };
-  
-  # https://github.com/NixOS/nixpkgs/commit/9b67ea9106102d882f53d62890468071900b9647#commitcomment-36174386
-  extraConfig = ''
-    CRYPTO_AEGIS128_SIMD n
-  '' + (args.extraConfig or "");
-
 } // (args.argsOverride or {}))
