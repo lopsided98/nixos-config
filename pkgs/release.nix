@@ -19,8 +19,8 @@ let
 in mapTestOn {
   # Fancy shortcut to generate one attribute per supported platform.
   dnsupdate = hostSystems;
-  sanoid = hostSystems;
   tinyssh = hostSystems;
+  nixos-secrets = hostSystems;
 
   python3Packages = {
     aur = hostSystems;
