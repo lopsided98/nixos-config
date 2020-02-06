@@ -28,7 +28,7 @@
     cleanTmpDir = true;
 
     # Enable magic SysRq
-    boot.kernel.sysctl."kernel.sysrq" = 1;
+    kernel.sysctl."kernel.sysrq" = 1;
 
     # Enable GRUB serial console
     loader.grub.extraConfig = ''
