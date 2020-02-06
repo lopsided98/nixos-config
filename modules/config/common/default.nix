@@ -27,6 +27,9 @@
     kernelParams = [ "boot.shell_on_fail" ];
     cleanTmpDir = true;
 
+    # Enable magic SysRq
+    boot.kernel.sysctl."kernel.sysrq" = 1;
+
     # Enable GRUB serial console
     loader.grub.extraConfig = ''
       serial --unit=0 --speed=115200
