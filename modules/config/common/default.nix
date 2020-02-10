@@ -164,76 +164,25 @@
       Host *.thayer.dartmouth.edu
         User f002w9k
     '';
-    knownHosts = [
-      {
-        hostNames = [ "[raspi2.benwolsieffer.com]:4242" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
-      }
-      {
-        hostNames = [ "[odroid-xu4.benwolsieffer.com]:4243" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
-      }
-      {
-        hostNames = [ "[dell-optiplex-780.benwolsieffer.com]:4244" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODxgNjFuareM/XZEo7ZZrGddVj2Bx6RfaOTK1/DyNBJ";
-      }
-      {
-        hostNames = [ "[hp-z420.benwolsieffer.com]:4245" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
-      }
-      {
-        hostNames = [ "[rock64.benwolsieffer.com]:4246" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeI22j7yJpTJcRpHms2V1xMbDq8DF/zmoG02HNOYWjH";
-      }
-      {
-        hostNames = [ "[rockpro64.benwolsieffer.com]:4247" ];
-        publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
-      }
-      {
-        hostNames = [ "babylon1.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBP4kFknlR2wSVMEQpkKaF94oQknPSC1tn2LYQOmRaOfpTvHlriMdTxmJmLXQXJ9+sJDQjFER82pdHkUARkdixgw=";
-      }
-      {
-        hostNames = [ "babylon2.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC/9qHbvq9MusqH3Hfg8IR12y4Ke7asjW8m2H1TG28LQFtqwS5wAeTZ+5rOvxYDGksuv+xn4rDdQ97BgeAl8igo=";
-      }
-      {
-        hostNames = [ "babylon3.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBF3JJkf9cYLO72VM16cAkJ6Odpv2fndns5EyhXH1vhHF7qzBOh0owxNztglQQju1WV2T9/oFNmDCOkQrq8ooIzM=";
-      }
-      {
-        hostNames = [ "babylon4.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNFhs+i6NZvPfS+z1rPcZ0AO8BkZMwcGRfcOj6VoA8i3AMbeSLs9L0euCuGF3G7qVUXXs8cfJl16tjVqjXVqKvU=";
-      }
-      {
-        hostNames = [ "babylon5.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIAkBc0Up3SrXSl5Ubd0dr61gF4FTp4NnrTGw0NcKqIXHo0KMbsMTCFyq4bN1nyo5IWop7eFF4FvGgnNzk2lOvM=";
-      }
-      {
-        hostNames = [ "babylon6.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMd4NLcm9Gv2hUB35KK4Lb2T49kl2apWfTiqlLlydc3PTGYCfMm3rOL3LgW9atqT8pn2FWg6B2KZjHM8mZcy6O0=";
-      }
-      {
-        hostNames = [ "babylon7.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPORxS4Hg9so30ktT2Dk5JrTMmkJp3rllfG9xXsFvX6C7hrMd1Aaiv4V0B2MNLBsvKEAkF+kDKoNmZ2kvVuYQzs=";
-      }
-      {
-        hostNames = [ "babylon8.thayer.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaH1x8SIinN8wMbafHc/fZBbTl0w2cJfzNHmlAD2gGt9iookORXMEvS4XW9zFKtKTGZjW0xO0iVj7rSa9SRtQU=";
-      }
-      {
-        hostNames = [ "bear.cs.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI1q3WedIIRk5zZTxfxE8HZQBvTD5eARHEkQ4jpiCvy+5+hILMMMdNAPGFasXivCM6fgoNRhBYz+zC2iWXH416U=";
-      }
-      {
-        hostNames = [ "flume.cs.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDpOEp1zfF9mKLza6VlGO5TX/vJ1wlapEQC9Lb7dke2CeMy61ytgnaBqpAcfiHP4BnCGeb37usHfTYiHyZd3UBs=";
-      }
-      {
-        hostNames = [ "tahoe.cs.dartmouth.edu" ];
-        publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHcGnvXB8fBeLdIMTYolAuxE+WTQH2JOeQPFwwfPh5ahYSk8bOkaWhRhinv3krWNter8HxNKcnwaBrFrCNOp28I=";
-      }
-    ];
+    knownHosts = {
+      "[raspi2.benwolsieffer.com]:4242".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
+      "[odroid-xu4.benwolsieffer.com]:4243".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
+      "[dell-optiplex-780.benwolsieffer.com]:4244".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODxgNjFuareM/XZEo7ZZrGddVj2Bx6RfaOTK1/DyNBJ";
+      "[hp-z420.benwolsieffer.com]:4245".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
+      "[rock64.benwolsieffer.com]:4246".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeI22j7yJpTJcRpHms2V1xMbDq8DF/zmoG02HNOYWjH";
+      "[rockpro64.benwolsieffer.com]:4247".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
+      "babylon1.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBP4kFknlR2wSVMEQpkKaF94oQknPSC1tn2LYQOmRaOfpTvHlriMdTxmJmLXQXJ9+sJDQjFER82pdHkUARkdixgw=";
+      "babylon2.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBC/9qHbvq9MusqH3Hfg8IR12y4Ke7asjW8m2H1TG28LQFtqwS5wAeTZ+5rOvxYDGksuv+xn4rDdQ97BgeAl8igo=";
+      "babylon3.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBF3JJkf9cYLO72VM16cAkJ6Odpv2fndns5EyhXH1vhHF7qzBOh0owxNztglQQju1WV2T9/oFNmDCOkQrq8ooIzM=";
+      "babylon4.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNFhs+i6NZvPfS+z1rPcZ0AO8BkZMwcGRfcOj6VoA8i3AMbeSLs9L0euCuGF3G7qVUXXs8cfJl16tjVqjXVqKvU=";
+      "babylon5.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBIAkBc0Up3SrXSl5Ubd0dr61gF4FTp4NnrTGw0NcKqIXHo0KMbsMTCFyq4bN1nyo5IWop7eFF4FvGgnNzk2lOvM=";
+      "babylon6.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMd4NLcm9Gv2hUB35KK4Lb2T49kl2apWfTiqlLlydc3PTGYCfMm3rOL3LgW9atqT8pn2FWg6B2KZjHM8mZcy6O0=";
+      "babylon7.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPORxS4Hg9so30ktT2Dk5JrTMmkJp3rllfG9xXsFvX6C7hrMd1Aaiv4V0B2MNLBsvKEAkF+kDKoNmZ2kvVuYQzs=";
+      "babylon8.thayer.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHaH1x8SIinN8wMbafHc/fZBbTl0w2cJfzNHmlAD2gGt9iookORXMEvS4XW9zFKtKTGZjW0xO0iVj7rSa9SRtQU=";
+      "bear.cs.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI1q3WedIIRk5zZTxfxE8HZQBvTD5eARHEkQ4jpiCvy+5+hILMMMdNAPGFasXivCM6fgoNRhBYz+zC2iWXH416U=";
+      "flume.cs.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDpOEp1zfF9mKLza6VlGO5TX/vJ1wlapEQC9Lb7dke2CeMy61ytgnaBqpAcfiHP4BnCGeb37usHfTYiHyZd3UBs=";
+      "tahoe.cs.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHcGnvXB8fBeLdIMTYolAuxE+WTQH2JOeQPFwwfPh5ahYSk8bOkaWhRhinv3krWNter8HxNKcnwaBrFrCNOp28I=";
+    };
   };
 
   networking = {
