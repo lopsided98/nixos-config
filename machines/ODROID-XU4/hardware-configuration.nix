@@ -13,4 +13,6 @@
     device = "/swap";
     size = 1024;
   };
+
+  nix.buildCores = 4;
 }
