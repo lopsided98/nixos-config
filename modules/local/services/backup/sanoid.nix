@@ -40,9 +40,8 @@ in {
     services.syncoid = {
       enable = true;
       interval = "*-*-* *:15:00";
-      user = "backup";
       sshKey = secrets.getSecret secrets."${config.networking.hostName}".backup.sshKey;
-      commonArgs = [ "--no-privilege-elevation" "--no-sync-snap" ];
+      commonArgs = [ "--no-sync-snap" ];
     };
     systemd = {
       notifyFailed.enable = true;
@@ -62,6 +61,6 @@ in {
       timers.syncoid.timerConfig.RandomizedDelaySec = "10m";
     };
 
-    environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".backup.sshKey { user = "backup"; };
+    environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".backup.sshKey { user = "syncoid"; };
   };
 }
