@@ -219,40 +219,6 @@ in rec {
     };
   };
 
-  # Temporary server for Nix ARM bootstrap files
-  services.nginx = {
-    enable = true;
-    virtualHosts = {
-      "hp-z420.benwolsieffer.com" = {
-        locations."/bootstrap-tools/" = {
-          root = let
-            archs = [ "armv5tel" "armv6l" "armv7l" ];
-            bootstrapTools = import "${pkgs.fetchFromGitHub {
-              owner = "NixOS";
-              repo = "nixpkgs";
-              rev = "ac241fb7a570d6cf81d229ad22a8889602639160";
-              sha256 = "0fvbzp44pwlyc9kr7wz0wax80bqil83kxkx0rwz7kfc2x7wh1gyg";
-            }}/pkgs/stdenv/linux/make-bootstrap-tools-cross.nix" { };
-          in pkgs.runCommand "bootstrap-tools-serve" { } (''
-            mkdir -p "$out/bootstrap-tools"
-            cd "$out/bootstrap-tools"
-          '' + (lib.concatStringsSep "\n" (lib.mapAttrsToList (arch: tools: ''
-            mkdir '${arch}'
-            pushd '${arch}'
-            ln -s '${tools.bootstrapFiles.busybox}' busybox
-            ln -s '${tools.bootstrapFiles.bootstrapTools}' bootstrap-tools.tar.xz
-            popd
-          '') (lib.getAttrs archs bootstrapTools))));
-          extraConfig = ''
-            autoindex on;
-          '';
-        };
-        enableACME = true;
-        forceSSL = true;
-      };
-    };
-  };
-
   # Libvirt
   virtualisation.libvirtd = {
     enable = true;
