@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
-{
-  services.nginx = lib.mkIf config.services.nginx.enable {
+lib.mkIf config.services.nginx.enable {
+  services.nginx = {
     package = pkgs.nginxMainline;
     commonHttpConfig = ''
       log_format access '[$host] $remote_addr "$request" '
