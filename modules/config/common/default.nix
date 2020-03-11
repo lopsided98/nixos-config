@@ -262,14 +262,6 @@
   # My personal root CA
   security.pki.certificateFiles = [ ./root_ca.pem ];
 
-  # Global ACME settings. Doesn't do anything unless ACME is enabled.
-  security.acme = {
-    # Pretend I read the terms and conditions
-    # This is totally legally binding...
-    acceptTerms = true;
-    email = "benwolsieffer@gmail.com";
-  };
-
   environment.secrets =
     secrets.mkSecret secrets.build.sshKey {} //
     secrets.mkSecret secrets.hydra.netrc {};
