@@ -18,11 +18,4 @@ lib.mkIf config.services.nginx.enable {
     recommendedProxySettings = true;
   };
   networking.firewall.allowedTCPPorts = [ 80 443 ];
-
-  security.acme = {
-    # Pretend I read the terms and conditions
-    # This is totally legally binding...
-    acceptTerms = true;
-    email = "benwolsieffer@gmail.com";
-  };
 }
