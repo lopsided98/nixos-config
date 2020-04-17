@@ -1,4 +1,4 @@
-{ config, lib, pkgs, secrets, ... }: {
+{ config, lib, pkgs, secrets, ... }: with lib; {
 
   services.hydra = {
     enable = true;
@@ -10,6 +10,18 @@
       binary_cache_secret_key_file=${secrets.getSecret secrets.hydra.binaryCacheSecretKey}
     '';
     useSubstitutes = true;
+  };
+
+  # Thayer sysadmins decided pubkey auth was too secure/convenient, so we need
+  # this hack to supply the password
+  systemd.services = let
+    sshpass-wrapper = pkgs.writeScriptBin "ssh" ''
+      #!${pkgs.stdenv.shell}
+      '${pkgs.sshpass}/bin/sshpass' -f '${secrets.getSecret secrets.hydra.thayerServerPassword}' '${pkgs.openssh}/bin/ssh' -oBatchMode=no "$@"
+    '';
+  in {
+    hydra-queue-runner.path = mkBefore [ sshpass-wrapper ];
+    nix-daemon.path = mkBefore [ sshpass-wrapper ];
   };
 
   services.postgresql = {
@@ -182,5 +194,6 @@
       group = "hydra";
     };
   } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; }
-    // secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; };
+    // secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; }
+    // secrets.mkSecret secrets.hydra.thayerServerPassword { user = "hydra-queue-runner"; };
 }

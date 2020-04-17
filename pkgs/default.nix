@@ -30,9 +30,6 @@ in {
 
   hacker-hats = self.callPackage ./hacker-hats {};
 
-  # darcs breaks all the time
-  hydra = super.hydra.override { darcs = null; };
-
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
 
   nixos-secrets = self.python3Packages.callPackage ./nixos-secrets { };
