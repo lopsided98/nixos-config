@@ -46,7 +46,7 @@ in rec {
       };
     };
     kernelParams = [
-      "ip=${address}::${gateway}:255.255.255.0::eth0:none"
+      "ip=${address}::${gateway}:255.255.255.0::${interface}:none"
       "console=ttyS0,115200n8" # Serial boot console
     ];
   };

@@ -49,8 +49,8 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=:::::eth0:dhcp"
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" "intel_iommu=on" ];
+    # "ip=:::::eno1:dhcp"
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eno1:none" "intel_iommu=on" ];
   };
 
   local.networking.vpn.dartmouth.enable = true;
