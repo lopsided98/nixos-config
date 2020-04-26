@@ -154,39 +154,39 @@ in rec {
   services.sanoid = {
     datasets = {
       "root/root" = {
-        useTemplate = [ "local" ];
+        use_template = [ "local" ];
       };
       "root/home" = {
-        useTemplate = [ "local" ];
+        use_template = [ "local" ];
       };
       "root/vm" = {
-        useTemplate = [ "local" ];
+        use_template = [ "local" ];
         recursive = true;
-        processChildrenOnly = true;
+        process_children_only = true;
       };
       # Each backup node takes its own snapshots of data
       "backup/data" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         autosnap = true;
         recursive = true;
-        processChildrenOnly = true;
+        process_children_only = true;
       };
       # Prune all backups with one rule
       "backup/backups" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         recursive = true;
-        processChildrenOnly = true;
+        process_children_only = true;
       };
 
       # Snapshots of non-ZFS devices that backup to this node
       "backup/backups/Dell-Inspiron-15" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         autosnap = true;
         recursive = true;
-        processChildrenOnly = true;
+        process_children_only = true;
       };
       "backup/backups/Dell-Inspiron-15-Windows" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         autosnap = true;
         recursive = true;
       };

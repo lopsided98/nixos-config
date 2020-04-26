@@ -72,21 +72,21 @@ in {
     datasets = {
       # Each backup node takes its own snapshots of data
       "backup/data" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         autosnap = true;
         recursive = true;
-        processChildrenOnly = true;
+        process_children_only = true;
       };
       # Prune all backups with one rule
       "backup/backups" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         recursive = true;
-        processChildrenOnly = true;
+        process_children_only = true;
       };
 
       # Snapshots of non-ZFS devices that backup to this node
       "backup/backups/P-3400" = {
-        useTemplate = [ "backup" ];
+        use_template = [ "backup" ];
         autosnap = true;
         recursive = true;
       };

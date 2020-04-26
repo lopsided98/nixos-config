@@ -88,10 +88,10 @@ in rec {
   services.sanoid = {
     datasets = {
       "root/root" = {
-        useTemplate = [ "local" ];
+        use_template = [ "local" ];
       };
       "root/home" = {
-        useTemplate = [ "local" ];
+        use_template = [ "local" ];
       };
     };
   };
