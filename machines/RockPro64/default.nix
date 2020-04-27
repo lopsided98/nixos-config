@@ -14,33 +14,18 @@ in {
     ../../modules
   ];
 
-  nixpkgs.localSystem = lib.systems.examples.aarch64-multiplatform // {
-    platform = lib.systems.platforms.aarch64-multiplatform // {
-      # Allow overlays to be applied to upstream device trees
-      kernelMakeFlags = [ "DTC_FLAGS='-@'" ];
-    };
-  };
-
   boot = {
     loader = {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_4;
-    kernelPatches = [
-      {
-        name = "brcmfmac-add-support-for-BCM4359-SDIO-chipset";
-        patch = ./0001-brcmfmac-add-support-for-BCM4359-SDIO-chipset.patch;
-      }
-      {
-        name = "brcmfac-reset-two-D11-cores-if-chip-has-two-D11-cores";
-        patch = ./0002-brcmfmac-reset-two-D11-cores-if-chip-has-two-D11-cor.patch;
-      }
-    ];
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_6;
   };
 
-  # Disabled until BCM4359 works correctly
-  # networking.wireless.enable = true;
+  local.networking.wireless.home = {
+    enable = true;
+    interface = "wlan0";
+  };
 
   systemd.network = {
     enable = true;
@@ -75,10 +60,6 @@ in {
 
   hardware = {
     bluetooth.enable = true;
-    deviceTree = {
-      enable = true;
-      overlays = [ ./rockpro64-wifi-bt.dtbo ];
-    };
     firmware = [ (pkgs.runCommand "bcm4359-firwmare" {} ''
       mkdir -p "$out/lib/firmware/brcm"
       cd "$out/lib/firmware/brcm"
@@ -96,6 +77,7 @@ in {
       }}' brcmfmac4359-sdio.clm_blob
     '') ];
   };
+
 
   # List services that you want to enable:
 
