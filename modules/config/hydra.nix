@@ -109,7 +109,7 @@
   system.buildMachines = let
     machine = m: { sshKey = secrets.getSecret secrets.build.sshKey; } // m;
   in {
-    "babylon1" = machine {
+    /*"babylon1" = machine {
       systems = [ "x86_64-linux" ];
       maxJobs = 12;
       speedFactor = 20;
@@ -165,7 +165,7 @@
       supportedFeatures = [ "big-parallel" ];
       sshUser = "f002w9k";
     };
-    /*"bear" = machine {
+    "bear" = machine {
       systems = [ "x86_64-linux" ];
       maxJobs = 6;
       speedFactor = 8;

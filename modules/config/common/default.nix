@@ -113,9 +113,12 @@
     # Use my binary cache
     binaryCaches = let
       isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
-    in [ "https://cache.nixos.org/" ] ++
+    in [ "https://ros.cachix.org" ] ++
       lib.optional (!isHydra) "https://hydra.benwolsieffer.com";
-    binaryCachePublicKeys = [ "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ=" ];
+    binaryCachePublicKeys = [
+      "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
+      "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
+    ];
 
     nixPath = let
       nixpkgs = builtins.path {
