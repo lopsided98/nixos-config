@@ -2,6 +2,20 @@
 
   services.hydra = {
     enable = true;
+    package = pkgs.hydra-migration.overrideAttrs ({ patches ? [], ... }: {
+      patches = patches ++ [
+        # Fix trying to build on other machines when running on localhost
+        (pkgs.fetchpatch {
+          url = "https://github.com/lopsided98/hydra/commit/f020f7efef6b2d09fe6c07f2b7efcb7332a27e31.patch";
+          sha256 = "1z915mzy39anzwdfalmdjn1wjcl4ip4q9gw9xmvw663x6iych2zw";
+        })
+        # Fix queue getting stuck
+        (pkgs.fetchpatch {
+          url = "https://github.com/lopsided98/hydra/commit/1f047a5dd3e16c21e14ea9130a8c8fbfd485e5a9.patch";
+          sha256 = "1pmiy702rvcil97qlldmcyahv3438anis3kwrgjlpp4h5nx5z4g1";
+        })
+      ];
+    });
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
     port = 8080;
