@@ -15,6 +15,8 @@ let
     + " "
     + concatStringsSep "," machine.mandatoryFeatures
     + "\n";
+
+  hostName = config.networking.hostName;
 in {
   options = {
     system.buildMachines = mkOption {
@@ -69,11 +71,11 @@ in {
           speedFactor
           supportedFeatures
           mandatoryFeatures;
-      }) (filterAttrs (h: m: h != config.networking.hostName) cfg);
+      }) (filterAttrs (h: m: h != hostName) cfg);
     # Include a second machine file with the configuration for the local machine
-    services.hydra.buildMachinesFiles = let 
-      hostName = config.networking.hostName;
-    in singleton "/etc/nix/machines" 
-    ++ singleton (pkgs.writeText "hydra-localhost-build" (buildMachine "localhost" (cfg."${hostName}" // { sshUser = null; })));
+    services.hydra.buildMachinesFiles = [
+      "/etc/nix/machines"
+      (pkgs.writeText "hydra-localhost-build" (buildMachine "localhost" (cfg.${hostName} // { sshUser = null; })))
+    ];
   };
 }
