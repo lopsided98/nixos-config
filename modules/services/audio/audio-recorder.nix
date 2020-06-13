@@ -95,17 +95,17 @@ in {
       user = "nginx";
       group = "nginx";
       plugins = [ "python3" ];
-      type = "emperor";
-      vassals.audio-recorder = {
-        pythonPackages = self: with self; [ pkgs.audio-recorder.web-interface ];
-        env = {
-          PATH = "/run/wrappers/bin";
-          AUDIO_RECORDER_SETTINGS = pkgs.writeText "audio-recorder-settings.py" ''
-            DEVICES=[${concatMapStrings (d: "\"${escape ["\""] d}\",") cfg.devices}]
-          '';
-          PYTHONPATH = pkgs.python3.withPackages(ps: [ pkgs.audio-recorder.web-interface ]);
-        };
-        extraConfig = {
+      instance = {
+        type = "emperor";
+        vassals.audio-recorder = {
+          type = "normal";
+          pythonPackages = self: with self; [ pkgs.audio-recorder.web-interface ];
+          env = [
+            "PATH=/run/wrappers/bin"
+            "AUDIO_RECORDER_SETTINGS=${pkgs.writeText "audio-recorder-settings.py" ''
+              DEVICES=[${concatMapStrings (d: "\"${escape ["\""] d}\",") cfg.devices}]
+            ''}"
+          ];
           socket = uwsgiSocket;
           module = "audio_recorder.web_interface";
           callable = "app";

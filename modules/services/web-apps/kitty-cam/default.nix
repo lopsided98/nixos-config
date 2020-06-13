@@ -103,15 +103,16 @@ in {
       enable = true;
       user = "nginx";
       group = "nginx";
-      plugins = [ "python3" ];
-      type = "emperor";
-      vassals.kitty-cam = {
-        pythonPackages = self: with self; [ pkgs.kitty-cam ];
-        env = {
-          KITTY_CAM_SETTINGS = pkgs.writeText "kitty-cam-settings.py" ''
-          '';
-        };
-        extraConfig = {
+      plugins = [ "python3" ];    
+      instance = {
+        type = "emperor";
+        vassals.kitty-cam = {
+          type = "normal";
+          pythonPackages = self: with self; [ pkgs.kitty-cam ];
+          env = [
+            "KITTY_CAM_SETTINGS=${pkgs.writeText "kitty-cam-settings.py" ''
+            ''}"
+          ];
           socket = uwsgiSocket;
           module = "kitty_cam.controller";
           callable = "app";

@@ -112,7 +112,6 @@ in {
         flightgear: {}
         flightgear-data: {}
         genymotion: {}
-        ghetto-skype: {}
         gnome-mpv: {}
         grpc: {}
         heimdall-git: {}
@@ -124,7 +123,6 @@ in {
         lcov: {}
         lejos-nxj: {}
         lib32-tk: {}
-        logisim: {}
         multipath-tools: {}
         nix: {}
         platformio: {}

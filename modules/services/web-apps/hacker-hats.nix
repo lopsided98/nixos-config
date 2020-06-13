@@ -5,6 +5,11 @@ with lib;
 let
   cfg = config.services.hackerHats;
 
+  cfgFile = pkgs.writeText "HackerHats.cfg" ''
+    with open('${cfg.secretKeyFile}', 'r') as passwd_file:
+        SECRET_KEY = passwd_file.read().strip('\r\n')
+    DATABASE = '/var/lib/hacker-hats/data.db'
+  '';
 in {
 
   # Interface
@@ -27,12 +32,38 @@ in {
         Socket file used to communicate between nginx and uwsgi.
       '';
     };
+
+    secretKeyFile = mkOption {
+      type = types.str;
+      description = "File containing the secret key.";
+    };
   };
 
   # Implementation
 
   config = mkIf cfg.enable {
     services.hackerHats.uwsgiSocket = mkDefault "${config.services.uwsgi.runDir}/HackerHats.sock";
+
+    services.uwsgi = {
+      enable = true;
+      user = "nginx";
+      group = "nginx";
+      plugins = [ "python3" ];
+      instance = {
+        type = "emperor";
+        vassals.hacker-hats = {
+          type = "normal";
+          pythonPackages = self: with self; [ flask ];
+          env = [
+            "HACKER_HATS_SETTINGS=${cfgFile}"
+          ];
+          socket = cfg.uwsgiSocket;
+          chdir = pkgs.hacker-hats;
+          module = "runserver";
+          callable = "app";
+        };
+      };
+    };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
