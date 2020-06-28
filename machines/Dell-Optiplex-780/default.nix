@@ -14,7 +14,6 @@ in rec {
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/config/telegraf.nix
-      ../../modules/config/docker.nix
 
       ../../modules
     ];
@@ -40,9 +39,7 @@ in rec {
             privateKey = secrets.getBootSecret secrets.Dell-Optiplex-780.tinyssh.hostEd25519Key;
           };
         };
-        decryptssh = {
-          enable = true;
-        };
+        decryptssh.enable = true;
       };
     };
     kernelParams = [
