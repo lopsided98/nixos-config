@@ -3,6 +3,7 @@ with lib;
 let
   address = "192.168.1.9";
   gateway = "192.168.1.1";
+  interface = "enp1s0";
 in {
   imports = [ ../../modules ];
 
@@ -46,7 +47,7 @@ in {
         decryptssh.enable = true;
       };
     };
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eth0:none" ];
+    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::${interface}:none" ];
   };
 
   /*local.networking.vpn.home.tap.client = {
@@ -67,8 +68,8 @@ in {
     };*/
 
     # Home network
-    networks."50-enp1s0" = {
-      name = "enp1s0";
+    networks."50-${interface}" = {
+      name = "${interface}";
       address = [ "${address}/24" ];
       gateway = [ gateway ];
       dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
