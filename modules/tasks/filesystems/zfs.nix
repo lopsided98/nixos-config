@@ -1,9 +1,9 @@
 # Automatically applied settings when ZFS is enabled
 { config, lib, pkgs, ... }: with lib; mkIf (any (fs: fs == "zfs") config.boot.supportedFilesystems) (mkMerge [
   ({
-    # Use a supported kernel version
+    # Use a LTS kernel version
     # Lower priority than mkForce to allow devices to use custom kernels
-    boot.kernelPackages = mkOverride 75 pkgs.linuxPackages_4_19;
+    boot.kernelPackages = mkOverride 75 pkgs.linuxPackages;
   })
   (mkIf config.virtualisation.docker.enable {
     virtualisation.docker.storageDriver = "zfs";
