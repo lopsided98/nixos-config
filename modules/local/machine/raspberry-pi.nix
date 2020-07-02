@@ -27,8 +27,6 @@ in {
           inherit pkgs; # For U-Boot
           inherit (pkgs) raspberrypifw;
         };
-      extlinuxConfBuilder = pkgs.buildPackages.callPackage
-        <nixpkgs/nixos/modules/system/boot/loader/generic-extlinux-compatible/extlinux-conf-builder.nix> { };
       raspberryPiBuilder = pkgs.buildPackages.callPackage
         <nixpkgs/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix> { };
 
@@ -47,7 +45,7 @@ in {
       '';
       populateRootCommands = optionalString ubootEnabled ''
         mkdir -p ./files/boot
-        '${extlinuxConfBuilder}' -t 3 -c '${config.system.build.toplevel}' -d ./files/boot
+        ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c ${config.system.build.toplevel} -d ./files/boot
       '';
     };
 
