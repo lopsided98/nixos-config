@@ -19,7 +19,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64_5_6;
+    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64;
   };
 
   local.networking.wireless.home = {

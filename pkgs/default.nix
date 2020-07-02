@@ -69,12 +69,12 @@ in {
     enableLibpulseaudio = false;
   };
 
-  linux_rock64_5_6 = self.callPackage ./linux-rock64/5.6.nix {
+  linux_rock64 = self.callPackage ./linux-rock64 {
     kernelPatches = with self.kernelPatches; [
       bridge_stp_helper
       request_key_helper
       export_kernel_fpu_functions."5.3"
     ];
   };
-  linuxPackages_rock64_5_6 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64_5_6);
+  linuxPackages_rock64 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }
