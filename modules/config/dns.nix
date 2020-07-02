@@ -46,7 +46,7 @@
 
     # ODROID-XU4
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:b416:dcff:fe31:cbeb"; }
+    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:e006:ff:fec2:11eb"; }
 
     # Dell-Optiplex-780
     { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = externalIPv4; }
