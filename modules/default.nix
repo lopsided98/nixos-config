@@ -30,6 +30,7 @@
     ./local/services/backup/syncthing.nix
     ./local/services/deluge.nix
     ./local/services/mail.nix
+    ./local/services/public-files.nix
     ./local/services/water-level-monitor.nix
 
     ../pkgs/nixos-secrets/secrets.nix

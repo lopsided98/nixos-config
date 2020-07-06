@@ -127,6 +127,9 @@ in rec {
     adminMessage = "Ben Wolsieffer <benwolsieffer@gmail.com>";
   };
 
+  # Web server for sharing publicly accessible files
+  local.services.publicFiles.enable = true;
+
   modules.doorman = {
     enable = true;
     device = "/dev/doorman";
