@@ -18,7 +18,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        42         ; Serial
+                        43         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -38,7 +38,7 @@
     { name = "@"; class = "IN"; type = "A"; data = "104.198.14.52"; }
     { name = "www"; class = "IN"; type = "CNAME"; data = "ben-website.netlify.com."; }
 
-    { name = "t3counter"; class = "IN"; type = "CNAME"; data = "t3counter.byethost31.com."; }
+    { name = "t3counter"; class = "IN"; type = "CNAME"; data = "t3counter.byethost7.com."; }
 
     # RasPi2
     { name = "raspi2"; class = "IN"; type = "A"; data = externalIPv4; }
@@ -64,11 +64,11 @@
 
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "rock64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:411:7cff:feb3:6e9d"; }
+    { name = "rock64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:484e:25ff:feaf:9e0f"; }
 
     # RockPro64
     { name = "rockpro64"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "rockpro64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:b05e:efff:fe50:6aff"; }
+    { name = "rockpro64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:ec5b:4ff:fe00:43c4"; }
 
     # KittyCop
     { name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.241"; }
@@ -131,13 +131,13 @@ in {
         };
       };
 
-      acl slaves {
+      acl secondaries {
         69.65.50.192;
         2001:1850:1:5:800::6b;
         204.42.254.5;
         2001:418:3f4::5;
       };
-      masters slaves {
+      masters secondaries {
         69.65.50.192;
         2001:1850:1:5:800::6b;
         204.42.254.5;
@@ -145,12 +145,12 @@ in {
       };
 
       view "external" {
-        match-clients { slaves; };
-        allow-query { slaves; };
+        match-clients { secondaries; };
+        allow-query { secondaries; };
 
         zone "benwolsieffer.com" {
           type master;
-          allow-transfer { slaves; };
+          allow-transfer { secondaries; };
           notify yes;
 
           file "${pkgs.writeText "dns-external-zone" ''
