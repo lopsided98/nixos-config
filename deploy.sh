@@ -93,7 +93,7 @@ while getopts "nps" opt; do
     n) deploy=0; sync=1 ;;
     p) deploy_hydra=1 ;;
     s) sync=1 ;;
-    \?) usage ;;
+    \?) usage; exit ;;
   esac
 done
 shift "$(($OPTIND -1))"
