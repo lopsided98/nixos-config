@@ -14,11 +14,11 @@ in {
         bind-address = "";
         unix-socket-enabled = true;
         bind-socket = socket;
+        # Enable Flux query language
+        flux-enabled = true;
       };
       # Disable collectd because I don't use it and it does not currently build
       collectd = [];
-      # Enable Flux query language
-      flux-enabled = true;
     };
   };
 
