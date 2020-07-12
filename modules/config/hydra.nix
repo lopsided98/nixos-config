@@ -21,18 +21,6 @@
     useSubstitutes = true;
   };
 
-  # Thayer sysadmins decided pubkey auth was too secure/convenient, so we need
-  # this hack to supply the password
-  systemd.services = let
-    sshpass-wrapper = pkgs.writeScriptBin "ssh" ''
-      #!${pkgs.stdenv.shell}
-      '${pkgs.sshpass}/bin/sshpass' -f '${secrets.getSecret secrets.hydra.thayerServerPassword}' '${pkgs.openssh}/bin/ssh' -oBatchMode=no "$@"
-    '';
-  in {
-    hydra-queue-runner.path = mkBefore [ sshpass-wrapper ];
-    nix-daemon.path = mkBefore [ sshpass-wrapper ];
-  };
-
   services.postgresql = {
     package = pkgs.postgresql96;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
