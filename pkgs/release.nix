@@ -38,6 +38,7 @@ in mapTestOn {
     ubootOdroidXU3;
 } // lib.optionalAttrs (lib.elem "aarch64-linux" hostSystems) {
   inherit (pkgs.pkgsCross.aarch64-multiplatform)
+    ubootOdroidC2
     ubootRaspberryPi3_64bit
     ubootRock64
     ubootRockPro64;
