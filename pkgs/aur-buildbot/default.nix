@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub }: let
-  commit = "98b6e2d89bc5323a3e0b391b0d594e22bd9a8325";
+  rev = "254f24a653cefa7b674b4d5576cf6cb655cbbadd";
 in stdenv.mkDerivation {
-  name = "aur-buildbot-${lib.substring 0 7 commit}";
+  name = "aur-buildbot-${lib.substring 0 7 rev}";
 
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "aur-buildbot";
-    rev = commit;
-    sha256 = "03bqjxhx8pay3wwbsz7mjjmj68g36297g9hl3s89jn6d8p2awhl6";
+    inherit rev;
+    sha256 = "09x82j0yzgrci4yia794sxb4z2c9kcfz7dxq096d0fl22iq0cg6z";
   };
   
   installPhase = ''
@@ -25,7 +25,8 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Buildbot configuration for building Arch Linux AUR packages";
-    homepage = https://github.com/lopsided98/aur-buildbot;
+    homepage = "https://github.com/lopsided98/aur-buildbot";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ lopsided98 ];
   };
 }
