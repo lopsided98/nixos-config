@@ -1,8 +1,6 @@
 #!/bin/bash
 set -eu
 
-TMPDIR="${TMPDIR:-/tmp}"
-
 function cleanup {
   # Don't stop on failure of cleanup commands
   set +eu
@@ -34,7 +32,7 @@ else
   kpartx -a "${loop_dev}"
   block_dev="/dev/mapper/${loop}p2"
 fi
-mount_dir=$(mktemp -d "${TMPDIR}"/mount.XXXXXX)
+mount_dir=$(mktemp -d --tmpdir mount.XXXXXX)
 mount "${block_dev}" "${mount_dir}"
 
 install -D -o root -g root -m 400 "${key}" "${mount_dir}/etc/secrets/key.asc"
