@@ -21,6 +21,7 @@ in filterAttrs (m: c: builtins.elem (realSystem c.config.nixpkgs) hostSystems) {
   "HP-Z420" = callMachine ./HP-Z420 "x86_64-linux";
   "Dell-Optiplex-780" = callMachine ./Dell-Optiplex-780 "x86_64-linux";
   "ODROID-XU4" = callMachine ./ODROID-XU4 "armv7l-linux";
+  "ragazza" = callMachine ./ragazza "armv6l-linux";
   "RasPi2" = callMachine ./RasPi2 "armv7l-linux";
   "Rock64" = callMachine ./Rock64 "aarch64-linux";
   "RockPro64" = callMachine ./RockPro64 "aarch64-linux";

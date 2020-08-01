@@ -8,6 +8,9 @@ with lib;
     ../../modules/local/machine/raspberry-pi.nix
   ];
 
+  local.machine.raspberryPi.enableWirelessFirmware = true;
+  local.profiles.minimal = true;
+
   sdImage = {
     firmwarePartitionID = "0x2a7208bc";
     rootPartitionUUID = "79cd7c77-b355-4d2b-b1d5-fa9207e944f2";

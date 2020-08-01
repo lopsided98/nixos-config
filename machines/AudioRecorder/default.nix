@@ -7,16 +7,14 @@
 
 with lib;
 
-let
-  extraFirmwareConfig = ''
-    dtoverlay=fe-pi-audio
-    dtparam=audio=off
-  '';
-in {
+{
   imports = [
     ../../modules
     ../../modules/local/machine/raspberry-pi.nix
   ];
+
+  local.machine.raspberryPi.enableWirelessFirmware = true;
+  local.profiles.minimal = true;
 
   sdImage = {
     inherit firmwarePartitionID rootPartitionUUID;
@@ -51,12 +49,9 @@ in {
     };
   };
 
-  # Enable wifi firmware
-  hardware.enableRedistributableFirmware = true;
-
-  networking.wireless = {
+  local.networking.wireless.home = {
     enable = true;
-    interfaces = [ "wlan0" ];
+    interface = "wlan0";
   };
 
   # Create virtual AP
@@ -82,40 +77,23 @@ in {
 
   systemd.network = {
     enable = true;
-    networks = {
-      # Home network
-      "30-wlan0" = {
-        name = "wlan0";
-        DHCP = "v4";
-        dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-        networkConfig = {
-          LLMNR = "yes";
-        };
-        extraConfig = ''
-          [IPv6AcceptRA]
-          UseDNS=no
-        '';
+    # Access point
+    networks."30-ap0" = {
+      name = "ap0";
+      address = [ "10.9.0.1/24" ];
+      networkConfig = {
+        DHCPServer = true;
+        IPv6PrefixDelegation = true;
+        LLMNR = "yes";
       };
+      extraConfig = ''
+        [DHCPServer]
+        EmitDNS=no
+        EmitNTP=no
 
-      # Access point
-      "30-ap0" = {
-        name = "ap0";
-        address = [ "10.9.0.1/24" ];
-        networkConfig = {
-          DHCPServer = true;
-          IPv6PrefixDelegation = true;
-          LLMNR = "yes";
-        };
-        extraConfig = ''
-          [DHCPServer]
-          EmitDNS=no
-          EmitNTP=no
-
-          [IPv6PrefixDelegation]
-          EmitDNS=no
-        '';
-      };
+        [IPv6PrefixDelegation]
+        EmitDNS=no
+      '';
     };
   };
   networking.hostName = hostName;

@@ -19,7 +19,11 @@ in {
   # Implementation
 
   config = mkIf cfg.enable {
-    networking.wireless.enable = true;
+    networking.wireless = {
+      enable = true;
+      interfaces = [ cfg.interface ];
+      configFile = secrets.getSystemdSecret "wpa_supplicant" secrets.wpaSupplicant.homeNetwork;
+    };
 
     systemd.network = {
       enable = true;
@@ -35,8 +39,9 @@ in {
       };
     };
 
-    environment.secrets = secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
-      target = "wpa_supplicant.conf";
+    systemd.secrets.wpa_supplicant = {
+      files = secrets.mkSecret secrets.wpaSupplicant.homeNetwork { };
+      units = singleton "wpa_supplicant.service";
     };
   };
 }

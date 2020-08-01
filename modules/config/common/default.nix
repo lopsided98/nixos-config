@@ -41,15 +41,12 @@
   # All systems use USA Eastern Time
   time.timeZone = "America/New_York";
 
-  # Standard set of packages
+  # Packages considered absolutely essential for all machines
+  # Add other useful but less critical packages to standard profile, so they
+  # won't be included in the minimal profile.
   environment.systemPackages = with pkgs; [
     htop
     iotop
-    linuxPackages_latest.tmon
-    bmon
-    git
-    file
-    vim
     screen
     usbutils
   ];
@@ -61,7 +58,7 @@
   system.buildMachines = let
     machine = m: {
       sshUser = "build";
-      sshKey = secrets.getSecret secrets.build.sshKey;
+      sshKey = secrets.getSystemdSecret "nix" secrets.build.sshKey;
     } // m;
   in {
     "HP-Z420" = machine {
@@ -105,7 +102,7 @@
     autoOptimiseStore = true;
     extraOptions = ''
       builders-use-substitutes = true
-      netrc-file = ${secrets.getSecret secrets.hydra.netrc}
+      netrc-file = ${secrets.getSystemdSecret "nix" secrets.hydra.netrc}
       min-free = ${toString (1024 * 1024 * 1024)}
       max-free = ${toString (4096 * 1024 * 1024)}
     '';
@@ -120,16 +117,8 @@
       "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
     ];
 
-    nixPath = let
-      nixpkgs = builtins.path {
-        inherit (pkgs) path;
-        name = "nixpkgs";
-        # Leave enough of the git repo to determine the revision, but remove the
-        # large objects directory
-        filter = path: type: type != "directory" || !lib.hasSuffix ".git/objects" path;
-      };
-    in [
-      "nixpkgs=${nixpkgs}"
+    nixPath = [
+      "nixpkgs=${lib.cleanSource pkgs.path}"
       "localpkgs=/etc/nixos"
       "nixos-config=/etc/nixos/machines/${config.networking.hostName}"
       "nixpkgs-overlays=/etc/nixos/overlays"
@@ -273,9 +262,13 @@
     email = "benwolsieffer@gmail.com";
   };
 
-  environment.secrets =
-    secrets.mkSecret secrets.build.sshKey {} //
-    secrets.mkSecret secrets.hydra.netrc {};
+  systemd.secrets.nix = {
+    units = [ "nix-daemon.service" ];
+    files = lib.mkMerge [
+      (secrets.mkSecret secrets.build.sshKey {})
+      (secrets.mkSecret secrets.hydra.netrc {})
+    ];
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
