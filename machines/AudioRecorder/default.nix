@@ -49,23 +49,27 @@ with lib;
     };
   };
 
-  local.networking.wireless.home = {
+  networking.wireless = {
     enable = true;
-    interface = "wlan0";
+    interfaces = [ "wlan0" ];
+    configFile = secrets.getSystemdSecret "wpa_supplicant" secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}";
+  };
+  local.networking.home = {
+    enable = true;
+    interfaces = [ "wlan0" ];
   };
 
   # Create virtual AP
   networking.localCommands = mkIf ap ''
     ${pkgs.iw}/bin/iw dev wlan0 interface add ap0 type __ap
   '';
-
   services.hostapd = mkIf ap {
     enable = true;
     interface = "ap0";
     ssid = "AudioRecorder";
     extraConfig = ''
       wpa=2
-      wpa_psk_file=${secrets.getSecret secrets.AudioRecorder.hostapd.wpaPsk}
+      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.AudioRecorder.hostapd.wpaPsk}
     '';
   };
   systemd.services.hostapd = mkIf ap {
@@ -74,7 +78,6 @@ with lib;
     # Hack to wait before starting wpa_supplicant
     serviceConfig.ExecStartPost = "${pkgs.coreutils}/bin/sleep 5";
   };
-
   systemd.network = {
     enable = true;
     # Access point
@@ -96,6 +99,7 @@ with lib;
       '';
     };
   };
+
   networking.hostName = hostName;
 
   # Allow access to audio devices
@@ -247,11 +251,18 @@ with lib;
     ];
   };
 
+  systemd.secrets = {
+    wpa_supplicant = {
+      units = [ "wpa_supplicant.service" ];
+      files = [ (secrets.mkSecret secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}" {}) ];
+    };
+    hostapd = mkIf ap {
+      units = [ "hostapd.service" ];
+      files = [ (secrets.mkSecret secrets.AudioRecorder.hostapd.wpaPsk {}) ];
+    };
+  };
+
   environment.secrets = mkMerge [
-    (secrets.mkSecret secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}" {
-      target = "wpa_supplicant.conf";
-    })
-    (mkIf ap (secrets.mkSecret secrets.AudioRecorder.hostapd.wpaPsk {}))
     (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostRsaKey {})
     (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key {})
     (secrets.mkSecret secrets.AudioRecorder.samba.smbpasswd {})

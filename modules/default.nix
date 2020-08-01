@@ -21,6 +21,7 @@
     ./services/web-servers/nginx.nix
     ./tasks/filesystems/zfs.nix
 
+    ./local/networking/home.nix
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
     ./local/networking/wireless/home.nix

@@ -25,18 +25,9 @@ in {
       configFile = secrets.getSystemdSecret "wpa_supplicant" secrets.wpaSupplicant.homeNetwork;
     };
 
-    systemd.network = {
+    local.networking.home = {
       enable = true;
-      networks."30-home-wifi" = {
-        name = cfg.interface;
-        DHCP = "v4";
-        dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-        extraConfig = ''
-          [IPv6AcceptRA]
-          UseDNS=no
-        '';
-      };
+      interfaces = [ cfg.interface ];
     };
 
     systemd.secrets.wpa_supplicant = {
