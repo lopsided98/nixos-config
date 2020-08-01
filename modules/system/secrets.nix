@@ -15,6 +15,10 @@ in {
 
       getSecret = secret: "/etc/" + config.environment.secrets."${secret}".target;
 
+      getSystemdSecret = service: secret: let 
+        systemdSecret = config.systemd.secrets."${service}";
+      in systemdSecret.directory + "/" + systemdSecret.files."${secret}".target;
+
       getBootSecret = secret: "/boot/secrets/" + config.boot.secrets."${secret}".target;
     } // secrets;
   };
