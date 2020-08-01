@@ -17,19 +17,13 @@ in {
           config.unitConfig.OnFailure = mkIf (cfg.enable && config.notifyFailed) "notify-failed@%n.service";
         }));
       };
-      notifyFailed = mkOption {
-        type = types.submodule {
-          options = {
-            enable = mkEnableOption "system failure notification";
-            address = mkOption {
-              type = types.str;
-              default = "benwolsieffer@gmail.com";
-              description = "Recipient email address";
-            };
-          };
+      notifyFailed = {
+        enable = mkEnableOption "systemd service failure notification";
+        address = mkOption {
+          type = types.str;
+          default = "benwolsieffer@gmail.com";
+          description = "Recipient email address";
         };
-        default = {};
-        description = "Global systemd failure notification options";
       };
     };
   };
