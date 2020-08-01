@@ -119,8 +119,8 @@ with lib;
   # List services that you want to enable:
 
   services.openssh.hostKeys = [
-    { type = "rsa"; bits = 4096; path = secrets.getSecret secrets.AudioRecorder.ssh."${hostName}".hostRsaKey; }
-    { type = "ed25519"; path = secrets.getSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key; }
+    { type = "rsa"; bits = 4096; path = secrets.getSystemdSecret "sshd" secrets.AudioRecorder.ssh."${hostName}".hostRsaKey; }
+    { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key; }
   ];
 
   services.resolved.llmnr = "true";
@@ -187,7 +187,7 @@ with lib;
     };
     extraConfig = ''
       workgroup = MSHOME
-      passdb backend = smbpasswd:${secrets.getSecret secrets.AudioRecorder.samba.smbpasswd}
+      passdb backend = smbpasswd:${secrets.getSystemdSecret "samba" secrets.AudioRecorder.samba.smbpasswd}
 
       # Disable printing
       load printers = no
@@ -254,17 +254,22 @@ with lib;
   systemd.secrets = {
     wpa_supplicant = {
       units = [ "wpa_supplicant.service" ];
-      files = [ (secrets.mkSecret secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}" {}) ];
+      files = secrets.mkSecret secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}" {};
     };
     hostapd = mkIf ap {
       units = [ "hostapd.service" ];
-      files = [ (secrets.mkSecret secrets.AudioRecorder.hostapd.wpaPsk {}) ];
+      files = secrets.mkSecret secrets.AudioRecorder.hostapd.wpaPsk {};
+    };
+    sshd = {
+      units = [ "sshd@.service" ];
+      files = mkMerge [
+        (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostRsaKey {})
+        (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key {})
+      ];
+    };
+    samba = {
+      units = [ "samba-smbd.service" ];
+      files = secrets.mkSecret secrets.AudioRecorder.samba.smbpasswd {};
     };
   };
-
-  environment.secrets = mkMerge [
-    (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostRsaKey {})
-    (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key {})
-    (secrets.mkSecret secrets.AudioRecorder.samba.smbpasswd {})
-  ];
 }
