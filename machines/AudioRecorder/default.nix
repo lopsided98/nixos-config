@@ -231,9 +231,6 @@ with lib;
     };
   };
 
-  # Enable SD card TRIM
-  services.fstrim.enable = true;
-
   networking.firewall = {
     allowedTCPPorts = [
       34876 # Allow access to audio server for debugging
