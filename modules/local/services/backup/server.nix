@@ -32,7 +32,7 @@ in {
         }
 
         backup_mounted() {
-          zpool list -H | grep -q backup
+          /run/booted-system/sw/bin/zpool list -H | grep -q backup
         }
       '';
       mountBackup = pkgs.writeScript "mount-backup.sh" ''
@@ -63,6 +63,7 @@ in {
       if !(backup_decrypted && backup_mounted); then
 	      if yes_no "Backup drive is not mounted. Do you want to mount it? (y/N) "; then
 		      sudo '${mountBackup}'
+		      sudo systemctl start syncthing
 	      fi
       fi
       )
