@@ -211,29 +211,7 @@ with lib;
   };
 
   # Save/restore time
-  systemd.services.fake-hwclock = {
-    before = [ "sysinit.target" "shutdown.target" ];
-    after = [ "local-fs.target" ];
-    wantedBy = [ "sysinit.target" ];
-    conflicts = [ "shutdown.target" ];
-    unitConfig.DefaultDependencies = false;
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      StateDirectory = "fake-hwclock";
-      ExecStart = pkgs.writeScript "fake-hwclock-start" ''
-        #!${pkgs.stdenv.shell}
-
-        if [ -e /var/lib/fake-hwclock/clock ]; then
-          ${pkgs.coreutils}/bin/date -s "$(cat /var/lib/fake-hwclock/clock)"
-        fi
-      '';
-      ExecStop = pkgs.writeScript "fake-hwclock-stop" ''
-        #!${pkgs.stdenv.shell}
-        ${pkgs.coreutils}/bin/date > /var/lib/fake-hwclock/clock
-      '';
-    };
-  };
+  services.fakeHwClock.enable = true;
 
   networking.firewall = {
     allowedTCPPorts = [
