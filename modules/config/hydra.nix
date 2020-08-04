@@ -15,8 +15,8 @@
     notificationSender = "hydra@hydra.benwolsieffer.com";
     port = 8080;
     extraConfig = ''
-      store_uri = daemon?secret-key=${secrets.getSecret secrets.hydra.binaryCacheSecretKey}
-      binary_cache_secret_key_file=${secrets.getSecret secrets.hydra.binaryCacheSecretKey}
+      store_uri = daemon?secret-key=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
+      binary_cache_secret_key_file=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
     '';
     useSubstitutes = true;
   };
@@ -51,7 +51,7 @@
         enableACME = true;
         forceSSL = true;
 
-        basicAuthFile = secrets.getSecret secrets.hydra.htpasswd;
+        basicAuthFile = secrets.getSystemdSecret "hydra" secrets.hydra.htpasswd;
 
         locations = {
           "/" = {
@@ -104,7 +104,7 @@
   # Only use these builders on the Hydra machine because they require special
   # network configuration.
   system.buildMachines = let
-    machine = m: { sshKey = secrets.getSecret secrets.build.sshKey; } // m;
+    machine = m: { sshKey = secrets.getSystemdSecret "nix" secrets.build.sshKey; } // m;
   in {
     /*"babylon1" = machine {
       systems = [ "x86_64-linux" ];
@@ -185,12 +185,21 @@
     };*/
   };
 
-  environment.secrets = {
-    "${secrets.build.sshKey}" = {
-      user = "hydra-queue-runner";
-      group = "hydra";
+  systemd.secrets = {
+    nix = {
+      units = [ "hydra-queue-runner.service" ];
+      files."${secrets.build.sshKey}" = {
+        user = "hydra-queue-runner";
+        group = "hydra";
+      };
     };
-  } // secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; }
-    // secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; }
-    // secrets.mkSecret secrets.hydra.thayerServerPassword { user = "hydra-queue-runner"; };
+    hydra = {
+      units = [ "nginx.service" "hydra-server.service" "hydra-queue-runner.service" ];
+      files = mkMerge [
+        (secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; })
+        (secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; })
+        (secrets.mkSecret secrets.hydra.thayerServerPassword { user = "hydra-queue-runner"; })
+      ];
+    };
+  };
 }
