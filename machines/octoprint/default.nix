@@ -1,4 +1,7 @@
-{ lib, config, pkgs, ... }: {
+{ lib, config, pkgs, ... }: let
+  videoDevice = "/dev/v4l/by-id/usb-046d_HD_Webcam_C525_6498ABA0-video-index0";
+  videoSystemdDevice = "dev-v4l-by\\x2did-usb\\x2d046d_HD_Webcam_C525_6498ABA0\\x2dvideo\\x2dindex0.device";
+in {
   imports = [ ../../modules ];
 
   fileSystems."/" = {
@@ -75,12 +78,21 @@
 
   services.mjpg-streamer = {
     enable = true;
-    inputPlugin = "input_uvc.so -r 1280x720";
+    inputPlugin = "input_uvc.so -d ${videoDevice} -r 1280x720";
+  };
+  # Automatically start mjpg-streamer when camera connected (and stop when removed)
+  systemd.services.mjpg-streamer = {
+    after = [ videoSystemdDevice ];
+    bindsTo = [ videoSystemdDevice ];
+    # Replace multi-user.target
+    wantedBy = lib.mkForce [ videoSystemdDevice ];
   };
 
-  # Allow gpio group to access GPIO devices
   users.groups.gpio = { };
   services.udev.extraRules = ''
+    # Enable systemd device units for cameras
+    SUBSYSTEM=="video4linux", TAG+="systemd"
+    # Allow gpio group to access GPIO devices
     KERNEL=="gpiochip*", GROUP="gpio", MODE="0660"
   '';
 
