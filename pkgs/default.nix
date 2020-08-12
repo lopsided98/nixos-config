@@ -63,8 +63,6 @@ in {
     usePulseAudio = false;
   };
 
-  openrocket = self.callPackage ./openrocket { };
-
   sox = super.sox.override {
     enableLibpulseaudio = false;
   };
