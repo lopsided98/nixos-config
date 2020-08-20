@@ -22,7 +22,10 @@ in {
     networking.wireless = {
       enable = true;
       interfaces = [ cfg.interface ];
-      configFile = secrets.getSystemdSecret "wpa_supplicant" secrets.wpaSupplicant.homeNetwork;
+    };
+
+    environment.etc."wpa_supplicant.conf" = mkForce {
+      source = secrets.getSystemdSecret "wpa_supplicant" secrets.wpaSupplicant.homeNetwork;
     };
 
     local.networking.home = {
