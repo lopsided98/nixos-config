@@ -116,13 +116,6 @@
       "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
       "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
     ];
-
-    nixPath = [
-      "nixpkgs=${lib.cleanSource pkgs.path}"
-      "localpkgs=/etc/nixos"
-      "nixos-config=/etc/nixos/machines/${config.networking.hostName}"
-      "nixpkgs-overlays=/etc/nixos/overlays"
-    ];
   };
 
   # Global SSH configuration for distributed builds
