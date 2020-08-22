@@ -43,7 +43,7 @@ with lib;
       name = "wlan0";
       DHCP = "ipv4";
     };
-    networks."50-vpn-home-tap-client".DHCP = "v4";
+    networks."50-vpn-home-tap-client".DHCP = "ipv4";
   };
   networking.hostName = "maine-pi";
 
