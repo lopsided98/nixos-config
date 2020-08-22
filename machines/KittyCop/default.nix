@@ -22,7 +22,7 @@
   systemd.network = {
     enable = true;
     networks."30-eth0" = {
-      DHCP = "v4";
+      DHCP = "ipv4";
     };
   };
   networking.hostName = "KittyCop"; # Define your hostname.
