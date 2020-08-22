@@ -1,9 +1,11 @@
 { localpkgs ? ../.,
   nixpkgs ? <nixpkgs>,
-  hostSystems ? [ "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ],
+  hostSystems ? [ "x86_64-linux" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ],
   buildSystem ? null }:
 with (import <nixpkgs/pkgs/top-level/release-lib.nix> { supportedSystems = hostSystems; });
 let
+  fullSystems = lib.intersectLists [ "x86_64-linux" "aarch64-linux" ] hostSystems;
+
   machines = import (localpkgs + "/machines") {
     inherit hostSystems buildSystem;
     modules = lib.singleton {
@@ -15,23 +17,22 @@ let
       });
     };
   };
-
 in mapTestOn {
   # Fancy shortcut to generate one attribute per supported platform.
-  dnsupdate = hostSystems;
-  tinyssh = hostSystems;
-  nixos-secrets = hostSystems;
+  dnsupdate = fullSystems;
+  tinyssh = fullSystems;
+  nixos-secrets = fullSystems;
 
   python3Packages = {
-    aur = hostSystems;
-    memoizedb = hostSystems;
-    pyalpm = hostSystems;
-    xcgf = hostSystems;
-    xcpf = hostSystems;
+    aur = fullSystems;
+    memoizedb = fullSystems;
+    pyalpm = fullSystems;
+    xcgf = fullSystems;
+    xcpf = fullSystems;
   };
 
-  linuxPackages_latest.tmon = hostSystems;
-  linuxPackages.tmon = hostSystems;
+  linuxPackages_latest.tmon = fullSystems;
+  linuxPackages.tmon = fullSystems;
 } // lib.optionalAttrs (lib.elem "armv7l-linux" hostSystems) {
   inherit (pkgs.pkgsCross.armv7l-hf-multiplatform)
     ubootRaspberryPi2
