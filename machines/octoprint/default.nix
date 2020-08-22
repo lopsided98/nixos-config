@@ -15,24 +15,17 @@ in {
   };
 
   hardware.enableRedistributableFirmware = true;
-  local.networking.wireless.home = {
-    enable = true;
-    interface = "wlan0";
-  };
-
-  systemd.network = {
-    enable = true;
-    networks."30-eth0" = {
-      name = "eth0";
-      DHCP = "v4";
-      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-      dhcpConfig.UseDNS = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
+  local.networking = {
+    wireless.home = {
+      enable = true;
+      interface = "wlan0";
+    };
+    home = {
+      enable = true;
+      interfaces = [ "eth0" ];
     };
   };
+
   networking.hostName = "octoprint";
 
   # List services that you want to enable:
