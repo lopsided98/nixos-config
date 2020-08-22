@@ -38,6 +38,8 @@
     ./local/services/mail.nix
     ./local/services/public-files.nix
     ./local/services/water-level-monitor.nix
+    ./local/sources.nix
+    ./local/system.nix
 
     ../pkgs/nixos-secrets/secrets.nix
   ];
