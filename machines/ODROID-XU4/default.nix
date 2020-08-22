@@ -16,6 +16,8 @@ in {
     ../../modules
   ];
 
+  local.profiles.headless = true;
+
   boot = {
     loader = {
       grub.enable = false;
@@ -24,20 +26,12 @@ in {
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_hardkernel_4_14;
   };
 
-  systemd.network = {
+  local.networking.home = {
     enable = true;
-    networks."30-${interface}" = {
-      name = interface;
-      address = [ "192.168.1.3/24" ];
-      gateway = [ "192.168.1.1" ];
-      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-      dhcpConfig.UseDNS = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
-    };
+    interfaces = [ interface ];
+    ipv4Address = "192.168.1.3/24";
   };
+
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
   nix.extraOptions = ''
