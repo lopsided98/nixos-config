@@ -41,16 +41,6 @@ in {
           UseDNS=no
         '';
       };
-      "30-wlan0" = {
-        name = "wlan0";
-        DHCP = "v4";
-        dhcpConfig.UseDNS = false;
-        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-        extraConfig = ''
-          [IPv6AcceptRA]
-          UseDNS=no
-        '';
-      };
     };
   };
   networking = {
@@ -96,9 +86,6 @@ in {
   services.fstrim.enable = true;
 
   environment.secrets = mkMerge [
-    (secrets.mkSecret secrets.wpaSupplicant.homeNetwork {
-      target = "wpa_supplicant.conf";
-    })
     (secrets.mkSecret secrets.RockPro64.ssh.hostRsaKey {})
     (secrets.mkSecret secrets.RockPro64.ssh.hostEd25519Key {})
   ];
