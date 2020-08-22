@@ -171,10 +171,9 @@
   };
 
   networking = {
+    useNetworkd = true;
     # I configure my networks directly using networkd
     useDHCP = false;
-    # Networkd backend is kind of broken right now
-    useNetworkd = false;
 
     # Don't use hostnames because DNSSEC fails unless the time is correct
     timeServers = [
