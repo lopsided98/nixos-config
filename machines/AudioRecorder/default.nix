@@ -52,7 +52,9 @@ with lib;
   networking.wireless = {
     enable = true;
     interfaces = [ "wlan0" ];
-    configFile = secrets.getSystemdSecret "wpa_supplicant" secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}";
+  };
+  environment.etc."wpa_supplicant.conf" = mkForce {
+    source = secrets.getSystemdSecret "wpa_supplicant" secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}";
   };
   local.networking.home = {
     enable = true;
@@ -86,7 +88,7 @@ with lib;
       address = [ "10.9.0.1/24" ];
       networkConfig = {
         DHCPServer = true;
-        IPv6PrefixDelegation = true;
+        IPv6PrefixDelegation = "yes";
         LLMNR = "yes";
       };
       extraConfig = ''
