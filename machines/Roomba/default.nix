@@ -27,26 +27,17 @@
     kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi3;
   };
 
-  hardware.enableRedistributableFirmware = true;
-  local.networking.wireless.home = {
-    enable = true;
-    interface = "wlan0";
-  };
-
-  systemd.network = {
-    enable = true;
-    networks."30-eth0" = {
-      name = "eth0";
-      DHCP = "v4";
-      dhcpConfig.UseDNS = false;
-      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-      linkConfig.RequiredForOnline = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
+  local.networking = {
+    wireless.home = {
+      enable = true;
+      interface = "wlan0";
+    };
+    home = {
+      enable = true;
+      interfaces = [ "eth0" ];
     };
   };
+
   networking.hostName = "Roomba"; # Define your hostname.
 
   # List services that you want to enable:
@@ -65,9 +56,6 @@
   };
 
   sound.enable = true;
-
-  # Enable SD card TRIM
-  services.fstrim.enable = true;
 
   networking.firewall.allowedTCPPorts = [
     1935 # RTMP Streaming
