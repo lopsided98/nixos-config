@@ -6,7 +6,8 @@ with lib;
       default = false;
       type = types.bool;
       description = ''
-        Strip down NixOS as much as possible.
+        Strip down NixOS as much as possible. This is targeted at both reducing
+        closure size and runtime memory usage.
       '';
     };
   };

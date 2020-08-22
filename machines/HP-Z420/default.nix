@@ -53,6 +53,12 @@ in rec {
     kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eno1:none" "intel_iommu=on" ];
   };
 
+  local.networking.home = {
+    enable = true;
+    interfaces = [ interface ];
+    ipv4Address = "${address}/24";
+  };
+
   local.networking.vpn.dartmouth.enable = true;
 
   /*local.networking.vpn.home.tap.client = {
@@ -77,19 +83,6 @@ in rec {
         UseDNS=false
       '';
     };*/
-
-    # Home network
-    networks."50-${interface}" = {
-      name = interface;
-      address = [ "${address}/24" ];
-      gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
-      dhcpConfig.UseDNS = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
-    };
 
     # Use physical interface MAC on bridge to get same IPs
     netdevs."50-${interface}".netdevConfig = {

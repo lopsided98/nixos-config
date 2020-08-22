@@ -27,6 +27,7 @@
     ./local/networking/vpn/home/tap-client.nix
     ./local/networking/wireless/home.nix
     ./local/profiles/headless.nix
+    ./local/profiles/limited-memory.nix
     ./local/profiles/minimal.nix
     ./local/profiles/standard.nix
     ./local/services/backup/common.nix
