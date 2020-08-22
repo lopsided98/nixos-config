@@ -41,7 +41,7 @@ with lib;
     enable = true;
     networks."30-wlan0" = {
       name = "wlan0";
-      DHCP = "v4";
+      DHCP = "ipv4";
     };
     networks."50-vpn-home-tap-client".DHCP = "v4";
   };
@@ -87,9 +87,6 @@ with lib;
     enable = true;
     influxdb.certificateSecret = secrets.maine-pi.waterLevelMonitor.influxdbCertificate;
   };
-
-  # Enable SD card TRIM
-  services.fstrim.enable = true;
 
   environment.secrets = mkMerge [
     (secrets.mkSecret secrets.maine-pi.dnsupdate.secretKey { user = "dnsupdate"; })
