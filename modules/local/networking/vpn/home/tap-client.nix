@@ -155,12 +155,8 @@ in {
       '';
     };
 
-    systemd.services.openvpn-home-tap-client = {
-      unitConfig = {
-        # Keep attempting to connect forever
-        StartLimitIntervalSec = 0;
-      };
-    };
+    # Keep attempting to connect forever
+    systemd.services.openvpn-home-tap-client.unitConfig.StartLimitIntervalSec = 0;
 
     users = {
       users.openvpn = {
