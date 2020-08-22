@@ -73,7 +73,7 @@ in rec {
     # Dartmouth network
     /*networks."50-${interface}" = {
       name = interface;
-      DHCP = "v4";
+      DHCP = "ipv4";
     };
 
     networks."50-vpn-home-tap-client" = {
