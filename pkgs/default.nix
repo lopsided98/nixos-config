@@ -28,6 +28,8 @@ in {
 
   dnsupdate = self.python3Packages.callPackage ./dnsupdate { };
 
+  freefb = self.callPackage ./freefb { };
+
   hacker-hats = self.callPackage ./hacker-hats {};
 
   kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
