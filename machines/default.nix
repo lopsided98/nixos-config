@@ -4,17 +4,19 @@
 with import <nixpkgs/lib>;
 let
   # Evaluate the configuration for a machine
-  callMachine = path: system: import <nixpkgs/nixos/lib/eval-config.nix> {
-    modules = [ path ({
-      local.system = {
-        hostSystem.system = system;
-        buildSystem = mkIf (buildSystem != null) { system = buildSystem; };
-      };
-    }) ] ++ modules;
-  };
+  callMachine = path: system: if builtins.elem system hostSystems
+    then import <nixpkgs/nixos/lib/eval-config.nix> {
+      modules = [ path ({
+        local.system = {
+          hostSystem.system = system;
+          buildSystem = mkIf (buildSystem != null) { system = buildSystem; };
+        };
+      }) ] ++ modules;
+    }
+    else null;
 
 # Filter out machines with systems that are not supported
-in filterAttrs (m: c: builtins.elem c.config.local.system.hostSystem.system hostSystems) {
+in filterAttrs (m: c: c != null) {
   "HP-Z420" = callMachine ./HP-Z420 "x86_64-linux";
   "Dell-Optiplex-780" = callMachine ./Dell-Optiplex-780 "x86_64-linux";
   "ODROID-XU4" = callMachine ./ODROID-XU4 "armv7l-linux";
