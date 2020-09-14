@@ -11,6 +11,7 @@
     ./services/audio/audio-recorder.nix
     ./services/continuous-integration/aur-buildbot/worker.nix
     ./services/continuous-integration/aur-buildbot/master.nix
+    ./services/hardware/freefb.nix
     ./services/networking/dnsupdate.nix
     ./services/networking/doorman.nix
     ./services/networking/tinyssh.nix
