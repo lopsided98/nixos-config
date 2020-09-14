@@ -89,6 +89,13 @@ in {
     KERNEL=="gpiochip*", GROUP="gpio", MODE="0660"
   '';
 
+  # Enable Fitbit synchronization
+  services.freefb = {
+    enable = true;
+    link = "dongle";
+    dump = true;
+  };
+
   networking.firewall.allowedTCPPorts = [
     80 # OctoPrint
     5050 # mjpg-streamer
