@@ -107,6 +107,9 @@ in {
     };
   };
 
+  # Add debug info to system profile
+  environment.enableDebugInfo = true;
+
   # ROS needs lots of ports
   networking.firewall.enable = false;
 
