@@ -1,8 +1,24 @@
-{ config, lib, pkgs, secrets, ... }: with lib; {
+{ config, lib, pkgs, secrets, ... }: with lib; let
+  nixFlakes = pkgs.nixFlakes.overrideAttrs ({ patches ? [], ... }: {
+    patches = patches ++ [
+      # Fix bugs in unstable Nix
+      (pkgs.fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/525b38eee8fac48eb2a82fb78fa0a933a9eee2a4.patch";
+        sha256 = "sha256-58MAq5zyCIGRd2P6p0ydpfpxZDULKanVpzMsNYKz6IM=";
+      })
+      (pkgs.fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/8dbd57a6a5fe497bde9e647a3249c1ce0ea121ab.patch";
+        sha256 = "sha256-AsjV8sya/pk927SK2DWMeF4vgt2fRKjSerdB8bRhMB8=";
+      })
+    ];
+  });
+in {
 
   services.hydra = {
     enable = true;
-    package = pkgs.hydra-unstable.overrideAttrs ({ patches ? [], ... }: {
+    package = (pkgs.hydra-unstable.override (old: {
+      nix = nixFlakes;
+    })).overrideAttrs ({ patches ? [], ... }: {
       patches = patches ++ [
         # Fix queue getting stuck
         (pkgs.fetchpatch {
@@ -22,14 +38,18 @@
   };
 
   services.postgresql = {
-    package = pkgs.postgresql96;
+    package = pkgs.postgresql_11;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
-    extraConfig = ''
-      max_connections = 250
-      work_mem = 8MB
-      shared_buffers = 512MB
-    '';
+    settings = {
+      max_connections = 250;
+      work_mem = "8MB";
+      shared_buffers = "512MB";
+    };
   };
+
+  # hydra-queue-runner gets stuck running localhost builds unless unstable Nix
+  # daemon is used
+  nix.package = nixFlakes;
 
   # Serve binary cache
   services.nginx = {
