@@ -7,7 +7,7 @@
     nixos-secrets.url = "github:lopsided98/nixos-secrets";
     secrets.url = "git+ssh://git@github.com/lopsided98/nixos-config-secrets.git";
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
-    ros-sailing.url = "/home/ben/Documents/School/Thesis/ros/catkin_ws/src/ros_sailing";
+    ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
   };
 
   outputs = { self, nixpkgs-unstable-custom, nixpkgs-master-custom

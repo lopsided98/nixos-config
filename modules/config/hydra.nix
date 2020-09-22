@@ -57,6 +57,15 @@ in {
     '';
   };
 
+  # Deploy keys for private repositories
+  programs.ssh.extraConfig = ''
+    Host gitlab.com
+      IdentityFile '${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.gitlab}';
+
+    Host github.com
+      IdentityFile '${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.githubNixosConfigSecrets}';
+  '';
+
   # Serve binary cache
   services.nginx = {
     enable = true;
@@ -222,11 +231,19 @@ in {
       };
     };
     hydra = {
-      units = [ "nginx.service" "hydra-server.service" "hydra-queue-runner.service" ];
+      units = [
+        "nginx.service"
+        "hydra-server.service"
+        "hydra-evaluator.service"
+        "hydra-queue-runner.service"
+      ];
       files = mkMerge [
         (secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; })
         (secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; })
         (secrets.mkSecret secrets.hydra.thayerServerPassword { user = "hydra-queue-runner"; })
+        # SSH deploy keys
+        (secrets.mkSecret secrets.hydra.ssh.gitlab { user = "hydra"; })
+        (secrets.mkSecret secrets.hydra.ssh.githubNixosConfigSecrets { user = "hydra"; })
       ];
     };
   };

@@ -172,6 +172,8 @@
       "bear.cs.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBI1q3WedIIRk5zZTxfxE8HZQBvTD5eARHEkQ4jpiCvy+5+hILMMMdNAPGFasXivCM6fgoNRhBYz+zC2iWXH416U=";
       "flume.cs.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDpOEp1zfF9mKLza6VlGO5TX/vJ1wlapEQC9Lb7dke2CeMy61ytgnaBqpAcfiHP4BnCGeb37usHfTYiHyZd3UBs=";
       "tahoe.cs.dartmouth.edu".publicKey = "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBHcGnvXB8fBeLdIMTYolAuxE+WTQH2JOeQPFwwfPh5ahYSk8bOkaWhRhinv3krWNter8HxNKcnwaBrFrCNOp28I=";
+      "github.com".publicKey = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==";
+      "gitlab.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf";
     };
   };
 

@@ -108,11 +108,10 @@
       "locked": {
         "lastModified": 1600752924,
         "narHash": "sha256-J8Ux11lhufC0KgHNHMd9oTzKSoxScEhbVXDm8Hzs7Q8=",
-        "ref": "master",
+        "owner": "lopsided98",
+        "repo": "nixos-secrets",
         "rev": "55d36a6046bdbaf7fc729d01b1f15784caa2c61e",
-        "revCount": 16,
-        "type": "git",
-        "url": "file:///home/ben/nixos/pkgs/nixos-secrets"
+        "type": "github"
       },
       "original": {
         "owner": "lopsided98",
@@ -219,22 +218,26 @@
         ]
       },
       "locked": {
-        "narHash": "sha256-NqLkaV2NiEE/tymqdPOXMshBYKAQEFXMH/KwPRKhZjU=",
-        "path": "/home/ben/Documents/School/Thesis/ros/catkin_ws/src/ros_sailing",
-        "type": "path"
+        "lastModified": 1600801884,
+        "narHash": "sha256-2x+SkD4XXl8cu472DS1mVeEVxFXjXRhamGU6zcMFNfA=",
+        "ref": "master",
+        "rev": "a6ddb78d0cdf0bb35e0278f5cea9a3bb7ccd0d63",
+        "revCount": 46,
+        "type": "git",
+        "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
       "original": {
-        "path": "/home/ben/Documents/School/Thesis/ros/catkin_ws/src/ros_sailing",
-        "type": "path"
+        "type": "git",
+        "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       }
     },
     "secrets": {
       "locked": {
-        "lastModified": 1600753617,
-        "narHash": "sha256-12mXDCq1DOLuhibB/3VxU2h00UbuWbHuEdDcWleers8=",
+        "lastModified": 1600814790,
+        "narHash": "sha256-IWBZmsvtqjcEfrzKYXCF5mRJRNua7pBbrQnNTk0AdMg=",
         "ref": "master",
-        "rev": "8d99189d8e88231217edb626ff2548b4042dc68e",
-        "revCount": 49,
+        "rev": "2589af05021c4b9d7958566c324f82b65a13ddaf",
+        "revCount": 50,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
