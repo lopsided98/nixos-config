@@ -21,6 +21,7 @@ with lib;
     local.sources.nixpkgs.enable = mkDefault false;
 
     # Disable uncessary systemd components
-    services.resolved.enable = mkDefault false;
+    # Override mkDefault in nixpkgs networkd config
+    services.resolved.enable = mkOverride 900 false;
   };
 }

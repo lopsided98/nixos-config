@@ -7,7 +7,6 @@
     ./system/boot/initrd-tinyssh.nix
     ./system/boot/initrd-decryptssh.nix
     ./system/boot/systemd-notify-failed.nix
-    ./system/secrets.nix
     ./services/audio/audio-recorder.nix
     ./services/continuous-integration/aur-buildbot/worker.nix
     ./services/continuous-integration/aur-buildbot/master.nix
@@ -41,7 +40,5 @@
     ./local/services/water-level-monitor.nix
     ./local/sources.nix
     ./local/system.nix
-
-    ../pkgs/nixos-secrets/secrets.nix
   ];
 }

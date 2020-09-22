@@ -2,7 +2,7 @@
 # not either and there is no way to do conditional imports. Any machine that
 # uses this configuration must manually include it.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 
@@ -11,7 +11,8 @@ let
   bootloaderCfg = config.boot.loader.raspberryPi;
   ubootEnabled = bootloaderCfg.uboot.enable;
 in {
-  imports = singleton <nixpkgs/nixos/modules/installer/cd-dvd/sd-image.nix>;
+  # FIXME: find a way to import this from nixpkgs with flakes
+  imports = singleton ./sd-image.nix;
 
   options.local.machine.raspberryPi = {
     enableWirelessFirmware = mkOption {
@@ -26,7 +27,7 @@ in {
   config = {
     sdImage = let
       firmwareBuilder = pkgs.buildPackages.callPackage
-        <nixpkgs/nixos/modules/system/boot/loader/raspberrypi/firmware-builder.nix> {
+        "${inputs.nixpkgs}/nixos/modules/system/boot/loader/raspberrypi/firmware-builder.nix" {
           inherit (bootloaderCfg) version;
           inherit ubootEnabled;
           # Override to use host packages where necessary
@@ -34,7 +35,7 @@ in {
           inherit (pkgs) raspberrypifw;
         };
       raspberryPiBuilder = pkgs.buildPackages.callPackage
-        <nixpkgs/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix> { };
+        "${inputs.nixpkgs}/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix> { }";
 
       configTxt = pkgs.writeText "config.txt" bootloaderCfg.firmwareConfig;
     in {

@@ -1,33 +1,16 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nixos-secrets
+#!nix-shell -i bash -p nixFlakes nixos-secrets
 set -euo pipefail
 
 # See https://gist.github.com/tvlooy/cbfbdb111a4ebad8b93e
 nixos_root="$(dirname $(readlink -f "$0"))"
 ssh_control_path="~/.ssh/master-%r@%h:%p.sock"
 
-# Mapping from system name to Hydra jobset
-declare -A system_jobset
-system_jobset[armv6l-linux]=master-custom
-system_jobset[armv7l-linux]=master-custom
-system_jobset[aarch64-linux]=unstable-custom
-system_jobset[x86_64-linux]=unstable-custom
-
 usage() {
   echo "$0 [-nps] <machine>"
 }
 
-machine_toplevel_drv_link() { echo "${1}.system.drv"; }
 machine_toplevel_link() { echo "${1}.system"; }
-
-machine_system() {
-  # TODO: fix system detection with cross compiling
-  nix eval --raw -f "${nixos_root}/machines" "${1}.config.nixpkgs.localSystem.system"
-}
-
-machine_jobset() {
-  echo "${system_jobset["$(machine_system "${1}")"]}"
-}
 
 machine_ssh() {
   local machine="${1}"
@@ -41,15 +24,11 @@ realize_ssh() {
 
   # Instantiate configuration on local machine. This prevents underpowered
   # machines from having to perform the evaluation themselves.
-  local toplevel_drv_link
-  toplevel_drv_link=$(nix-instantiate "${nixos_root}/machines" \
-    --add-root "$(machine_toplevel_drv_link "${machine}")" --indirect \
-    --show-trace -A "${1}.config.system.build.toplevel") || return 1
-  local toplevel_drv
-  toplevel_drv="$(readlink "${toplevel_drv_link}")" || return 1
+  toplevel_drv=$(nix eval --raw --show-trace \
+    "${nixos_root}#nixosConfigurations.${machine}.config.system.build.toplevel.drvPath") || return 1
 
   # Copy instantiated (but not realized config) to machine
-  nix copy --to "ssh://${machine}" "${toplevel_drv}" 1>&2
+  nix copy --derivation --to "ssh://${machine}" "${toplevel_drv}" 1>&2
 
   machine_ssh "${machine}" nix-store --realize "${toplevel_drv}" \
     --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null

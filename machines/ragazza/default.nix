@@ -1,4 +1,4 @@
-{ lib, config, pkgs, secrets, ... }:
+{ lib, config, pkgs, inputs, secrets, ... }:
 
 with lib;
 
@@ -8,7 +8,6 @@ in {
   imports = [
     ../../modules
     ../../modules/local/machine/raspberry-pi.nix
-    <nix-ros-overlay/modules>
   ];
 
   local.machine.raspberryPi.enableWirelessFirmware = true;
@@ -57,6 +56,10 @@ in {
     enable = true;
     interface = "wlan0";
   };
+  # Disable power saving (causes network hangs every few seconds)
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
+  '';
   services.resolved.extraConfig = "MulticastDNS=yes";
   systemd.network.networks."30-home".networkConfig.MulticastDNS = "yes";
 
@@ -78,32 +81,37 @@ in {
 
   services.ros = {
     enable = true;
-    distro = "melodicPython3";
-    overlays = [
-      (import ~/Documents/School/Thesis/ros/catkin_ws)
-      (self: super: {
-        # Remove wxPython dependency, only needed for GUI
-        actionlib = super.actionlib.override {
-          pythonPackages = self.pythonPackages // { wxPython = null; };
-        };
-      })
-    ];
+    distro = "noetic";
+    overlays = [ inputs.ros-sailing.rosOverlay ];
 
     systemPackages = p: with p; [ rosbash roslaunch rostopic sailboat-navigation ];
 
-    nodes.sailboat-planner = {
-      package = "sailboat_navigation";
-      node = "sailboat_planner_node";
-      params = {
-        _map_file = "/var/lib/ros/map.wkt";
-        _wind_direction_sensor_std_dev = "1.0";
+    launchFiles = {
+      mavros-sailboat = {
+        package = "mavros_sailboat";
+        launchFile = "mavros_sailboat.launch";
+        args = {
+          fcu_url = "/dev/ttyAMA0:921600";
+          gcs_url = "udp://@";
+        };
+      };
+
+      sailboat-navigation = {
+        package = "sailboat_navigation";
+        launchFile = "sailboat_navigation.launch";
+        args._map_file = "/var/lib/ros/map.wkt";
       };
     };
 
-    launchFiles.mavros-sailboat = {
-      package = "mavros_sailboat";
-      launchFile = "mavros_sailboat.launch";
-      args.fcu_url = "/dev/ttyAMA0:921600";
+    nodes.wind-estimator = {
+      package = "sailboat_navigation";
+      node = "wind_estimator_node";
+      params = {
+        _map_file = "/var/lib/ros/map.wkt";
+        _direction_std_dev = "2.0";
+        _speed_std_dev = "0.5";
+        _estimation_window = "200";
+      };
     };
   };
 

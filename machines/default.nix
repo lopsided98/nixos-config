@@ -1,22 +1,22 @@
-{ hostSystems ? [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" "armv5tel-linux" ]
+{ lib
+, hostSystems ? [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" "armv5tel-linux" ]
 , buildSystem ? null
 , modules ? [] }:
-with import <nixpkgs/lib>;
 let
   # Evaluate the configuration for a machine
   callMachine = path: system: if builtins.elem system hostSystems
-    then import <nixpkgs/nixos/lib/eval-config.nix> {
+    then lib.nixosSystem {
       modules = [ path ({
         local.system = {
           hostSystem.system = system;
-          buildSystem = mkIf (buildSystem != null) { system = buildSystem; };
+          buildSystem = lib.mkIf (buildSystem != null) { system = buildSystem; };
         };
       }) ] ++ modules;
     }
     else null;
 
 # Filter out machines with systems that are not supported
-in filterAttrs (m: c: c != null) {
+in lib.filterAttrs (m: c: c != null) {
   "HP-Z420" = callMachine ./HP-Z420 "x86_64-linux";
   "Dell-Optiplex-780" = callMachine ./Dell-Optiplex-780 "x86_64-linux";
   "ODROID-XU4" = callMachine ./ODROID-XU4 "armv7l-linux";
