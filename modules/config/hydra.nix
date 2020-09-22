@@ -51,19 +51,21 @@ in {
     # hydra-queue-runner gets stuck running localhost builds unless unstable Nix
     # daemon is used
     package = nixFlakes;
-    # Allow Hydra to build flakes
     extraOptions = ''
+      # Allow Hydra to build flakes
       experimental-features = nix-command flakes
+      # Allow Hydra to access SSH URIs in flakes (I think this is a Nix bug)
+      allowed-uris = ssh://
     '';
   };
 
   # Deploy keys for private repositories
   programs.ssh.extraConfig = ''
     Host gitlab.com
-      IdentityFile '${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.gitlab}';
+      IdentityFile ${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.gitlab}
 
     Host github.com
-      IdentityFile '${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.githubNixosConfigSecrets}';
+      IdentityFile ${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.githubNixosConfigSecrets}
   '';
 
   # Serve binary cache
