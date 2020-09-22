@@ -2,7 +2,7 @@
 # not either and there is no way to do conditional imports. Any machine that
 # uses this configuration must manually include it.
 
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -27,7 +27,7 @@ in {
   config = {
     sdImage = let
       firmwareBuilder = pkgs.buildPackages.callPackage
-        "${inputs.nixpkgs}/nixos/modules/system/boot/loader/raspberrypi/firmware-builder.nix" {
+        (pkgs.path + "/nixos/modules/system/boot/loader/raspberrypi/firmware-builder.nix") {
           inherit (bootloaderCfg) version;
           inherit ubootEnabled;
           # Override to use host packages where necessary
@@ -35,7 +35,7 @@ in {
           inherit (pkgs) raspberrypifw;
         };
       raspberryPiBuilder = pkgs.buildPackages.callPackage
-        "${inputs.nixpkgs}/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix> { }";
+        (pkgs.path + "/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix") { };
 
       configTxt = pkgs.writeText "config.txt" bootloaderCfg.firmwareConfig;
     in {

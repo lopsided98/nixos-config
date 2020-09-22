@@ -16,7 +16,7 @@
 with lib;
 
 let
-  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
+  rootfsImage = pkgs.callPackage (pkgs.path + "/nixos/lib/make-ext4-fs.nix") ({
     inherit (config.sdImage) storePaths;
     compressImage = true;
     populateImageCommands = config.sdImage.populateRootCommands;
