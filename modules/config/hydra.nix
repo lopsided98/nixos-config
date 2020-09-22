@@ -47,9 +47,15 @@ in {
     };
   };
 
-  # hydra-queue-runner gets stuck running localhost builds unless unstable Nix
-  # daemon is used
-  nix.package = nixFlakes;
+  nix = {
+    # hydra-queue-runner gets stuck running localhost builds unless unstable Nix
+    # daemon is used
+    package = nixFlakes;
+    # Allow Hydra to build flakes
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+  };
 
   # Serve binary cache
   services.nginx = {
@@ -120,6 +126,8 @@ in {
       };
     };
   };
+  # Allow access to cache directory
+  systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/cache/hydra" ];
 
   # Only use these builders on the Hydra machine because they require special
   # network configuration.
