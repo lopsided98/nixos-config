@@ -35,4 +35,5 @@ in filterAttrs (m: c: c != null) {
   # update them and usually just generate an SD image
   "maine-pi" = callMachine ./maine-pi "armv6l-linux";
   "atomic-pi" = callMachine ./atomic-pi "x86_64-linux";
+  "omnitech" = callMachine ./omnitech "armv5tel-linux";
 }

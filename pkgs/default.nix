@@ -69,6 +69,15 @@ in {
     enableLibpulseaudio = false;
   };
 
+  linux_omnitech = self.callPackage ./linux-omnitech {
+    kernelPatches = with self.kernelPatches; [
+      bridge_stp_helper
+      request_key_helper
+      export_kernel_fpu_functions."5.3"
+    ];
+  };
+  linuxPackages_omnitech = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_omnitech);
+
   linux_rock64 = self.callPackage ./linux-rock64 {
     kernelPatches = with self.kernelPatches; [
       bridge_stp_helper
