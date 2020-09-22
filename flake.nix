@@ -18,8 +18,8 @@
       importMachines = nixpkgs: hostSystems: (import ./machines {
         inherit (nixpkgs) lib;
         inherit hostSystems;
-        # Allow modules to access flake inputs
         modules = [
+          # Allow modules to access flake inputs
           {
             _module.args.inputs = inputs // {
               # Add fake nixpkgs input that selects the right branch for the
@@ -35,8 +35,6 @@
     in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
        importMachines nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
 
-    hydraJobs = foldr recursiveUpdate {} (mapAttrsToList (name: config: {
-      ${config.config.local.system.buildSystem.system}.${name} = config.config.system.build.toplevel;
-    }) self.nixosConfigurations);
+    hydraJobs = mapAttrs (name: config: config.config.system.build.toplevel) self.nixosConfigurations;
   };
 }
