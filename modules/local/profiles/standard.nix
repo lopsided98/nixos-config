@@ -15,6 +15,8 @@ with lib;
   config = mkIf config.local.profiles.standard {
     # Standard set of packages
     environment.systemPackages = with pkgs; [
+      strace
+      rsync
       linuxPackages_latest.tmon
       bmon
       git

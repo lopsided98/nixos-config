@@ -44,12 +44,17 @@
   # Packages considered absolutely essential for all machines
   # Add other useful but less critical packages to standard profile, so they
   # won't be included in the minimal profile.
-  environment.systemPackages = with pkgs; [
-    htop
-    iotop
-    screen
-    usbutils
-  ];
+  environment = {
+    systemPackages = with pkgs; [
+      htop
+      iotop
+      screen
+      usbutils
+    ];
+    # Disable packages that would be automatically added to systemPackages
+    # A subset of these are re-added in the standard profile
+    defaultPackages = [];
+  };
 
   # Select internationalisation properties.
   console.keyMap = "us";
