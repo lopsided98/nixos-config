@@ -43,7 +43,7 @@ realize_hydra() {
   # my Hydra instance soon
   local toplevel
   toplevel="$(curl -sL --netrc-file /etc/nix/netrc -H 'Accept: application/json' \
-    "https://hydra.benwolsieffer.com/job/localpkgs/$(machine_jobset "${machine}")/machines.${machine}/latest" \
+    "https://hydra.benwolsieffer.com/job/localpkgs/release/machines.${machine}/latest" \
     | jq -r .buildoutputs.out.path)" || return 1
 
   machine_ssh "${machine}" nix-store --realize "${toplevel}" \
