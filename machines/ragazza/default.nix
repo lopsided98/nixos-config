@@ -47,21 +47,59 @@ in {
     ];
   };
 
+  # WiFi configuration
+
   boot.extraModprobeConfig = ''
     options cfg80211 ieee80211_regdom="US"
   '';
   hardware.firmware = [ pkgs.wireless-regdb ];
 
+  services.udev.extraRules = ''
+    # Disable power saving (causes network hangs every few seconds)
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
+    # Create virtual AP
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
+  '';
+
+  services.hostapd = {
+    enable = true;
+    interface = "ap0";
+    ssid = "ragazza";
+    extraConfig = ''
+      wpa=2
+      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.ragazza.hostapd.wpaPsk}
+    '';
+  };
+
+  services.resolved.extraConfig = "MulticastDNS=yes";
+  systemd.network = {
+    enable = true;
+    # Access point
+    networks = {
+      "30-ap0" = {
+        name = "ap0";
+        address = [ "10.12.0.1/24" ];
+        networkConfig = {
+          DHCPServer = true;
+          IPv6PrefixDelegation = "yes";
+          MulticastDNS = "yes";
+        };
+        extraConfig = ''
+          [DHCPServer]
+          EmitDNS=no
+          EmitNTP=no
+
+          [IPv6PrefixDelegation]
+          EmitDNS=no
+        '';
+      };
+      "30-home".networkConfig.MulticastDNS = "yes";
+    };
+  };
   local.networking.wireless.home = {
     enable = true;
     interface = "wlan0";
   };
-  # Disable power saving (causes network hangs every few seconds)
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wl*", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
-  '';
-  services.resolved.extraConfig = "MulticastDNS=yes";
-  systemd.network.networks."30-home".networkConfig.MulticastDNS = "yes";
 
   networking.hostName = "ragazza";
 
@@ -121,13 +159,19 @@ in {
   # ROS needs lots of ports
   networking.firewall.enable = false;
 
-  systemd.secrets.sshd = {
-    units = [ "sshd@.service" ];
-    # Prevent first connection from failing due to decryption taking too long
-    lazy = false;
-    files = mkMerge [
-      (secrets.mkSecret secrets.ragazza.ssh.hostRsaKey {})
-      (secrets.mkSecret secrets.ragazza.ssh.hostEd25519Key {})
-    ];
+  systemd.secrets = {
+    sshd = {
+      units = [ "sshd@.service" ];
+      # Prevent first connection from failing due to decryption taking too long
+      lazy = false;
+      files = mkMerge [
+        (secrets.mkSecret secrets.ragazza.ssh.hostRsaKey {})
+        (secrets.mkSecret secrets.ragazza.ssh.hostEd25519Key {})
+      ];
+    };
+    hostapd = {
+      units = [ "hostapd.service" ];
+      files = secrets.mkSecret secrets.ragazza.hostapd.wpaPsk {};
+    };
   };
 }
