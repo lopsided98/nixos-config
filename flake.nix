@@ -35,6 +35,9 @@
     in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
        importMachines nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
 
-    hydraJobs = mapAttrs (name: config: config.config.system.build.toplevel) self.nixosConfigurations;
+    hydraJobs = {
+      machines = mapAttrs (name: config: config.config.system.build.toplevel)
+        self.nixosConfigurations;
+    };
   };
 }
