@@ -140,90 +140,6 @@ in {
   # Allow access to cache directory
   systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/cache/hydra" ];
 
-  # Only use these builders on the Hydra machine because they require special
-  # network configuration.
-  system.buildMachines = let
-    machine = m: { sshKey = secrets.getSystemdSecret "nix" secrets.build.sshKey; } // m;
-  in {
-    /*"babylon1" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 12;
-      speedFactor = 20;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon2" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 12;
-      speedFactor = 20;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon3" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 12;
-      speedFactor = 20;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon4" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 12;
-      speedFactor = 20;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon5" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 6;
-      speedFactor = 10;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon6" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 6;
-      speedFactor = 10;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon7" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 6;
-      speedFactor = 10;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "babylon8" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 6;
-      speedFactor = 10;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "f002w9k";
-    };
-    "bear" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 6;
-      speedFactor = 8;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "benwolsieffer";
-    };
-    "flume" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 10;
-      speedFactor = 12;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "benwolsieffer";
-    };
-    "tahoe" = machine {
-      systems = [ "x86_64-linux" ];
-      maxJobs = 6;
-      speedFactor = 8;
-      supportedFeatures = [ "big-parallel" ];
-      sshUser = "benwolsieffer";
-    };*/
-  };
-
   systemd.secrets = {
     nix = {
       units = [ "hydra-queue-runner.service" ];
@@ -242,7 +158,6 @@ in {
       files = mkMerge [
         (secrets.mkSecret secrets.hydra.htpasswd { user = "nginx"; })
         (secrets.mkSecret secrets.hydra.binaryCacheSecretKey { user = "hydra-www"; })
-        (secrets.mkSecret secrets.hydra.thayerServerPassword { user = "hydra-queue-runner"; })
         # SSH deploy keys
         (secrets.mkSecret secrets.hydra.ssh.gitlab { user = "hydra"; })
         (secrets.mkSecret secrets.hydra.ssh.githubNixosConfigSecrets { user = "hydra"; })
