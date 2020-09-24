@@ -115,12 +115,36 @@ in {
     ];
   };
 
+  # chronyd -s can do something similar, but this runs earlier
   services.fakeHwClock.enable = true;
+
+  services.chrony = {
+    enable = true;
+    initstepslew = {
+      enabled = true;
+      threshold = 30;
+    };
+    extraConfig = ''
+      # Pixhawk GPS time from ntpd_driver ROS node. Owned by root:root so we
+      # have to make it world writable to allow ntpd_driver to write to it
+      # Transmission delays usually cause it to be ~60-80 ms off NTP time (no
+      # idea if this will stay constant over time)
+      refclock SHM 0:perm=0666 delay 0.5 offset 0.070 refid GPS
+
+      # Allow GPS to step clock
+      makestep 30 3
+    '';
+  };
 
   services.ros = {
     enable = true;
     distro = "noetic";
-    overlays = [ inputs.ros-sailing.rosOverlay ];
+    overlays = [
+      inputs.ros-sailing.rosOverlay
+      (rosSelf: rosSuper: {
+        ntpd-driver = rosSelf.callPackage ./ntpd-driver.nix { };
+      })
+    ];
 
     systemPackages = p: with p; [ rosbash roslaunch rostopic sailboat-navigation ];
 
@@ -141,14 +165,25 @@ in {
       };
     };
 
-    nodes.wind-estimator = {
-      package = "sailboat_navigation";
-      node = "wind_estimator_node";
-      params = {
-        _map_file = "/var/lib/ros/map.wkt";
-        _direction_std_dev = "2.0";
-        _speed_std_dev = "0.5";
-        _estimation_window = "200";
+    nodes = {
+      wind-estimator = {
+        package = "sailboat_navigation";
+        node = "wind_estimator_node";
+        params = {
+          _map_file = "/var/lib/ros/map.wkt";
+          _direction_std_dev = "2.0";
+          _speed_std_dev = "0.5";
+          _estimation_window = "200";
+        };
+      };
+
+      ntpd-driver = {
+        package = "ntpd_driver";
+        node = "shm_driver";
+        params = {
+          _shm_unit = "0";
+          _time_ref_topic = "/mavros/time_reference";
+        };
       };
     };
   };
