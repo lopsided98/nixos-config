@@ -153,11 +153,11 @@
     },
     "nixpkgs-unstable-custom": {
       "locked": {
-        "lastModified": 1600719293,
-        "narHash": "sha256-59Yqnq8nZcUk7Vf4Ndn67Npvo2giGshpsWzTFExstzs=",
+        "lastModified": 1600899476,
+        "narHash": "sha256-9FkG5XTDzL0Q6gxH1gzwe/c4KWy/t+MqRWCaaSUvt6E=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "162210b3baefcdd134661031888fe2f84818286c",
+        "rev": "4b47b03dde833afb26be65bd859b5aa83ec5ea2f",
         "type": "github"
       },
       "original": {
@@ -218,11 +218,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1600801884,
-        "narHash": "sha256-2x+SkD4XXl8cu472DS1mVeEVxFXjXRhamGU6zcMFNfA=",
+        "lastModified": 1600969514,
+        "narHash": "sha256-evX6UX3hSzSXF97zRE/HnXps+yzsqfvAlt6VY3a/eZ0=",
         "ref": "master",
-        "rev": "a6ddb78d0cdf0bb35e0278f5cea9a3bb7ccd0d63",
-        "revCount": 46,
+        "rev": "5c74e0d10506f4546e7960549a1493f2a79e866c",
+        "revCount": 47,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
