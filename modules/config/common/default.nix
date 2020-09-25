@@ -82,7 +82,7 @@
       systems = [ "armv6l-linux" "armv7l-linux" ];
       maxJobs = 6;
       speedFactor = 4;
-      supportedFeatures = [ "big-parallel" "nixos-test" ];
+      supportedFeatures = [ "big-parallel" ];
     };
     "Rock64" = machine {
       systems = [ "aarch64-linux" ];
