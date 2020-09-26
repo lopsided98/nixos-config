@@ -1,7 +1,6 @@
-{ lib, fetchFromGitHub, buildPythonApplication, makeWrapper,
-  requests, pyyaml,
-  networkInterfaceSupport ? true, netifaces ? null,
-  webScrapingSupport ? false, beautifulsoup4 ? null }:
+{ lib, fetchFromGitHub, buildPythonApplication, requests, pyyaml
+, networkInterfaceSupport ? true, netifaces ? null
+, webScrapingSupport ? false, beautifulsoup4 ? null }:
 
 assert networkInterfaceSupport -> netifaces != null;
 assert webScrapingSupport -> beautifulsoup4 != null;
@@ -9,7 +8,6 @@ assert webScrapingSupport -> beautifulsoup4 != null;
 buildPythonApplication rec {
   pname = "dnsupdate";
   version = "0.3";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "lopsided98";
@@ -19,18 +17,15 @@ buildPythonApplication rec {
   };
 
   # Requests and PyYaml are needed for tests
-  nativeBuildInputs = [ makeWrapper ];
   buildInputs = with lib; [ requests pyyaml ]
     ++ optional webScrapingSupport beautifulsoup4
     ++ optional networkInterfaceSupport netifaces;
-    
-  postFixup = ''
-      wrapProgram $out/bin/dnsupdate --set PYTHONPATH "$PYTHONPATH"
-    '';
 
   meta = with lib; {
     description = "A modern and flexible dynamic DNS client";
-    homepage = https://github.com/lopsided98/dnsupdate;
+    homepage = "https://github.com/lopsided98/dnsupdate";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ lopsided98 ];
+    platforms = platforms.all;
   };
 }
