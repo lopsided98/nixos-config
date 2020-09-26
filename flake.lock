@@ -218,11 +218,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1600969514,
-        "narHash": "sha256-evX6UX3hSzSXF97zRE/HnXps+yzsqfvAlt6VY3a/eZ0=",
+        "lastModified": 1601135048,
+        "narHash": "sha256-D/bczPnsyy5WlSrTmu8pJOLSfBTSomqlqHiEM5Ovh9I=",
         "ref": "master",
-        "rev": "5c74e0d10506f4546e7960549a1493f2a79e866c",
-        "revCount": 47,
+        "rev": "a1b228bd0b497980c6cbf62a79d7f8f126bff5b2",
+        "revCount": 48,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
