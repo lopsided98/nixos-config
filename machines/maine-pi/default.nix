@@ -8,6 +8,9 @@ with lib;
     ../../modules/local/machine/raspberry-pi.nix
   ];
 
+  # Enable cross-compilation
+  local.system.buildSystem.system = "x86_64-linux";
+
   local.machine.raspberryPi.enableWirelessFirmware = true;
   local.profiles.minimal = true;
 
@@ -26,11 +29,7 @@ with lib;
     uboot.enable = true;
   };
 
-  hardware = {
-    bluetooth.enable = true;
-    # Enable wifi firmware
-    enableRedistributableFirmware = true;
-  };
+  hardware.bluetooth.enable = true;
 
   networking.wireless = {
     enable = true;
