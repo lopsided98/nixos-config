@@ -86,11 +86,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1600798190,
-        "narHash": "sha256-INmwvQM4xXf++ezvVusYMkadON0J1yzA91Cj7uD/GQ8=",
+        "lastModified": 1601075075,
+        "narHash": "sha256-O4HRLzsqXsa70KTwIRnl7qdHjmYFtaAcmimyfzP75yA=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "37073ae7108e64a0ece1379ad57b76be3053cab4",
+        "rev": "cb4c1aac9a502bb4b6f3d06086db12260fb98eaa",
         "type": "github"
       },
       "original": {
@@ -218,11 +218,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1601135048,
-        "narHash": "sha256-D/bczPnsyy5WlSrTmu8pJOLSfBTSomqlqHiEM5Ovh9I=",
+        "lastModified": 1601137704,
+        "narHash": "sha256-Pf2vZnzfKGqbJ3aaceLaeh2nYX95yvi5eTEiY0/wM8c=",
         "ref": "master",
-        "rev": "a1b228bd0b497980c6cbf62a79d7f8f126bff5b2",
-        "revCount": 48,
+        "rev": "c8a4778372e6dc172cdbcd9e601cc66fbdf23fae",
+        "revCount": 49,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
