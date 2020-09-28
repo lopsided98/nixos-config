@@ -6,6 +6,9 @@
     ../../modules/local/machine/raspberry-pi.nix
   ];
 
+  # Enable cross-compilation
+  local.system.buildSystem.system = "x86_64-linux";
+
   local.profiles.minimal = true;
 
   sdImage = {
