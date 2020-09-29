@@ -13,6 +13,9 @@ with lib;
     ../../modules/local/machine/raspberry-pi.nix
   ];
 
+  # Enable cross-compilation
+  local.system.buildSystem.system = "x86_64-linux";
+
   local.machine.raspberryPi.enableWirelessFirmware = true;
   local.profiles.minimal = true;
 
