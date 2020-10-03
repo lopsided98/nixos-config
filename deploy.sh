@@ -1,9 +1,10 @@
-#!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nixFlakes nixos-secrets
+#!@runtimeShell@
 set -euo pipefail
 
-# See https://gist.github.com/tvlooy/cbfbdb111a4ebad8b93e
-nixos_root="$(dirname $(readlink -f "$0"))"
+export PATH="@path@"
+
+nixos_root="@nixosRoot@"
+secrets_root="@secretsRoot@"
 ssh_control_path="~/.ssh/master-%r@%h:%p.sock"
 
 usage() {
@@ -52,6 +53,25 @@ realize_hydra() {
   echo "${toplevel}"
 }
 
+realize_builder() {
+  local machine="${1}"
+
+  # Instantiate configuration on local machine.
+  toplevel_drv="$(nix eval --raw --show-trace \
+    "${nixos_root}#nixosConfigurations.${machine}.config.system.build.toplevel.drvPath")" || return 1
+
+  # Copy instantiated (but not realized) config to builder
+  nix copy --derivation --to "ssh://HP-Z420" "${toplevel_drv}" 1>&2
+
+  # Build on builder
+  toplevel="$(machine_ssh HP-Z420 nix-store --realize "${toplevel_drv}")"
+
+  machine_ssh "${machine}" nix-store --realize "${toplevel}" \
+    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null
+
+  echo "${toplevel}"
+}
+
 activate() {
   local machine="${1}"
   local toplevel="${2}"
@@ -65,19 +85,21 @@ activate() {
 
 deploy=1
 deploy_hydra=0
+use_builder=0 # Whether to run builds locally
 sync=0 # Whether to synchronize configuration to the machine
 
-while getopts "nps" opt; do
+while getopts "npbs" opt; do
   case "$opt" in
     n) deploy=0; sync=1 ;;
     p) deploy_hydra=1 ;;
+    b) use_builder=1 ;;
     s) sync=1 ;;
     \?) usage; exit ;;
   esac
 done
 shift "$(($OPTIND -1))"
 
-nixos-secrets -c "${nixos_root}/secrets" check
+nixos-secrets -c "${secrets_root}" check
 
 machine="${1}"
 shift
@@ -85,6 +107,8 @@ shift
 if [ "${deploy}" -eq 1 ]; then
   if [ "${deploy_hydra}" -eq 1 ]; then
     toplevel="$(realize_hydra "${machine}")"
+  elif [ "${use_builder}" -eq 1 ]; then
+    toplevel="$(realize_builder "${machine}")"
   else
     toplevel="$(realize_ssh "${machine}")"
   fi
