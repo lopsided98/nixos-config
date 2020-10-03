@@ -1,13 +1,15 @@
-{ hostName,
-  ap ? false,
-  firmwarePartitionID,
-  rootPartitionUUID }:
+{ device,
+  totalDevices ? 16,
+  ap ? device == 1 }:
 
 { lib, config, pkgs, secrets, ... }:
 
 with lib;
 
-{
+let
+  hostNamePrefix = "AudioRecorder";
+  hostName = hostNamePrefix + toString device;
+in {
   imports = [
     ../../modules
     ../../modules/local/machine/raspberry-pi.nix
@@ -20,7 +22,15 @@ with lib;
   local.profiles.minimal = true;
 
   sdImage = {
-    inherit firmwarePartitionID rootPartitionUUID;
+    firmwarePartitionID = "0x" + substring 0 8 (builtins.hashString "md5" "firmware" + hostName);
+    rootPartitionUUID = let 
+      hash = substring 0 32 (builtins.hashString "sha1" "root" + hostName);
+      u1 = substring 0 8 hash;
+      u2 = substring 8 4 hash;
+      u3 = substring 12 4 hash;
+      u4 = substring 16 4 hash;
+      u5 = substring 20 12 hash;
+    in "${u1}-${u2}-${u3}-${u4}-${u5}";
     compressImage = false;
   };
 
@@ -65,14 +75,18 @@ with lib;
     interfaces = [ "wlan0" ];
   };
 
-  # Create virtual AP
-  networking.localCommands = mkIf ap ''
-    ${pkgs.iw}/bin/iw dev wlan0 interface add ap0 type __ap
+  services.udev.extraRules = ''
+    # Disable power saving (causes network hangs every few seconds)
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
+  '' + optionalString ap ''
+    # Create virtual AP
+    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
   '';
+
   services.hostapd = mkIf ap {
     enable = true;
     interface = "ap0";
-    ssid = "AudioRecorder";
+    ssid = hostNamePrefix;
     extraConfig = ''
       wpa=2
       wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.AudioRecorder.hostapd.wpaPsk}
@@ -169,16 +183,8 @@ with lib;
   sound.enable = true;
   services.zeusAudio = {
     enable = true;
-    devices = map (d: optionalString (d != hostName) "http://${toLower d}.local") [
-      "AudioRecorder1"
-      "AudioRecorder2"
-      "AudioRecorder3"
-      "AudioRecorder4"
-      "AudioRecorder5"
-      "AudioRecorder6"
-      "AudioRecorder7"
-      "AudioRecorder8"
-    ];
+    devices = map (d: optionalString (d != hostName) "http://${toLower d}.local")
+      (genList (i: hostNamePrefix + toString (i + 1)) totalDevices);
     clockMaster = ap;
   };
 
@@ -246,6 +252,7 @@ with lib;
     };
     sshd = {
       units = [ "sshd@.service" ];
+      lazy = false;
       files = mkMerge [
         (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostRsaKey {})
         (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key {})
