@@ -52,10 +52,12 @@
     apps = {
       deploy = {
         type = "app";
-        program = with pkgs; (runCommand "deploy" {} ''
-          export nixosRoot="/home/ben/nixos"
-          export secretsRoot="/home/ben/nixos/secrets"
-          export path="${lib.makeBinPath [ nixFlakes pkgs.nixos-secrets openssh git rsync ]}"
+        program = with pkgs; (runCommand "deploy" {
+          inherit runtimeShell;
+          nixosRoot = "/home/ben/nixos";
+          secretsRoot = "/home/ben/nixos/secrets";
+          path = lib.makeBinPath [ nixFlakes pkgs.nixos-secrets coreutils openssh git rsync ];
+        } ''
           substituteAll ${./deploy.sh} "$out"
           chmod +x "$out"
         '').outPath;
