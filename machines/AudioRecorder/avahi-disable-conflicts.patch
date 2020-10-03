@@ -1,34 +1,35 @@
-From 3a6860ad85d527aaebf2df55eafd4bf3b0ef6335 Mon Sep 17 00:00:00 2001
+From d281511bb67d5c922b511e0afd9fd3c8adc93274 Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
-Date: Wed, 20 Mar 2019 19:54:48 -0400
+Date: Sat, 3 Oct 2020 19:21:30 -0400
 Subject: [PATCH] HACK: remove conflict detection because it is broken with
  IPv6
 
 ---
- avahi-core/server.c | 4 ----
- 1 file changed, 4 deletions(-)
+ avahi-core/server.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/avahi-core/server.c b/avahi-core/server.c
-index a2580e3..c8e7cdd 100644
+index e507750..48a3994 100644
 --- a/avahi-core/server.c
 +++ b/avahi-core/server.c
-@@ -304,16 +304,12 @@ static int handle_conflict(AvahiServer *s, AvahiInterface *i, AvahiRecord *recor
-             if (avahi_entry_is_registered(s, e, i)) {
- 
-                 /* A conflict => we have to return to probe mode */
--                conflict = 1;
--                conflicting_entry = e;
- 
-             } else if (avahi_entry_is_probing(s, e, i)) {
- 
-                 /* We are currently registering a matching record, but
-                  * someone else already claimed it, so let's
-                  * withdraw */
--                conflict = 1;
--                withdraw_immediately = 1;
-             }
+@@ -224,7 +224,7 @@ static void incoming_probe(AvahiServer *s, AvahiRecord *record, AvahiInterface *
          }
      }
+ 
+-    if (!ours) {
++    if (!ours && 0) {
+         char *t = avahi_record_to_string(record);
+ 
+         if (won)
+@@ -318,7 +318,7 @@ static int handle_conflict(AvahiServer *s, AvahiInterface *i, AvahiRecord *recor
+         }
+     }
+ 
+-    if (!ours && conflict) {
++    if (!ours && conflict && 0) {
+         char *t;
+ 
+         valid = 0;
 -- 
-2.21.0
+2.28.0
 
