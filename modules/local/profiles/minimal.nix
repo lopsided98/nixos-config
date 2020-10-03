@@ -25,11 +25,14 @@ with lib;
 
     nixpkgs.overlays = singleton (const (super: {
       nix = super.nix.override { withAWS = false; };
+      nixUnstable = super.nixUnstable.override { withAWS = false; };
+      nixFlakes = super.nixFlakes.override { withAWS = false; };
       # Prevent building two versions of glibcLocales
-      glibcLocales = super.glibcLocales.override {
+      # This seems to break qemu
+      /*glibcLocales = super.glibcLocales.override {
         allLocales = false;
         locales = config.i18n.supportedLocales;
-      };
+      };*/
     }));
   };
 }
