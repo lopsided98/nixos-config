@@ -6,14 +6,66 @@
     nixpkgs-master-custom.url = "github:lopsided98/nixpkgs/master-custom";
     nixos-secrets.url = "github:lopsided98/nixos-secrets";
     secrets.url = "git+ssh://git@github.com/lopsided98/nixos-config-secrets.git";
+    zeus-audio.url = "github:lopsided98/zeus_audio";
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs-unstable-custom, nixpkgs-master-custom
-            , nixos-secrets, secrets, nix-ros-overlay, ... }@inputs:
-    with nixpkgs-unstable-custom.lib;
-  {
+            , nixos-secrets, secrets, zeus-audio, nix-ros-overlay
+            , flake-utils, ... }@inputs:
+  with nixpkgs-unstable-custom.lib;
+  with flake-utils.lib;
+  let
+    systems = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "armv7l-linux"
+      "armv6l-linux"
+      "armv5tel-linux"
+    ];
+
+    nixpkgsSystemsAttrs = nixpkgs: systems:
+      listToAttrs (map (system: nameValuePair system (import nixpkgs {
+        inherit system;
+        overlays = [ self.overlay nixos-secrets.overlay ];
+      })) systems);
+
+    nixpkgsBySystem =
+      (nixpkgsSystemsAttrs nixpkgs-unstable-custom [
+        "x86_64-linux"
+        "aarch64-linux"
+      ]) //
+      (nixpkgsSystemsAttrs nixpkgs-master-custom [
+        "armv7l-linux"
+        "armv6l-linux"
+        "armv5tel-linux"
+      ]);
+  in eachSystem systems (system: let
+    pkgs = nixpkgsBySystem.${system};
+  in {
+    packages = with pkgs; {
+      inherit dnsupdate;
+    };
+
+    apps = {
+      deploy = {
+        type = "app";
+        program = with pkgs; (runCommand "deploy" {} ''
+          export nixosRoot="/home/ben/nixos"
+          export secretsRoot="/home/ben/nixos/secrets"
+          export path="${lib.makeBinPath [ nixFlakes pkgs.nixos-secrets openssh git rsync ]}"
+          substituteAll ${./deploy.sh} "$out"
+          chmod +x "$out"
+        '').outPath;
+      };
+    };
+
+    defaultApp = self.apps.${system}.deploy;
+  }) // {
+    overlay = import ./pkgs;
+
     nixosConfigurations = let
       importMachines = nixpkgs: hostSystems: (import ./machines {
         inherit (nixpkgs) lib;
@@ -29,6 +81,7 @@
           }
           nixos-secrets.nixosModule
           secrets.nixosModule
+          zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
         ];
       });

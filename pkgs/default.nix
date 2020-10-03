@@ -19,11 +19,6 @@ self: super: with super.lib; let
 
 in {
 
-  audio-recorder = {
-    audio-server = self.callPackage ./audio-recorder/audio-server.nix {};
-    web-interface = self.python3Packages.callPackage ./audio-recorder/web-interface.nix {};
-  };
-
   aur-buildbot = self.callPackage ./aur-buildbot {};
 
   dnsupdate = self.python3Packages.callPackage ./dnsupdate { };

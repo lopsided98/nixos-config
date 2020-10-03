@@ -31,8 +31,10 @@ in lib.filterAttrs (m: c: c != null) {
   "AudioRecorder2" = callMachine ./AudioRecorder2 "armv6l-linux";
   "AudioRecorder3" = callMachine ./AudioRecorder3 "armv6l-linux";
   "AudioRecorder4" = callMachine ./AudioRecorder4 "armv6l-linux";
-  # 5-8 are not included because they would just waste time, since I rarely
-  # update them and usually just generate an SD image
+  "AudioRecorder5" = callMachine ./AudioRecorder5 "armv6l-linux";
+  "AudioRecorder6" = callMachine ./AudioRecorder6 "armv6l-linux";
+  "AudioRecorder7" = callMachine ./AudioRecorder7 "armv6l-linux";
+  "AudioRecorder8" = callMachine ./AudioRecorder8 "armv6l-linux";
   "maine-pi" = callMachine ./maine-pi "armv6l-linux";
   "atomic-pi" = callMachine ./atomic-pi "x86_64-linux";
   "omnitech" = callMachine ./omnitech "armv5tel-linux";

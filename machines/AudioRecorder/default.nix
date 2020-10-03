@@ -21,6 +21,7 @@ with lib;
 
   sdImage = {
     inherit firmwarePartitionID rootPartitionUUID;
+    compressImage = false;
   };
 
   boot = {
@@ -32,7 +33,7 @@ with lib;
         dtparam=audio=off
       '';
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi0;
+    kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
     /*kernelPatches = [ {
       name = "i2c-output-source-selection";
       patch = ./0001-ASoC-sgtl5000-add-I2S-output-source-selection.patch;
@@ -166,7 +167,7 @@ with lib;
 
   # Audio recording service
   sound.enable = true;
-  modules.audioRecorder = {
+  services.zeusAudio = {
     enable = true;
     devices = map (d: optionalString (d != hostName) "http://${toLower d}.local") [
       "AudioRecorder1"
@@ -186,7 +187,7 @@ with lib;
     enable = true;
     enableWinbindd = false;
     shares.audio = {
-      path = "/var/lib/${config.modules.audioRecorder.audioDir}";
+      path = "/var/lib/${config.services.zeusAudio.audioDir}";
       "valid users" = "ben, gary";
       writable = "yes";
     };
