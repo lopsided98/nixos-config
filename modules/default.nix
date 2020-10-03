@@ -25,6 +25,7 @@
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
     ./local/networking/wireless/home.nix
+    ./local/networking/wireless/thunderbat.nix
     ./local/profiles/headless.nix
     ./local/profiles/limited-memory.nix
     ./local/profiles/minimal.nix
