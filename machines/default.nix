@@ -35,4 +35,4 @@ lib.listToAttrs (map (device:
   lib.nameValuePair
     "AudioRecorder${toString device}"
     (callMachine (import ./AudioRecorder { inherit device; }) "armv6l-linux")
-) (lib.genList (i: i + 1) 8)))
+) (lib.genList (i: i + 1) 10)))
