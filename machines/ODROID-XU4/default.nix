@@ -16,6 +16,9 @@ in {
     ../../modules
   ];
 
+  # Enable cross-compilation
+  local.system.buildSystem.system = "x86_64-linux";
+
   local.profiles.headless = true;
 
   boot = {
@@ -23,7 +26,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_hardkernel_4_14;
+    kernelPackages = lib.mkForce pkgs.linuxPackages_hardkernel_4_14;
   };
 
   local.networking.home = {
