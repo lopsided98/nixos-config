@@ -274,19 +274,14 @@
     "ros-sailing": {
       "inputs": {
         "flake-utils": "flake-utils_4",
-        "nix-ros-overlay": "nix-ros-overlay_2",
-        "nixpkgs": [
-          "ros-sailing",
-          "nix-ros-overlay",
-          "nixpkgs"
-        ]
+        "nix-ros-overlay": "nix-ros-overlay_2"
       },
       "locked": {
-        "lastModified": 1601137704,
-        "narHash": "sha256-Pf2vZnzfKGqbJ3aaceLaeh2nYX95yvi5eTEiY0/wM8c=",
+        "lastModified": 1602700266,
+        "narHash": "sha256-2n28uaf/H753bjiVU0VSZYNJYThSnFpBpP8gcfuYg18=",
         "ref": "master",
-        "rev": "c8a4778372e6dc172cdbcd9e601cc66fbdf23fae",
-        "revCount": 49,
+        "rev": "84d9e92d3b91a6449175a5f803412c46fb2d7ddd",
+        "revCount": 50,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
