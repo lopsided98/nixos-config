@@ -68,6 +68,8 @@
   }) // {
     overlay = import ./pkgs;
 
+    nixosModule = import ./modules;
+
     nixosConfigurations = let
       importMachines = nixpkgs: hostSystems: (import ./machines {
         inherit (nixpkgs) lib;
