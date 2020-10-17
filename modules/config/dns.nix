@@ -64,7 +64,7 @@
 
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "rock64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:484e:25ff:feaf:9e0f"; }
+    { name = "rock64"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:ac80:4fff:fe00:604f"; }
 
     # RockPro64
     { name = "rockpro64"; class = "IN"; type = "A"; data = externalIPv4; }
