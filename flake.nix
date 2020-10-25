@@ -56,7 +56,7 @@
           inherit runtimeShell;
           nixosRoot = "/home/ben/nixos";
           secretsRoot = "/home/ben/nixos/secrets";
-          path = lib.makeBinPath [ nixFlakes pkgs.nixos-secrets coreutils openssh git rsync ];
+          path = lib.makeBinPath [ nixFlakes pkgs.nixos-secrets coreutils openssh git rsync jq curl ];
         } ''
           substituteAll ${./deploy.sh} "$out"
           chmod +x "$out"
