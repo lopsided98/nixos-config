@@ -47,14 +47,7 @@ in {
       notifyFailed.enable = true;
       services = {
         sanoid.notifyFailed = true;
-        syncoid = {
-          # Hack to ignore exit code returned when there are no snapshots for a
-          # parent dataset as well as continue if any command returns a
-          # non-zero exit code.
-          script = lib.mkBefore "set +e";
-          serviceConfig.SuccessExitStatus = "2";
-          notifyFailed = true;
-        };
+        syncoid.notifyFailed = true;
       };
       # Prevent syncoid on multiple machines from running at the same time and
       # failing with "<dataset> is already target of a zfs receive process."

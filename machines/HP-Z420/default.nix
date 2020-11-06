@@ -199,10 +199,12 @@ in rec {
       "root/vm" = {
         target = "backup/backups/HP-Z420/vm";
         recursive = true;
+        extraArgs = [ "--skip-parent" ];
       };
       "backup/backups/HP-Z420" = {
         target = "${remote}:backup/backups/HP-Z420";
         recursive = true;
+        extraArgs = [ "--skip-parent" ];
       };
       "backup/backups/Dell-Inspiron-15" = {
         target = "${remote}:backup/backups/Dell-Inspiron-15";
