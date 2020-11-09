@@ -42,13 +42,11 @@ in {
       interval = "*-*-* *:15:00";
       sshKey = secrets.getSecret secrets."${config.networking.hostName}".backup.sshKey;
       commonArgs = [ "--no-sync-snap" ];
+      service.notifyFailed = true;
     };
     systemd = {
       notifyFailed.enable = true;
-      services = {
-        sanoid.notifyFailed = true;
-        syncoid.notifyFailed = true;
-      };
+      services.sanoid.notifyFailed = true;
       # Prevent syncoid on multiple machines from running at the same time and
       # failing with "<dataset> is already target of a zfs receive process."
       timers.syncoid.timerConfig.RandomizedDelaySec = "10m";
