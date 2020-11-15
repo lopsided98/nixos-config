@@ -77,7 +77,7 @@ activate() {
   local toplevel="${2}"
 
   machine_ssh "${machine}" \
-    sudo -Sv 2>/dev/null \&\& \
+    sudo -Sv 2\>/dev/null \&\& \
     sudo -n nix-env -p /nix/var/nix/profiles/system --set "${toplevel}" \&\& \
     sudo -n "${toplevel}/bin/switch-to-configuration" switch \
     <<< "${sudo_password}"
