@@ -16,7 +16,9 @@ machine_toplevel_link() { echo "${1}.system"; }
 machine_ssh() {
   local machine="${1}"
   shift
-  ssh -oControlMaster=auto -oControlPath=\"${ssh_control_path}\" \
+  ssh -oControlMaster=auto \
+    -oControlPath=\"${ssh_control_path}\" \
+    -oControlPersist=5m \
     "${machine}" -- "${@}"
 }
 
