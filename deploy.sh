@@ -89,14 +89,11 @@ activate() {
 deploy=1
 deploy_hydra=0
 use_builder=0 # Whether to run builds locally
-sync=0 # Whether to synchronize configuration to the machine
 
-while getopts "npbs" opt; do
+while getopts "pb" opt; do
   case "$opt" in
-    n) deploy=0; sync=1 ;;
     p) deploy_hydra=1 ;;
     b) use_builder=1 ;;
-    s) sync=1 ;;
     \?) usage; exit ;;
   esac
 done
@@ -119,10 +116,6 @@ fi
 
 read -sp "[sudo] password for ${USER}: " sudo_password
 echo
-
-if [ "${sync}" -eq 1 ]; then
-  rsync -e "ssh -oControlPath=\"${ssh_control_path}\"" --rsync-path="echo \"${sudo_password}\" | sudo -Sv 2>/dev/null; sudo rsync" -rlpt --delete "${nixos_root}/" "${machine}:/etc/nixos"
-fi
 
 if [ "${deploy}" -eq 1 ]; then
   activate "${machine}" "${toplevel}"
