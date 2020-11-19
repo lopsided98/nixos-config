@@ -86,7 +86,6 @@ activate() {
     <<< "${sudo_password}"
 }
 
-deploy=1
 deploy_hydra=0
 use_builder=0 # Whether to run builds locally
 
@@ -104,20 +103,16 @@ nixos-secrets -c "${secrets_root}" check
 machine="${1}"
 shift
 
-if [ "${deploy}" -eq 1 ]; then
-  if [ "${deploy_hydra}" -eq 1 ]; then
-    toplevel="$(realize_hydra "${machine}")"
-  elif [ "${use_builder}" -eq 1 ]; then
-    toplevel="$(realize_builder "${machine}")"
-  else
-    toplevel="$(realize_ssh "${machine}")"
-  fi
+if [ "${deploy_hydra}" -eq 1 ]; then
+  toplevel="$(realize_hydra "${machine}")"
+elif [ "${use_builder}" -eq 1 ]; then
+  toplevel="$(realize_builder "${machine}")"
+else
+  toplevel="$(realize_ssh "${machine}")"
 fi
 
 read -sp "[sudo] password for ${USER}: " sudo_password
 echo
 
-if [ "${deploy}" -eq 1 ]; then
-  activate "${machine}" "${toplevel}"
-fi
+activate "${machine}" "${toplevel}"
 
