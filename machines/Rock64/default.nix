@@ -101,6 +101,7 @@ in {
       "backup/backups/Dell-Optiplex-780" = {
         target = "${remote}:backup/backups/Dell-Optiplex-780";
         recursive = true;
+        extraArgs = [ "--skip-parent" ];
       };
       "backup/backups/P-3400" = {
         target = "${remote}:backup/backups/P-3400";
