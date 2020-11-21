@@ -194,29 +194,17 @@ in rec {
   in {
     commonArgs = [ "--sshport" "4246" ];
     commands = {
-      "root/root" = {
-        target = "backup/backups/HP-Z420/root";
-        service.before = [ "syncoid-backup-backups-HP-Z420.service" ];
-      };
-      "root/home" = {
-        target = "backup/backups/HP-Z420/home";
-        service.before = [ "syncoid-backup-backups-HP-Z420.service" ];
-      };
+      "root/root".target = "backup/backups/HP-Z420/root";
+      "root/home".target = "backup/backups/HP-Z420/home";
       "root/vm" = {
         target = "backup/backups/HP-Z420/vm";
         recursive = true;
         extraArgs = [ "--skip-parent" ];
-        service.before = [ "syncoid-backup-backups-HP-Z420.service" ];
       };
       "backup/backups/HP-Z420" = {
         target = "${remote}:backup/backups/HP-Z420";
         recursive = true;
         extraArgs = [ "--skip-parent" ];
-        service.after = [
-          "syncoid-root-root.service"
-          "syncoid-root-home.service"
-          "syncoid-root-vm.service"
-        ];
       };
       "backup/backups/Dell-Inspiron-15" = {
         target = "${remote}:backup/backups/Dell-Inspiron-15";
