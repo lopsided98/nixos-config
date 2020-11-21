@@ -14,12 +14,9 @@ in {
     ../../modules
   ];
 
-  boot = {
-    loader = {
-      grub.enable = false;
-      generic-extlinux-compatible.enable = true;
-    };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rock64;
+  boot.loader = {
+    grub.enable = false;
+    generic-extlinux-compatible.enable = true;
   };
 
   local.networking.wireless.home = {
