@@ -68,6 +68,8 @@ in {
 
   # List services that you want to enable:
 
+  local.services.rtlamr.enable = true;
+
   # Use the same speed as the bootloader/early console
   services.mingetty.serialSpeed = [ 1500000 ];
 

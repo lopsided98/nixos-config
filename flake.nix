@@ -9,11 +9,12 @@
     zeus-audio.url = "github:lopsided98/zeus_audio";
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
+    nix-sdr.url = "github:lopsided98/nix-sdr";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs-unstable-custom, nixpkgs-master-custom
-            , nixos-secrets, secrets, zeus-audio, nix-ros-overlay
+            , nixos-secrets, secrets, zeus-audio, nix-ros-overlay, nix-sdr
             , flake-utils, ... }@inputs:
   with nixpkgs-unstable-custom.lib;
   with flake-utils.lib;
@@ -29,7 +30,10 @@
     nixpkgsSystemsAttrs = nixpkgs: systems:
       listToAttrs (map (system: nameValuePair system (import nixpkgs {
         inherit system;
-        overlays = [ self.overlay nixos-secrets.overlay ];
+        overlays = [
+          self.overlay
+          nixos-secrets.overlay
+        ];
       })) systems);
 
     nixpkgsBySystem =
@@ -75,8 +79,8 @@
         inherit (nixpkgs) lib;
         inherit hostSystems;
         modules = [
-          # Allow modules to access flake inputs
           {
+            # Allow modules to access flake inputs
             _module.args.inputs = inputs // {
               # Add fake nixpkgs input that selects the right branch for the
               # machine
@@ -87,6 +91,7 @@
           secrets.nixosModule
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
+          nix-sdr.nixosModule
         ];
       });
     in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //

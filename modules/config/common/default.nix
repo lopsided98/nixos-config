@@ -1,12 +1,13 @@
-{ config, lib, pkgs, secrets, ... }: {
+{ config, lib, pkgs, secrets, inputs, ... }: {
 
   imports = [
     ../ssh.nix # Enable SSH on all systems
   ];
 
   # Include overlays
-  nixpkgs.overlays = [
-    (import ../../../pkgs)
+  nixpkgs.overlays = with inputs; [
+    self.overlay
+    nix-sdr.overlay
     (self: super: {
       crossPackages = self.forceCross {
         system = "x86_64-linux";
