@@ -4455,10 +4455,11 @@ rec {
               }
             );
         in
-        pkgs.runCommand "run-tests-${testCrate.name}" {
-          inherit testCrateFlags;
-          buildInputs = testInputs;
-        } ''
+        pkgs.runCommand "run-tests-${testCrate.name}"
+          {
+            inherit testCrateFlags;
+            buildInputs = testInputs;
+          } ''
           set -ex
 
           export RUST_BACKTRACE=1
@@ -4490,17 +4491,16 @@ rec {
           done
         '';
     in
-    crate.overrideAttrs
-      (
-        old: {
-          checkPhase = ''
-            test -e ${test}
-          '';
-          passthru = (old.passthru or { }) // {
-            inherit test;
-          };
-        }
-      );
+    pkgs.runCommand "${crate.name}-linked"
+      {
+        inherit (crate) outputs crateName;
+        passthru = (crate.passthru or { }) // {
+          inherit test;
+        };
+      } ''
+      echo tested by ${test}
+      ${lib.concatMapStringsSep "\n" (output: "ln -s ${crate.${output}} ${"$"}${output}") crate.outputs}
+    '';
 
   /* A restricted overridable version of builtRustCratesWithFeatures. */
   buildRustCrateWithFeatures =
@@ -4522,7 +4522,7 @@ rec {
         let
           buildRustCrateOverrides =
             if crateOverrides == pkgs.defaultCrateOverrides
-            then {}
+            then { }
             else {
               defaultCrateOverrides = crateOverrides;
             };
@@ -4538,11 +4538,12 @@ rec {
           testDrv = builtTestRustCrates.${packageId};
           derivation =
             if runTests then
-              crateWithTest {
-                crate = drv;
-                testCrate = testDrv;
-                inherit testCrateFlags testInputs;
-              }
+              crateWithTest
+                {
+                  crate = drv;
+                  testCrate = testDrv;
+                  inherit testCrateFlags testInputs;
+                }
             else drv;
         in
         derivation
@@ -4578,7 +4579,6 @@ rec {
           let
             # proc_macro crates must be compiled for the build architecture
             cratePkgs = if crateConfig.procMacro or false then pkgs.buildPackages else pkgs;
-
             features = mergedFeatures."${packageId}" or [ ];
             crateConfig' = crateConfigs."${packageId}";
             crateConfig =
@@ -4636,7 +4636,7 @@ rec {
               in
               lib.mapAttrs (name: choices: builtins.map versionAndRename choices) grouped;
           in
-            cratePkgs.buildRustCrate.override buildRustCrateOverrides
+          cratePkgs.buildRustCrate.override buildRustCrateOverrides
             (
               crateConfig // {
                 src = crateConfig.src or (
@@ -4812,11 +4812,12 @@ rec {
                 in
                 if cache ? ${packageId} && cache.${packageId} == combinedFeatures
                 then cache
-                else mergePackageFeatures {
-                  features = combinedFeatures;
-                  featuresByPackageId = cache;
-                  inherit crateConfigs packageId target runTests rootPackageId;
-                }
+                else
+                  mergePackageFeatures {
+                    features = combinedFeatures;
+                    featuresByPackageId = cache;
+                    inherit crateConfigs packageId target runTests rootPackageId;
+                  }
             );
         cacheWithSelf =
           let
