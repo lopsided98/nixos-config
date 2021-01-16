@@ -10,12 +10,13 @@
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
     nix-sdr.url = "github:lopsided98/nix-sdr";
+    radonpy.url = "github:lopsided98/radonpy";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = { self, nixpkgs-unstable-custom, nixpkgs-master-custom
-            , nixos-secrets, secrets, zeus-audio, nix-ros-overlay, nix-sdr
-            , flake-utils, ... }@inputs:
+            , nixos-secrets, secrets, zeus-audio, nix-ros-overlay
+            , nix-sdr, radonpy, flake-utils, ... }@inputs:
   with nixpkgs-unstable-custom.lib;
   with flake-utils.lib;
   let
@@ -92,6 +93,7 @@
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
           nix-sdr.nixosModule
+          radonpy.nixosModule
         ];
       });
     in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //

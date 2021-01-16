@@ -37,6 +37,7 @@
     ./local/services/deluge.nix
     ./local/services/mail.nix
     ./local/services/public-files.nix
+    ./local/services/radonpy
     ./local/services/rtlamr
     ./local/services/water-level-monitor.nix
     ./local/sources.nix
