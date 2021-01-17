@@ -218,8 +218,8 @@ in {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${pkgs.raspberrypi-tools}/bin/tvservice -o";
-      ExecStop = "${pkgs.raspberrypi-tools}/bin/tvservice -p";
+      ExecStart = "${pkgs.libraspberrypi}/bin/tvservice -o";
+      ExecStop = "${pkgs.libraspberrypi}/bin/tvservice -p";
     };
 
     description = "Disable HDMI port";
