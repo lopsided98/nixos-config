@@ -46,7 +46,7 @@ with lib;
       generic-extlinux-compatible.enable = true;
     };
     kernelPackages = lib.mkForce (pkgs.linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit (pkgs) stdenv;
+      inherit (pkgs) lib stdenv;
       inherit (pkgs.linuxPackages_omnitech.kernel) version src;
       configfile = ./kernel.config;
       config = import ./kernel-config.nix;
