@@ -71,7 +71,7 @@ in {
   local.services.rtlamr.enable = true;
 
   # Use the same speed as the bootloader/early console
-  services.mingetty.serialSpeed = [ 1500000 ];
+  services.getty.serialSpeed = [ 1500000 ];
 
   services.openssh = {
     ports = [ 4247 ];

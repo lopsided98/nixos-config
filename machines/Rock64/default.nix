@@ -46,7 +46,7 @@ in {
   # List services that you want to enable:
 
   # Use the same speed as the bootloader/early console
-  services.mingetty.serialSpeed = [ 1500000 ];
+  services.getty.serialSpeed = [ 1500000 ];
 
   # Set SSH port
   services.openssh.ports = [ 4246 ];
