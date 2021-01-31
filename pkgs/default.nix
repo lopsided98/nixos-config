@@ -68,7 +68,6 @@ in {
     kernelPatches = with self.kernelPatches; [
       bridge_stp_helper
       request_key_helper
-      export_kernel_fpu_functions."5.3"
     ];
   };
   linuxPackages_omnitech = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_omnitech);
@@ -77,7 +76,6 @@ in {
     kernelPatches = with self.kernelPatches; [
       bridge_stp_helper
       request_key_helper
-      export_kernel_fpu_functions."5.3"
     ];
   };
   linuxPackages_rock64 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
