@@ -84,6 +84,8 @@ in {
 
   # List services that you want to enable:
 
+  local.services.radonpy.enable = true;
+
   services.openssh = {
     ports = [ 4286 ];
     hostKeys = [
