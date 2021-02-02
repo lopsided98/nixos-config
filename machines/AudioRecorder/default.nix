@@ -165,7 +165,6 @@ in {
     initstepslew = {
       enabled = !ap;
       threshold = 0.1;
-      servers = config.services.chrony.servers;
     };
     extraConfig = optionalString ap ''
       local stratum 8
