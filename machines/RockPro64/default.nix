@@ -19,11 +19,6 @@ in {
     generic-extlinux-compatible.enable = true;
   };
 
-  local.networking.wireless.home = {
-    enable = true;
-    interface = "wlan0";
-  };
-
   systemd.network = {
     enable = true;
     networks = {
@@ -44,27 +39,6 @@ in {
     hostName = "RockPro64";
     hostId = "67b35626";
   };
-
-  hardware = {
-    bluetooth.enable = true;
-    firmware = [ (pkgs.runCommand "bcm4359-firwmare" {} ''
-      mkdir -p "$out/lib/firmware/brcm"
-      cd "$out/lib/firmware/brcm"
-      ln -s '${pkgs.fetchurl {
-        url = "https://github.com/armbian/firmware/raw/78a566d50b7f82bfe77b32c172ce0dfee8642dea/brcm/brcmfmac4359-sdio.bin";
-        sha256 = "1h1axlwlyvnzvds6wqh460q9jagy8cipcx58kn88bnb9p306jib9";
-      }}' brcmfmac4359-sdio.bin
-      ln -s '${pkgs.fetchurl {
-        url = "https://github.com/armbian/firmware/raw/78a566d50b7f82bfe77b32c172ce0dfee8642dea/brcm/brcmfmac4359-sdio.txt";
-        sha256 = "122c6rqjwfirdp602nv6vy63z683hpyy47p2vawxnhydzq2qbk2s";
-      }}' brcmfmac4359-sdio.txt
-      ln -s '${pkgs.fetchurl {
-        url = "https://github.com/reMarkable/brcmfmac-firmware/raw/04f5d06feadee32da803c54e36c2b85909142867/brcmfmac4359-sdio.clm_blob";
-        sha256 = "10yxmhjq7jyhb8a0jslldfj5yabacgyg03xb4mvqv1fnskihi1f4";
-      }}' brcmfmac4359-sdio.clm_blob
-    '') ];
-  };
-
 
   # List services that you want to enable:
 
