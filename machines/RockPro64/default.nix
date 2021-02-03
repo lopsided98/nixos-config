@@ -42,6 +42,7 @@ in {
 
   # List services that you want to enable:
 
+  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
   local.services.rtlamr.enable = true;
 
   # Use the same speed as the bootloader/early console
