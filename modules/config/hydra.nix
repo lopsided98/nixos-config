@@ -145,6 +145,7 @@
         # SSH deploy keys
         (secrets.mkSecret secrets.hydra.ssh.gitlab { user = "hydra"; })
         (secrets.mkSecret secrets.hydra.ssh.githubNixosConfigSecrets { user = "hydra"; })
+        (secrets.mkSecret secrets.hydra.ssh.githubFreefb { user = "hydra"; })
       ];
     };
   };

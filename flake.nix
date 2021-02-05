@@ -9,14 +9,14 @@
     zeus-audio.url = "github:lopsided98/zeus_audio";
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
+    freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     nix-sdr.url = "github:lopsided98/nix-sdr";
     radonpy.url = "github:lopsided98/radonpy";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs-unstable-custom, nixpkgs-master-custom
-            , nixos-secrets, secrets, zeus-audio, nix-ros-overlay
-            , nix-sdr, radonpy, flake-utils, ... }@inputs:
+  outputs = { ... }@inputs:
+  with inputs;
   with nixpkgs-unstable-custom.lib;
   with flake-utils.lib;
   let

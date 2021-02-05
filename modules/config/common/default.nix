@@ -7,6 +7,7 @@
   # Include overlays
   nixpkgs.overlays = with inputs; [
     self.overlay
+    freefb.overlay
     nix-sdr.overlay
     (self: super: {
       crossPackages = self.forceCross {
