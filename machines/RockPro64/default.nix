@@ -42,8 +42,9 @@ in {
 
   # List services that you want to enable:
 
-  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
+  # Power usage logging
   local.services.rtlamr.enable = true;
+  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
 
   # Use the same speed as the bootloader/early console
   services.getty.serialSpeed = [ 1500000 ];
