@@ -1,25 +1,26 @@
-{ stdenv, lib, fetchFromGitHub }: let
-  rev = "254f24a653cefa7b674b4d5576cf6cb655cbbadd";
-in stdenv.mkDerivation {
-  name = "aur-buildbot-${lib.substring 0 7 rev}";
+{ stdenv, lib, fetchFromGitHub }:
+
+stdenv.mkDerivation {
+  pname = "aur-buildbot";
+  version = "2021-02-05";
 
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "aur-buildbot";
-    inherit rev;
-    sha256 = "09x82j0yzgrci4yia794sxb4z2c9kcfz7dxq096d0fl22iq0cg6z";
+    rev = "41af44508c3ea3364582716fd0c1030e76a08d28";
+    sha256 = "1557pa8g6ymhcv25czh4hznfybnr0bqh3kkciay3x731q852mvvb";
   };
-  
+
   installPhase = ''
     mkdir "$out"
     cp -a * "$out"
   '';
-  
+
   postFixup = ''
     substituteInPlace "$out/worker/build-package" \
       --replace /bin/bash "${stdenv.shell}" \
   '';
-  
+
   # Don't patch the docker entrypoint script
   dontPatchShebangs = true;
 
