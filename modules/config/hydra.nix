@@ -47,9 +47,36 @@
   programs.ssh.extraConfig = ''
     Host gitlab.com
       IdentityFile ${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.gitlab}
+  '';
 
-    Host github.com
-      IdentityFile ${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.githubNixosConfigSecrets}
+  # Automatically select the right deploy key for SSH access to different GitHub
+  # repositories
+  systemd.services.hydra-evaluator.environment.GIT_SSH = pkgs.writers.writePython3 "git-ssh-identity.py" {
+    # Ignore "line too long"
+    flakeIgnore  = [ "E501" ];
+  } ''
+    import sys
+    import os
+    import re
+
+    SSH_EXECUTABLE = '${pkgs.openssh}/bin/ssh'
+
+    KEY_MAP = {
+        'git@github.com/lopsided98/nixos-config-secrets.git': '${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.githubNixosConfigSecrets}',
+        'git@github.com/lopsided98/freefb.git': '${secrets.getSystemdSecret "hydra" secrets.hydra.ssh.githubFreefb}',
+    }
+
+    host = sys.argv[-2]
+    command_match = re.match(r'([^ ]+)[ ]+[\']([^\']*)[\']', sys.argv[-1])
+
+    key_args = []
+    if command_match:
+        path = command_match.group(2)
+        key = KEY_MAP.get(host + path)
+        if key is not None:
+            key_args = ['-i', key]
+
+    os.execv(SSH_EXECUTABLE, [SSH_EXECUTABLE] + key_args + sys.argv[1:])
   '';
 
   # Serve binary cache
