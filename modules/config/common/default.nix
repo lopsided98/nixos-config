@@ -194,8 +194,6 @@
     MaxRetentionSec=3month
   '';
 
-  programs.bash.enableCompletion = true;
-
   # Disable UDisks by default (significantly reduces system closure size)
   services.udisks2.enable = lib.mkDefault false;
 
