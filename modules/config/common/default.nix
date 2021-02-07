@@ -24,15 +24,20 @@
       if pkgs.stdenv.isAarch32 && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform 
       then pkgs.crossPackages.linuxPackages_latest
       else pkgs.linuxPackages_latest;
-
     # Enable a shell if boot fails. This is disabled by default because it
     # gives root access, but someone with access to this shell would also have
     # physical access to the machine, so this doesn't really matter.
     kernelParams = [ "boot.shell_on_fail" ];
-    cleanTmpDir = true;
-
     # Enable magic SysRq
     kernel.sysctl."kernel.sysrq" = 1;
+
+    # NixOS tries to include a bunch of random modules by default, some of which
+    # are missing in some kernel configs (e.g. Raspberry Pi). A poorly thought
+    # out change made missing modules cause the build to fail, so this option
+    # is basically required to use NixOS on ARM now.
+    initrd.includeDefaultModules = false;
+
+    cleanTmpDir = true;
 
     # Enable GRUB serial console
     loader.grub.extraConfig = ''
