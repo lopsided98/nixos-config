@@ -33,9 +33,16 @@ in rec {
         efiSysMountPoint = "/boot/esp";
       };
     };
+
     initrd = {
-      availableKernelModules = [ "e1000e" ];
-      luks.devices.root.device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
+      luks.devices = {
+        root.device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
+        ssd = {
+          device = "/dev/disk/by-uuid/aee09f7d-1d4b-42ea-8058-82272d3f8400";
+          allowDiscards = true;
+        };
+      };
+
       network = {
         enable = true;
         tinyssh = {
@@ -234,6 +241,9 @@ in rec {
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
   ];
+
+  # Enable SSD TRIM
+  services.fstrim.enable = true;
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostEd25519Key {};
   environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey { };

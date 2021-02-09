@@ -4,16 +4,31 @@
 { config, lib, pkgs, ... }:
 
 {
-  boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [
+    # USB
+    "ehci_pci"
+    "xhci_pci"
+    "usb_storage"
+    "usbhid"
+    # Keyboard
+    "hid_generic"
+    # Disks
+    "ahci"
+    "sd_mod"
+    "sr_mod"
+    # SSD
+    "isci"
+    # Ethernet
+    "e1000e"
+  ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
 
   fileSystems = {
     "/" = {
       device = "root/root";
       fsType = "zfs";
     };
-    
+
     "/var/lib/docker" = {
       device = "root/root/docker";
       fsType = "zfs";
@@ -24,6 +39,16 @@
       fsType = "zfs";
     };
 
+    "/mnt/ssd" = {
+      device = "/dev/disk/by-uuid/85ed6ea7-de86-4fbd-9dfb-f2f7d83e1539";
+      fsType = "ext4";
+    };
+
+    "/tmp" = {
+      device = "/mnt/ssd/tmp";
+      options = [ "bind" ];
+    };
+
     "/boot/esp" = {
       device = "/dev/disk/by-uuid/BAA5-3E52";
       fsType = "vfat";
@@ -31,8 +56,6 @@
       options = [ "fmask=0137" ];
     };
   };
-
-  swapDevices = [ ];
 
   nix.maxJobs = lib.mkDefault 8;
   nix.buildCores = lib.mkDefault 8;
