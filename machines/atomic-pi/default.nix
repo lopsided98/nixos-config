@@ -29,7 +29,20 @@ in {
       };
     };
     initrd = {
-      availableKernelModules = [ "sdhci_acpi" "r8169" ];
+      availableKernelModules = [
+        # USB
+        "xhci_pci"
+        "usb_storage"
+        "usbhid"
+        # Keyboard
+        "hid_generic"
+        # eMMC
+        "sd_mod"
+        "sdhci_acpi"
+        "mmc_block"
+        # Ethernet
+        "r8169"
+      ];
       luks.devices.root = {
         device = "/dev/disk/by-uuid/b70eef17-f299-4f20-857f-1c04c5d316df";
         allowDiscards = true;
@@ -94,7 +107,7 @@ in {
     ];
   };
 
-  # Enable SD card TRIM
+  # Enable eMMC TRIM
   services.fstrim.enable = true;
 
   boot.secrets = secrets.mkSecret secrets.atomic-pi.tinyssh.hostEd25519Key { };
