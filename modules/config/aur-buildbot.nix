@@ -136,7 +136,6 @@ in {
         redeclipse: {}
         saleae-logic: {}
         sbupdate-git: {}
-        solaar-git: {}
         vmware-horizon-client: {}
         webstorm: {}
         xca: {}
