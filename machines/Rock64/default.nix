@@ -51,65 +51,6 @@ in {
   # Set SSH port
   services.openssh.ports = [ 4246 ];
 
-  local.services.deluge.enable = true;
-
-  local.services.backup = {
-    server = {
-      enable = true;
-      device = "/dev/disk/by-uuid/fea46c86-192a-40e4-a871-ae7f5d9b1840";
-    };
-    sanoid.enable = true;
-    syncthing = {
-      virtualHost = "syncthing.rock64.benwolsieffer.com";
-      certificate = ./syncthing/cert.pem;
-      certificateKeySecret = secrets.Rock64.syncthing.certificateKey;
-      httpsCertificate = ./syncthing/https-cert.pem;
-      httpsCertificateKeySecret = secrets.Rock64.syncthing.httpsCertificateKey;
-    };
-  };
-
-  services.sanoid = {
-    datasets = {
-      # Each backup node takes its own snapshots of data
-      "backup/data" = {
-        use_template = [ "backup" ];
-        autosnap = true;
-        recursive = true;
-        process_children_only = true;
-      };
-      # Prune all backups with one rule
-      "backup/backups" = {
-        use_template = [ "backup" ];
-        recursive = true;
-        process_children_only = true;
-      };
-
-      # Snapshots of non-ZFS devices that backup to this node
-      "backup/backups/P-3400" = {
-        use_template = [ "backup" ];
-        autosnap = true;
-        recursive = true;
-      };
-    };
-  };
-
-  services.syncoid = let
-    remote = "backup@hp-z420.benwolsieffer.com";
-  in {
-    commonArgs = [ "--sshport" "4245" ];
-    commands = {
-      "backup/backups/Dell-Optiplex-780" = {
-        target = "${remote}:backup/backups/Dell-Optiplex-780";
-        recursive = true;
-        extraArgs = [ "--skip-parent" ];
-      };
-      "backup/backups/P-3400" = {
-        target = "${remote}:backup/backups/P-3400";
-        recursive = true;
-      };
-    };
-  };
-
   # Enable SD card TRIM
   services.fstrim.enable = true;
 }

@@ -34,11 +34,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1610051610,
-        "narHash": "sha256-U9rPz/usA1/Aohhk7Cmc2gBrEEKRzcW4nwPWMPwja4Y=",
+        "lastModified": 1614513358,
+        "narHash": "sha256-LakhOx3S1dRjnh0b5Dg3mbZyH0ToC9I8Y2wKSkBaTzU=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3982c9903e93927c2164caa727cd3f6a0e6d14cc",
+        "rev": "5466c5bbece17adaab2d82fae80b46e807611bf3",
         "type": "github"
       },
       "original": {
@@ -460,11 +460,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1612486345,
-        "narHash": "sha256-aU1xleJPBoe7Ja+gpnsOkjab5DrKqEY7onmaisoCJyc=",
+        "lastModified": 1614532035,
+        "narHash": "sha256-D1cvau5TnwUa7mk9lTS2/TF81fYnOG/co/wql9q2+tA=",
         "ref": "master",
-        "rev": "ef1ec708716893f6386d9c6b4cbd945b8f231624",
-        "revCount": 59,
+        "rev": "bc12cda36e7efaaff21d432e6d49c2058d629f60",
+        "revCount": 60,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },

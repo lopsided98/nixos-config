@@ -18,7 +18,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        43         ; Serial
+                        44         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -89,7 +89,7 @@
     { name = "influxdb"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "grafana"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "syncthing.hp-z420"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
-    { name = "syncthing.rock64"; class = "IN"; type = "CNAME"; data = "rock64"; }
+    { name = "syncthing.rockpro64"; class = "IN"; type = "CNAME"; data = "rockpro64"; }
   ];
 in {
 

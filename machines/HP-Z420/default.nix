@@ -197,9 +197,9 @@ in rec {
   };
 
   services.syncoid = let
-    remote = "backup@rock64.benwolsieffer.com";
+    remote = "backup@rockpro64.benwolsieffer.com";
   in {
-    commonArgs = [ "--sshport" "4246" ];
+    commonArgs = [ "--sshport" "4247" ];
     commands = {
       "root/root".target = "backup/backups/HP-Z420/root";
       "root/home".target = "backup/backups/HP-Z420/home";
