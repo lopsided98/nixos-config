@@ -46,6 +46,8 @@ in rec {
     ];
   };
 
+  hardware.cpu.intel.updateMicrocode = true;
+
   systemd.network = {
     enable = true;
     networks."30-${interface}" = {

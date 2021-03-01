@@ -19,8 +19,6 @@ in {
     };
   };
 
-  hardware.cpu.intel.updateMicrocode = true;
-
   boot = {
     # Use systemd-boot
     loader = {
@@ -66,6 +64,8 @@ in {
     };
     kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::${interface}:none" "intel_iommu=on" ];
   };
+
+  hardware.cpu.intel.updateMicrocode = true;
 
   local.networking.home = {
     enable = true;

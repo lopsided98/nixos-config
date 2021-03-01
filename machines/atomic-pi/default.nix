@@ -63,6 +63,8 @@ in {
     kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::${interface}:none" ];
   };
 
+  hardware.cpu.intel.updateMicrocode = true;
+
   /*local.networking.vpn.home.tap.client = {
     enable = true;
     macAddress = "00:07:32:4d:3c:3d";

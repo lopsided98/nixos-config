@@ -59,6 +59,8 @@ in rec {
     kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eno1:none" "intel_iommu=on" ];
   };
 
+  hardware.cpu.intel.updateMicrocode = true;
+
   local.networking.home = {
     enable = true;
     interfaces = [ interface ];
