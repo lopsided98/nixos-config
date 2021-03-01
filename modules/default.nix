@@ -13,7 +13,6 @@
     ./services/networking/dnsupdate.nix
     ./services/networking/doorman.nix
     ./services/networking/tinyssh.nix
-    ./services/monitoring/telegraf.nix
     ./services/monitoring/watchdog.nix
     ./services/system/fake-hwclock.nix
     ./services/web-apps/hacker-hats.nix
@@ -39,6 +38,7 @@
     ./local/services/public-files.nix
     ./local/services/radonpy
     ./local/services/rtlamr
+    ./local/services/telegraf.nix
     ./local/services/water-level-monitor.nix
     ./local/sources.nix
     ./local/system.nix

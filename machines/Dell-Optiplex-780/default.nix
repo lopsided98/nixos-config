@@ -69,9 +69,6 @@ in rec {
     method = "magicpacket";
   };
 
-  # Enable telegraf metrics for this interface
-  services.telegraf.inputs.net.interfaces = [ interface ];
-
   # List services that you want to enable:
 
   # Serial terminal

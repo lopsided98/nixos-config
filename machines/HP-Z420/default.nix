@@ -113,7 +113,7 @@ in rec {
     hostId = "5e9c1aa3";
   };
   # Enable telegraf metrics for this interface
-  services.telegraf.inputs.net.interfaces = [ interface ];
+  local.services.telegraf.networkInterfaces = [ interface ];
 
   # List services that you want to enable:
 

@@ -168,7 +168,7 @@ in {
     };
 
     # Monitor VPN with telegraf
-    services.telegraf.inputs.net.interfaces = [ cfg.interface ];
+    local.services.telegraf.networkInterfaces = [ cfg.interface ];
 
     environment.secrets = secrets.mkSecret secrets.vpn.home.hmacKey {};
   };

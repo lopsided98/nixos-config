@@ -26,6 +26,7 @@ in lib.filterAttrs (m: c: c != null) ({
   "RockPro64" = callMachine ./RockPro64 "aarch64-linux";
   "Roomba" = callMachine ./Roomba "aarch64-linux";
   "octoprint" = callMachine ./octoprint "aarch64-linux";
+  "p-3400" = callMachine ./p-3400 "x86_64-linux";
   "KittyCop" = callMachine ./KittyCop "armv6l-linux";
   "maine-pi" = callMachine ./maine-pi "armv6l-linux";
   "atomic-pi" = callMachine ./atomic-pi "x86_64-linux";
