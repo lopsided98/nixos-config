@@ -44,6 +44,15 @@ in {
   # Set SSH port
   services.openssh.ports = [ 4242 ];
 
+  # System metrics logging
+  local.services.telegraf = {
+    enable = true;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.RasPi2.telegraf.influxdbTlsKey;
+    };
+  };
+
   # Network monitoring
   services.telegraf.inputs.ping = {
     urls = [

@@ -8,9 +8,6 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-
-    ../../modules/config/telegraf.nix
-
     ../../modules
   ];
 
@@ -40,9 +37,6 @@ in {
   networking.hostName = "Rock64"; # Define your hostname.
   networking.hostId = "566a7fd8";
 
-  environment.systemPackages = with pkgs; [
-  ];
-
   # List services that you want to enable:
 
   # Use the same speed as the bootloader/early console
@@ -50,6 +44,15 @@ in {
 
   # Set SSH port
   services.openssh.ports = [ 4246 ];
+
+  # System metrics logging
+  local.services.telegraf = {
+    enable = true;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.Rock64.telegraf.influxdbTlsKey;
+    };
+  };
 
   # Enable SD card TRIM
   services.fstrim.enable = true;

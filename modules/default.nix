@@ -13,6 +13,7 @@
     ./services/networking/dnsupdate.nix
     ./services/networking/doorman.nix
     ./services/networking/tinyssh.nix
+    ./services/monitoring/telegraf.nix
     ./services/monitoring/watchdog.nix
     ./services/system/fake-hwclock.nix
     ./services/web-apps/hacker-hats.nix

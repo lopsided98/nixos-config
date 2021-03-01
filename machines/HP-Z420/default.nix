@@ -13,7 +13,6 @@ in rec {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/config/telegraf.nix
     ../../modules/config/docker.nix
     ../../modules/config/hydra.nix
     ../../modules/config/hacker-hats.nix
@@ -112,8 +111,15 @@ in rec {
     hostName = "HP-Z420"; # Define your hostname.
     hostId = "5e9c1aa3";
   };
-  # Enable telegraf metrics for this interface
-  local.services.telegraf.networkInterfaces = [ interface ];
+
+  # System metrics logging
+  local.services.telegraf = {
+    enable = true;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.HP-Z420.telegraf.influxdbTlsKey;
+    };
+  };
 
   # List services that you want to enable:
 

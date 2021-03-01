@@ -10,7 +10,6 @@ in {
     ./hardware-configuration.nix
 
     # Modules without configuration options
-    ../../modules/config/telegraf.nix
     ../../modules/config/openvpn/server.nix
 
     ../../modules
@@ -49,6 +48,15 @@ in {
 
   # Set SSH port
   services.openssh.ports = [4243];
+
+  # System metrics logging
+  local.services.telegraf = {
+    enable = true;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.ODROID-XU4.telegraf.influxdbTlsKey;
+    };
+  };
 
   # Temperature monitoring
   services.telegraf.inputs.sensors = {

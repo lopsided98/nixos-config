@@ -13,8 +13,6 @@ in rec {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../modules/config/telegraf.nix
-
       ../../modules
     ];
 
@@ -76,6 +74,15 @@ in rec {
 
   # Set SSH port
   services.openssh.ports = [ 4244 ];
+
+  # System metrics logging
+  local.services.telegraf = {
+    enable = true;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.Dell-Optiplex-780.telegraf.influxdbTlsKey;
+    };
+  };
 
   local.services.backup.sanoid.enable = true;
 

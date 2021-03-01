@@ -78,6 +78,7 @@ in {
     hostId = "9035d933";
   };
 
+  # System metrics logging
   local.services.telegraf = {
     enable = true;
     influxdb = {

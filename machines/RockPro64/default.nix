@@ -8,9 +8,6 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-
-    ../../modules/config/telegraf.nix
-
     ../../modules
   ];
 
@@ -58,6 +55,15 @@ in {
       { type = "rsa"; bits = 4096; path = secrets.getSecret secrets.RockPro64.ssh.hostRsaKey; }
       { type = "ed25519"; path = secrets.getSecret secrets.RockPro64.ssh.hostEd25519Key; }
     ];
+  };
+
+  # System metrics logging
+  local.services.telegraf = {
+    enable = true;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.RockPro64.telegraf.influxdbTlsKey;
+    };
   };
 
   local.services.backup = {
