@@ -2,14 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, ... }: let
+{ lib, config, pkgs, secrets, ... }: let
   interface = "eth0";
 in {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
 
-      ../../modules/config/telegraf.nix
       ../../modules/config/dnsupdate.nix
       ../../modules/config/dns.nix
 
