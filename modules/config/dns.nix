@@ -52,6 +52,10 @@
     { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:225:64ff:febd:bdbc"; }
 
+    # p-3400
+    { name = "p-3400"; class = "IN"; type = "A"; data = externalIPv4; }
+    { name = "p-3400"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:468a:5bff:fece:23c6"; }
+
     # HP-Z420
     #{ name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.92.198"; }
     { name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
@@ -82,6 +86,7 @@
     { name = "raspi2"; class = "IN"; type = "A"; data = "192.168.1.2"; }
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = "192.168.1.3"; }
     { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = "192.168.1.4"; }
+    { name = "p-3400"; class = "IN"; type = "A"; data = "192.168.1.4"; }
     { name = "hp-z420"; class = "IN"; type = "A"; data = "192.168.1.5"; }
     { name = "rock64"; class = "IN"; type = "A"; data = "192.168.1.6"; }
     { name = "rockpro64"; class = "IN"; type = "A"; data = "192.168.1.7"; }

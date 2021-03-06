@@ -88,11 +88,11 @@
       speedFactor = 8;
       supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
     };
-    "Dell-Optiplex-780" = machine {
+    "p-3400" = machine {
       systems = [ "x86_64-linux" "i686-linux" ];
-      maxJobs = 2;
-      speedFactor = 2;
-      supportedFeatures = [ "nixos-test" "kvm" ];
+      maxJobs = 4;
+      speedFactor = 6;
+      supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
     };
     "ODROID-XU4" = machine {
       systems = [ "armv6l-linux" "armv7l-linux" ];
@@ -155,6 +155,9 @@
       Host Dell-Optiplex-780
         Port 4244
 
+      Host p-3400
+        Port 4244
+
       Host RasPi2
         Port 4242
 
@@ -174,6 +177,7 @@
       "[raspi2.benwolsieffer.com]:4242".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
       "[odroid-xu4.benwolsieffer.com]:4243".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
       "[dell-optiplex-780.benwolsieffer.com]:4244".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIODxgNjFuareM/XZEo7ZZrGddVj2Bx6RfaOTK1/DyNBJ";
+      "[p-3400.benwolsieffer.com]:4244".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA63giTolB7xmmyfxqlekRl97rncLwcNpsyvR2v1IsgE";
       "[hp-z420.benwolsieffer.com]:4245".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
       "[rock64.benwolsieffer.com]:4246".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeI22j7yJpTJcRpHms2V1xMbDq8DF/zmoG02HNOYWjH";
       "[rockpro64.benwolsieffer.com]:4247".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
