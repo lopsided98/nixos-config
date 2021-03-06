@@ -17,10 +17,9 @@ in {
       filterId = "44904168";
       influxdb = {
         hostName = "https://influxdb.benwolsieffer.com:8086";
-        user = "rtlamr";
         # Authentication is done with client certificate
-        password = "";
-        database = "rtlamr";
+        token = "rtlamr:invalid";
+        bucket = "rtlamr";
         clientCert = ./influxdb.crt;
         clientKey = secrets.getSystemdSecret "rtlamr" secrets.rtlamr.influxdbClientKey;
       };
@@ -29,6 +28,7 @@ in {
     systemd.services.rtlamr-collect = {
       wants = [ "rtl-tcp.service" ];
       after = [ "rtl-tcp.service" ];
+      notifyFailed = true;
     };
 
     systemd.secrets.rtlamr = {
@@ -37,5 +37,7 @@ in {
       };
       units = singleton "rtlamr-collect.service";
     };
+
+    systemd.notifyFailed.enable = true;
   };
 }

@@ -109,11 +109,11 @@
     },
     "flake-utils_6": {
       "locked": {
-        "lastModified": 1610051610,
-        "narHash": "sha256-U9rPz/usA1/Aohhk7Cmc2gBrEEKRzcW4nwPWMPwja4Y=",
+        "lastModified": 1614513358,
+        "narHash": "sha256-LakhOx3S1dRjnh0b5Dg3mbZyH0ToC9I8Y2wKSkBaTzU=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3982c9903e93927c2164caa727cd3f6a0e6d14cc",
+        "rev": "5466c5bbece17adaab2d82fae80b46e807611bf3",
         "type": "github"
       },
       "original": {
@@ -359,16 +359,16 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1612483052,
-        "narHash": "sha256-qj75uOEXA8KnF5+JkRGoNhPWHbhTjl8zo4QsuG1k5wM=",
-        "owner": "lopsided98",
+        "lastModified": 1614815769,
+        "narHash": "sha256-Rdy37Ioof5FlMlc+YC9PniSIJW/EsdImG+wZPP5VWvo=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b65b13fa8ce76c90be96cfd13f143021dd55a4fb",
+        "rev": "d496205cf22c3079461d868ea3198d42ded59287",
         "type": "github"
       },
       "original": {
-        "owner": "lopsided98",
-        "ref": "aioinflux-init",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -411,11 +411,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1612484198,
-        "narHash": "sha256-yuYaldLQI4Q3n4/s7bLFoiJB38QeRuFvAHH1zRSGPSY=",
+        "lastModified": 1615064102,
+        "narHash": "sha256-G7y1Iz8xR8IvGNCImjx0mLAyZtewCAwAfAstLocE0Zc=",
         "owner": "lopsided98",
         "repo": "radonpy",
-        "rev": "a72374b37ecb17706e57b1cded0999e00ba7b2c9",
+        "rev": "6adfdf5abe7bd2e273f5b64c55259c7c135f2fb8",
         "type": "github"
       },
       "original": {
