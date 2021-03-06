@@ -22,18 +22,17 @@ with lib;
   local.system = {
     hostSystem = {
       config = "armv5tel-unknown-linux-gnueabi";
-      platform = {
+      linux-kernel = {
         name = "omnitech-16878";
-        kernelMajor = "2.6";
-        kernelArch = "arm";
-        kernelAutoModules = false;
-        kernelTarget = "zImage";
-        kernelDTB = true;
-        gcc = {
-          arch = "armv5te";
-          float-abi = "soft";
-          tune = "arm926ej-s";
-        };
+        Major = "2.6";
+        autoModules = false;
+        target = "zImage";
+        DTB = true;
+      };
+      gcc = {
+        arch = "armv5te";
+        float-abi = "soft";
+        tune = "arm926ej-s";
       };
     };
     # Enable cross-compilation
@@ -66,10 +65,10 @@ with lib;
     '')
   ];
 
-  local.networking.wireless.home = {
+  /*local.networking.wireless.home = {
     enable = true;
     interface = "wlan0";
-  };
+  };*/
 
   networking.hostName = "omnitech";
 
