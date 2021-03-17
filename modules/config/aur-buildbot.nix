@@ -98,48 +98,25 @@ in {
         android-sdk-build-tools: {}
         android-sdk-platform-tools: {}
         arm-linux-gnueabihf-gcc: {}
-        aurman: {}
         binfmt-qemu-static: {}
         bumblebee-git: {}
-        chrome-gnome-shell-git: {}
         clion: {}
-        cutecom: {}
-        dex2jar: {}
-        dislocker: {}
-        dmg2img: {}
         dropbox: {}
         eagle: {}
         flightgear: {}
         flightgear-data: {}
-        genymotion: {}
-        gnome-mpv: {}
-        grpc: {}
-        heimdall-git: {}
         intellij-idea-ultimate-edition: {}
-        jd-gui:
-          dependencies: [jdk8-openjdk]
         keepass-plugin-rpc: {}
         keepass-plugin-keetraytotp: {}
-        lcov: {}
         lejos-nxj: {}
-        lib32-tk: {}
-        multipath-tools: {}
         nix: {}
         platformio: {}
         pycharm-professional: {}
-        python-flask-cors: {}
-        python-keras: {}
-        python-pyalsaaudio: {}
-        python-scikit-image: {}
-        python-v4l2capture: {}
         qemu-user-static: {}
         redeclipse: {}
         saleae-logic: {}
         sbupdate-git: {}
-        vmware-horizon-client: {}
         webstorm: {}
-        xca: {}
-        zotero: {}
     '';
   };
 
