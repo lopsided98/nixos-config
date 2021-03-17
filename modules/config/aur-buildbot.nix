@@ -110,7 +110,6 @@ in {
         keepass-plugin-keetraytotp: {}
         lejos-nxj: {}
         nix: {}
-        platformio: {}
         pycharm-professional: {}
         qemu-user-static: {}
         redeclipse: {}
