@@ -23,11 +23,16 @@ in {
       };
     };
 
-    systemd.secrets.radonpy = {
-      files = secrets.mkSecret secrets.radonpy.influxdbClientKey {
-        user = "radonpy";
+    systemd = {
+      notifyFailed.enable = true;
+      services.radonpy.notifyFailed = true;
+
+      secrets.radonpy = {
+        files = secrets.mkSecret secrets.radonpy.influxdbClientKey {
+          user = "radonpy";
+        };
+        units = singleton "radonpy.service";
       };
-      units = singleton "radonpy.service";
     };
   };
 }
