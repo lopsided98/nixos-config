@@ -9,6 +9,12 @@
           url = "https://github.com/lopsided98/hydra/commit/1f047a5dd3e16c21e14ea9130a8c8fbfd485e5a9.patch";
           sha256 = "1pmiy702rvcil97qlldmcyahv3438anis3kwrgjlpp4h5nx5z4g1";
         })
+        # Fix incompatibility with builders running Nix unstable
+        # https://github.com/NixOS/hydra/pull/914
+        (pkgs.fetchpatch {
+          url = "https://github.com/NixOS/hydra/commit/0bee194ce9bcc0c88991ed72a60c13d13a0bfdab.patch";
+          sha256 = "sha256-lMcQ+81dBHl4Nn04klVJIjzSt5ksQJZyKCHl/v8+y3w=";
+        })
       ];
     });
     hydraURL = "https://hydra.benwolsieffer.com";
