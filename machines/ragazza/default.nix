@@ -81,17 +81,14 @@ in {
         address = [ "10.12.0.1/24" ];
         networkConfig = {
           DHCPServer = true;
-          IPv6PrefixDelegation = "yes";
-          MulticastDNS = "yes";
+          IPv6SendRA = true;
+          MulticastDNS = true;
         };
-        extraConfig = ''
-          [DHCPServer]
-          EmitDNS=no
-          EmitNTP=no
-
-          [IPv6PrefixDelegation]
-          EmitDNS=no
-        '';
+        dhcpServerConfig = {
+          EmitDNS = false;
+          EmitNTP = false;
+        };
+        ipv6SendRAConfig.EmitDNS = false;
       };
       "30-home".networkConfig.MulticastDNS = "yes";
     };

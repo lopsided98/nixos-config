@@ -109,17 +109,14 @@ in {
       address = [ "10.9.0.1/24" ];
       networkConfig = {
         DHCPServer = true;
-        IPv6PrefixDelegation = "yes";
-        LLMNR = "yes";
+        IPv6SendRA = true;
+        LLMNR = true;
       };
-      extraConfig = ''
-        [DHCPServer]
-        EmitDNS=no
-        EmitNTP=no
-
-        [IPv6PrefixDelegation]
-        EmitDNS=no
-      '';
+      dhcpServerConfig = {
+        EmitDNS = false;
+        EmitNTP = false;
+      };
+      ipv6SendRAConfig.EmitDNS = false;
     };
   };
 
