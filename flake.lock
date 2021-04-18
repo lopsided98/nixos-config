@@ -411,11 +411,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1618457034,
-        "narHash": "sha256-u7Ym9aDzTwWmLE1cDunBJesfBe3PmrB363oypvey/+8=",
+        "lastModified": 1618759712,
+        "narHash": "sha256-CFDMlbyxeQUA0GEiO6PPDYizXWywnQJklwmaZoZObsI=",
         "owner": "lopsided98",
         "repo": "radonpy",
-        "rev": "ee1d900d82aa0d6245af49b85116343a549f76e8",
+        "rev": "f0f7ec43649a8a8972596731a3785987848fb7a9",
         "type": "github"
       },
       "original": {
