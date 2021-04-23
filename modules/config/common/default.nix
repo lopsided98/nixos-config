@@ -96,7 +96,7 @@
     };
     "ODROID-XU4" = machine {
       systems = [ "armv6l-linux" "armv7l-linux" ];
-      maxJobs = 2;
+      maxJobs = 1;
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
     };
