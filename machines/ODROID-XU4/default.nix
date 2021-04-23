@@ -22,7 +22,6 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_hardkernel_4_14;
   };
 
   local.networking.home = {
