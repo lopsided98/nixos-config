@@ -54,7 +54,7 @@ in rec {
       name = interface;
       address = [ "${address}/24" ];
       gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18a:0:1b5c:ba27:ebff:fe5e:6b6e" ];
       dhcpConfig.UseDNS = false;
       extraConfig = ''
         [IPv6AcceptRA]

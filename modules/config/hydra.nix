@@ -136,7 +136,7 @@
               # Allow access from local network without password
               satisfy any;
               allow 192.168.1.0/24;
-              allow 2601:18a:0:7723::/64;
+              allow 2601:18a:0:1b5c::/64;
               deny all;
             '';
           };

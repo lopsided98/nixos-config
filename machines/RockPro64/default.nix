@@ -26,7 +26,7 @@ in {
         name = interface;
         address = [ "192.168.1.7/24" ];
         gateway = [ "192.168.1.1" ];
-        dns = [ "192.168.1.2" "2601:18a:0:ff60:ba27:ebff:fe5e:6b6e" ];
+        dns = [ "192.168.1.2" "2601:18a:0:1b5c:ba27:ebff:fe5e:6b6e" ];
         dhcpConfig.UseDNS = false;
         extraConfig = ''
           [IPv6AcceptRA]

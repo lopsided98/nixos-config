@@ -12,7 +12,7 @@
   mergeRecords = parent: child: attrValues (recursiveUpdate (recordAttrs parent) (recordAttrs child));
 
   externalIPv4 = "73.149.219.1";
-  ipv6Prefix = "2601:18a:0:ff60";
+  ipv6Prefix = "2601:18a:0:1b5c";
 
   externalRecords = [
     { name = "@"; class = "IN"; type = "SOA";
