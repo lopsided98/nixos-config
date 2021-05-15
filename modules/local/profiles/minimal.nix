@@ -24,9 +24,13 @@ with lib;
     i18n.supportedLocales = mkDefault [ "en_US.UTF-8/UTF-8" ];
 
     nixpkgs.overlays = singleton (const (super: {
+      # Avoids transitive dependency on polkit and others
+      gnupg = super.gnupg.override { enableMinimal = true; };
+
       nix = super.nix.override { withAWS = false; };
       nixUnstable = super.nixUnstable.override { withAWS = false; };
       nixFlakes = super.nixFlakes.override { withAWS = false; };
+
       # Prevent building two versions of glibcLocales
       # This seems to break qemu
       /*glibcLocales = super.glibcLocales.override {
