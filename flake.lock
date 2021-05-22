@@ -480,11 +480,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1601754093,
-        "narHash": "sha256-5zSQr3Bumq16YSgjbqNf8QF6A+jWn/PkVgHabHS6Ub0=",
+        "lastModified": 1621708249,
+        "narHash": "sha256-pKalu9zEC4KmaapDEIbPF7Qpl+EvJP9ytKybRoh3OuU=",
         "owner": "lopsided98",
         "repo": "zeus_audio",
-        "rev": "2da22387484789bd545f3bac1d734593c0c633f8",
+        "rev": "65cb32d10d4e1f8ed59c514cb2afdeaaccdf416e",
         "type": "github"
       },
       "original": {
