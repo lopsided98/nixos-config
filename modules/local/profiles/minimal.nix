@@ -24,8 +24,8 @@ with lib;
     i18n.supportedLocales = mkDefault [ "en_US.UTF-8/UTF-8" ];
 
     nixpkgs.overlays = singleton (const (super: {
-      # Avoids transitive dependency on polkit and others
-      gnupg = super.gnupg.override { enableMinimal = true; };
+      # Avoid transitive dependency on polkit and others
+      gnupg = super.gnupg.override { pcsclite = null; };
 
       nix = super.nix.override { withAWS = false; };
       nixUnstable = super.nixUnstable.override { withAWS = false; };
