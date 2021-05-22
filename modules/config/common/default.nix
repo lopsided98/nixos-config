@@ -259,7 +259,12 @@
     units = [ "nix-daemon.service" ];
     files = lib.mkMerge [
       (secrets.mkSecret secrets.build.sshKey {})
-      (secrets.mkSecret secrets.hydra.netrc {})
+      (secrets.mkSecret secrets.hydra.netrc {
+        # Make world readable so nix can access the binary cache without going
+        # through the daemon. This secret is not particularly sensitive, it
+        # just prevents random people from accessing my cache.
+        mode = "0444";
+      })
     ];
   };
 

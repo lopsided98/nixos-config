@@ -93,6 +93,10 @@
         proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
         cacheConfig = ''
           proxy_cache hydra;
+          proxy_cache_valid 1w;
+          # Ignore cache headers from Hydra; they cause caching of error
+          # responses
+          proxy_ignore_headers Expires Cache-Control;
           add_header X-Cache $upstream_cache_status;
         '';
       in {
@@ -126,13 +130,6 @@
           };
           "/log/" = {
             inherit proxyPass;
-            extraConfig = ''
-              # Allow access from local network without password
-              satisfy any;
-              allow 192.168.1.0/24;
-              allow 2601:18a:0:1b5c::/64;
-              deny all;
-            '';
           };
         };
         extraConfig = ''
@@ -140,10 +137,6 @@
           # Would be necessary if Hydra supported range requests; in any case it
           # doesn't hurt.
           proxy_http_version 1.1;
-          proxy_cache_valid 1w;
-          # Ignore cache headers from Hydra; they cause caching of error
-          # responses
-          proxy_ignore_headers Expires Cache-Control;
         '';
       };
     };
