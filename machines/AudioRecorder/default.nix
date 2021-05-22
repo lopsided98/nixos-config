@@ -42,15 +42,11 @@ in {
       enable = true;
       version = 0;
       firmwareConfig = ''
-        dtoverlay=fe-pi-audio
+        dtoverlay=wm8960-soundcard
         dtparam=audio=off
       '';
     };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
-    /*kernelPatches = [ {
-      name = "i2c-output-source-selection";
-      patch = ./0001-ASoC-sgtl5000-add-I2S-output-source-selection.patch;
-    } ];*/
   };
 
   nixpkgs.config = {
