@@ -126,7 +126,7 @@ in {
       extraGroups = [ "wheel" "audio" "audio-recorder" ];
       uid = 1001;
       hashedPassword = "$6$aC3UnQWVt$y.uMfBSzkcdasHj.aWjtRvqJIRhi3OuervlLcyDiZmsF5rFPClOUTP5NaXdBPhMVLPUAEOIov/6pyTob2r0qx.";
-      openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCM67Ah+UMtpQQ4Cta6fQi9cPTguQcUNCaZxJMqS8fpUH9lyj1Ybq8QRZ7yw0yrU02d+DtD0xH9Hh2qp2U89ghPwYTlC9yR/huJFKe1h77u5QUFjoeQTELH/eu0mSPriWj+KCb3NyArOKrv6rSJohxdA0Ald7NLL3q6Fk+YfC1oK3ng6GB1byrWVXMQjgA3kN4/ZIkRfaXIgVj9qZTZFwHs/kwC16SVi4AH8JKrWwvyBfhCERoLW6FPxeJD5dPkmTMasujNkfrXA43wmT4a2Y/pEWJdvUzkPPjt1vy+SP8pMO3oOCnYqZMqSmSDiiAuNjo44DSmi3eaJm9mgfynWjPx rsa-key-20210522" ];
+      openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGmfMgjNEt/J4aW+CPj1JQjReapFe4y/NHZqLn9IxFCQ ed25519-key-20180907" ];
     };
   };
 
