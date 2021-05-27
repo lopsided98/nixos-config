@@ -19,7 +19,7 @@ in {
 
     dns = mkOption {
       type = types.listOf types.str;
-      default = [ "192.168.1.2" "2601:18a:0:1b5c:ba27:ebff:fe5e:6b6e" ];
+      default = [ "192.168.1.2" "2601:18a:0:85e0:ba27:ebff:fe5e:6b6e" ];
       description = "DNS server that is used exclusively if the VPN is running.";
     };
 
