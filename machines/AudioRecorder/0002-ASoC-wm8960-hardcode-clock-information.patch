@@ -1,0 +1,53 @@
+From 4bf1fade482ac85dfab209cdf6a5d43f01ccf3b5 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sat, 29 May 2021 10:59:34 -0400
+Subject: [PATCH 2/2] ASoC: wm8960: hardcode clock information
+
+This comes from the Waveshare driver, and should be replaced with a properly
+configurable solution.
+
+Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
+---
+ sound/soc/codecs/wm8960.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
+index 35b5080ee422..76dc0e48ab31 100644
+--- a/sound/soc/codecs/wm8960.c
++++ b/sound/soc/codecs/wm8960.c
+@@ -747,7 +747,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+ 	if (!(iface1 & (1<<6))) {
+ 		dev_dbg(component->dev,
+ 			"Codec is slave mode, no need to configure clock\n");
+-		return 0;
++		/* return 0; */
+ 	}
+ 
+ 	if (wm8960->clk_id != WM8960_SYSCLK_MCLK && !wm8960->freq_in) {
+@@ -1282,6 +1282,7 @@ static int wm8960_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
+ {
+ 	struct snd_soc_component *component = dai->component;
+ 	struct wm8960_priv *wm8960 = snd_soc_component_get_drvdata(component);
++	clk_id = WM8960_SYSCLK_PLL;
+ 
+ 	switch (clk_id) {
+ 	case WM8960_SYSCLK_MCLK:
+@@ -1298,6 +1299,7 @@ static int wm8960_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
+ 		return -EINVAL;
+ 	}
+ 
++	wm8960->freq_in = 24000000;
+ 	wm8960->sysclk = freq;
+ 	wm8960->clk_id = clk_id;
+ 
+@@ -1408,6 +1410,7 @@ static int wm8960_i2c_probe(struct i2c_client *i2c,
+ 	if (wm8960 == NULL)
+ 		return -ENOMEM;
+ 
++	wm8960->clk_id = WM8960_SYSCLK_PLL;
+ 	wm8960->mclk = devm_clk_get(&i2c->dev, "mclk");
+ 	if (IS_ERR(wm8960->mclk)) {
+ 		if (PTR_ERR(wm8960->mclk) == -EPROBE_DEFER)
+-- 
+2.31.0
+

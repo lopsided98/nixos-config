@@ -47,6 +47,16 @@ in {
       '';
     };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
+    kernelPatches = [
+      {
+        name = "wm8960-enable-mic-bias";
+        patch = ./0001-ASoC-wm8960-enable-mic-bias-network-for-electret-mic.patch;
+      }
+      {
+        name = "wm8960-hardcode-clock-information";
+        patch = ./0002-ASoC-wm8960-hardcode-clock-information.patch;
+      }
+    ];
   };
 
   nixpkgs.config = {
