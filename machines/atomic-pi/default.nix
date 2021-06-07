@@ -100,6 +100,11 @@ in {
   # List services that you want to enable:
 
   local.services.radonpy.enable = true;
+  # Enable bluetoothd debugging
+  /*systemd.services.bluetooth.serviceConfig.ExecStart = mkForce [
+    ""
+    "${config.hardware.bluetooth.package}/libexec/bluetooth/bluetoothd -d -f /etc/bluetooth/main.conf"
+  ];*/
 
   services.openssh = {
     ports = [ 4286 ];
