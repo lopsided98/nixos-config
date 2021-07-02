@@ -54,6 +54,21 @@ in
       '';
     };
 
+    firmwarePartitionOffset = mkOption {
+      type = types.int;
+      default = 8;
+      description = ''
+        Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
+        bytes).
+        Can be increased to make more space for boards requiring to dd u-boot
+        SPL before actual partitions.
+        Unless you are building your own images pre-configured with an
+        installed U-Boot, you can instead opt to delete the existing `FIRMWARE`
+        partition, which is used **only** for the Raspberry Pi family of
+        hardware.
+      '';
+    };
+
     firmwarePartitionID = mkOption {
       type = types.str;
       default = "0x2178694e";
@@ -82,7 +97,7 @@ in
 
     firmwareSize = mkOption {
       type = types.int;
-      # As of 2019-08-18 the Raspberry Pi firmware + U-Boot takes ~18MiB
+      # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
       default = 30;
       description = ''
         Size of the /boot/firmware partition, in megabytes.
@@ -126,6 +141,13 @@ in
       '';
     };
 
+    expandOnBoot = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to configure the sd image to expand it's partition on boot.
+      '';
+    };
   };
 
   config = {
@@ -157,65 +179,53 @@ in
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
         export img=$out/sd-image/${config.sdImage.imageName}
-
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         if test -n "$compressImage"; then
           echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
         else
           echo "file sd-image $img" >> $out/nix-support/hydra-build-products
         fi
-
         echo "Decompressing rootfs image"
         zstd -d --no-progress "${rootfsImage}" -o ./root-fs.img
-
         # Gap in front of the first partition, in MiB
-        gap=8
-
+        gap=${toString config.sdImage.firmwarePartitionOffset}
         # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
         rootSizeBlocks=$(du -B 512 --apparent-size ./root-fs.img | awk '{ print $1 }')
         firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
         imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
         truncate -s $imageSize $img
-
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         # The "bootable" partition is where u-boot will look file for the bootloader
         # information (dtbs, extlinux.conf file).
         sfdisk $img <<EOF
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
-
             start=''${gap}M, size=$firmwareSizeBlocks, type=b
             start=$((gap + ${toString config.sdImage.firmwareSize}))M, type=83, bootable
         EOF
-
         # Copy the rootfs into the SD image
         eval $(partx $img -o START,SECTORS --nr 2 --pairs)
         dd conv=notrunc if=./root-fs.img of=$img seek=$START count=$SECTORS
-
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) firmware_part.img
         faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
-
         # Populate the files intended for /boot/firmware
         mkdir firmware
         ${config.sdImage.populateFirmwareCommands}
-
         # Copy the populated /boot/firmware into the SD image
         (cd firmware; mcopy -psvm -i ../firmware_part.img ./* ::)
         # Verify the FAT partition before copying it.
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
-
         ${config.sdImage.postBuildCommands}
-
         if test -n "$compressImage"; then
             zstd -T$NIX_BUILD_CORES --rm $img
         fi
       '';
     }) {};
 
-    boot.postBootCommands = ''
+    boot.postBootCommands = lib.mkIf config.sdImage.expandOnBoot ''
       # On the first boot do some maintenance tasks
       if [ -f /nix-path-registration ]; then
         set -euo pipefail
@@ -224,19 +234,15 @@ in
         rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
         partNum=$(lsblk -npo MAJ:MIN $rootPart | ${pkgs.gawk}/bin/awk -F: '{print $2}')
-
         # Resize the root partition and the filesystem to fit the disk
         echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
         ${pkgs.parted}/bin/partprobe
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
-
         # Register the contents of the initial Nix store
         ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
-
         # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
         touch /etc/NIXOS
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-
         # Prevents this from running on later boots.
         rm -f /nix-path-registration
       fi
