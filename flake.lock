@@ -19,6 +19,22 @@
     "crate2nix_2": {
       "flake": false,
       "locked": {
+        "lastModified": 1624988334,
+        "narHash": "sha256-crBb5UCxkeBap8r4JWG9SleCHJa9nw42f2iHhMKeNyQ=",
+        "owner": "kolloch",
+        "repo": "crate2nix",
+        "rev": "e7a26bbd9f56ec4167f616fcee28d792f8168a56",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kolloch",
+        "repo": "crate2nix",
+        "type": "github"
+      }
+    },
+    "crate2nix_3": {
+      "flake": false,
+      "locked": {
         "lastModified": 1599563194,
         "narHash": "sha256-HS+I8fszn8UW3Z++X0EOjJf6/hXEwfPiCrawHOzzXh8=",
         "owner": "kolloch",
@@ -39,6 +55,21 @@
         "owner": "numtide",
         "repo": "flake-utils",
         "rev": "f7e004a55b120c02ecb6219596820fcd32ca8772",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_10": {
+      "locked": {
+        "lastModified": 1601282935,
+        "narHash": "sha256-WQAFV6sGGQxrRs3a+/Yj9xUYvhTpukQJIcMbIi7LCJ4=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "588973065fce51f4763287f0fda87a174d78bf48",
         "type": "github"
       },
       "original": {
@@ -154,11 +185,11 @@
     },
     "flake-utils_9": {
       "locked": {
-        "lastModified": 1601282935,
-        "narHash": "sha256-WQAFV6sGGQxrRs3a+/Yj9xUYvhTpukQJIcMbIi7LCJ4=",
+        "lastModified": 1623875721,
+        "narHash": "sha256-A8BU7bjS5GirpAUv4QA+QnJ4CceLHkcXdRp4xITDB0s=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "588973065fce51f4763287f0fda87a174d78bf48",
+        "rev": "f7e004a55b120c02ecb6219596820fcd32ca8772",
         "type": "github"
       },
       "original": {
@@ -391,6 +422,20 @@
     },
     "nixpkgs_7": {
       "locked": {
+        "lastModified": 1624922035,
+        "narHash": "sha256-OiIxJQuMRkICxaUwY3xMBbrPPu20de/n7tVYnWzLvS4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "3a8d7958a610cd3fec3a6f424480f91a1b259185",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_8": {
+      "locked": {
         "lastModified": 1601171649,
         "narHash": "sha256-G3RUAi2DUq6r3ntASLS+LZC/Eamot55W1+xmBOgEh3M=",
         "owner": "NixOS",
@@ -436,6 +481,7 @@
         "radonpy": "radonpy",
         "ros-sailing": "ros-sailing",
         "secrets": "secrets",
+        "water-level-monitor": "water-level-monitor",
         "zeus-audio": "zeus-audio"
       }
     },
@@ -473,11 +519,31 @@
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       }
     },
-    "zeus-audio": {
+    "water-level-monitor": {
       "inputs": {
         "crate2nix": "crate2nix_2",
         "flake-utils": "flake-utils_9",
         "nixpkgs": "nixpkgs_7"
+      },
+      "locked": {
+        "lastModified": 1625192427,
+        "narHash": "sha256-0RkiHsyYRTNUXMi3Ks3DiQIjPh9j9PFS8jw+deK5kW4=",
+        "owner": "lopsided98",
+        "repo": "WaterLevelMonitor",
+        "rev": "473e443af663467829d18814b3108c896fa4442b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lopsided98",
+        "repo": "WaterLevelMonitor",
+        "type": "github"
+      }
+    },
+    "zeus-audio": {
+      "inputs": {
+        "crate2nix": "crate2nix_3",
+        "flake-utils": "flake-utils_10",
+        "nixpkgs": "nixpkgs_8"
       },
       "locked": {
         "lastModified": 1621715679,

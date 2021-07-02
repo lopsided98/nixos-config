@@ -12,10 +12,11 @@
     freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     nix-sdr.url = "github:lopsided98/nix-sdr";
     radonpy.url = "github:lopsided98/radonpy";
+    water-level-monitor.url = "github:lopsided98/WaterLevelMonitor";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { ... }@inputs:
+  outputs = inputs:
   with inputs;
   with nixpkgs-unstable-custom.lib;
   with flake-utils.lib;
@@ -94,6 +95,7 @@
           nix-ros-overlay.nixosModule
           nix-sdr.nixosModule
           radonpy.nixosModule
+          water-level-monitor.nixosModule
         ];
       });
     in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //

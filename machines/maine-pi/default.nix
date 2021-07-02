@@ -84,7 +84,14 @@ with lib;
 
   local.services.waterLevelMonitor = {
     enable = true;
-    influxdb.certificateSecret = secrets.maine-pi.waterLevelMonitor.influxdbCertificate;
+    certificateSecret = secrets.maine-pi.waterLevelMonitor.influxdbCertificate;
+  };
+  services.waterLevelMonitor = {
+    influxdb = {
+       url = "https://influxdb.benwolsieffer.com:8068";
+       database = "maine";
+    };
+    address = "C6:F8:64:2F:D9:D2";
   };
 
   environment.secrets = mkMerge [
