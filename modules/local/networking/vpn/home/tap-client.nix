@@ -34,9 +34,9 @@ in {
       description = "Client certificate file";
     };
 
-    privateKey = mkOption {
-      type = types.path;
-      description = "Client certificate private key file";
+    privateKeySecret = mkOption {
+      type = types.str;
+      description = "Client certificate private key secret";
     };
   };
 
@@ -98,7 +98,7 @@ in {
       # file can be used for all clients.
       ca ${./ca.crt}
       cert ${cfg.certificate}
-      key ${cfg.privateKey}
+      key ${secrets.getSystemdSecret "vpn-home-tap-client" cfg.privateKeySecret}
 
       # Verify server certificate by checking
       # that the certicate has the nsCertType
@@ -115,7 +115,7 @@ in {
 
       # If a tls-auth key is used on the server
       # then every client must also have the key.
-      tls-auth ${secrets.getSecret secrets.vpn.home.hmacKey} 1
+      tls-auth ${secrets.getSystemdSecret "vpn-home-tap-client" secrets.vpn.home.hmacKey} 1
 
       # Select a cryptographic cipher.
       # If the cipher option is used on the server
@@ -170,6 +170,12 @@ in {
     # Monitor VPN with telegraf
     local.services.telegraf.networkInterfaces = [ cfg.interface ];
 
-    environment.secrets = secrets.mkSecret secrets.vpn.home.hmacKey {};
+    systemd.secrets.vpn-home-tap-client = {
+      files = mkMerge [
+        (secrets.mkSecret secrets.vpn.home.hmacKey {})
+        (secrets.mkSecret cfg.privateKeySecret {})
+      ];
+      units = [ "openvpn-home-tap-client.service" ];
+    };
   };
 }
