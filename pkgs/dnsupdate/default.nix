@@ -12,8 +12,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "dnsupdate";
-    rev = version;
-    sha256 = "11sajb6gspjfcf1j640v7gp6y0nk8i9b60izxl0a8146j4i1is7a";
+    rev = "f0168b423a1ee41e2ee04325657b7e08f21d30dc";
+    sha256 = "sha256-K519Jc5wY4wAoiM9kbzPJNu7EAVbR7Cs6vlOtFQRpyc=";
   };
 
   propagatedBuildInputs = [ requests pyyaml ]
