@@ -100,7 +100,7 @@ with lib;
   };
   services.waterLevelMonitor = {
     influxdb = {
-       url = "https://influxdb.benwolsieffer.com:8068";
+       url = "https://influxdb.benwolsieffer.com:8086";
        database = "maine";
     };
     address = "C6:F8:64:2F:D9:D2";
