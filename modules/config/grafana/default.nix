@@ -6,10 +6,17 @@ in {
     enable = true;
 
     protocol = "socket";
+    socket = socket;
     domain = "grafana.benwolsieffer.com";
     rootUrl = "https://%(domain)s/";
 
-    extraOptions."SERVER_SOCKET" = socket;
+    smtp = {
+      enable = true;
+      host = "smtp.gmail.com:465";
+      user = "benwolsieffer@gmail.com";
+      passwordFile = secrets.getSystemdSecret "grafana" secrets.grafana.gmailPassword;
+      fromAddress = "grafana@benwolsieffer.com";
+    };
   };
 
   systemd.services.grafana = {
@@ -40,11 +47,17 @@ in {
 
       forceSSL = true;
       sslCertificate = ./server.pem;
-      sslCertificateKey = secrets.getSecret secrets.grafana.sslCertificateKey;
+      sslCertificateKey = secrets.getSystemdSecret "grafana" secrets.grafana.sslCertificateKey;
 
       locations."/".proxyPass = "http://unix:${socket}";
     };
   };
 
-  environment.secrets = secrets.mkSecret secrets.grafana.sslCertificateKey { user = "nginx"; };
+  systemd.secrets.grafana = {
+    files = lib.mkMerge [
+      (secrets.mkSecret secrets.grafana.sslCertificateKey { user = "nginx"; })
+      (secrets.mkSecret secrets.grafana.gmailPassword { user = "grafana"; })
+    ];
+    units = [ "grafana.service" ];
+  };
 }
