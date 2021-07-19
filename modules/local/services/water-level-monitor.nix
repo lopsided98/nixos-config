@@ -24,9 +24,14 @@ in {
       influxdb.certificateFile = secrets.getSystemdSecret "water-level-base-station" cfg.certificateSecret;
     };
 
-    systemd.secrets.water-level-base-station = {
-      units = [ "water-level-base-station.service" ];
-      files = secrets.mkSecret cfg.certificateSecret {};
+    systemd = {
+      #notifyFailed.enable = true;
+      #services.water-level-base-station.notifyFailed = true;
+
+      secrets.water-level-base-station = {
+        units = [ "water-level-base-station.service" ];
+        files = secrets.mkSecret cfg.certificateSecret { user = "water-level"; };
+      };
     };
   };
 }
