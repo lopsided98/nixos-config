@@ -95,11 +95,11 @@
     },
     "flake-utils_3": {
       "locked": {
-        "lastModified": 1620759905,
-        "narHash": "sha256-WiyWawrgmyN0EdmiHyG2V+fqReiVi8bM9cRdMaKQOFg=",
+        "lastModified": 1623875721,
+        "narHash": "sha256-A8BU7bjS5GirpAUv4QA+QnJ4CceLHkcXdRp4xITDB0s=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "b543720b25df6ffdfcf9227afafc5b8c1fabfae8",
+        "rev": "f7e004a55b120c02ecb6219596820fcd32ca8772",
         "type": "github"
       },
       "original": {
@@ -224,11 +224,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1624898718,
-        "narHash": "sha256-731wem88UIMXPqSgbudjYpgy+KNg4XLXuiKEXWXX8DU=",
+        "lastModified": 1626708904,
+        "narHash": "sha256-m8kmzjNv1r/bGOJLr7kT76NKZixe8ejd5LDT+MeOCYE=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "97bd4c9cd8da8c4e879c138b1bf0e7f19f031642",
+        "rev": "be22697212debf9912e75bb5424285bfbbfbbe41",
         "type": "github"
       },
       "original": {
@@ -283,11 +283,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1625243760,
-        "narHash": "sha256-al8bg09gCUpcaynsGnuLRl6NaHFejTIP0rrRxXohb5c=",
+        "lastModified": 1625276099,
+        "narHash": "sha256-LrgDdIs+0BfkymNN7acHy01wGGk8QJjRVTJQ1ciRzcI=",
         "owner": "lopsided98",
         "repo": "nixos-secrets",
-        "rev": "42cae2714cd7a925a069c86da9598cd99d46eb0f",
+        "rev": "25ee91afa1aa693c5e689c0723a10e643c39fc61",
         "type": "github"
       },
       "original": {
@@ -312,11 +312,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1625270337,
-        "narHash": "sha256-J5o3Xh6GzUC3R+XMToIcZwYXd9+UZ0jBkWMqgf94ckc=",
+        "lastModified": 1626404173,
+        "narHash": "sha256-tdXFj7QU1dBkWm3EixJDIOD+mAZt3Ut2FF4hJD7d0Z8=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "6b96be009197a9da249adde7062ce1b9ea44779a",
+        "rev": "ef50ed8706ba15ad4464c4519856affef1066aab",
         "type": "github"
       },
       "original": {
@@ -328,11 +328,11 @@
     },
     "nixpkgs-unstable-custom": {
       "locked": {
-        "lastModified": 1623623610,
-        "narHash": "sha256-ZVk8am2K2//4tagSvW8LwFXVfcDpXH3RIn2seY/ufhE=",
+        "lastModified": 1626710415,
+        "narHash": "sha256-v0fsCe6bBOzYPO14mltdudLJfyikC0Vn45YGmiUQUZU=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "d8dd3c0f9fdb99297a4f6e842aca0b9067e707df",
+        "rev": "a63d262fe2be2a4eb851b5ca30ec4c278023c7e0",
         "type": "github"
       },
       "original": {
@@ -344,11 +344,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1622389051,
-        "narHash": "sha256-QSPMRmhEZQBTxFTR+BQwS1t1GVWYj6ml8G7coZ1jeF0=",
+        "lastModified": 1626707822,
+        "narHash": "sha256-n+oqT263FlHXYi67sbgZA74FGF1eJUWNj+VOloDHZ9g=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "e8749b4747df41e835cd5c3ee8aef7b5283d0f46",
+        "rev": "4b60a34e741b0383d47c24c17433d4847387fe65",
         "type": "github"
       },
       "original": {
@@ -506,11 +506,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1625244109,
-        "narHash": "sha256-ui2ZoAkfRE/teCV1d+ox3NlqjWZSWf1penb1Pu38qGM=",
+        "lastModified": 1626221457,
+        "narHash": "sha256-ZzHj3vNpbsB30Lh6F6scECWRL0moSbGYjeKnvnYI9LQ=",
         "ref": "master",
-        "rev": "bb4e0d437c1eedc4df3015b84e2ba6a35764b696",
-        "revCount": 64,
+        "rev": "b1e8f954ea43f31c2fd46ddd746db876255e0251",
+        "revCount": 66,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
@@ -526,11 +526,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1625270480,
-        "narHash": "sha256-VGkNvRtI1af17zFqWtfXLZ1zY18XXZO9VpDqljBGk44=",
+        "lastModified": 1625889792,
+        "narHash": "sha256-0iUwL+6JBIW4ShyNCR3HmS8VHCKMUeP5IBZARXZNI3Q=",
         "owner": "lopsided98",
         "repo": "WaterLevelMonitor",
-        "rev": "8922a3adc95badc99d5702300d4847d959d562ee",
+        "rev": "8b7fa7efbab159a22045a91776e30e5c016e6a48",
         "type": "github"
       },
       "original": {
