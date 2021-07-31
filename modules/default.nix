@@ -41,7 +41,6 @@
     ./local/services/rtlamr
     ./local/services/telegraf.nix
     ./local/services/water-level-monitor.nix
-    ./local/sources.nix
     ./local/system.nix
   ];
 }

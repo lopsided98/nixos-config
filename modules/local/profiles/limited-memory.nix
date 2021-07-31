@@ -16,10 +16,6 @@ with lib;
   config = mkIf config.local.profiles.limitedMemory {
     local.profiles.minimal = mkDefault true;
 
-    # With this little memory, it doesn't make sense to run evals onboard, so
-    # don't include nixpkgs sources.
-    local.sources.nixpkgs.enable = mkDefault false;
-
     # Disable uncessary systemd components
     # Override mkDefault in nixpkgs networkd config
     services.resolved.enable = mkOverride 900 false;
