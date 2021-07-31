@@ -21,9 +21,6 @@ in {
   local.machine.raspberryPi.enableWirelessFirmware = true;
   local.profiles.minimal = true;
 
-  # nixpkgs sources are never used and waste space
-  local.sources.nixpkgs.enable = mkDefault false;
-
   sdImage = {
     firmwarePartitionID = "0x" + substring 0 8 (builtins.hashString "md5" "firmware" + hostName);
     rootPartitionUUID = let 
