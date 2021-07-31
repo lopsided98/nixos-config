@@ -22,14 +22,7 @@
     kernelPackages =
       # Use cross-compiled kernel on ARM, if we aren't cross-compiling everything
       if pkgs.stdenv.isAarch32 && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform 
-      then
-        # GCC 10.2 can't compile armv7l kernel
-        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96377
-        if pkgs.stdenv.system == "armv7l-linux" then with pkgs.crossPackages;
-          linuxPackages_latest.extend (self: super: {
-            kernel = linux_latest.override { stdenv = gcc9Stdenv; };
-          })
-        else pkgs.crossPackages.linuxPackages_latest
+      then pkgs.crossPackages.linuxPackages_latest
       else pkgs.linuxPackages_latest;
     # Enable a shell if boot fails. This is disabled by default because it
     # gives root access, but someone with access to this shell would also have
