@@ -19,6 +19,7 @@ let
 in lib.filterAttrs (m: c: c != null) ({
   "atomic-pi" = callMachine ./atomic-pi "x86_64-linux";
   "bone" = callMachine ./bone "armv7l-linux";
+  "bone-black" = callMachine ./bone-black "armv7l-linux";
   "Dell-Optiplex-780" = callMachine ./Dell-Optiplex-780 "x86_64-linux";
   "HP-Z420" = callMachine ./HP-Z420 "x86_64-linux";
   "KittyCop" = callMachine ./KittyCop "armv6l-linux";
