@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }: let
+{ lib, config, pkgs, secrets, ... }: let
   videoDevice = "/dev/v4l/by-id/usb-046d_HD_Webcam_C525_6498ABA0-video-index0";
   videoSystemdDevice = "dev-v4l-by\\x2did-usb\\x2d046d_HD_Webcam_C525_6498ABA0\\x2dvideo\\x2dindex0.device";
 in {
@@ -125,6 +125,7 @@ in {
     enable = true;
     link = "dongle";
     dump = true;
+    configFile = secrets.getSystemdSecret "freefb" secrets.freefb.configFile;
   };
 
   networking.firewall.allowedTCPPorts = [
@@ -134,4 +135,9 @@ in {
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
+  
+  systemd.secrets.freefb = {
+    units = [ "freefb.service" ];
+    files = secrets.mkSecret secrets.freefb.configFile {};
+  };
 }

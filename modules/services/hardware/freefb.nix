@@ -36,6 +36,15 @@ in {
         Whether to dump mega dump files to /var/lib/freefb.
       '';
     };
+
+    configFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        Path to freefb config file. This file normally contains passwords, so
+        should not be kept in the Nix store.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -54,6 +63,9 @@ in {
           Type = "oneshot";
           ExecStart = escapeShellArgs ([
             "${pkgs.freefb}/bin/freefb"
+          ] ++ optionals (cfg.configFile != null) [
+            "--config" cfg.configFile
+          ] ++ [
             "-l" "${cfg.link}"
             "sync"
           ] ++ optional cfg.dump "--dump");
