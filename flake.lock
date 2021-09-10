@@ -205,11 +205,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1628992794,
-        "narHash": "sha256-NnLGEcHyb6NZkLI+5Xh+uoATIugGVQhKicntU7B7rqs=",
+        "lastModified": 1631235417,
+        "narHash": "sha256-ZAukFDNtR/Ec1lPXzqzq0rz0hGW16YTlsZMbbbW+wjc=",
         "ref": "master",
-        "rev": "8285e7f6de4da611c662a648e3bfb2d36b6c2d43",
-        "revCount": 58,
+        "rev": "60d2a1ccf54761ae78bf2c30b6291923bd2b4125",
+        "revCount": 60,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/freefb.git"
       },
@@ -224,11 +224,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1628480108,
-        "narHash": "sha256-6Vn8deGK4l1RtZ32uLxZmalAQ7YingDjsX3lwaCMTMM=",
+        "lastModified": 1631134700,
+        "narHash": "sha256-2u0z94esfdvgR8z5G0OvC8dcdcrWli2rg/fUI3N3teY=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "b1306a8aa6b3a5487331d5c60b604e5c43ad5d7f",
+        "rev": "6ed3fe9f34a9b44dc306bcc668ea70d0685d86be",
         "type": "github"
       },
       "original": {
@@ -344,11 +344,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1626707822,
-        "narHash": "sha256-n+oqT263FlHXYi67sbgZA74FGF1eJUWNj+VOloDHZ9g=",
+        "lastModified": 1628997704,
+        "narHash": "sha256-n8OHnfTuA77hfXLEql8UtfFiBBLZovcriVXswQVvT4M=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "4b60a34e741b0383d47c24c17433d4847387fe65",
+        "rev": "327e9d3470f971024f8c62f4a5e8dfebee1af370",
         "type": "github"
       },
       "original": {
