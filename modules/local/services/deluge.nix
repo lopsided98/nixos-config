@@ -27,13 +27,16 @@ in {
         random_port = false;
         listen_ports = [ 62761 62769 ];
       };
-      authFile = secrets.getSecret secrets.deluge.authFile;
+      authFile = secrets.getSystemdSecret "deluge" secrets.deluge.authFile;
 
       openFirewall = true;
     };
 
-    environment.secrets = secrets.mkSecret secrets.deluge.authFile {
-      inherit (config.services.deluge) user group;
+    systemd.secrets.deluge = {
+      files = secrets.mkSecret secrets.deluge.authFile {
+        inherit (config.services.deluge) user group;
+      };
+      units = singleton "deluged.service";
     };
   };
 }

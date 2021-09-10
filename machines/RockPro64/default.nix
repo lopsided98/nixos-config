@@ -46,6 +46,9 @@ in {
   local.services.rtlamr.enable = true;
   boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
 
+  # Deluge torrent client
+  local.services.deluge.enable = true;
+
   # Use the same speed as the bootloader/early console
   services.getty.serialSpeed = [ 1500000 ];
 
