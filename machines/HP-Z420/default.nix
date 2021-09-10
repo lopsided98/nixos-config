@@ -55,31 +55,31 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=:::::eno1:dhcp"
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eno1:none" "intel_iommu=on" ];
+    # "ip=${address}::${gateway}:255.255.255.0::eno1:none"
+    kernelParams = [ "ip=:::::eno1:dhcp" "intel_iommu=on" ];
   };
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  local.networking.home = {
+  /*local.networking.home = {
     enable = true;
     interfaces = [ interface ];
     ipv4Address = "${address}/24";
   };
 
-  local.networking.vpn.dartmouth.enable = true;
+  local.networking.vpn.dartmouth.enable = true;*/
 
-  /*local.networking.vpn.home.tap.client = {
+  local.networking.vpn.home.tap.client = {
     enable = true;
     macAddress = "a0:d3:c1:20:da:3f";
     certificate = ./vpn/home/client.crt;
-    privateKey = secrets.getSecret secrets.HP-Z420.vpn.home.privateKey;
-  };*/
+    privateKeySecret = secrets.HP-Z420.vpn.home.privateKey;
+  };
   systemd.network = {
     enable = true;
 
     # Dartmouth network
-    /*networks."50-${interface}" = {
+    networks."50-${interface}" = {
       name = interface;
       DHCP = "ipv4";
     };
@@ -90,7 +90,7 @@ in rec {
         [IPv6AcceptRA]
         UseDNS=false
       '';
-    };*/
+    };
 
     # Use physical interface MAC on bridge to get same IPs
     netdevs."50-${interface}".netdevConfig = {
@@ -244,7 +244,7 @@ in rec {
   # These modules must come before early modesetting
   boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
   # Quadro K4000
-  boot.extraModprobeConfig ="options vfio-pci ids=10de:11fa,10de:0e0b";
+  boot.extraModprobeConfig = "options vfio-pci ids=10de:11fa,10de:0e0b";
 
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
@@ -254,5 +254,4 @@ in rec {
   services.fstrim.enable = true;
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostEd25519Key {};
-  environment.secrets = secrets.mkSecret secrets.HP-Z420.vpn.home.privateKey { };
 }
