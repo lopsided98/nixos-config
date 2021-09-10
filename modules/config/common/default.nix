@@ -93,12 +93,12 @@
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
     };
-    "Rock64" = machine {
+    /*"Rock64" = machine {
       systems = [ "aarch64-linux" ];
       maxJobs = 2;
       speedFactor = 2;
       supportedFeatures = [ ];
-    };
+    };*/
     "RockPro64" = machine {
       systems = [ "aarch64-linux" ];
       maxJobs = 6;
