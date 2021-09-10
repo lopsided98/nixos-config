@@ -61,10 +61,8 @@ in {
       openDefaultPorts = true;
       dataDir = "${cfg.backupMountpoint}";
       configDir = "${cfg.backupMountpoint}/syncthing";
-      declarative = {
-        cert = "${cfg.certificate}";
-        key = secrets.getSecret cfg.certificateKeySecret;
-      };
+      cert = "${cfg.certificate}";
+      key = secrets.getSecret cfg.certificateKeySecret;
     };
 
     # Increase inotify watch limit
