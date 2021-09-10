@@ -35,7 +35,7 @@ in {
 
     systemd.secrets.wpa_supplicant = {
       files = secrets.mkSecret secrets.wpaSupplicant.homeNetwork { };
-      units = singleton "wpa_supplicant.service";
+      units = singleton "wpa_supplicant-${cfg.interface}.service";
     };
   };
 }
