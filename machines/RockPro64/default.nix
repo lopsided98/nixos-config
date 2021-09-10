@@ -16,7 +16,7 @@ in {
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+    kernelPackages = lib.mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
   };
 
   systemd.network = {
