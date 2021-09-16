@@ -25,7 +25,7 @@ in {
       config = {
         download_location = cfg.downloadDir;
         random_port = false;
-        listen_ports = [ 62761 62769 ];
+        listen_ports = [ 62761 62761 ];
       };
       authFile = secrets.getSystemdSecret "deluge" secrets.deluge.authFile;
 
