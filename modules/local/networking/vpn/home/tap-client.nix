@@ -149,10 +149,19 @@ in {
       # Make the VPN dns override all others
       domains = ["~."];
       dhcpConfig.UseDNS = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=false
-      '';
+      ipv6AcceptRAConfig.UseDNS = false;
+
+      # Apply source based routing to packets sent from VPN interface. This
+      # allows devices to expose services to the internet through the VPN and
+      # my home network.
+      routingPolicyRules = [ { routingPolicyRuleConfig = {
+        From = "192.168.1.0/24";
+        Table = 242;
+      }; } ];
+      routes = [ { routeConfig = {
+        Gateway = "192.168.1.1";
+        Table = 242;
+      }; } ];
     };
 
     # Keep attempting to connect forever
