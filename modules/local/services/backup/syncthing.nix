@@ -66,7 +66,7 @@ in {
     };
 
     # Increase inotify watch limit
-    boot.kernel.sysctl."fs.inotify.max_user_watches" = 1000000;
+    boot.kernel.sysctl."fs.inotify.max_user_watches" = 5000000;
 
     systemd.services.syncthing.unitConfig.ConditionPathIsMountPoint = cfg.backupMountpoint;
 
