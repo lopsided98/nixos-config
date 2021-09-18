@@ -38,6 +38,11 @@ in {
   networking = {
     hostName = "RockPro64";
     hostId = "67b35626";
+
+    # Work around checksumming bug
+    localCommands = ''
+      ${pkgs.ethtool}/bin/ethtool -K eth0 rx off tx off
+    '';
   };
 
   # List services that you want to enable:
