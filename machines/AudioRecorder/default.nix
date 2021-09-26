@@ -100,7 +100,7 @@ in {
   };
   systemd.services.hostapd = mkIf ap {
     wantedBy = [ "network.target" ];
-    before = [ "wpa_supplicant.service" ];
+    before = [ "wpa_supplicant-wlan0.service" ];
     # Hack to wait before starting wpa_supplicant
     serviceConfig.ExecStartPost = "${pkgs.coreutils}/bin/sleep 5";
   };
@@ -245,7 +245,7 @@ in {
 
   systemd.secrets = {
     wpa_supplicant = {
-      units = [ "wpa_supplicant.service" ];
+      units = [ "wpa_supplicant-wlan0.service" ];
       files = secrets.mkSecret secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}" {};
     };
     hostapd = mkIf ap {
