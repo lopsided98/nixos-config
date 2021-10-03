@@ -96,7 +96,7 @@ in rec {
     netdevs."50-${interface}".netdevConfig = {
       Name = interface;
       Kind = "bridge";
-      MACAddress = "a0:d3:c1:20:da:3f";
+      # MACAddress = "a0:d3:c1:20:da:3f";
     };
 
     # Attach the physical interface to the bridge
