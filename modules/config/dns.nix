@@ -18,7 +18,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        46         ; Serial
+                        47         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -47,10 +47,6 @@
     # ODROID-XU4
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:e006:ff:fec2:11eb"; }
-
-    # Dell-Optiplex-780
-    { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "dell-optiplex-780"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:225:64ff:febd:bdbc"; }
 
     # p-3400
     { name = "p-3400"; class = "IN"; type = "A"; data = externalIPv4; }
