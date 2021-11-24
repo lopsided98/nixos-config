@@ -57,9 +57,6 @@ in {
     downloadDir = "/var/lib/torrents";
   };
 
-  # Use the same speed as the bootloader/early console
-  services.getty.serialSpeed = [ 1500000 ];
-
   services.openssh = {
     ports = [ 4247 ];
     hostKeys = [
