@@ -16,7 +16,7 @@ in rec {
     ../../modules/config/docker.nix
     ../../modules/config/hydra.nix
     ../../modules/config/hacker-hats.nix
-    # ../../modules/config/aur-buildbot.nix
+    ../../modules/config/aur-buildbot.nix
     ../../modules/config/influxdb
     ../../modules/config/grafana
 
@@ -128,12 +128,12 @@ in rec {
   # Set SSH port
   services.openssh.ports = [ 4245 ];
 
-  /*services.aur-buildbot-worker = {
+  services.aur-buildbot-worker = {
     enable = true;
     workerPassFile = secrets.getSecret secrets.HP-Z420.aurBuildbot.password;
     masterHost = "hp-z420.benwolsieffer.com";
     adminMessage = "Ben Wolsieffer <benwolsieffer@gmail.com>";
-  };*/
+  };
 
   # Web server for sharing publicly accessible files
   local.services.publicFiles.enable = true;
