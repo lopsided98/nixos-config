@@ -6,8 +6,8 @@
       patches = patches ++ [
         # Fix queue getting stuck
         (pkgs.fetchpatch {
-          url = "https://github.com/lopsided98/hydra/commit/1f047a5dd3e16c21e14ea9130a8c8fbfd485e5a9.patch";
-          sha256 = "1pmiy702rvcil97qlldmcyahv3438anis3kwrgjlpp4h5nx5z4g1";
+          url = "https://github.com/lopsided98/hydra/commit/27ebf1e56b24662e4dd36c842556cbe1144057c1.patch";
+          sha256 = "sha256-YE+qL5lrtxNY/DzxuAEkaeTVGDuEQxCNmBFlbJv30b0=";
         })
       ];
     });
