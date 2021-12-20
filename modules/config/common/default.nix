@@ -120,9 +120,9 @@
       min-free = ${toString (1024 * 1024 * 1024)}
       max-free = ${toString (4096 * 1024 * 1024)}
     '';
-    nixPath = [
-      "nixpkgs=https://github.com/lopsided98/nixpkgs/archive/${inputs.nixpkgs.sourceInfo.rev}.tar.gz"
-    ];
+    nixPath =
+      lib.optional (lib.hasAttr "rev" inputs.nixpkgs.sourceInfo)
+        "nixpkgs=https://github.com/lopsided98/nixpkgs/archive/${inputs.nixpkgs.sourceInfo.rev}.tar.gz";
 
     # Use my binary cache
     binaryCaches = let
