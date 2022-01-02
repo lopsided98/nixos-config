@@ -283,11 +283,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1641143773,
-        "narHash": "sha256-56tSxPd8l3QnUsRe0kT4zuLnKgx0eaBgb7rOfhNR4Lg=",
+        "lastModified": 1641143972,
+        "narHash": "sha256-v3U3DsVHfB6ubBZYkQUxg38ohVG2qHlhf0fG22XwPvg=",
         "owner": "lopsided98",
         "repo": "nixos-secrets",
-        "rev": "400ace1bb4fdc152af4d2a96eb877640f4139782",
+        "rev": "d4f80c5fc3af208779ec71fdfaef9cfd340f1c7b",
         "type": "github"
       },
       "original": {
