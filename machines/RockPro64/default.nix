@@ -4,6 +4,7 @@ with lib;
 
 let
   interface = "eth0";
+  address = "192.168.1.7";
 in {
   imports = [
     # Include the results of the hardware scan.
@@ -19,18 +20,28 @@ in {
     kernelPackages = lib.mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
   };
 
+  local.networking.vpn.home.tap.client = {
+    enable = true;
+    macAddress = "b2:5e:ef:50:6a:ff";
+    certificate = ./vpn/home/client.crt;
+    privateKeySecret = secrets.RockPro64.vpn.home.privateKey;
+  };
   systemd.network = {
     enable = true;
     networks = {
+      # Use a different MAC address on physical interface, because the normal MAC
+      # is used on the VPN in order to get consistent IPs.
       "30-${interface}" = {
         name = interface;
-        address = [ "192.168.1.7/24" ];
-        gateway = [ "192.168.1.1" ];
-        dns = [ "192.168.1.2" "2601:18a:0:85e0:ba27:ebff:fe5e:6b6e" ];
-        dhcpConfig.UseDNS = false;
+        DHCP = "ipv4";
+        linkConfig.MACAddress = "ba:4b:f9:9b:f1:88";
+      };
+
+      "50-vpn-home-tap-client" = {
+        address = [ "${address}/24" ];
         extraConfig = ''
           [IPv6AcceptRA]
-          UseDNS=no
+          UseDNS=false
         '';
       };
     };
@@ -46,16 +57,6 @@ in {
   };
 
   # List services that you want to enable:
-
-  # Power usage logging
-  local.services.rtlamr.enable = true;
-  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
-
-  # Deluge torrent client
-  local.services.deluge = {
-    enable = true;
-    downloadDir = "/var/lib/torrents";
-  };
 
   services.openssh = {
     ports = [ 4247 ];
