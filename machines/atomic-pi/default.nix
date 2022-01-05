@@ -106,6 +106,10 @@ in {
     "${config.hardware.bluetooth.package}/libexec/bluetooth/bluetoothd -d -f /etc/bluetooth/main.conf"
   ];*/
 
+  # Power usage logging
+  local.services.rtlamr.enable = true;
+  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
+
   services.openssh = {
     ports = [ 4286 ];
     hostKeys = [
