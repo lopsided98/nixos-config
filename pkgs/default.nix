@@ -35,8 +35,6 @@ in {
 
   watchdog = self.callPackage ./watchdog { };
 
-  water-level-base-station = self.callPackage ./water-level-base-station { };
-
   python27 = pythonOverridesFor super.python27;
   python36 = pythonOverridesFor super.python36;
   python37 = pythonOverridesFor super.python37;
