@@ -491,11 +491,11 @@
         "nix-ros-overlay": "nix-ros-overlay_2"
       },
       "locked": {
-        "lastModified": 1641665391,
-        "narHash": "sha256-wte+WtzvcNVDgkzhyGXTOM+y17p0l7Tuqw/9n9mQgU4=",
+        "lastModified": 1641665628,
+        "narHash": "sha256-eYMSH+Z1e/U6rT61fSG/AJwWvJGn39Ztan+M6WEUqh0=",
         "ref": "master",
-        "rev": "f2ee5b6d5a99ea3e5a805f01cac2c416f342f4c4",
-        "revCount": 51,
+        "rev": "5f1cacfa5923971e0a78d9e37c1b591cd8305331",
+        "revCount": 52,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
