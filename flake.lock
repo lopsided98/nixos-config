@@ -283,11 +283,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1641303611,
-        "narHash": "sha256-rX8LxSD93Uocw0qmTAU27IXT6UxJ4RyIdIY90KUJQ/I=",
+        "lastModified": 1641662359,
+        "narHash": "sha256-23RcKs9ecWH4gb+bf+8/o7YfidLZ+TxbHqjdl70O7g8=",
         "owner": "lopsided98",
         "repo": "nixos-secrets",
-        "rev": "6e46fb122422748e6293c04c3174e88fa80a6bc1",
+        "rev": "07c8bacac485c56674d331b5adc30623dc224d39",
         "type": "github"
       },
       "original": {
@@ -376,11 +376,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1640871638,
-        "narHash": "sha256-ty6sGnJUQEkCd43At5U3DRQZD7rPARz5VginSW6hZ3k=",
+        "lastModified": 1641528457,
+        "narHash": "sha256-FyU9E63n1W7Ql4pMnhW2/rO9OftWZ37pLppn/c1aisY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5b091d4fbe3b7b7493c3b46fe0842e4b30ea24b3",
+        "rev": "ff377a78794d412a35245e05428c8f95fef3951f",
         "type": "github"
       },
       "original": {
@@ -506,11 +506,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1641346079,
-        "narHash": "sha256-LOKwSQCEvI14y8f5tKT2ZSu4Qy+eC/Jsi1H8uU8/4BE=",
+        "lastModified": 1641662298,
+        "narHash": "sha256-xnxvOC108zh0z3hQXZAK3dMGL+bWKqdYVOzwXkibKZQ=",
         "ref": "master",
-        "rev": "4d9f55c633353c61494f124d93aa445c34540ec3",
-        "revCount": 74,
+        "rev": "30f305065e9d0d23e4446f0c1c8f9f45a39be7aa",
+        "revCount": 76,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
