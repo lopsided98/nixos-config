@@ -15,7 +15,7 @@ in {
       ../../modules
     ];
 
-  # local.profiles.headless = true;
+  local.profiles.headless = true;
   # SpiderMonkey doesn't build on 32-bit (OOM)
   security.polkit.enable = false;
 
@@ -78,12 +78,6 @@ in {
   # Quassel core (IRC)
   services.quassel = {
     enable = true;
-    # Try to cut down on GUI deps
-    package = pkgs.quasselDaemon.override {
-      qtbase = pkgs.qt5.qtbase.override {
-        withGtk3 = false;
-      };
-    };
     portNumber = 4600;
     interfaces = [ "0.0.0.0" ];
     dataDir = "/var/lib/quassel";

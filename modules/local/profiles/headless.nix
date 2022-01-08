@@ -13,5 +13,14 @@ with lib;
 
   config = mkIf config.local.profiles.headless {
     environment.noXlibs = true;
+
+    nixpkgs.overlays = singleton (const (super: {
+      qt515 = super.qt515.overrideScope' (const (super: {
+        # Build Qt without Gtk. The other GUI deps can't be disabled right now.
+        qtbase = super.qtbase.override {
+          withGtk3 = false;
+        };
+      }));
+    }));
   };
 }
