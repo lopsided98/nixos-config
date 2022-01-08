@@ -15,6 +15,10 @@ in {
       ../../modules
     ];
 
+  # local.profiles.headless = true;
+  # SpiderMonkey doesn't build on 32-bit (OOM)
+  security.polkit.enable = false;
+
   boot = {
     loader = {
       grub.enable = false;
@@ -42,9 +46,6 @@ in {
 
   # Set SSH port
   services.openssh.ports = [ 4242 ];
-
-  # SpiderMonkey doesn't build on 32-bit (OOM)
-  security.polkit.enable = false;
 
   # System metrics logging
   local.services.telegraf = {
