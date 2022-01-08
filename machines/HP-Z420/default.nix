@@ -147,6 +147,12 @@ in rec {
     SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="doorman"
   '';*/
 
+  # Deluge torrent client
+  local.services.deluge = {
+    enable = true;
+    downloadDir = "/var/lib/torrents";
+  };
+
   local.services.backup = {
     server = {
       enable = true;
