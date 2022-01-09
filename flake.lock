@@ -422,11 +422,11 @@
     },
     "nixpkgs_7": {
       "locked": {
-        "lastModified": 1641230035,
-        "narHash": "sha256-hFyqihERaTbLxCOlugy/rpp22VLtLh8SPRnA2uu3F/8=",
+        "lastModified": 1641528457,
+        "narHash": "sha256-FyU9E63n1W7Ql4pMnhW2/rO9OftWZ37pLppn/c1aisY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "78cd22c1b8604de423546cd49bfe264b786eca13",
+        "rev": "ff377a78794d412a35245e05428c8f95fef3951f",
         "type": "github"
       },
       "original": {
@@ -526,11 +526,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1641417656,
-        "narHash": "sha256-VyWoH/ROO+dLuUqhpEVOQjvJ3osfqu7xbSR1YjdTGss=",
+        "lastModified": 1641694432,
+        "narHash": "sha256-vZRCrcNSmOdp1p3NWREa2buVSyJ5nMn3JyRMcD3ZPOk=",
         "owner": "lopsided98",
         "repo": "WaterLevelMonitor",
-        "rev": "67a465b606b4ef3120b1a3660e965f36b0576a5d",
+        "rev": "d26a1a87d0c04a5e7585de3f332d7e2943955176",
         "type": "github"
       },
       "original": {
