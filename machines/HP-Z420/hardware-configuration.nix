@@ -57,6 +57,6 @@
     };
   };
 
-  nix.maxJobs = lib.mkDefault 8;
-  nix.buildCores = lib.mkDefault 8;
+  nix.settings.max-jobs = lib.mkDefault 8;
+  nix.settings.cores = lib.mkDefault 8;
 }

@@ -9,6 +9,6 @@
       fsType = "ext4";
     };
 
-  nix.maxJobs = 2;
-  nix.buildCores = lib.mkDefault 4;
+  nix.settings.max-jobs = 2;
+  nix.settings.cores = lib.mkDefault 4;
 }

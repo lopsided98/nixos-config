@@ -107,32 +107,37 @@
     };
   };
 
-  # Set local maxJobs based on remote builder configuration.
-  nix.maxJobs = lib.mkDefault (config.system.buildMachines.${config.networking.hostName}.maxJobs or 1);
-
   nix = {
-    trustedUsers = [ "build" ];
     distributedBuilds = true;
-    autoOptimiseStore = true;
+
+    settings = {
+      # Set local maxJobs based on remote builder configuration.
+      max-jobs = lib.mkDefault (config.system.buildMachines.${config.networking.hostName}.maxJobs or 1);
+      trusted-users = [ "build" ];
+      auto-optimise-store = true;
+      builders-use-substitutes = true;
+      
+      # Use my binary cache
+      substituters = let
+        isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
+      in [ "https://ros.cachix.org" ] ++
+        lib.optional (!isHydra) "https://hydra.benwolsieffer.com";
+      trusted-public-keys = [
+        "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
+        "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
+      ];
+
+      min-free = toString (1024 * 1024 * 1024);
+      max-free = toString (4096 * 1024 * 1024);
+    };
+    # Causes infinite recursion in in nix.settings
     extraOptions = ''
-      builders-use-substitutes = true
       netrc-file = ${secrets.getSystemdSecret "nix" secrets.hydra.netrc}
-      min-free = ${toString (1024 * 1024 * 1024)}
-      max-free = ${toString (4096 * 1024 * 1024)}
     '';
+
     nixPath =
       lib.optional (lib.hasAttr "rev" inputs.nixpkgs.sourceInfo)
         "nixpkgs=https://github.com/lopsided98/nixpkgs/archive/${inputs.nixpkgs.sourceInfo.rev}.tar.gz";
-
-    # Use my binary cache
-    binaryCaches = let
-      isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
-    in [ "https://ros.cachix.org" ] ++
-      lib.optional (!isHydra) "https://hydra.benwolsieffer.com";
-    binaryCachePublicKeys = [
-      "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
-      "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
-    ];
   };
 
   # Global SSH configuration for distributed builds
@@ -244,7 +249,7 @@
     # Pretend I read the terms and conditions
     # This is totally legally binding...
     acceptTerms = true;
-    email = "benwolsieffer@gmail.com";
+    defaults.email = "benwolsieffer@gmail.com";
   };
 
   systemd.secrets.nix = {
