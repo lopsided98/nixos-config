@@ -224,11 +224,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1644538203,
-        "narHash": "sha256-yrbiuvkzsvbiALteVJCyj2TNekJLDrpnoLkCfTJSDbA=",
+        "lastModified": 1646846920,
+        "narHash": "sha256-cusCO8c5HSYIsyJ6YPMdYQdG2T3FIY2MGT62fbE/JOs=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "d28a39debdb152610b21a9b432c817b2f74bdec1",
+        "rev": "58251544893cd76d711a040e2792e888bd07ce12",
         "type": "github"
       },
       "original": {
@@ -312,11 +312,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1644616259,
-        "narHash": "sha256-9buai4yONYB7d/EMxzMnpz79auFfLuAuYaj4jV1iOp4=",
+        "lastModified": 1646851863,
+        "narHash": "sha256-RRBqK6twCqWM8nAKrhIt7cSFnUjI6p9m/3w8NMA7jx0=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "b61875f468c588b2379cfe17d338636ef07c3b9b",
+        "rev": "f4ade48170326c2a1ead3d5773281684dd18151f",
         "type": "github"
       },
       "original": {
@@ -328,11 +328,11 @@
     },
     "nixpkgs-unstable-custom": {
       "locked": {
-        "lastModified": 1644540584,
-        "narHash": "sha256-YK4swhDtt+bHwNIiHrQq5rFisFZM5yh1vIDY+KQ5vzI=",
+        "lastModified": 1646849638,
+        "narHash": "sha256-Ywdfu0rPNp1p6WP+D4m/A7iZGjkpcQzFzcPGXyfa1rs=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "570245454fbb76b12f64e25bb151de65e95b0a8c",
+        "rev": "1f43a167f11b05922f0502f1adddb55a662e1630",
         "type": "github"
       },
       "original": {
@@ -491,11 +491,11 @@
         "nix-ros-overlay": "nix-ros-overlay_2"
       },
       "locked": {
-        "lastModified": 1641677541,
-        "narHash": "sha256-2rBYTmcMmzQyWRap3CEl4xcTGc0wrju40jHE+NtGth0=",
+        "lastModified": 1646255923,
+        "narHash": "sha256-g3g4zZz2IRCkpWU/SiKXeR/3FQsBb6YlBpQeMNetW9I=",
         "ref": "master",
-        "rev": "16d4a170247dc67fded1da618b6234ca5328dbc2",
-        "revCount": 53,
+        "rev": "6b0175461abdb4ae05e27b9b7edc9a45fd343b8c",
+        "revCount": 57,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
