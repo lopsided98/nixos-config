@@ -239,19 +239,6 @@ in rec {
     };
   };
 
-  # Libvirt
-  virtualisation.libvirtd = {
-    enable = true;
-    onShutdown = "shutdown";
-  };
-  users.users.ben.extraGroups = [ "libvirtd" ];
-
-  # VFIO/PCI Passthrough
-  # These modules must come before early modesetting
-  boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
-  # Quadro K4000
-  boot.extraModprobeConfig = "options vfio-pci ids=10de:11fa,10de:0e0b";
-
   networking.firewall.allowedTCPPorts = [
     8086 # InfluxDB
   ];
