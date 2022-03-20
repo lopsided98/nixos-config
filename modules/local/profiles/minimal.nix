@@ -29,7 +29,6 @@ with lib;
 
       nix = super.nix.override { withAWS = false; };
       nixUnstable = super.nixUnstable.override { withAWS = false; };
-      nixFlakes = super.nixFlakes.override { withAWS = false; };
 
       # Prevent building two versions of glibcLocales
       # This seems to break qemu
