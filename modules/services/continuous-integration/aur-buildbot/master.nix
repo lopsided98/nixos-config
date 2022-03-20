@@ -54,7 +54,7 @@ in {
       home = cfg.buildbotDir;
       user = "aur-buildbot";
       group = "aur-buildbot";
-      packages = with pkgs; [ git pacman ];
+      packages = with pkgs; [ git pacman gzip ];
       masterCfg = "${pkgs.aur-buildbot}/master/master.cfg";
     };
 
