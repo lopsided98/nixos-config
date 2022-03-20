@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aur";
-  version = "2018.8";
+  version = "2021.11.20.1";
 
   src = fetchurl {
-    url = "http://xyne.archlinux.ca/projects/python3-${pname}/src/python3-${pname}-${version}.tar.xz";
-    sha256 = "09if4a32dzg0j3haqxis6c90sknng9s2zs90mmp3z9dk0h9h3vni";
+    url = "https://xyne.dev/projects/python3-${pname}/src/python3-${pname}-${version}.tar.xz";
+    sha256 = "sha256-V93/aKPvGcXt5PcfioD5ezO6DSaoyfX3wG8W+jgici4=";
   };
 
   propagatedBuildInputs = [ pyalpm xcgf xcpf pyxdg ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "AUR-related modules and helper utilities (aurploader, aurquery, aurtomatic)";
-    homepage = "https://xyne.archlinux.ca/projects/python3-aur/";
+    homepage = "https://xyne.dev/projects/python3-aur/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lopsided98 ];
   };

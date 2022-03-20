@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "memoizedb";
-  version = "2017.3.30";
+  version = "2021";
 
   src = fetchurl {
-    url = "http://xyne.archlinux.ca/projects/python3-${pname}/src/python3-${pname}-${version}.tar.xz";
-    sha256 = "1knkqghrkkajriv6zw5bf9iz37pzjc94h4a6f9q1chrwznfy9v26";
+    url = "https://xyne.dev/projects/python3-${pname}/src/python3-${pname}-${version}.tar.xz";
+    sha256 = "sha256-Ttw7bGWBLCvqcM645KEbkRUZo3bDPHiEF3+NzXcVB0Q=";
   };
 
   meta = with lib; {
     description = "Generic data retrieval memoizer that uses an sqlite database to cache data";
-    homepage = "https://xyne.archlinux.ca/projects/python3-memoizedb/";
+    homepage = "https://xyne.dev/projects/python3-memoizedb/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ lopsided98 ];
   };
