@@ -29,6 +29,16 @@
       fsType = "zfs";
     };
 
+    "/nix" = {
+      device = "root/nix";
+      fsType = "zfs";
+    };
+
+    "/var" = {
+      device = "root/var";
+      fsType = "zfs";
+    };
+
     "/var/lib/docker" = {
       device = "root/root/docker";
       fsType = "zfs";
