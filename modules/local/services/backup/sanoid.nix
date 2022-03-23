@@ -15,7 +15,17 @@ in {
     services.sanoid = {
       enable = true;
       templates = {
-        local = {
+        system = {
+          hourly = 24;
+          daily = 5;
+          monthly = 1;
+          yearly = 0;
+
+          autosnap = true;
+          autoprune = true;
+        };
+
+        data = {
           hourly = 48;
           daily = 10;
           monthly = 1;

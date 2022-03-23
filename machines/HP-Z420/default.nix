@@ -170,17 +170,17 @@ in rec {
 
   services.sanoid = {
     datasets = {
-      "root/root" = {
-        use_template = [ "local" ];
-      };
-      "root/home" = {
-        use_template = [ "local" ];
-      };
-      "root/vm" = {
-        use_template = [ "local" ];
+      "root/data" = {
+        use_template = [ "data" ];
+        # Not allowed in template
         recursive = true;
-        process_children_only = true;
       };
+      "root/system" = {
+        use_template = [ "system" ];
+        # Not allowed in template
+        recursive = true;
+      };
+
       # Each backup node takes its own snapshots of data
       "backup/data" = {
         use_template = [ "backup" ];
@@ -215,10 +215,8 @@ in rec {
   in {
     commonArgs = [ "--sshport" "4247" ];
     commands = {
-      "root/root".target = "backup/backups/HP-Z420/root";
-      "root/home".target = "backup/backups/HP-Z420/home";
-      "root/vm" = {
-        target = "backup/backups/HP-Z420/vm";
+      "root" = {
+        target = "backup/backups/HP-Z420";
         recursive = true;
         extraArgs = [ "--skip-parent" ];
       };
