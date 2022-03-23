@@ -103,6 +103,17 @@ in {
         tcpserver -HRDl0 0.0.0.0 ${toString cfg.port} tinysshd -v /etc/tinyssh/sshkeydir &
       '';
 
+      postMountCommands = ''
+        # Stop tinyssh cleanly before stage 2.
+        #
+        # If you want to keep it around to debug post-mount SSH issues,
+        # run `touch /.keep_tinyssh` (either from an SSH session or in
+        # another initrd hook like preDeviceCommands).
+        if ! [ -e /.keep_tinyssh ]; then
+          pkill -x tcpserver
+        fi
+      '';
+
       secrets = {
         # Not a secret, but there seems to be no other way to include it.
         "/etc/tinyssh/sshkeydir/ed25519.pk" = cfg.hostEd25519Key.publicKey;
