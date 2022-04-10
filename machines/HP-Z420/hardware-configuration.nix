@@ -25,27 +25,27 @@
 
   fileSystems = {
     "/" = {
-      device = "root/root";
+      device = "root/system/root";
       fsType = "zfs";
     };
 
     "/nix" = {
-      device = "root/nix";
+      device = "root/system/nix";
       fsType = "zfs";
     };
 
     "/var" = {
-      device = "root/var";
+      device = "root/data/var";
       fsType = "zfs";
     };
 
     "/var/lib/docker" = {
-      device = "root/root/docker";
+      device = "root/local/docker";
       fsType = "zfs";
     };
 
     "/home" = {
-      device = "root/home";
+      device = "root/data/home";
       fsType = "zfs";
     };
 
