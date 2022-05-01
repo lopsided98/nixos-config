@@ -3,8 +3,8 @@
   services.hydra = {
     enable = true;
     package = (pkgs.hydra-unstable.override {
-      # Not yet compatible with newer Nix versions
-      nix = pkgs.nixVersions.nix_2_6;
+      # 2.4 is the last version before they started breaking everything
+      nix = pkgs.nixVersions.nix_2_4;
     }).overrideAttrs ({ patches ? [], ... }: {
       patches = patches ++ [
         # Fix queue getting stuck
@@ -34,12 +34,15 @@
     };
   };
 
-  nix.extraOptions = ''
-    # Allow Hydra to build flakes
-    experimental-features = nix-command flakes
-    # Allow Hydra to access SSH URIs in flakes (I think this is a Nix bug)
-    allowed-uris = ssh://
-  '';
+  nix = {
+    package = pkgs.nixVersions.nix_2_4;
+    extraOptions = ''
+      # Allow Hydra to build flakes
+      experimental-features = nix-command flakes
+      # Allow Hydra to access SSH URIs in flakes (I think this is a Nix bug)
+      allowed-uris = ssh://
+    '';
+  };
 
   # Deploy keys for private repositories
   programs.ssh.extraConfig = ''
