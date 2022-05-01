@@ -9,6 +9,7 @@
     zeus-audio.url = "github:lopsided98/zeus_audio";
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
+    hydra.url = "github:NixOS/hydra";
     freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     nix-sdr.url = "github:lopsided98/nix-sdr";
     radonpy.url = "github:lopsided98/radonpy";
@@ -93,6 +94,7 @@
           secrets.nixosModule
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
+          hydra.nixosModules.hydra
           nix-sdr.nixosModule
           radonpy.nixosModule
           water-level-monitor.nixosModule

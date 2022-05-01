@@ -1,19 +1,7 @@
 { config, lib, pkgs, secrets, ... }: with lib; {
 
-  services.hydra = {
+  services.hydra-dev = {
     enable = true;
-    package = (pkgs.hydra-unstable.override {
-      # 2.4 is the last version before they started breaking everything
-      nix = pkgs.nixVersions.nix_2_4;
-    }).overrideAttrs ({ patches ? [], ... }: {
-      patches = patches ++ [
-        # Fix queue getting stuck
-        (pkgs.fetchpatch {
-          url = "https://github.com/lopsided98/hydra/commit/27ebf1e56b24662e4dd36c842556cbe1144057c1.patch";
-          sha256 = "sha256-YE+qL5lrtxNY/DzxuAEkaeTVGDuEQxCNmBFlbJv30b0=";
-        })
-      ];
-    });
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
     port = 8080;
@@ -25,7 +13,7 @@
   };
 
   services.postgresql = {
-    package = pkgs.postgresql_11;
+    package = pkgs.postgresql_13;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
     settings = {
       max_connections = 250;
@@ -34,14 +22,11 @@
     };
   };
 
-  nix = {
-    package = pkgs.nixVersions.nix_2_4;
-    extraOptions = ''
-      # Allow Hydra to build flakes
-      experimental-features = nix-command flakes
-      # Allow Hydra to access SSH URIs in flakes (I think this is a Nix bug)
-      allowed-uris = ssh://
-    '';
+  nix.settings = {
+    # Allow Hydra to build flakes
+    experimental-features = "nix-command flakes";
+    # Allow Hydra to access SSH URIs in flakes
+    allowed-uris = "ssh://";
   };
 
   # Deploy keys for private repositories
@@ -91,7 +76,7 @@
 
     virtualHosts = {
       "hydra.benwolsieffer.com" = let
-        proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+        proxyPass = "http://127.0.0.1:${toString config.services.hydra-dev.port}";
         cacheConfig = ''
           proxy_cache hydra;
           proxy_cache_valid 1w;
