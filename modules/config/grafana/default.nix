@@ -17,6 +17,9 @@ in {
       passwordFile = secrets.getSystemdSecret "grafana" secrets.grafana.gmailPassword;
       fromAddress = "grafana@benwolsieffer.com";
     };
+
+    # Enable XYChart
+    extraOptions.PANELS_ENABLE_ALPHA = "true";
   };
 
   systemd.services.grafana = {
