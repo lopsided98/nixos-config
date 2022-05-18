@@ -51,7 +51,7 @@
   time.timeZone = "America/New_York";
 
   # Packages considered absolutely essential for all machines
-  # Add other useful but less critical packages to standard profile, so they
+  # Add other useful but less critical packages to the standard profile, so they
   # won't be included in the minimal profile.
   environment = {
     systemPackages = with pkgs; [
@@ -108,6 +108,9 @@
   };
 
   nix = {
+    # Nix flake overlay (pulled in by Hydra flake) makes "nix" point to an
+    # unstable version.
+    package = pkgs.nixStable;
     distributedBuilds = true;
 
     settings = {

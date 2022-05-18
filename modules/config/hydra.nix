@@ -1,4 +1,4 @@
-{ config, lib, pkgs, secrets, ... }: with lib; {
+{ config, lib, pkgs, secrets, inputs, ... }: with lib; {
 
   services.hydra-dev = {
     enable = true;
