@@ -38,10 +38,8 @@ in {
           inherit dns;
           dhcpV4Config.UseDNS = false;
           dhcpV6Config.UseDNS = false;
-          extraConfig = ''
-            [IPv6AcceptRA]
-            UseDNS=no
-          '';
+          networkConfig.IPv6AcceptRA = false;
+          ipv6AcceptRAConfig.UseDNS = false;
         }
         (if cfg.ipv4Address == null then {
           DHCP = "ipv4";
