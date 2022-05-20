@@ -1,0 +1,15 @@
+/dts-v1/;
+/plugin/;
+
+/* Disable serial console to allow use for other applications. */
+
+/{
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target-path = "/chosen";
+		__overlay__ {
+			stdout-path = "";
+		};
+	};
+};

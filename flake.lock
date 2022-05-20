@@ -125,11 +125,11 @@
     },
     "flake-utils_5": {
       "locked": {
-        "lastModified": 1638122382,
-        "narHash": "sha256-sQzZzAbvKEqN9s0bzWuYmRaA03v40gaJ4+iL1LXjaeI=",
+        "lastModified": 1652776076,
+        "narHash": "sha256-gzTw/v1vj4dOVbpBSJX4J0DwUR6LIyXo7/SuuTJp1kM=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "74f7e4319258e287b0f9cb95426c9853b282730b",
+        "rev": "04c1b180862888302ddfb2e3ad9eaa63afc60cf8",
         "type": "github"
       },
       "original": {
@@ -359,11 +359,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1641662576,
-        "narHash": "sha256-vBDgzpU8nVBD0h7wApXlGBuxYR50L+pvb94sfrC3dp0=",
+        "lastModified": 1653066690,
+        "narHash": "sha256-jdVdmXrp1jJZ7M5RFD2oN/NGms945vf/Uu6gjmQLFME=",
         "owner": "lopsided98",
         "repo": "nixos-secrets",
-        "rev": "3bea02209db33fb10aa1526985d803b2d9671cd3",
+        "rev": "948e6240859481583e3de8070e7851322c966d4b",
         "type": "github"
       },
       "original": {
@@ -482,11 +482,11 @@
     },
     "nixpkgs_5": {
       "locked": {
-        "lastModified": 1641528457,
-        "narHash": "sha256-FyU9E63n1W7Ql4pMnhW2/rO9OftWZ37pLppn/c1aisY=",
+        "lastModified": 1652885393,
+        "narHash": "sha256-YIgvvlk4iQ1Hi7KD9o5gsojc+ApB+jiH1d5stK8uXiw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "ff377a78794d412a35245e05428c8f95fef3951f",
+        "rev": "48037fd90426e44e4bf03e6479e88a11453b9b66",
         "type": "github"
       },
       "original": {
@@ -598,11 +598,11 @@
         "nix-ros-overlay": "nix-ros-overlay_2"
       },
       "locked": {
-        "lastModified": 1651430219,
-        "narHash": "sha256-Fqfh4ydUqlpmGaUMhRQ3+tNfhWyXnwaYVrHutzyb9P0=",
+        "lastModified": 1652923969,
+        "narHash": "sha256-+zwv6xpA1bXxPKyhbdR56lWhd5fcHVhfXF1blJfB0t4=",
         "ref": "master",
-        "rev": "cf9aa35c94b8b51a829d13c275f3165608bd36cb",
-        "revCount": 86,
+        "rev": "e7049c2c7c30264dda4e4919d214032e506a8484",
+        "revCount": 90,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git"
       },
@@ -613,11 +613,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1641662298,
-        "narHash": "sha256-xnxvOC108zh0z3hQXZAK3dMGL+bWKqdYVOzwXkibKZQ=",
+        "lastModified": 1653066646,
+        "narHash": "sha256-Psl33X1o22H3H3Jxb3ZLMR9II98ZX9ij3cs8VWk37K0=",
         "ref": "master",
-        "rev": "30f305065e9d0d23e4446f0c1c8f9f45a39be7aa",
-        "revCount": 76,
+        "rev": "9a8982220951cf05e298d48dd5e5e31fadb3e42c",
+        "revCount": 78,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
