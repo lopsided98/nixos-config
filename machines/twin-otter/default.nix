@@ -45,6 +45,8 @@ in {
     ];
   };
 
+  environment.systemPackages = [ tcpdump dhcpcd ];
+
   # WiFi configuration
 
   boot.extraModprobeConfig = ''
