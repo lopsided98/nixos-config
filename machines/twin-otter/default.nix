@@ -19,6 +19,7 @@ in {
   sdImage = {
     firmwarePartitionID = "0x87b76516";
     rootPartitionUUID = "c1f10940-ab67-43df-915f-2eab9432f62b";
+    compressImage = false;
   };
 
   boot.loader.raspberryPi = {
@@ -58,6 +59,9 @@ in {
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
   '';
 
+  services.resolved.extraConfig = "MulticastDNS=yes";
+
+  # Access point
   services.hostapd = {
     enable = true;
     interface = "ap0";
@@ -67,30 +71,25 @@ in {
       wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.twin-otter.hostapd.wpaPsk}
     '';
   };
-
-  services.resolved.extraConfig = "MulticastDNS=yes";
   systemd.network = {
     enable = true;
-    # Access point
-    networks = {
-      "30-ap0" = {
-        name = "ap0";
-        address = [ "10.12.0.1/24" ];
-        networkConfig = {
-          DHCPServer = true;
-          IPv6SendRA = true;
-          MulticastDNS = true;
-        };
-        dhcpServerConfig = {
-          EmitDNS = false;
-          EmitNTP = false;
-        };
-        ipv6SendRAConfig.EmitDNS = false;
+    networks."30-ap0" = {
+      name = "ap0";
+      address = [ "10.12.0.1/24" ];
+      networkConfig = {
+        DHCPServer = true;
+        MulticastDNS = true;
       };
-      "30-home".networkConfig.MulticastDNS = "yes";
+      dhcpServerConfig = {
+        EmitDNS = false;
+        EmitNTP = false;
+      };
     };
   };
-  local.networking.wireless.home = {
+  # DHCP server
+  networking.firewall.allowedUDPPorts = [ 67 ];
+
+  local.networking.wireless.eduroam = {
     enable = true;
     interface = "wlan0";
   };
@@ -116,10 +115,10 @@ in {
       threshold = 30;
     };
     extraConfig = ''
-      # Pixhawk GPS time from ntpd_driver ROS node. Owned by root:root so we
-      # have to make it world writable to allow ntpd_driver to write to it
-      # Transmission delays usually cause it to be ~60-80 ms off NTP time (no
-      # idea if this will stay constant over time)
+      # GPS time from ntpd_driver ROS node. Owned by root:root so we have to
+      # make it world writable to allow ntpd_driver to write to it. Transmission
+      # delays usually cause it to be ~60-80 ms off NTP time (no idea if this
+      # will stay constant over time)
       refclock SHM 0:perm=0666 delay 0.5 offset 0.070 refid GPS
 
       # Allow GPS to step clock
