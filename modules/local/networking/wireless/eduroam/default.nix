@@ -22,13 +22,21 @@ in {
     networking.wireless = {
       enable = true;
       interfaces = [ cfg.interface ];
-    };
-
-    environment.etc = {
-      "wpa_supplicant.conf" = mkForce {
-        source = secrets.getSystemdSecret "wpa_supplicant" secrets.wpaSupplicant.eduroam;
+      environmentFile = secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam;
+      networks.eduroam = {
+        authProtocols = [ "WPA-EAP" ];
+        auth = ''
+          pairwise=CCMP
+          group=CCMP TKIP
+          eap=PEAP
+          ca_cert="${./eduroam_ca.pem}"
+          identity="@EDUROAM_NETID@@dartmouth.edu"
+          altsubject_match="DNS:radius.dartmouth.edu"
+          phase2="auth=MSCHAPV2"
+          password="@EDUROAM_PASSWORD@"
+          anonymous_identity="anonymous@dartmouth.edu"
+        '';
       };
-      "wpa_supplicant/eduroam_ca.pem".source = ./eduroam_ca.pem;
     };
 
     systemd.network = {
@@ -39,7 +47,7 @@ in {
       };
     };
 
-    systemd.secrets.wpa_supplicant = {
+    systemd.secrets.wpa_supplicant-eduroam = {
       files = secrets.mkSecret secrets.wpaSupplicant.eduroam { };
       units = singleton "wpa_supplicant-${cfg.interface}.service";
     };

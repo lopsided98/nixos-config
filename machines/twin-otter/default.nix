@@ -45,8 +45,6 @@ in {
     ];
   };
 
-  environment.systemPackages = [ tcpdump dhcpcd ];
-
   # WiFi configuration
 
   boot.extraModprobeConfig = ''
@@ -91,6 +89,7 @@ in {
   # DHCP server
   networking.firewall.allowedUDPPorts = [ 67 ];
 
+  # eduroam
   local.networking.wireless.eduroam = {
     enable = true;
     interface = "wlan0";
