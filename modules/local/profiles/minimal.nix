@@ -22,6 +22,7 @@ with lib;
     programs.command-not-found.enable = mkDefault false;
     xdg.mime.enable = mkDefault false;
     i18n.supportedLocales = mkDefault [ "en_US.UTF-8/UTF-8" ];
+    system.disableInstallerTools = true;
 
     nixpkgs.overlays = singleton (const (super: {
       # Avoid transitive dependency on polkit and others

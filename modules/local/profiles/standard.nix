@@ -19,6 +19,7 @@ with lib;
       rsync
       linuxPackages_latest.tmon
       bmon
+      iotop
       git
       file
       vim

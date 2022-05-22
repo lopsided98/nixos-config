@@ -56,7 +56,6 @@
   environment = {
     systemPackages = with pkgs; [
       htop
-      iotop
       screen
       usbutils
     ];
