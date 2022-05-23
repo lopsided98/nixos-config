@@ -34,9 +34,7 @@ in {
 
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
-  nix.extraOptions = ''
-    extra-platforms = armv6l-linux
-  '';
+  nix.settings.extra-platforms = "armv6l-linux";
 
   environment.systemPackages = with pkgs; [
     pkgs.linuxPackages_latest.tmon
