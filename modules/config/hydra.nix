@@ -2,6 +2,8 @@
 
   services.hydra-dev = {
     enable = true;
+    # Use unstable Nix from flake
+    package = pkgs.nixUnstable;
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
     port = 8080;
