@@ -1,4 +1,4 @@
-From f3c9c33db71fdb0b288e0cdb83801180912ceea6 Mon Sep 17 00:00:00 2001
+From 469e5214213ad7a19961bb20cc12879f58d1d31f Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Fri, 28 May 2021 23:48:44 -0400
 Subject: [PATCH 1/2] ASoC: wm8960: enable mic bias network for electret mics
@@ -9,7 +9,7 @@ Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
-index 9d325555e219..35b5080ee422 100644
+index 499604f1e178..1abbc0dc278a 100644
 --- a/sound/soc/codecs/wm8960.c
 +++ b/sound/soc/codecs/wm8960.c
 @@ -405,6 +405,7 @@ SND_SOC_DAPM_PGA("OUT3 VMID", WM8960_POWER2, 1, 0, NULL, 0),
@@ -29,5 +29,5 @@ index 9d325555e219..35b5080ee422 100644
  	{ "Right Boost Mixer", "RINPUT2 Switch", "RINPUT2" },
  	{ "Right Boost Mixer", "RINPUT3 Switch", "RINPUT3" },
 -- 
-2.31.0
+2.36.1
 

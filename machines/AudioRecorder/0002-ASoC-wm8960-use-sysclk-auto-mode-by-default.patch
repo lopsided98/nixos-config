@@ -1,0 +1,171 @@
+From 7e8542fbec0aa73faf407ef89d8aa628abfe5b08 Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sun, 6 Jun 2021 13:09:20 -0400
+Subject: [PATCH 2/2] ASoC: wm8960: use sysclk auto mode by default
+
+Several places, most importantly Simple-Card, use a hardcoded clk_id of 0 to
+configure SYSCLK. Without this patch, this causes the driver to use MCLK to
+provide SYSCLK, without using the PLL. The driver also provides a sysclk auto
+mode, which automatically chooses whether to use the PLL. Excepting any bugs in
+the implementation, this mode should work in all cases and therefore makes a
+good default. The auto mode allows Simple-Card to work with the WM8960 in cases
+where the PLL is needed.
+
+Unfortunately, we can't simply change the clk_ids, since they are also used as
+register masks. Therefore, this patch introduces a new wm8960_sysclk_src enum
+to serve as the clk_id, based on examples from other drivers.
+
+Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
+---
+ sound/soc/codecs/wm8960.c                 | 20 ++++++++++----------
+ sound/soc/codecs/wm8960.h                 |  7 ++++++-
+ sound/soc/fsl/fsl-asoc-card.c             |  4 ++--
+ sound/soc/mediatek/mt2701/mt2701-wm8960.c |  5 +++--
+ 4 files changed, 21 insertions(+), 15 deletions(-)
+
+diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
+index 1abbc0dc278a..72aaa0461879 100644
+--- a/sound/soc/codecs/wm8960.c
++++ b/sound/soc/codecs/wm8960.c
+@@ -757,7 +757,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+ 		return 0;
+ 	}
+ 
+-	if (wm8960->clk_id != WM8960_SYSCLK_MCLK && !wm8960->freq_in) {
++	if (wm8960->clk_id != WM8960_SYSCLK_SRC_MCLK && !wm8960->freq_in) {
+ 		dev_err(component->dev, "No MCLK configured\n");
+ 		return -EINVAL;
+ 	}
+@@ -769,7 +769,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+ 	 * directly. Otherwise, auto select a available pll out frequency
+ 	 * and set PLL.
+ 	 */
+-	if (wm8960->clk_id == WM8960_SYSCLK_AUTO) {
++	if (wm8960->clk_id == WM8960_SYSCLK_SRC_AUTO) {
+ 		/* disable the PLL and using MCLK to provide sysclk */
+ 		wm8960_set_pll(component, 0, 0);
+ 		freq_out = freq_in;
+@@ -780,11 +780,11 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (wm8960->clk_id != WM8960_SYSCLK_PLL) {
++	if (wm8960->clk_id != WM8960_SYSCLK_SRC_PLL) {
+ 		ret = wm8960_configure_sysclk(wm8960, freq_out, &i, &j, &k);
+ 		if (ret >= 0) {
+ 			goto configure_clock;
+-		} else if (wm8960->clk_id != WM8960_SYSCLK_AUTO) {
++		} else if (wm8960->clk_id != WM8960_SYSCLK_SRC_AUTO) {
+ 			dev_err(component->dev, "failed to configure clock\n");
+ 			return -EINVAL;
+ 		}
+@@ -931,7 +931,7 @@ static int wm8960_set_bias_level_out3(struct snd_soc_component *component,
+ 			 * If it's sysclk auto mode, and the pll is enabled,
+ 			 * disable the pll
+ 			 */
+-			if (wm8960->clk_id == WM8960_SYSCLK_AUTO && (pm2 & 0x1))
++			if (wm8960->clk_id == WM8960_SYSCLK_SRC_AUTO && (pm2 & 0x1))
+ 				wm8960_set_pll(component, 0, 0);
+ 
+ 			if (!IS_ERR(wm8960->mclk))
+@@ -1052,7 +1052,7 @@ static int wm8960_set_bias_level_capless(struct snd_soc_component *component,
+ 			 * If it's sysclk auto mode, and the pll is enabled,
+ 			 * disable the pll
+ 			 */
+-			if (wm8960->clk_id == WM8960_SYSCLK_AUTO && (pm2 & 0x1))
++			if (wm8960->clk_id == WM8960_SYSCLK_SRC_AUTO && (pm2 & 0x1))
+ 				wm8960_set_pll(component, 0, 0);
+ 
+ 			if (!IS_ERR(wm8960->mclk))
+@@ -1236,7 +1236,7 @@ static int wm8960_set_dai_pll(struct snd_soc_dai *codec_dai, int pll_id,
+ 
+ 	wm8960->freq_in = freq_in;
+ 
+-	if (pll_id == WM8960_SYSCLK_AUTO)
++	if (pll_id == WM8960_SYSCLK_SRC_AUTO)
+ 		return 0;
+ 
+ 	return wm8960_set_pll(component, freq_in, freq_out);
+@@ -1291,15 +1291,15 @@ static int wm8960_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
+ 	struct wm8960_priv *wm8960 = snd_soc_component_get_drvdata(component);
+ 
+ 	switch (clk_id) {
+-	case WM8960_SYSCLK_MCLK:
++	case WM8960_SYSCLK_SRC_MCLK:
+ 		snd_soc_component_update_bits(component, WM8960_CLOCK1,
+ 					0x1, WM8960_SYSCLK_MCLK);
+ 		break;
+-	case WM8960_SYSCLK_PLL:
++	case WM8960_SYSCLK_SRC_PLL:
+ 		snd_soc_component_update_bits(component, WM8960_CLOCK1,
+ 					0x1, WM8960_SYSCLK_PLL);
+ 		break;
+-	case WM8960_SYSCLK_AUTO:
++	case WM8960_SYSCLK_SRC_AUTO:
+ 		break;
+ 	default:
+ 		return -EINVAL;
+diff --git a/sound/soc/codecs/wm8960.h b/sound/soc/codecs/wm8960.h
+index 63ba6c03c488..eb5e21611a15 100644
+--- a/sound/soc/codecs/wm8960.h
++++ b/sound/soc/codecs/wm8960.h
+@@ -79,7 +79,6 @@
+ 
+ #define WM8960_SYSCLK_MCLK		(0 << 0)
+ #define WM8960_SYSCLK_PLL		(1 << 0)
+-#define WM8960_SYSCLK_AUTO		(2 << 0)
+ 
+ #define WM8960_DAC_DIV_1		(0 << 3)
+ #define WM8960_DAC_DIV_1_5		(1 << 3)
+@@ -108,4 +107,10 @@
+ #define WM8960_OPCLK_DIV_5_5		(4 << 0)
+ #define WM8960_OPCLK_DIV_6		(5 << 0)
+ 
++enum wm8960_sysclk_src {
++	WM8960_SYSCLK_SRC_AUTO = 0,
++	WM8960_SYSCLK_SRC_MCLK,
++	WM8960_SYSCLK_SRC_PLL,
++};
++
+ #endif
+diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
+index 06107ae46e20..a426e995f189 100644
+--- a/sound/soc/fsl/fsl-asoc-card.c
++++ b/sound/soc/fsl/fsl-asoc-card.c
+@@ -637,8 +637,8 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
+ 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
+ 	} else if (of_device_is_compatible(np, "fsl,imx-audio-wm8960")) {
+ 		codec_dai_name = "wm8960-hifi";
+-		priv->codec_priv.fll_id = WM8960_SYSCLK_AUTO;
+-		priv->codec_priv.pll_id = WM8960_SYSCLK_AUTO;
++		priv->codec_priv.fll_id = WM8960_SYSCLK_SRC_AUTO;
++		priv->codec_priv.pll_id = WM8960_SYSCLK_SRC_AUTO;
+ 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
+ 	} else if (of_device_is_compatible(np, "fsl,imx-audio-ac97")) {
+ 		codec_dai_name = "ac97-hifi";
+diff --git a/sound/soc/mediatek/mt2701/mt2701-wm8960.c b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
+index 414e422c0eba..60a97379e118 100644
+--- a/sound/soc/mediatek/mt2701/mt2701-wm8960.c
++++ b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/module.h>
+ #include <sound/soc.h>
++#include <sound/wm8960.h>
+ 
+ #include "mt2701-afe-common.h"
+ 
+@@ -34,8 +35,8 @@ static int mt2701_wm8960_be_ops_hw_params(struct snd_pcm_substream *substream,
+ 
+ 	mclk_rate = rate * div_bck_over_lrck * div_mclk_over_bck;
+ 
+-	snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_rate, SND_SOC_CLOCK_OUT);
+-	snd_soc_dai_set_sysclk(codec_dai, 0, mclk_rate, SND_SOC_CLOCK_IN);
++	snd_soc_dai_set_sysclk(cpu_dai, WM8960_SYSCLK_SRC_MCLK, mclk_rate, SND_SOC_CLOCK_OUT);
++	snd_soc_dai_set_sysclk(codec_dai, WM8960_SYSCLK_SRC_MCLK, mclk_rate, SND_SOC_CLOCK_IN);
+ 
+ 	return 0;
+ }
+-- 
+2.36.1
+

@@ -1,5 +1,6 @@
 { device,
   totalDevices ? 16,
+  useWm8960 ? false,
   ap ? device == 1 }:
 
 { lib, config, pkgs, secrets, ... }:
@@ -38,20 +39,23 @@ in {
     loader.raspberryPi = {
       enable = true;
       version = 0;
-      firmwareConfig = ''
+      firmwareConfig = (if useWm8960 ''
         dtoverlay=wm8960-soundcard
+      '' else ''
+        dtoverlay=fe-pi-audio
+      '') + ''
         dtparam=audio=off
       '';
     };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
     kernelPatches = [
       {
-        name = "wm8960-enable-mic-bias";
+        name = "ASoC-wm8960-enable-mic-bias-network-for-electret-mic";
         patch = ./0001-ASoC-wm8960-enable-mic-bias-network-for-electret-mic.patch;
       }
       {
-        name = "wm8960-hardcode-clock-information";
-        patch = ./0002-ASoC-wm8960-hardcode-clock-information.patch;
+        name = "ASoC-wm8960-use-sysclk-auto-mode-by-default";
+        patch = ./0002-ASoC-wm8960-use-sysclk-auto-mode-by-default.patch;
       }
     ];
   };
