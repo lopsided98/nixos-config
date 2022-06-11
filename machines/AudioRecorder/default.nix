@@ -39,7 +39,7 @@ in {
     loader.raspberryPi = {
       enable = true;
       version = 0;
-      firmwareConfig = (if useWm8960 ''
+      firmwareConfig = (if useWm8960 then ''
         dtoverlay=wm8960-soundcard
       '' else ''
         dtoverlay=fe-pi-audio
