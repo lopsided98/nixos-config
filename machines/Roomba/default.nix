@@ -30,7 +30,7 @@
   local.networking = {
     wireless.home = {
       enable = true;
-      interface = "wlan0";
+      interfaces = [ "wlan0" ];
     };
     home = {
       enable = true;

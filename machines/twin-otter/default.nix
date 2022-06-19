@@ -92,7 +92,7 @@ in {
   # eduroam
   local.networking.wireless.eduroam = {
     enable = true;
-    interface = "wlan0";
+    interfaces = [ "wlan0" ];
   };
 
   networking.hostName = "twin-otter";
