@@ -22,7 +22,6 @@ in {
     networking.wireless = {
       enable = true;
       inherit (cfg) interfaces;
-      environmentFiles = singleton (secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam);
       networks.eduroam = {
         authProtocols = [ "WPA-EAP" ];
         auth = ''
@@ -30,14 +29,16 @@ in {
           group=CCMP TKIP
           eap=PEAP
           ca_cert="${./eduroam_ca.pem}"
-          identity="@EDUROAM_NETID@@dartmouth.edu"
+          identity="f002w9k@dartmouth.edu"
           altsubject_match="DNS:radius.dartmouth.edu"
           phase2="auth=MSCHAPV2"
-          password="@EDUROAM_PASSWORD@"
+          password=ext:EDUROAM_PASSWORD
           anonymous_identity="anonymous@dartmouth.edu"
         '';
       };
     };
+    local.networking.wireless.passwordFiles =
+      singleton (secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam);
 
     systemd.network = {
       enable = true;

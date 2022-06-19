@@ -22,12 +22,13 @@ in {
     networking.wireless = {
       enable = true;
       inherit (cfg) interfaces;
-      environmentFiles = singleton (secrets.getSystemdSecret "wpa_supplicant-home" secrets.wpaSupplicant.home);
       networks = {
-        Thunderbolt.psk = "@HOME_PASSWORD@";
-        Thunderbolt_5Ghz.psk = "@HOME_PASSWORD@";
+        Thunderbolt.pskRaw = "ext:HOME_PSK";
+        Thunderbolt_5Ghz.pskRaw = "ext:HOME_PSK";
       };
     };
+    local.networking.wireless.passwordFiles =
+      singleton (secrets.getSystemdSecret "wpa_supplicant-home" secrets.wpaSupplicant.home);
 
     local.networking.home = {
       enable = true;
