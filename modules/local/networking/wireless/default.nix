@@ -14,6 +14,7 @@ in {
 
   options.local.networking.wireless.passwordFiles = mkOption {
     type = types.listOf types.path;
+    default = [];
     description = "Password files to pass to ext_password_backend";
   };
 
@@ -21,8 +22,9 @@ in {
 
   config = {
     systemd.services = listToAttrs (map (unit: nameValuePair unit {
+      # /dev/null is included so this still works with no password files
       preStart = ''
-        cat ${escapeShellArgs localCfg.passwordFiles} > "$RUNTIME_DIRECTORY/passwords.conf"
+        cat ${escapeShellArgs localCfg.passwordFiles} /dev/null > "$RUNTIME_DIRECTORY/passwords.conf"
       '';
     }) units);
 
