@@ -25,8 +25,16 @@ with lib;
     enable = true;
     interfaces = [ "eth0" ];
   };
-  # Enable mDNS
-  systemd.network.networks."30-home".networkConfig.MulticastDNS = "yes";
+  local.networking.wireless = {
+    home = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
+    eduroam = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
+  };
 
   networking.hostName = "bone";
 

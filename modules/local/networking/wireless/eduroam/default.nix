@@ -10,9 +10,9 @@ in {
   options.local.networking.wireless.eduroam = {
     enable = mkEnableOption "eduroam WiFi network";
 
-    interface = mkOption {
-      type = types.str;
-      description = "Wireless network interface";
+    interfaces = mkOption {
+      type = types.listOf types.str;
+      description = "Wireless network interfaces";
     };
   };
 
@@ -21,8 +21,8 @@ in {
   config = mkIf cfg.enable {
     networking.wireless = {
       enable = true;
-      interfaces = [ cfg.interface ];
-      environmentFile = secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam;
+      inherit (cfg) interfaces;
+      environmentFiles = singleton (secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam);
       networks.eduroam = {
         authProtocols = [ "WPA-EAP" ];
         auth = ''
@@ -42,14 +42,15 @@ in {
     systemd.network = {
       enable = true;
       networks."30-eduroam" = {
-        name = cfg.interface;
+        name = concatStringsSep " " cfg.interfaces;
+        matchConfig.SSID = "eduroam";
         DHCP = "ipv4";
       };
     };
 
     systemd.secrets.wpa_supplicant-eduroam = {
       files = secrets.mkSecret secrets.wpaSupplicant.eduroam { };
-      units = singleton "wpa_supplicant-${cfg.interface}.service";
+      units = map (interface: "wpa_supplicant-${interface}.service") cfg.interfaces;
     };
   };
 }

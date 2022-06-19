@@ -21,8 +21,9 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = ''
-        Static IPv4 address to set. If not set, DHCP is used. Only really makes
-        sense with a single interface for now.
+        Static IPv4 address to set. If not set, DHCP is used. If more than one
+        interface is configured, this address will only be used on the first
+        and the rest will be configured with DHCP.
       '';
     };
   };
@@ -32,22 +33,25 @@ in {
   config = mkIf cfg.enable {
     systemd.network = {
       enable = true;
-      networks."30-home" = mkMerge [
-        {
-          name = concatStringsSep " " cfg.interfaces;
-          inherit dns;
-          dhcpV4Config.UseDNS = false;
-          dhcpV6Config.UseDNS = false;
-          networkConfig.IPv6AcceptRA = false;
-          ipv6AcceptRAConfig.UseDNS = false;
-        }
-        (if cfg.ipv4Address == null then {
-          DHCP = "ipv4";
-        } else {
-          address = [ cfg.ipv4Address ];
-          gateway = [ "192.168.1.1" ];
-        })
-      ];
+      networks = listToAttrs (imap0 (i: interface: {
+        name = "30-home-${interface}";
+        value = mkMerge [
+          {
+            name = interface;
+            inherit dns;
+            networkConfig.MulticastDNS = "yes";
+            dhcpV4Config.UseDNS = false;
+            dhcpV6Config.UseDNS = false;
+            ipv6AcceptRAConfig.UseDNS = false;
+          }
+          (if cfg.ipv4Address == null || i > 0 then {
+            DHCP = "ipv4";
+          } else {
+            address = [ cfg.ipv4Address ];
+            gateway = [ "192.168.1.1" ];
+          })
+        ];
+      }) cfg.interfaces);
     };
 
     # Fallback DNS config for systems that don't use resolved

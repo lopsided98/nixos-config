@@ -23,8 +23,6 @@ with lib;
     enable = true;
     interfaces = [ "eth0" ];
   };
-  # Enable mDNS
-  systemd.network.networks."30-home".networkConfig.MulticastDNS = "yes";
 
   networking.hostName = "bone-black";
 

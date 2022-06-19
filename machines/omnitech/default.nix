@@ -67,7 +67,7 @@ with lib;
 
   /*local.networking.wireless.home = {
     enable = true;
-    interface = "wlan0";
+    interfaces = [ "wlan0" ];
   };*/
 
   networking.hostName = "omnitech";

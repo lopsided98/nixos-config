@@ -10,9 +10,9 @@ in {
   options.local.networking.wireless.home = {
     enable = mkEnableOption "home WiFi network";
 
-    interface = mkOption {
-      type = types.str;
-      description = "Wireless network interface";
+    interfaces = mkOption {
+      type = types.listOf types.str;
+      description = "Wireless network interfaces";
     };
   };
 
@@ -21,21 +21,24 @@ in {
   config = mkIf cfg.enable {
     networking.wireless = {
       enable = true;
-      interfaces = [ cfg.interface ];
-    };
-
-    environment.etc."wpa_supplicant.conf" = mkForce {
-      source = secrets.getSystemdSecret "wpa_supplicant" secrets.wpaSupplicant.homeNetwork;
+      inherit (cfg) interfaces;
+      environmentFiles = singleton (secrets.getSystemdSecret "wpa_supplicant-home" secrets.wpaSupplicant.home);
+      networks.Thunderbolt.psk = "@HOME_PASSWORD@";
     };
 
     local.networking.home = {
       enable = true;
-      interfaces = [ cfg.interface ];
+      inherit (cfg) interfaces;
     };
 
-    systemd.secrets.wpa_supplicant = {
-      files = secrets.mkSecret secrets.wpaSupplicant.homeNetwork { };
-      units = singleton "wpa_supplicant-${cfg.interface}.service";
+    systemd.network.networks = listToAttrs (map (interface: {
+      name = "30-home-${interface}";
+      value = { matchConfig.SSID = "Thunderbolt Thunderbolt_5Ghz"; };
+    }) cfg.interfaces);
+
+    systemd.secrets.wpa_supplicant-home = {
+      files = secrets.mkSecret secrets.wpaSupplicant.home { };
+      units = map (interface: "wpa_supplicant-${interface}.service") cfg.interfaces;
     };
   };
 }

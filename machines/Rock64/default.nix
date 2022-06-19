@@ -16,19 +16,10 @@ in {
     generic-extlinux-compatible.enable = true;
   };
 
-  systemd.network = {
+  local.networking.home = {
     enable = true;
-    networks."30-${interface}" = {
-      name = interface;
-      address = [ "192.168.1.6/24" ];
-      gateway = [ "192.168.1.1" ];
-      dns = [ "192.168.1.2" "2601:18c:8380:79f0:ba27:ebff:fe5e:6b6e" ];
-      dhcpConfig.UseDNS = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
-    };
+    interfaces = [ interface ];
+    ipv4Address = "192.168.1.6/24";
   };
   networking.hostName = "Rock64"; # Define your hostname.
   networking.hostId = "566a7fd8";
