@@ -23,7 +23,10 @@ in {
       enable = true;
       inherit (cfg) interfaces;
       environmentFiles = singleton (secrets.getSystemdSecret "wpa_supplicant-home" secrets.wpaSupplicant.home);
-      networks.Thunderbolt.psk = "@HOME_PASSWORD@";
+      networks = {
+        Thunderbolt.psk = "@HOME_PASSWORD@";
+        Thunderbolt_5Ghz.psk = "@HOME_PASSWORD@";
+      };
     };
 
     local.networking.home = {
