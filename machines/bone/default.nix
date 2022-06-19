@@ -5,7 +5,7 @@ with lib;
 {
   imports = [
     ../../modules
-    ../../modules/local/machine/beagle-bone.nix
+    ../../modules/local/machine/beagle-bone
   ];
 
   # Enable cross-compilation
@@ -18,6 +18,8 @@ with lib;
     rootPartitionUUID = "de4bdabd-5b30-4339-9168-14fbd944184f";
     compressImage = false;
   };
+
+  local.machine.beagleBone.enableWirelessCape = true;
 
   local.networking.home = {
     enable = true;

@@ -10,9 +10,10 @@ let
   cfg = config.local.machine.beagleBone;
 in {
   # FIXME: find a way to import this from nixpkgs with flakes
-  imports = singleton ./sd-image.nix;
+  imports = singleton ../sd-image.nix;
 
   options.local.machine.beagleBone = {
+    enableWirelessCape = mkEnableOption "support for the Wireless Connectivity Cape";
   };
 
   config = {
@@ -43,5 +44,20 @@ in {
 
     # Enable SD card TRIM
     services.fstrim.enable = true;
+
+    hardware = mkIf cfg.enableWirelessCape {
+      deviceTree = {
+        filter = "am335x-bone*.dtb";
+        overlays = singleton {
+          name = "wifi-cape";
+          dtsFile = ./BB-GATEWAY-WL1837-00A0.dts;
+        };
+      };
+
+      firmware = singleton (pkgs.runCommand "wl18xx-firmware" {} ''
+        mkdir -p "$out/lib/firmware/ti-connectivity"
+        cp '${pkgs.linux-firmware}'/lib/firmware/ti-connectivity/wl18xx-*.bin "$out/lib/firmware/ti-connectivity"
+      '');
+    };
   };
 }

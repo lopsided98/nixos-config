@@ -5,7 +5,7 @@ with lib;
 {
   imports = [
     ../../modules
-    ../../modules/local/machine/beagle-bone.nix
+    ../../modules/local/machine/beagle-bone
   ];
 
   # Enable cross-compilation
