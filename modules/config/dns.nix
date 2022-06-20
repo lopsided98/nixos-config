@@ -46,7 +46,7 @@
 
     # ODROID-XU4
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:e006:ff:fec2:11eb"; }
+    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = "${ipv6Prefix}:b416:dcff:fe31:cbeb"; }
 
     # p-3400
     { name = "p-3400"; class = "IN"; type = "A"; data = externalIPv4; }
