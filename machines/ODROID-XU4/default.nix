@@ -15,6 +15,9 @@ in {
     ../../modules
   ];
 
+  # Enable cross-compilation
+  local.system.buildSystem.system = "x86_64-linux";
+
   local.profiles.headless = true;
   # SpiderMonkey doesn't build on 32-bit (OOM)
   security.polkit.enable = false;
