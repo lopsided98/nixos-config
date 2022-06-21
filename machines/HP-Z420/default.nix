@@ -67,7 +67,7 @@ in rec {
     ipv4Address = "${address}/24";
   };
 
-  local.networking.vpn.dartmouth.enable = true;
+  # local.networking.vpn.dartmouth.enable = true;
 
   /*local.networking.vpn.home.tap.client = {
     enable = true;

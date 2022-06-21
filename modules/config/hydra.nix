@@ -2,8 +2,6 @@
 
   services.hydra-dev = {
     enable = true;
-    # Use unstable Nix from flake
-    package = pkgs.nixUnstable;
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
     port = 8080;
@@ -24,11 +22,15 @@
     };
   };
 
-  nix.settings = {
-    # Allow Hydra to build flakes
-    experimental-features = "nix-command flakes";
-    # Allow Hydra to access SSH URIs in flakes
-    allowed-uris = "ssh://";
+  nix = {
+    # Use unstable Nix from flake
+    package = pkgs.nixUnstable;
+    settings = {
+      # Allow Hydra to build flakes
+      experimental-features = "nix-command flakes";
+      # Allow Hydra to access SSH URIs in flakes
+      allowed-uris = "ssh://";
+    };
   };
 
   # Deploy keys for private repositories
