@@ -5,24 +5,15 @@
   ];
 
   # Include overlays
-  nixpkgs.overlays = with inputs; lib.mkMerge [
-    [
-      self.overlay
-      freefb.overlay
-      nix-sdr.overlay
-      (self: super: {
-        crossPackages = self.forceCross {
-          system = "x86_64-linux";
-        } config.nixpkgs.localSystem;
-      })
-    ]
-    (lib.mkAfter [ (self: super: {
-      # Nix flake overlay (pulled in by Hydra flake) makes "nix" point to an
-      # unstable version, which is undesirable. We only want to use it for
-      # Hydra.
-      nix = self.nixStable;
-      nixUnstable = super.nix;
-    }) ])
+  nixpkgs.overlays = with inputs; [
+    self.overlay
+    freefb.overlay
+    nix-sdr.overlay
+    (self: super: {
+      crossPackages = self.forceCross {
+        system = "x86_64-linux";
+      } config.nixpkgs.localSystem;
+    })
   ];
 
   boot = {

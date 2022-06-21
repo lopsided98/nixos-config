@@ -1,10 +1,12 @@
-{ config, lib, pkgs, secrets, ... }:
+{ config, lib, pkgs, secrets, inputs, ... }:
 
 with lib;
 
 let
   cfg = config.local.services.waterLevelMonitor;
 in {
+  imports = [ inputs.water-level-monitor.nixosModule ];
+
   options.local.services.waterLevelMonitor = {
     enable = mkEnableOption "Water Level Monitor";
 

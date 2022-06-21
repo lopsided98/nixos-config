@@ -1,5 +1,7 @@
 { config, lib, pkgs, secrets, inputs, ... }: with lib; {
 
+  imports = [ inputs.hydra.nixosModules.hydra ];
+
   services.hydra-dev = {
     enable = true;
     hydraURL = "https://hydra.benwolsieffer.com";
@@ -10,6 +12,7 @@
       binary_cache_secret_key_file=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
     '';
     useSubstitutes = true;
+    inherit (config.services.hydra) buildMachinesFiles;
   };
 
   services.postgresql = {
@@ -23,8 +26,6 @@
   };
 
   nix = {
-    # Use unstable Nix from flake
-    package = pkgs.nixUnstable;
     settings = {
       # Allow Hydra to build flakes
       experimental-features = "nix-command flakes";

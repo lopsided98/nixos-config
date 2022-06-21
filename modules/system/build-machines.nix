@@ -73,7 +73,7 @@ in {
           mandatoryFeatures;
       }) (filterAttrs (h: m: h != hostName) cfg);
     # Include a second machine file with the configuration for the local machine
-    services.hydra-dev.buildMachinesFiles = [
+    services.hydra.buildMachinesFiles = [
       "/etc/nix/machines"
       (pkgs.writeText "hydra-localhost-build" (buildMachine "localhost" (cfg.${hostName} // { sshUser = null; })))
     ];

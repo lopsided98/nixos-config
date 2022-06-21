@@ -1,7 +1,8 @@
 { lib
 , hostSystems ? [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" "armv5tel-linux" ]
 , buildSystem ? null
-, modules ? [] }:
+, modules ? []
+, specialArgs ? {} }:
 let
   # Evaluate the configuration for a machine
   callMachine = path: system: if builtins.elem system hostSystems
@@ -12,6 +13,7 @@ let
           buildSystem = lib.mkIf (buildSystem != null) { system = buildSystem; };
         };
       }) ] ++ modules;
+      inherit specialArgs;
     }
     else null;
 

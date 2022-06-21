@@ -82,23 +82,19 @@
         inherit (nixpkgs) lib;
         inherit hostSystems;
         modules = [
-          {
-            # Allow modules to access flake inputs
-            _module.args.inputs = inputs // {
-              # Add fake nixpkgs input that selects the right branch for the
-              # machine
-              inherit nixpkgs;
-            };
-          }
           nixos-secrets.nixosModule
           secrets.nixosModule
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
-          hydra.nixosModules.hydra
           nix-sdr.nixosModule
           radonpy.nixosModule
-          water-level-monitor.nixosModule
         ];
+        # Allow modules to access flake inputs
+        specialArgs.inputs = inputs // {
+          # Add fake nixpkgs input that selects the right branch for the
+          # machine
+          inherit nixpkgs;
+        };
       });
     in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
        importMachines nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
