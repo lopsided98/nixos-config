@@ -1,10 +1,12 @@
-{ config, lib, pkgs, secrets, ... }:
+{ config, lib, pkgs, secrets, inputs, ... }:
 
 with lib;
 
 let
   cfg = config.local.services.rtlamr;
 in {
+  imports = [ inputs.nix-sdr.nixosModule ];
+
   options.local.services.rtlamr = {
     enable = mkEnableOption "power usage logging with RTL-SDR and InfluxDB";
   };

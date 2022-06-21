@@ -86,7 +86,6 @@
           secrets.nixosModule
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
-          nix-sdr.nixosModule
         ];
         # Allow modules to access flake inputs
         specialArgs.inputs = inputs // {
