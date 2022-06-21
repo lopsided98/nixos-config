@@ -1,10 +1,12 @@
-{ config, lib, pkgs, secrets, ... }:
+{ config, lib, pkgs, secrets, inputs, ... }:
 
 with lib;
 
 let
   cfg = config.local.services.radonpy;
 in {
+  imports = [ inputs.radonpy.nixosModule ];
+
   options.local.services.radonpy = {
     enable = mkEnableOption "radon level logging to InfluxDB from a RadonEye RD200";
   };

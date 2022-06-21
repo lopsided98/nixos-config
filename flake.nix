@@ -87,7 +87,6 @@
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModule
           nix-sdr.nixosModule
-          radonpy.nixosModule
         ];
         # Allow modules to access flake inputs
         specialArgs.inputs = inputs // {
