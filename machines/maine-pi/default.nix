@@ -42,10 +42,8 @@ with lib;
   networking.wireless = {
     enable = true;
     interfaces = [ "wlan0" ];
-    networks."OLE AKI" = {
-      authProtocols = [ "WPA-PSK" ];
-      psk = "@MAINE_PSK@";
-    };
+    # External password database doesn't work for some reason
+    networks."OLE AKI".psk = "@MAINE_PSK@";
     environmentFile = secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant;
   };
 
