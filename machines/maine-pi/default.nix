@@ -81,7 +81,7 @@ with lib;
 
     dnsServices = singleton {
       type = "NSUpdate";
-      args.hostname = "maine-pi.awsmppl.com";
+      args.hostname = "maine-pi.nsupdate.info";
       includeArgs.secret_key = secrets.getSystemdSecret "dnsupdate" secrets.maine-pi.dnsupdate.secretKey;
     };
   };
