@@ -14,6 +14,8 @@ with lib;
   local.machine.raspberryPi.enableWirelessFirmware = true;
   local.profiles.minimal = true;
 
+  #boot.kernelPackages = mkForce pkgs.linuxPackages_rpi0;
+
   sdImage = {
     firmwarePartitionID = "0x2a7208bc";
     rootPartitionUUID = "79cd7c77-b355-4d2b-b1d5-fa9207e944f2";
@@ -42,10 +44,12 @@ with lib;
   networking.wireless = {
     enable = true;
     interfaces = [ "wlan0" ];
-    networks."OLE AKI".pskRaw = "ext:MAINE_PSK";
+    networks."OLE AKI" = {
+      authProtocols = [ "WPA-PSK" ];
+      psk = "@MAINE_PSK@";
+    };
+    environmentFile = secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant;
   };
-  local.networking.wireless.passwordFiles =
-    singleton (secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant);
 
   systemd.network = {
     enable = true;
@@ -94,7 +98,7 @@ with lib;
   };
 
   local.services.waterLevelMonitor = {
-    enable = true;
+    enable = false;
     certificateSecret = secrets.maine-pi.waterLevelMonitor.influxdbCertificate;
   };
   services.waterLevelMonitor = {
