@@ -33,7 +33,6 @@ with lib;
   boot.extraModprobeConfig = ''
     options cfg80211 ieee80211_regdom="US"
   '';
-  hardware.firmware = [ pkgs.wireless-regdb ];
 
   services.udev.extraRules = ''
     # Disable power saving (causes network hangs every few seconds)
@@ -43,10 +42,10 @@ with lib;
   networking.wireless = {
     enable = true;
     interfaces = [ "wlan0" ];
+    networks."OLE AKI".pskRaw = "ext:MAINE_PSK";
   };
-  environment.etc."wpa_supplicant.conf" = mkForce {
-    source = secrets.getSystemdSecret "wpa_supplicant" secrets.maine-pi.wpaSupplicantConf;
-  };
+  local.networking.wireless.passwordFiles =
+    singleton (secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant);
 
   systemd.network = {
     enable = true;
@@ -120,8 +119,8 @@ with lib;
         (secrets.mkSecret secrets.maine-pi.ssh.hostEd25519Key {})
       ];
     };
-    wpa_supplicant = {
-      files = secrets.mkSecret secrets.maine-pi.wpaSupplicantConf { };
+    wpa_supplicant-maine = {
+      files = secrets.mkSecret secrets.maine-pi.wpaSupplicant { };
       units = [ "wpa_supplicant-wlan0.service" ];
     };
   };
