@@ -148,7 +148,8 @@ in {
       dns = cfg.dns;
       # Make the VPN dns override all others
       domains = ["~."];
-      dhcpConfig.UseDNS = false;
+      dhcpV4Config.UseDNS = false;
+      dhcpV6Config.UseDNS = false;
       ipv6AcceptRAConfig.UseDNS = false;
 
       # Apply source based routing to packets sent from VPN interface. This

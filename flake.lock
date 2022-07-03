@@ -613,11 +613,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1656216122,
-        "narHash": "sha256-wmUPU+rmS9mdU1DuVS7V0Ajy2X8/SxcD1W1eJp38RUw=",
+        "lastModified": 1656877708,
+        "narHash": "sha256-XBxhEldus+gx9VKWdnA1XoI6gMS/Dio1HIggo8gqll4=",
         "ref": "master",
-        "rev": "b4296ba313d8bb5952541608d2312d74619ba23d",
-        "revCount": 91,
+        "rev": "aa278ad2f308581c3259a9e85d24951d2b36d53f",
+        "revCount": 92,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
@@ -633,11 +633,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1655779129,
-        "narHash": "sha256-gyuncN9LbgQxiqEkucYdqDlOCaYPcsRYmNnZmkm5Ll8=",
+        "lastModified": 1656880803,
+        "narHash": "sha256-v0+/zaJu3OBxKZfBi1pIPkINm3tQDJyhGooce9C9sXc=",
         "owner": "lopsided98",
         "repo": "WaterLevelMonitor",
-        "rev": "c9eb9e0f37333bffd817f44926595236855e59a0",
+        "rev": "d37958de5742caf248efeeedd178842d6b9cd863",
         "type": "github"
       },
       "original": {

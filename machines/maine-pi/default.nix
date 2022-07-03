@@ -94,7 +94,7 @@ with lib;
   };
 
   local.services.waterLevelMonitor = {
-    enable = false;
+    enable = true;
     certificateSecret = secrets.maine-pi.waterLevelMonitor.influxdbCertificate;
   };
   services.waterLevelMonitor = {

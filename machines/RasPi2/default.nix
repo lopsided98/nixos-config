@@ -33,11 +33,9 @@ in {
       address = [ "192.168.1.2/24" ];
       gateway = [ "192.168.1.1" ];
       dns = [ "127.0.0.1" "::1" ];
-      dhcpConfig.UseDNS = false;
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=no
-      '';
+      dhcpV4Config.UseDNS = false;
+      dhcpV6Config.UseDNS = false;
+      ipv6AcceptRAConfig.UseDNS = false;
     };
   };
   networking.hostName = "RasPi2"; # Define your hostname.
