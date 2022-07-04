@@ -50,11 +50,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1656065134,
-        "narHash": "sha256-oc6E6ByIw3oJaIyc67maaFcnjYOz1mMcOtHxbEf9NwQ=",
+        "lastModified": 1656928814,
+        "narHash": "sha256-RIFfgBuKz6Hp89yRr7+NR5tzIAbn52h8vT6vXkYjZoM=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "bee6a7250dd1b01844a2de7e02e4df7d8a0a206c",
+        "rev": "7e2a3b3dfd9af950a856d66b0a7d01e3c18aa249",
         "type": "github"
       },
       "original": {
@@ -633,11 +633,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1656880803,
-        "narHash": "sha256-v0+/zaJu3OBxKZfBi1pIPkINm3tQDJyhGooce9C9sXc=",
+        "lastModified": 1656948493,
+        "narHash": "sha256-Uk5RFydQR8EEvx8i07pT8FXYiHV+ew9uNk8TpKg7adM=",
         "owner": "lopsided98",
         "repo": "WaterLevelMonitor",
-        "rev": "d37958de5742caf248efeeedd178842d6b9cd863",
+        "rev": "62715ba7d37dda81e5547550eab7872fe24e0019",
         "type": "github"
       },
       "original": {
