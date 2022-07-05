@@ -25,7 +25,10 @@ in {
   boot = {
     loader = {
       grub.enable = false;
-      generic-extlinux-compatible.enable = true;
+      generic-extlinux-compatible = {
+        enable = true;
+        copyKernels = false;
+      };
     };
   };
 
