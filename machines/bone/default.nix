@@ -21,6 +21,11 @@ with lib;
 
   local.machine.beagleBone.enableWirelessCape = true;
 
+  hardware.firmware = singleton (pkgs.runCommand "mt7610e-firmware" {} ''
+    mkdir -p "$out/lib/firmware/mediatek"
+    cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610e.bin "$out/lib/firmware/mediatek"
+  '');
+
   local.networking.home = {
     enable = true;
     interfaces = [ "eth0" ];
@@ -28,11 +33,34 @@ with lib;
   local.networking.wireless = {
     home = {
       enable = true;
-      interfaces = [ "wlan0" ];
+      interfaces = [ "wlan1" ];
     };
     eduroam = {
       enable = true;
-      interfaces = [ "wlan0" ];
+      interfaces = [ "wlan1" ];
+    };
+  };
+
+  # Access point
+  services.hostapd = {
+    enable = true;
+    interface = "wlan0";
+    ssid = "Illuin";
+    extraConfig = ''
+      wpa=2
+      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.bone.hostapd.wpaPsk}
+    '';
+  };
+  systemd.network = {
+    enable = true;
+    networks."30-ap" = {
+      name = "wlan0";
+      address = [ "192.168.2.1/24" ];
+      networkConfig = {
+        DHCPServer = true;
+        IPMasquerade = "yes";
+        MulticastDNS = true;
+      };
     };
   };
 
@@ -47,17 +75,24 @@ with lib;
     ];
   };
 
-  networking.firewall.allowedUDPPorts = [
+  networking.firewall.interfaces.wlan0.allowedUDPPorts = [
+    67 # DHCP
     5353 # mDNS
   ];
 
-  systemd.secrets.sshd = {
-    units = [ "sshd@.service" ];
-    # Prevent first connection from failing due to decryption taking too long
-    lazy = false;
-    files = mkMerge [
-      (secrets.mkSecret secrets.bone.ssh.hostRsaKey {})
-      (secrets.mkSecret secrets.bone.ssh.hostEd25519Key {})
-    ];
+  systemd.secrets = {
+    sshd = {
+      units = [ "sshd@.service" ];
+      # Prevent first connection from failing due to decryption taking too long
+      lazy = false;
+      files = mkMerge [
+        (secrets.mkSecret secrets.bone.ssh.hostRsaKey {})
+        (secrets.mkSecret secrets.bone.ssh.hostEd25519Key {})
+      ];
+    };
+    hostapd = {
+      units = [ "hostapd.service" ];
+      files = secrets.mkSecret secrets.bone.hostapd.wpaPsk {};
+    };
   };
 }
