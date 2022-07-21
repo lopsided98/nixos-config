@@ -207,7 +207,7 @@
       "locked": {
         "lastModified": 1654995723,
         "narHash": "sha256-yXAzfjKu3CaRgGBjOGtFzmFy7bQPCRdN/ULi/vWP0tk=",
-        "ref": "master",
+        "ref": "refs/heads/master",
         "rev": "c608625efaec62f969c2f9afac976c726fd5394a",
         "revCount": 67,
         "type": "git",
@@ -300,11 +300,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1658088518,
-        "narHash": "sha256-W7DXmDmgOILmWqxWmu15W7cpz4pfuH44ZK2ffTDb0ws=",
+        "lastModified": 1658446106,
+        "narHash": "sha256-wfDMsAj4oEsjucUy2eRfYRIyfTwFgtuaF+ekt09S4lY=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "4414348263f2c94bf168f6668683557d2385d671",
+        "rev": "055101b832671356779d2257cec5eea89fc8ac75",
         "type": "github"
       },
       "original": {
@@ -600,7 +600,7 @@
       "locked": {
         "lastModified": 1652923969,
         "narHash": "sha256-+zwv6xpA1bXxPKyhbdR56lWhd5fcHVhfXF1blJfB0t4=",
-        "ref": "master",
+        "ref": "refs/heads/master",
         "rev": "e7049c2c7c30264dda4e4919d214032e506a8484",
         "revCount": 90,
         "type": "git",
@@ -615,7 +615,7 @@
       "locked": {
         "lastModified": 1657069774,
         "narHash": "sha256-LI0o/FSO1s2aMlGbg6zhiYtx4/uK4Ny6HWEpB3ifJPY=",
-        "ref": "master",
+        "ref": "refs/heads/master",
         "rev": "c76cd9e129eb93e1fd240184f1bc66f14e474e67",
         "revCount": 93,
         "type": "git",
