@@ -61,6 +61,10 @@ with lib;
         IPMasquerade = "yes";
         MulticastDNS = true;
       };
+      # WL1837 driver doesn't accept multicast traffic in AP mode unless
+      # ALLMULTI is enabled.
+      # https://patchwork.kernel.org/project/linux-wireless/patch/20170209143728.22831-1-i-hunter1@ti.com/
+      linkConfig.AllMulticast = true;
     };
   };
 
