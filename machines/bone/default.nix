@@ -66,6 +66,10 @@ with lib;
       # https://patchwork.kernel.org/project/linux-wireless/patch/20170209143728.22831-1-i-hunter1@ti.com/
       linkConfig.AllMulticast = true;
     };
+    wait-online = {
+      anyInterface = true;
+      ignoredInterfaces = [ "wlan0" ];
+    };
   };
 
   networking.hostName = "bone";
