@@ -30,6 +30,10 @@
       "armv6l-linux"
       "armv5tel-linux"
     ];
+    hydraSystems = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
 
     nixpkgsSystemsAttrs = nixpkgs: systems:
       listToAttrs (map (system: nameValuePair system (import nixpkgs {
@@ -101,7 +105,7 @@
     hydraJobs = {
       machines = mapAttrs (name: config: config.config.system.build.toplevel)
         self.nixosConfigurations;
-      inherit (self) packages;
+      packages = getAttrs hydraSystems self.packages;
     };
   };
 }
