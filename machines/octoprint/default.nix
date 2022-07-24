@@ -30,14 +30,6 @@ in {
 
   # List services that you want to enable:
 
-  services.avahi = {
-    enable = true;
-    publish = {
-      enable = true;
-      addresses = true;
-    };
-  };
-
   services.octoprint = {
     enable = true;
     port = 80;
