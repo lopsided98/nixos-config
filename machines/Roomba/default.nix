@@ -25,7 +25,7 @@
         dtoverlay=pi3-disable-bt
       '';
     };
-    kernelPackages = lib.mkForce pkgs.crossPackages.linuxPackages_rpi3;
+    kernelPackages = lib.mkForce linuxPackages_rpi3;
   };
 
   local.networking = {
@@ -48,17 +48,10 @@
 
   services.kittyCam.enable = true;
 
-  services.avahi = {
-    enable = true;
-    publish = {
-      enable = true;
-      addresses = true;
-    };
-  };
-
   sound.enable = true;
 
   networking.firewall.allowedTCPPorts = [
     1935 # RTMP Streaming
+    5353 # mDNS
   ];
 }
