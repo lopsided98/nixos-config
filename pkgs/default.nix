@@ -27,8 +27,6 @@ in {
 
   hacker-hats = self.callPackage ./hacker-hats {};
 
-  kitty-cam = self.python3Packages.callPackage ./kitty-cam {};
-
   nixos-secrets = self.python3Packages.callPackage ./nixos-secrets { };
 
   tinyssh = self.callPackage ./tinyssh {};

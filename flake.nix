@@ -10,6 +10,7 @@
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
     hydra.url = "github:NixOS/hydra/5c90edd19f1787141ae3d9751f567b4df11fc0fa";
+    kitty-cam.url = "github:lopsided98/kitty-cam";
     freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     nix-sdr.url = "github:lopsided98/nix-sdr";
     radonpy.url = "github:lopsided98/radonpy";

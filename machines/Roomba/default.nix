@@ -2,10 +2,11 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, secrets, ... }: {
+{ lib, config, pkgs, inputs, secrets, ... }: {
   imports = [
     ../../modules
     ../../modules/local/machine/raspberry-pi.nix
+    inputs.kitty-cam.nixosModules.default
   ];
 
   local.machine.raspberryPi.enableWirelessFirmware = true;
