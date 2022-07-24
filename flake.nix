@@ -35,7 +35,7 @@
       listToAttrs (map (system: nameValuePair system (import nixpkgs {
         inherit system;
         overlays = [
-          self.overlay
+          self.overlays.default
           nixos-secrets.overlay
         ];
       })) systems);
@@ -55,27 +55,28 @@
   in {
     packages = with pkgs; {
       inherit dnsupdate;
+      deploy = runCommand "deploy" {
+        inherit runtimeShell;
+        nixosRoot = "/home/ben/nixos";
+        secretsRoot = "/home/ben/nixos/secrets";
+        path = lib.makeBinPath [ nix nixos-secrets coreutils openssh git rsync jq curl ];
+      } ''
+        substituteAll ${./deploy.sh} "$out"
+        chmod +x "$out"
+      '';
     };
 
     apps = rec {
       default = deploy;
       deploy = {
         type = "app";
-        program = with pkgs; (runCommand "deploy" {
-          inherit runtimeShell;
-          nixosRoot = "/home/ben/nixos";
-          secretsRoot = "/home/ben/nixos/secrets";
-          path = lib.makeBinPath [ nix nixos-secrets coreutils openssh git rsync jq curl ];
-        } ''
-          substituteAll ${./deploy.sh} "$out"
-          chmod +x "$out"
-        '').outPath;
+        program = self.packages.${system}.deploy.outPath;
       };
     };
   }) // {
-    overlay = import ./pkgs;
+    overlays.default = import ./pkgs;
 
-    nixosModule = import ./modules;
+    nixosModules.default = import ./modules;
 
     nixosConfigurations = let
       importMachines = nixpkgs: hostSystems: (import ./machines {
@@ -100,6 +101,7 @@
     hydraJobs = {
       machines = mapAttrs (name: config: config.config.system.build.toplevel)
         self.nixosConfigurations;
+      inherit (self) packages;
     };
   };
 }

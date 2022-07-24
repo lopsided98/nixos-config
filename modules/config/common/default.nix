@@ -6,7 +6,7 @@
 
   # Include overlays
   nixpkgs.overlays = with inputs; [
-    self.overlay
+    self.overlays.default
     freefb.overlay
     nix-sdr.overlay
     (self: super: {
