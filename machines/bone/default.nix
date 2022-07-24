@@ -79,10 +79,19 @@ with lib;
     ];
   };
 
-  networking.firewall.interfaces.wlan0.allowedUDPPorts = [
-    67 # DHCP
-    5353 # mDNS
-  ];
+  networking.firewall.interfaces = {
+    wlan0.allowedUDPPorts = [
+      67 # DHCP
+      5353 # mDNS
+    ];
+    # TODO: Remove at school
+    wlan1.allowedUDPPorts = [
+      5353 # mDNS
+    ];
+    eth0.allowedUDPPorts = [
+      5353 # mDNS
+    ];
+  };
 
   systemd.secrets = {
     sshd = {
