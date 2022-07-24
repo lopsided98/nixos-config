@@ -56,7 +56,8 @@
       inherit dnsupdate;
     };
 
-    apps = {
+    apps = rec {
+      default = deploy;
       deploy = {
         type = "app";
         program = with pkgs; (runCommand "deploy" {
@@ -70,8 +71,6 @@
         '').outPath;
       };
     };
-
-    defaultApp = self.apps.${system}.deploy;
   }) // {
     overlay = import ./pkgs;
 
