@@ -25,7 +25,7 @@
         dtoverlay=pi3-disable-bt
       '';
     };
-    kernelPackages = lib.mkForce linuxPackages_rpi3;
+    kernelPackages = lib.mkForce pkgs.linuxPackages_rpi3;
   };
 
   local.networking = {
