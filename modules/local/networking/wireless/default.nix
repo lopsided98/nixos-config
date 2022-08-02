@@ -31,5 +31,9 @@ in {
     networking.wireless.extraConfig = ''
       ext_password_backend=file:/run/wpa_supplicant/passwords.conf
     '';
+
+    boot.extraModprobeConfig = ''
+      options cfg80211 ieee80211_regdom="US"
+    '';
   };
 }

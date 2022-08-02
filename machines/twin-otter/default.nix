@@ -47,11 +47,6 @@ in {
 
   # WiFi configuration
 
-  boot.extraModprobeConfig = ''
-    options cfg80211 ieee80211_regdom="US"
-  '';
-  hardware.firmware = [ pkgs.wireless-regdb ];
-
   services.udev.extraRules = ''
     # Disable power saving (causes network hangs every few seconds)
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
