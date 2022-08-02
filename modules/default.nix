@@ -27,6 +27,7 @@
     ./local/networking/wireless/eduroam
     ./local/networking/wireless/home.nix
     ./local/networking/wireless/thunderbat.nix
+    ./local/networking/wireless/xfinitywifi.nix
     ./local/profiles/headless.nix
     ./local/profiles/limited-memory.nix
     ./local/profiles/minimal.nix
