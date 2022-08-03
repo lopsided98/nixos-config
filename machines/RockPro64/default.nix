@@ -3,7 +3,6 @@
 with lib;
 
 let
-  interface = "eth0";
   address = "192.168.1.7";
 in {
   imports = [
@@ -18,21 +17,49 @@ in {
       generic-extlinux-compatible.enable = true;
     };
     kernelPackages = lib.mkForce config.boot.zfs.package.latestCompatibleLinuxPackages;
+    # Disable 4-way handshake offloading, which appears to be broken
+    extraModprobeConfig = ''
+      options brcmfmac feature_disable=0x82000
+    '';
   };
 
-  local.networking.vpn.home.tap.client = {
-    enable = true;
-    macAddress = "b2:5e:ef:50:6a:ff";
-    certificate = ./vpn/home/client.crt;
-    privateKeySecret = secrets.RockPro64.vpn.home.privateKey;
+  hardware.firmware = let
+    libreElecFirmware = pkgs.fetchFromGitHub {
+      owner = "LibreELEC";
+      repo = "brcmfmac_sdio-firmware";
+      rev = "afc477e807c407736cfaff6a6188d09197dfbceb";
+      hash = "sha256-544zEHIBMKXtIAp7sSLolPChCIFQw+xVin1/Ki1MliI=";
+    };
+  in singleton (pkgs.runCommandNoCC "bcm4359-firmware" {} ''
+    mkdir -p "$out/lib/firmware/brcm"
+    cp '${libreElecFirmware}'/{BCM4359*.hcd,brcmfmac4359-sdio*}  "$out/lib/firmware/brcm"
+  '');
+
+  local.networking = {
+    wireless = {
+      xfinitywifi = {
+        enable = true;
+        interfaces = [ "wlan0" ];
+      };
+      home = {
+        enable = true;
+        interfaces = [ "wlan0" ];
+      };
+    };
+    vpn.home.tap.client = {
+      enable = true;
+      macAddress = "b2:5e:ef:50:6a:ff";
+      certificate = ./vpn/home/client.crt;
+      privateKeySecret = secrets.RockPro64.vpn.home.privateKey;
+    };
   };
   systemd.network = {
     enable = true;
     networks = {
       # Use a different MAC address on physical interface, because the normal MAC
       # is used on the VPN in order to get consistent IPs.
-      "30-${interface}" = {
-        name = interface;
+      "30-eth0" = {
+        name = "eth0";
         DHCP = "ipv4";
         linkConfig.MACAddress = "ba:4b:f9:9b:f1:88";
       };
@@ -45,6 +72,7 @@ in {
         '';
       };
     };
+    wait-online.anyInterface = true;
   };
   networking = {
     hostName = "RockPro64";
