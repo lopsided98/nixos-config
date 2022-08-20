@@ -87,7 +87,7 @@
         inherit (nixpkgs) lib;
         inherit hostSystems;
         modules = [
-          nixos-secrets.nixosModule
+          nixos-secrets.nixosModules.default
           secrets.nixosModule
           zeus-audio.nixosModule
           nix-ros-overlay.nixosModules.default

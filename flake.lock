@@ -50,11 +50,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1656928814,
-        "narHash": "sha256-RIFfgBuKz6Hp89yRr7+NR5tzIAbn52h8vT6vXkYjZoM=",
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "7e2a3b3dfd9af950a856d66b0a7d01e3c18aa249",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
         "type": "github"
       },
       "original": {
@@ -334,11 +334,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1658684776,
-        "narHash": "sha256-qWwQ0OaUia2XO89JN8noXs9gE1H69zZV3iSCmaOUvIA=",
+        "lastModified": 1660867709,
+        "narHash": "sha256-0m/xkT/BtCrKDwszDKysURIgC4M+kqAXuJnmeT+ZGSc=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "cc4692525681a554690f350df2f4273d7cf242f1",
+        "rev": "624fc3c9767269d360d1b4895423ad6ff625be64",
         "type": "github"
       },
       "original": {
@@ -393,11 +393,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1653066690,
-        "narHash": "sha256-jdVdmXrp1jJZ7M5RFD2oN/NGms945vf/Uu6gjmQLFME=",
+        "lastModified": 1661014602,
+        "narHash": "sha256-LSZVR6sHCBv7ZkZvjyYOz3CPVMdGfvehfkVPAB2MM2E=",
         "owner": "lopsided98",
         "repo": "nixos-secrets",
-        "rev": "948e6240859481583e3de8070e7851322c966d4b",
+        "rev": "ff58f40d05f3b86c4e69c25a1854ec7cc36c4ff0",
         "type": "github"
       },
       "original": {
@@ -453,11 +453,11 @@
     },
     "nixpkgs-unstable-custom": {
       "locked": {
-        "lastModified": 1658682195,
-        "narHash": "sha256-FTqLXTk3Lpp8qg6US67oh6lCj56seWM31IWo/kkBPPs=",
+        "lastModified": 1660615883,
+        "narHash": "sha256-4O97hKDc88NbU/5kOrBA/2uLWMUOevBGTRmEGrDVIE4=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "95a3de2eac81f36d715a4a5b2e4542e63d093188",
+        "rev": "f3f79235feefa0f99e476df890fa032b6419b0c0",
         "type": "github"
       },
       "original": {
@@ -664,11 +664,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1657069774,
-        "narHash": "sha256-LI0o/FSO1s2aMlGbg6zhiYtx4/uK4Ny6HWEpB3ifJPY=",
+        "lastModified": 1661014254,
+        "narHash": "sha256-iNFANm3Cq2nveTLrad0nZDnlDzq+IVGf14hvASqtYzE=",
         "ref": "refs/heads/master",
-        "rev": "c76cd9e129eb93e1fd240184f1bc66f14e474e67",
-        "revCount": 93,
+        "rev": "9f4ba277a843d190a60af9af885e26d2649fc7e7",
+        "revCount": 94,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
