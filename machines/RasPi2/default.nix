@@ -1,29 +1,29 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { lib, config, pkgs, secrets, ... }: let
   interface = "eth0";
 in {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+  imports = [
+    ../../modules/local/machine/raspberry-pi.nix
 
-      ../../modules/config/dnsupdate.nix
-      ../../modules/config/dns.nix
+    ../../modules/config/dnsupdate.nix
+    ../../modules/config/dns.nix
 
-      ../../modules
-    ];
+    ../../modules
+  ];
 
   local.profiles.headless = true;
   # SpiderMonkey doesn't build on 32-bit (OOM)
   security.polkit.enable = false;
 
-  boot = {
-    loader = {
-      grub.enable = false;
-      generic-extlinux-compatible.enable = true;
-    };
+  sdImage = {
+    firmwarePartitionID = "0xc99f2756";
+    rootPartitionUUID = "7292e6e2-4528-4a9a-aed4-1918605dde1f";
+    compressImage = false;
+  };
+
+  boot.loader.raspberryPi = {
+    enable = true;
+    version = 2;
+    uboot.enable = true;
   };
 
   systemd.network = {
@@ -42,8 +42,13 @@ in {
 
   # List services that you want to enable:
 
-  # Set SSH port
-  services.openssh.ports = [ 4242 ];
+  services.openssh = {
+    ports = [ 4242 ];
+    hostKeys = [
+      { type = "rsa"; bits = 4096; path = secrets.getSystemdSecret "sshd" secrets.RasPi2.ssh.hostRsaKey; }
+      { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.RasPi2.ssh.hostEd25519Key; }
+    ];
+  };
 
   # System metrics logging
   local.services.telegraf = {
@@ -87,4 +92,14 @@ in {
   networking.firewall.allowedTCPPorts = [
     4600 # Quassel
   ];
+
+  systemd.secrets.sshd = {
+    units = [ "sshd@.service" ];
+    # Prevent first connection from failing due to decryption taking too long
+    lazy = false;
+    files = lib.mkMerge [
+      (secrets.mkSecret secrets.RasPi2.ssh.hostRsaKey {})
+      (secrets.mkSecret secrets.RasPi2.ssh.hostEd25519Key {})
+    ];
+  };
 }
