@@ -87,7 +87,7 @@ in {
       name = "${interface}";
       address = [ "${address}/24" ];
       gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18c:8380:79f0:ba27:ebff:fe5e:6b6e" ];
+      dns = [ "192.168.1.2" "2601:18c:8380:74b0:ba27:ebff:fe5e:6b6e" ];
       dhcpV4Config.UseDNS = false;
       dhcpV6Config.UseDNS = false;
       ipv6AcceptRAConfig.UseDNS = false;

@@ -11,14 +11,14 @@
   recordAttrs = records: listToAttrs (map (r: nameValuePair "${r.name}:${r.class}:${r.type}" r) records);
   mergeRecords = parent: child: attrValues (recursiveUpdate (recordAttrs parent) (recordAttrs child));
 
-  externalIPv4 = "73.47.77.115";
-  ipv6Prefix = "2601:18c:8380:79f0";
+  externalIPv4 = "73.149.35.171";
+  ipv6Prefix = "2601:18c:8380:74b0";
 
   externalRecords = [
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        50         ; Serial
+                        51         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
