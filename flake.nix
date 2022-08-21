@@ -40,7 +40,7 @@
         inherit system;
         overlays = [
           self.overlays.default
-          nixos-secrets.overlay
+          nixos-secrets.overlays.default
         ];
       })) systems);
 
