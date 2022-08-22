@@ -68,12 +68,4 @@ in {
     ];
   };
   linuxPackages_omnitech = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_omnitech);
-
-  linux_rock64 = self.callPackage ./linux-rock64 {
-    kernelPatches = with self.kernelPatches; [
-      bridge_stp_helper
-      request_key_helper
-    ];
-  };
-  linuxPackages_rock64 = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_rock64);
 }
