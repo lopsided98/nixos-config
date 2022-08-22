@@ -75,7 +75,7 @@ in {
     }
     (mkIf cfg.enable {
       assertions = singleton {
-        assertion = net.cidr.child cfg.ipv6DelegatedPrefix cfg.ipv6Prefix;
+        assertion = cfg.ipv6DelegatedPrefix != null -> net.cidr.child cfg.ipv6DelegatedPrefix cfg.ipv6Prefix;
         message = "Delegated prefix must be a child of the router prefix";
       };
 
