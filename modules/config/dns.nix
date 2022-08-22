@@ -21,7 +21,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        51         ; Serial
+                        52         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -56,7 +56,6 @@
     { name = "p-3400"; class = "IN"; type = "AAAA"; data = net.cidr.host "::468a:5bff:fece:23c6" ipv6Prefix; }
 
     # HP-Z420
-    #{ name = "hp-z420"; class = "IN"; type = "A"; data = "129.170.92.198"; }
     { name = "hp-z420"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "hp-z420"; class = "IN"; type = "AAAA"; data = net.cidr.host "::a2d3:c1ff:fe20:da3f" ipv6Prefix; }
     { name = "hackerhats"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
@@ -73,15 +72,11 @@
     { name = "rockpro64"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "rockpro64"; class = "IN"; type = "AAAA"; data = net.cidr.host "::b05e:efff:fe50:6aff" ipv6Prefix; }
 
-    # KittyCop
-    { name = "kittycop"; class = "IN"; type = "A"; data = "129.170.93.241"; }
-
     # maine-pi
     { name = "maine-pi"; class = "IN"; type = "CNAME"; data = "maine-pi.nsupdate.info."; }
   ];
 
   internalRecords = [
-    { name = "ns"; class = "IN"; type = "A"; data = net.cidr.host 5 ipv4Subnet; }
     { name = "raspi2"; class = "IN"; type = "A"; data = net.cidr.host 2 ipv4Subnet; }
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = net.cidr.host 3 ipv4Subnet; }
     { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = net.cidr.host 4 ipv4Subnet; }
