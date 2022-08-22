@@ -114,7 +114,10 @@ in {
         allow-query { none; };
       };
 
-      acl internal { localnets; };
+      acl internal {
+        localnets;
+        ${config.local.networking.home.ipv6Prefix};
+      };
 
       view "internal" {
         match-clients { internal; };

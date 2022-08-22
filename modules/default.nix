@@ -23,6 +23,8 @@
     ./local/networking/home.nix
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
+    ./local/networking/vpn/home/wireguard
+    ./local/networking/vpn/home/wireguard/server.nix
     ./local/networking/wireless
     ./local/networking/wireless/eduroam
     ./local/networking/wireless/home.nix

@@ -20,7 +20,6 @@ self: super: with super.lib; let
   });
 
 in {
-
   aur-buildbot = self.callPackage ./aur-buildbot {};
 
   dnsupdate = self.python3Packages.callPackage ./dnsupdate { };
