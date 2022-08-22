@@ -18,7 +18,6 @@ in {
 
     ipv4PublicAddress = mkOption {
       type = net.types.ipv4;
-      default = null;
       readOnly = true;
       description = "Public IPv4 address assigned to router";
     };
@@ -68,6 +67,7 @@ in {
   config = mkMerge [
     {
       local.networking.home = {
+        ipv4PublicAddress = "73.149.35.171";
         ipv4Subnet = "192.168.1.0/24";
         ipv6Prefix = "2601:18c:8380:74b0::/60";
         ipv6SlaacPrefix = net.cidr.subnet (64 - net.cidr.length cfg.ipv6Prefix) 0 cfg.ipv6Prefix;
