@@ -29,8 +29,8 @@
     settings = {
       # Allow Hydra to build flakes
       experimental-features = "nix-command flakes";
-      # Allow Hydra to access SSH URIs in flakes
-      allowed-uris = "ssh://";
+      # Allow Hydra to access SSH and HTTP(S) URIs in flakes
+      allowed-uris = "ssh:// http:// https://";
     };
   };
 
