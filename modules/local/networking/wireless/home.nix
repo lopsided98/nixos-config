@@ -24,7 +24,7 @@ in {
       inherit (cfg) interfaces;
       networks = {
         Thunderbolt.pskRaw = "ext:HOME_PSK";
-        Thunderbolt_5Ghz.pskRaw = "ext:HOME_PSK";
+        Thunderbolt_5GHz.pskRaw = "ext:HOME_PSK";
       };
     };
     local.networking.wireless.passwordFiles =
@@ -37,7 +37,7 @@ in {
 
     systemd.network.networks = listToAttrs (map (interface: {
       name = "30-home-${interface}";
-      value = { matchConfig.SSID = "Thunderbolt Thunderbolt_5Ghz"; };
+      value = { matchConfig.SSID = "Thunderbolt Thunderbolt_5GHz"; };
     }) cfg.interfaces);
 
     systemd.secrets.wpa_supplicant-home = {
