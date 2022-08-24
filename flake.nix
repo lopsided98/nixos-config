@@ -2,20 +2,20 @@
   description = "Packages, modules and configurations for my NixOS machines";
 
   inputs = {
-    nixpkgs-unstable-custom.url = "github:lopsided98/nixpkgs/unstable-custom";
-    nixpkgs-master-custom.url = "github:lopsided98/nixpkgs/master-custom";
-    nixos-secrets.url = "github:lopsided98/nixos-secrets";
-    secrets.url = "git+ssh://git@github.com/lopsided98/nixos-config-secrets.git";
-    zeus-audio.url = "github:lopsided98/zeus_audio";
-    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
-    ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
+    flake-utils.url = "github:numtide/flake-utils";
+    freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     hydra.url = "github:NixOS/hydra/5c90edd19f1787141ae3d9751f567b4df11fc0fa";
     kitty-cam.url = "github:lopsided98/kitty-cam";
-    freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
+    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
     nix-sdr.url = "github:lopsided98/nix-sdr";
+    nixos-secrets.url = "github:lopsided98/nixos-secrets";
+    nixpkgs-master-custom.url = "github:lopsided98/nixpkgs/master-custom";
+    nixpkgs-unstable-custom.url = "github:lopsided98/nixpkgs/unstable-custom";
     radonpy.url = "github:lopsided98/radonpy";
+    ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
+    secrets.url = "git+ssh://git@github.com/lopsided98/nixos-config-secrets.git";
     water-level-monitor.url = "github:lopsided98/WaterLevelMonitor";
-    flake-utils.url = "github:numtide/flake-utils";
+    zeus-audio.url = "github:lopsided98/zeus_audio";
   };
 
   outputs = inputs:
