@@ -19,10 +19,7 @@
   lib =
     # IP address math library
     # https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba
-    (import (builtins.fetchurl {
-      url = "https://gist.githubusercontent.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/raw/3885f7cd9ed0a746a9d675da6f265d41e9fd6704/net.nix";
-      sha256 = "sha256:1hv0k003bjbfdf53bd2mh3ipbig1q0dh4c0yqa3gqyk9b7s861h3";
-    }) { inherit lib; }).lib;
+    (import "${inputs.lib-net}/net.nix" { inherit lib; }).lib;
 
   boot = {
     # Use the latest kernel. Some ARM systems and those with ZFS might use a
