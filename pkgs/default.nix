@@ -67,4 +67,14 @@ in {
     ];
   };
   linuxPackages_omnitech = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_omnitech);
+
+  wpa_supplicant = super.wpa_supplicant.overrideAttrs ({ patches ? [], ... }: {
+    patches = patches ++ [
+      # Fix external passwords with 4-way handshake offloading
+      (self.fetchpatch {
+        url = "https://github.com/lopsided98/hostap/commit/023c17659786fe381312f154cf06663f1cb3607c.patch";
+        hash = "sha256-sQDcLPRMWGmos+V7O+mNv7myZ/Ubxg6ZLftF+g3lUng=";
+      })
+    ];
+  });
 }
