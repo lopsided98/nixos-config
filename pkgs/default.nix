@@ -75,6 +75,11 @@ in {
         url = "https://github.com/lopsided98/hostap/commit/023c17659786fe381312f154cf06663f1cb3607c.patch";
         hash = "sha256-sQDcLPRMWGmos+V7O+mNv7myZ/Ubxg6ZLftF+g3lUng=";
       })
+      # Fix external passwords with WPA3-SAE
+      (self.fetchpatch {
+        url = "https://github.com/lopsided98/hostap/commit/abf0b545c7f29ce10a07e6aad08f01878125ae5e.patch";
+        hash = "sha256-qxh8VnSe6eQpjivNvwW8bhBS5KxNETmGXq1l/a0J2iQ=";
+      })
     ];
   });
 }
