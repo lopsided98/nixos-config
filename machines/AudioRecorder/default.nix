@@ -39,12 +39,11 @@ in {
     loader.raspberryPi = {
       enable = true;
       version = 0;
-      firmwareConfig = (if useWm8960 then ''
+      firmwareConfig = if useWm8960 then ''
       '' else ''
         dtoverlay=fe-pi-audio
-      '') + ''
-        dtparam=audio=off
       '';
+      uboot.enable = true;
     };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
     kernelPatches = [
@@ -72,18 +71,7 @@ in {
     ];
   };
 
-  nixpkgs.config = {
-    platform = lib.systems.platforms.raspberrypi;
-    packageOverrides = super: {
-      avahi = super.avahi.overrideAttrs ({
-        patches ? [], ...
-      }: {
-        # Prevent avahi from ever detecting mDNS conflicts. This works around
-        # https://github.com/lathiat/avahi/issues/117
-        patches = patches ++ [ ./avahi-disable-conflicts.patch ];
-      });
-    };
-  };
+  nixpkgs.config.platform = lib.systems.platforms.raspberrypi;
 
   networking.wireless.networks = {
     # Use same PSK as home network
@@ -131,6 +119,7 @@ in {
         DHCPServer = true;
         IPv6SendRA = true;
         LLMNR = true;
+        MulticastDNS = true;
       };
       dhcpServerConfig = {
         EmitDNS = false;
@@ -164,16 +153,6 @@ in {
   ];
 
   services.resolved.llmnr = "true";
-
-  # mDNS
-  services.avahi = {
-    enable = true;
-    publish = {
-      enable = true;
-      addresses = true;
-    };
-    nssmdns = true;
-  };
 
   # Time synchronization
   services.chrony = {

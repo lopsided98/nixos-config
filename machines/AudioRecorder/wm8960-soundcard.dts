@@ -4,74 +4,61 @@
 
 / {
 	compatible = "brcm,bcm2835";
+};
 
-	fragment@0 {
-		target = <&i2s>;
-		__overlay__ {
-			status = "okay";
-		};
+&i2s {
+	status = "okay";
+};
+
+&{/} {
+	wm8960_mclk: wm8960_mclk {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <24000000>;
 	};
+};
 
-	fragment@1 {
-		target-path="/";
-		__overlay__ {
-			wm8960_mclk: wm8960_mclk {
-				compatible = "fixed-clock";
-				#clock-cells = <0>;
-				clock-frequency = <24000000>;
-			};
-		};
+&i2c1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	wm8960: wm8960@1a {
+		compatible = "wlf,wm8960";
+		reg = <0x1a>;
+		#sound-dai-cells = <0>;
+		AVDD-supply = <&vdd_5v0_reg>;
+		DVDD-supply = <&vdd_3v3_reg>;
 	};
+};
 
-	fragment@2 {
-		target = <&i2c1>;
-		__overlay__ {
-			#address-cells = <1>;
-			#size-cells = <0>;
-			status = "okay";
+&sound {
+	compatible = "simple-audio-card";
+	status = "okay";
 
-			wm8960: wm8960@1a {
-				compatible = "wlf,wm8960";
-				reg = <0x1a>;
-				#sound-dai-cells = <0>;
-				AVDD-supply = <&vdd_5v0_reg>;
-				DVDD-supply = <&vdd_3v3_reg>;
-			};
-		};
+	simple-audio-card,name = "wm8960-soundcard";
+	simple-audio-card,format = "i2s";
+
+	simple-audio-card,widgets =
+		"Microphone", "Mic Jack",
+		"Speaker", "Speaker",
+		"Headphone", "Headphone Jack";
+	simple-audio-card,routing =
+		"Headphone Jack", "HP_L",
+		"Headphone Jack", "HP_R",
+		"Speaker", "SPK_LP",
+		"Speaker", "SPK_LN",
+		"LINPUT1", "Mic Jack",
+		"LINPUT3", "Mic Jack",
+		"RINPUT1", "Mic Jack",
+		"RINPUT2", "Mic Jack";
+
+	simple-audio-card,cpu {
+		sound-dai = <&i2s>;
 	};
-
-
-	fragment@3 {
-		target = <&sound>;
-		__overlay__ {
-			compatible = "simple-audio-card";
-			status = "okay";
-
-			simple-audio-card,name = "wm8960-soundcard";
-			simple-audio-card,format = "i2s";
-
-			simple-audio-card,widgets =
-				"Microphone", "Mic Jack",
-				"Speaker", "Speaker",
-				"Headphone", "Headphone Jack";
-			simple-audio-card,routing =
-				"Headphone Jack", "HP_L",
-				"Headphone Jack", "HP_R",
-				"Speaker", "SPK_LP",
-				"Speaker", "SPK_LN",
-				"LINPUT1", "Mic Jack",
-				"LINPUT3", "Mic Jack",
-				"RINPUT1", "Mic Jack",
-				"RINPUT2", "Mic Jack";
-
-			simple-audio-card,cpu {
-				sound-dai = <&i2s>;
-			};
-			link0_codec: simple-audio-card,codec {
-				sound-dai = <&wm8960>;
-				clocks = <&wm8960_mclk>;
-				clock-names = "mclk";
-			};
-		};
+	link0_codec: simple-audio-card,codec {
+		sound-dai = <&wm8960>;
+		clocks = <&wm8960_mclk>;
+		clock-names = "mclk";
 	};
 };

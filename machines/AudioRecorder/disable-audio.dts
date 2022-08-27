@@ -1,0 +1,11 @@
+/* Disable Raspberry Pi built-in audio */
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "brcm,bcm2835";
+};
+
+&audio {
+	status = "disabled";
+};
