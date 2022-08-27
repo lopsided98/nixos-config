@@ -1,7 +1,7 @@
-From 7e8542fbec0aa73faf407ef89d8aa628abfe5b08 Mon Sep 17 00:00:00 2001
+From b472a54d51660022eb4bde412b441fe611e5d41f Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Sun, 6 Jun 2021 13:09:20 -0400
-Subject: [PATCH 2/2] ASoC: wm8960: use sysclk auto mode by default
+Subject: [PATCH 2/3] ASoC: wm8960: use sysclk auto mode by default
 
 Several places, most importantly Simple-Card, use a hardcoded clk_id of 0 to
 configure SYSCLK. Without this patch, this causes the driver to use MCLK to
@@ -17,11 +17,10 @@ to serve as the clk_id, based on examples from other drivers.
 
 Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
 ---
- sound/soc/codecs/wm8960.c                 | 20 ++++++++++----------
- sound/soc/codecs/wm8960.h                 |  7 ++++++-
- sound/soc/fsl/fsl-asoc-card.c             |  4 ++--
- sound/soc/mediatek/mt2701/mt2701-wm8960.c |  5 +++--
- 4 files changed, 21 insertions(+), 15 deletions(-)
+ sound/soc/codecs/wm8960.c     | 20 ++++++++++----------
+ sound/soc/codecs/wm8960.h     |  7 ++++++-
+ sound/soc/fsl/fsl-asoc-card.c |  4 ++--
+ 3 files changed, 18 insertions(+), 13 deletions(-)
 
 diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
 index 1abbc0dc278a..72aaa0461879 100644
@@ -143,29 +142,6 @@ index 06107ae46e20..a426e995f189 100644
  		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
  	} else if (of_device_is_compatible(np, "fsl,imx-audio-ac97")) {
  		codec_dai_name = "ac97-hifi";
-diff --git a/sound/soc/mediatek/mt2701/mt2701-wm8960.c b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-index 414e422c0eba..60a97379e118 100644
---- a/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-+++ b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
-@@ -8,6 +8,7 @@
- 
- #include <linux/module.h>
- #include <sound/soc.h>
-+#include <sound/wm8960.h>
- 
- #include "mt2701-afe-common.h"
- 
-@@ -34,8 +35,8 @@ static int mt2701_wm8960_be_ops_hw_params(struct snd_pcm_substream *substream,
- 
- 	mclk_rate = rate * div_bck_over_lrck * div_mclk_over_bck;
- 
--	snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_rate, SND_SOC_CLOCK_OUT);
--	snd_soc_dai_set_sysclk(codec_dai, 0, mclk_rate, SND_SOC_CLOCK_IN);
-+	snd_soc_dai_set_sysclk(cpu_dai, WM8960_SYSCLK_SRC_MCLK, mclk_rate, SND_SOC_CLOCK_OUT);
-+	snd_soc_dai_set_sysclk(codec_dai, WM8960_SYSCLK_SRC_MCLK, mclk_rate, SND_SOC_CLOCK_IN);
- 
- 	return 0;
- }
 -- 
-2.36.1
+2.37.2
 

@@ -1,0 +1,46 @@
+From 130173c8355bde6de0541741652b66991473701b Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sat, 27 Aug 2022 00:56:11 -0400
+Subject: [PATCH 3/3] ASoC: wm8960: use sysclk as MCLK is PLL is not configured
+
+Simple-Card calls snd_soc_dai_set_sysclk() to configure the MCLK frequency, but
+doesn't call snd_soc_dai_set_pll(). To support this case, fallback to using
+the configured sysclk frequency as MCLK if the PLL has not been configured.
+
+Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
+---
+ sound/soc/codecs/wm8960.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
+index 72aaa0461879..041b860b0c5d 100644
+--- a/sound/soc/codecs/wm8960.c
++++ b/sound/soc/codecs/wm8960.c
+@@ -757,12 +757,22 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+ 		return 0;
+ 	}
+ 
+-	if (wm8960->clk_id != WM8960_SYSCLK_SRC_MCLK && !wm8960->freq_in) {
++	/*
++	 * If a user has called set_pll(), use the configured input frequency as
++	 * MCLK. If not, try to use the frequency passed to set_sysclk() as
++	 * MCLK.
++	 */
++	if (wm8960->freq_in) {
++		freq_in = wm8960->freq_in;
++	} else {
++		freq_in = wm8960->sysclk;
++	}
++
++	if (wm8960->clk_id != WM8960_SYSCLK_SRC_MCLK && !freq_in) {
+ 		dev_err(component->dev, "No MCLK configured\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	freq_in = wm8960->freq_in;
+ 	/*
+ 	 * If it's sysclk auto mode, check if the MCLK can provide sysclk or
+ 	 * not. If MCLK can provide sysclk, using MCLK to provide sysclk
+-- 
+2.37.2
+

@@ -1,6 +1,6 @@
 { device,
   totalDevices ? 16,
-  useWm8960 ? false,
+  useWm8960 ? device == 8,
   ap ? device == 1 }:
 
 { lib, config, pkgs, secrets, ... }:
@@ -40,7 +40,6 @@ in {
       enable = true;
       version = 0;
       firmwareConfig = (if useWm8960 then ''
-        dtoverlay=wm8960-soundcard
       '' else ''
         dtoverlay=fe-pi-audio
       '') + ''
@@ -56,6 +55,19 @@ in {
       {
         name = "ASoC-wm8960-use-sysclk-auto-mode-by-default";
         patch = ./0002-ASoC-wm8960-use-sysclk-auto-mode-by-default.patch;
+      }
+      {
+        name = "ASoC-wm8960-use-sysclk-as-MCLK-is-PLL-is-not-configu";
+        patch = ./0003-ASoC-wm8960-use-sysclk-as-MCLK-is-PLL-is-not-configu.patch;
+      }
+    ];
+  };
+  hardware.deviceTree = {
+    filter = "bcm2708-rpi-zero-w.dtb";
+    overlays = [
+      {
+        name = "wm8960-soundcard";
+        dtsFile = ./wm8960-soundcard.dts;
       }
     ];
   };
@@ -73,14 +85,15 @@ in {
     };
   };
 
-  networking.wireless = {
-    enable = true;
-    interfaces = [ "wlan0" ];
+  networking.wireless.networks = {
+    # Use same PSK as home network
+    AudioRecorder = mkIf (!ap) {
+      pskRaw = "ext:HOME_PSK";
+    };
+    # Make home network higher priority
+    Thunderbolt.priority = 2;
   };
-  environment.etc."wpa_supplicant.conf" = mkForce {
-    source = secrets.getSystemdSecret "wpa_supplicant" secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}";
-  };
-  local.networking.home = {
+  local.networking.wireless.home = {
     enable = true;
     interfaces = [ "wlan0" ];
   };
@@ -189,6 +202,12 @@ in {
   sound.enable = true;
   services.zeusAudio = {
     enable = true;
+    mixerEnums = [
+      (mkIf (!useWm8960) {
+        control = "Capture Mux";
+        value = "LINE_IN";
+      })
+    ];
     devices = map (d: optionalString (d != hostName) "http://${toLower d}.local")
       (genList (i: hostNamePrefix + toString (i + 1)) totalDevices);
     clockMaster = ap;
@@ -248,10 +267,6 @@ in {
   };
 
   systemd.secrets = {
-    wpa_supplicant = {
-      units = [ "wpa_supplicant-wlan0.service" ];
-      files = secrets.mkSecret secrets.AudioRecorder.wpaSupplicant."${if ap then "apConf" else "conf"}" {};
-    };
     hostapd = mkIf ap {
       units = [ "hostapd.service" ];
       files = secrets.mkSecret secrets.AudioRecorder.hostapd.wpaPsk {};
