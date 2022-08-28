@@ -1,7 +1,7 @@
 From 130173c8355bde6de0541741652b66991473701b Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Sat, 27 Aug 2022 00:56:11 -0400
-Subject: [PATCH 3/3] ASoC: wm8960: use sysclk as MCLK is PLL is not configured
+Subject: [PATCH 3/3] ASoC: wm8960: use sysclk as MCLK if PLL is not configured
 
 Simple-Card calls snd_soc_dai_set_sysclk() to configure the MCLK frequency, but
 doesn't call snd_soc_dai_set_pll(). To support this case, fallback to using

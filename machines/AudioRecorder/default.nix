@@ -39,10 +39,6 @@ in {
     loader.raspberryPi = {
       enable = true;
       version = 0;
-      firmwareConfig = if useWm8960 then ''
-      '' else ''
-        dtoverlay=fe-pi-audio
-      '';
       uboot.enable = true;
     };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
@@ -56,19 +52,20 @@ in {
         patch = ./0002-ASoC-wm8960-use-sysclk-auto-mode-by-default.patch;
       }
       {
-        name = "ASoC-wm8960-use-sysclk-as-MCLK-is-PLL-is-not-configu";
-        patch = ./0003-ASoC-wm8960-use-sysclk-as-MCLK-is-PLL-is-not-configu.patch;
+        name = "ASoC-wm8960-use-sysclk-as-MCLK-if-PLL-is-not-configu";
+        patch = ./0003-ASoC-wm8960-use-sysclk-as-MCLK-if-PLL-is-not-configu.patch;
       }
     ];
   };
   hardware.deviceTree = {
     filter = "bcm2708-rpi-zero-w.dtb";
-    overlays = [
-      {
-        name = "wm8960-soundcard";
-        dtsFile = ./wm8960-soundcard.dts;
-      }
-    ];
+    overlays = singleton (if useWm8960 then {
+      name = "wm8960-soundcard";
+      dtsFile = ./wm8960-soundcard.dts;
+    } else {
+      name = "fe-pi-audio";
+      dtsFile = ./fe-pi-audio.dts;
+    });
   };
 
   nixpkgs.config.platform = lib.systems.platforms.raspberrypi;
