@@ -15,6 +15,8 @@ with lib;
     environment.noXlibs = true;
 
     nixpkgs.overlays = singleton (const (super: {
+      gnupg = super.gnupg.override { guiSupport = false; };
+
       qt515 = super.qt515.overrideScope' (const (super: {
         # Build Qt without Gtk. The other GUI deps can't be disabled right now.
         qtbase = super.qtbase.override {

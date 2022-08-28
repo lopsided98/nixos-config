@@ -405,11 +405,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1661014602,
-        "narHash": "sha256-LSZVR6sHCBv7ZkZvjyYOz3CPVMdGfvehfkVPAB2MM2E=",
+        "lastModified": 1661715792,
+        "narHash": "sha256-DO81nG4/EX7kleTcw0gqn4hUqIiVg8iH0HtYPpY8DZg=",
         "owner": "lopsided98",
         "repo": "nixos-secrets",
-        "rev": "ff58f40d05f3b86c4e69c25a1854ec7cc36c4ff0",
+        "rev": "af90e51e367694bfee2f4a8b39d8d0b2e049b6d8",
         "type": "github"
       },
       "original": {
