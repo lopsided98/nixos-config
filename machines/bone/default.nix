@@ -21,15 +21,11 @@ with lib;
 
   local.machine.beagleBone.enableWirelessCape = true;
 
-  hardware.firmware = singleton (pkgs.runCommand "mt7610e-firmware" {} ''
+  hardware.firmware = singleton (pkgs.runCommand "mt7610-firmware" {} ''
     mkdir -p "$out/lib/firmware/mediatek"
-    cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610e.bin "$out/lib/firmware/mediatek"
+    cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610*.bin "$out/lib/firmware/mediatek"
   '');
 
-  local.networking.home = {
-    enable = true;
-    interfaces = [ "eth0" ];
-  };
   local.networking.wireless = {
     home = {
       enable = true;
@@ -46,33 +42,59 @@ with lib;
     enable = true;
     interface = "wlan0";
     ssid = "Illuin";
+    countryCode = "US";
     extraConfig = ''
       wpa=2
       wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.bone.hostapd.wpaPsk}
     '';
   };
+
   systemd.network = {
     enable = true;
-    networks."30-ap" = {
-      name = "wlan0";
-      address = [ "192.168.2.1/24" ];
-      networkConfig = {
-        DHCPServer = true;
-        IPMasquerade = "yes";
-        MulticastDNS = true;
+    netdevs."50-br-lan" = {
+      netdevConfig = {
+        Name = "br-lan";
+        Kind = "bridge";
       };
-      # WL1837 driver doesn't accept multicast traffic in AP mode unless
-      # ALLMULTI is enabled.
-      # https://patchwork.kernel.org/project/linux-wireless/patch/20170209143728.22831-1-i-hunter1@ti.com/
-      linkConfig.AllMulticast = true;
+      # Ethernet driver requires default_pvid to be 0 to be bridged
+      extraConfig = ''
+        [Bridge]
+        DefaultPVID=none
+      '';
     };
-    wait-online = {
-      anyInterface = true;
-      ignoredInterfaces = [ "wlan0" ];
+    networks = {
+      "30-br-lan" = {
+        name = "br-lan";
+        address = [ "192.168.2.1/24" ];
+        networkConfig = {
+          DHCPServer = true;
+          IPMasquerade = "ipv4";
+          MulticastDNS = true;
+        };
+        # Hardcode Dartmouth DNS so clients recieve it over DHCP even if the
+        # uplink interface is not connected
+        dhcpServerConfig.DNS = "129.170.17.4";
+      };
+      "30-ap" = {
+        name = "wlan0";
+        # Wait for hostapd to switch to AP mode
+        matchConfig.WLANInterfaceType = "ap";
+        networkConfig.Bridge = "br-lan";
+        # WL1837 driver doesn't accept multicast traffic in AP mode unless
+        # ALLMULTI is enabled.
+        # https://patchwork.kernel.org/project/linux-wireless/patch/20170209143728.22831-1-i-hunter1@ti.com/
+        linkConfig.AllMulticast = true;
+      };
+      "30-ethernet" = {
+        name = "eth0";
+        networkConfig.Bridge = "br-lan";
+      };
     };
   };
 
   networking.hostName = "bone";
+
+  environment.systemPackages = with pkgs; [ aircrack-ng iperf3 ];
 
   # Services to enable
 
@@ -83,19 +105,10 @@ with lib;
     ];
   };
 
-  networking.firewall.interfaces = {
-    wlan0.allowedUDPPorts = [
-      67 # DHCP
-      5353 # mDNS
-    ];
-    # TODO: Remove at school
-    wlan1.allowedUDPPorts = [
-      5353 # mDNS
-    ];
-    eth0.allowedUDPPorts = [
-      5353 # mDNS
-    ];
-  };
+  networking.firewall.interfaces.br-lan.allowedUDPPorts = [
+    67 # DHCP
+    5353 # mDNS
+  ];
 
   systemd.secrets = {
     sshd = {
