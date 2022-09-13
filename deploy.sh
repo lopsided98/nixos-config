@@ -77,22 +77,25 @@ realize_builder() {
 activate() {
   local machine="${1}"
   local toplevel="${2}"
+  local action="${3}"
 
   machine_ssh "${machine}" \
     sudo -Sv 2\>/dev/null \&\& \
     sudo -n nix-env -p /nix/var/nix/profiles/system --set "${toplevel}" \&\& \
-    sudo -n "${toplevel}/bin/switch-to-configuration" switch \&\& \
+    sudo -n "${toplevel}/bin/switch-to-configuration" "${action}" \&\& \
     : \
     <<< "${sudo_password}"
 }
 
 deploy_hydra=0
 use_builder=0 # Whether to run builds locally
+action=switch
 
-while getopts "pb" opt; do
+while getopts "pba:" opt; do
   case "$opt" in
     p) deploy_hydra=1 ;;
     b) use_builder=1 ;;
+    a) action="${OPTARG}" ;;
     \?) usage; exit ;;
   esac
 done
@@ -114,5 +117,5 @@ fi
 read -sp "[sudo] password for ${USER}: " sudo_password
 echo
 
-activate "${machine}" "${toplevel}"
+activate "${machine}" "${toplevel}" "${action}"
 
