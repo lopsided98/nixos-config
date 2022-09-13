@@ -26,7 +26,7 @@ with lib;
 
     nixpkgs.overlays = singleton (const (super: {
       # Avoid transitive dependency on polkit and others
-      gnupg = super.gnupg.override { enableMinimal = true; };
+      gnupg = super.gnupg.override { withPcsc = false; };
       wpa_supplicant = super.wpa_supplicant.override { withPcsclite = false; };
 
       nix = super.nix.override { withAWS = false; };
