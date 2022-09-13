@@ -42,10 +42,10 @@ with lib;
   networking.wireless = {
     enable = true;
     interfaces = [ "wlan0" ];
-    # External password database doesn't work for some reason
-    networks."OLE AKI".psk = "@MAINE_PSK@";
-    environmentFile = secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant;
+    networks."OLE AKI".pskRaw = "ext:MAINE_PSK";
   };
+  local.networking.wireless.passwordFiles =
+    singleton (secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant);
 
   systemd.network = {
     enable = true;
