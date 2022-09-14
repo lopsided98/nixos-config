@@ -53,6 +53,7 @@ in {
     eduroam = {
       enable = true;
       interfaces = [ "wl-wan" ];
+      networkConfig.dhcpV4Config.Anonymize = true;
     };
   };
 

@@ -14,6 +14,14 @@ in {
       type = types.listOf types.str;
       description = "Wireless network interfaces";
     };
+
+    networkConfig = mkOption {
+      type = types.attrs;
+      default = {};
+      description = ''
+        Extra systemd-networkd configuration options for this network
+      '';
+    };
   };
 
   # Implementation
@@ -40,14 +48,14 @@ in {
     local.networking.wireless.passwordFiles =
       singleton (secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam);
 
-    systemd.network = {
-      enable = true;
-      networks."30-eduroam" = {
+    systemd.network.networks."30-eduroam" = mkMerge [
+      ({
         name = concatStringsSep " " cfg.interfaces;
         matchConfig.SSID = "eduroam";
         DHCP = "ipv4";
-      };
-    };
+      })
+      cfg.networkConfig
+    ];
 
     systemd.secrets.wpa_supplicant-eduroam = {
       files = secrets.mkSecret secrets.wpaSupplicant.eduroam { };
