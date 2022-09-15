@@ -56,9 +56,6 @@ in {
       networkConfig.dhcpV4Config.Anonymize = true;
     };
   };
-  networking.wireless.networks.eduroam.extraConfig = ''
-    bssid=d4:dc:09:85:ac:f1
-  '';
 
   # LAN Bridge
   systemd.network = {
