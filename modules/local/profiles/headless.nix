@@ -23,6 +23,14 @@ with lib;
         };
       }));
       v4l-utils = super.v4l-utils.override { withGUI = false; };
+
+      gst_all_1 = super.gst_all_1 // {
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override {
+          enableX11 = false;
+          enableWayland = false;
+          enableGl = false;
+        };
+      };
     }));
   };
 }
