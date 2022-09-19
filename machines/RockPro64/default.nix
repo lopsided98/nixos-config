@@ -152,7 +152,7 @@ in {
     hostId = "67b35626";
   };
 
-  environment.systemPackages = with pkgs; [ aircrack-ng iperf3 ];
+  environment.systemPackages = with pkgs; [ wavemon aircrack-ng iperf3 ];
 
   # List services that you want to enable:
 
