@@ -179,7 +179,7 @@ in {
   local.services.backup = {
     server = {
       enable = true;
-      device = "/dev/disk/by-uuid/fea46c86-192a-40e4-a871-ae7f5d9b1840";
+      device = "/dev/disk/by-uuid/8ca1949f-18bc-47b7-927f-183f925881ed";
     };
     sanoid.enable = true;
     syncthing = {
