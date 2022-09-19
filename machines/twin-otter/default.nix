@@ -22,17 +22,19 @@ in {
     compressImage = false;
   };
 
+  boot.kernelPackages = mkForce pkgs.linuxPackages_rpi0;
+
   boot.loader.raspberryPi = {
     enable = true;
     version = 0;
     firmwareConfig = ''
-      # Use the minimum amount of GPU memory
-      gpu_mem=16
+      gpu_mem=128
     '';
     uboot.enable = true;
   };
-  hardware.deviceTree = {
-    filter = "bcm2835-rpi-zero-w.dtb";
+  hardware.deviceTree = rec {
+    name = "bcm2708-rpi-zero-w.dtb";
+    filter = name;
     overlays = [
       {
         name = "disable-bt";
@@ -41,6 +43,10 @@ in {
       {
         name = "disable-stdout";
         dtsFile = ./disable-stdout.dts;
+      }
+      {
+        name = "imx219";
+        dtsFile = ./imx219.dts;
       }
     ];
   };
@@ -54,15 +60,12 @@ in {
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
   '';
 
-  services.resolved.extraConfig = "MulticastDNS=yes";
-
   # Access point
   services.hostapd = {
     enable = true;
     interface = "ap0";
     ssid = config.networking.hostName;
     extraConfig = ''
-      wpa=2
       wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.twin-otter.hostapd.wpaPsk}
     '';
   };
@@ -81,16 +84,36 @@ in {
       };
     };
   };
-  # DHCP server
-  networking.firewall.allowedUDPPorts = [ 67 ];
+  networking.firewall.interfaces.ap0.allowedUDPPorts = [
+    67 # DHCP
+    5353 # mDNS
+  ];
 
-  # eduroam
-  local.networking.wireless.eduroam = {
-    enable = true;
-    interfaces = [ "wlan0" ];
+  local.networking.wireless = {
+    apartment = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
+    eduroam = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
+    home = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
   };
 
   networking.hostName = "twin-otter";
+
+  environment.systemPackages = with pkgs; [
+    libcamera
+    v4l-utils
+    gst_all_1.gstreamer.bin
+    gst_all_1.gstreamer.out
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ];
 
   # Services to enable
 
