@@ -117,6 +117,8 @@ with lib;
 
   networking.hostName = "Roomba"; # Define your hostname.
 
+  environment.systemPackages = with pkgs; [ wavemon aircrack-ng iperf3 ];
+
   # List services that you want to enable:
 
   services.openssh.hostKeys = [
