@@ -6,7 +6,6 @@
   imports = [
     ../../modules
     ../../modules/local/machine/raspberry-pi.nix
-    inputs.kitty-cam.nixosModules.default
   ];
 
   local.machine.raspberryPi.enableWirelessFirmware = true;
@@ -16,16 +15,9 @@
     rootPartitionUUID = "b12d092c-fc79-4d6d-8879-0be220bc1ad2";
   };
 
-  boot = {
-    loader.raspberryPi = {
-      enable = true;
-      version = 3;
-      firmwareConfig = ''
-        dtoverlay=gpio-ir-tx,gpio_pin=22
-        dtoverlay=pi3-disable-bt
-      '';
-    };
-    kernelPackages = lib.mkForce pkgs.linuxPackages_rpi3;
+  boot.loader.raspberryPi = {
+    enable = true;
+    version = 3;
   };
 
   local.networking = {
@@ -42,16 +34,4 @@
   networking.hostName = "Roomba"; # Define your hostname.
 
   # List services that you want to enable:
-
-  # Allow faac (non-redistributable) for AAC encoding
-  nixpkgs.config.allowUnfree = true;
-
-  services.kittyCam.enable = true;
-
-  sound.enable = true;
-
-  networking.firewall.allowedTCPPorts = [
-    1935 # RTMP Streaming
-    5353 # mDNS
-  ];
 }
