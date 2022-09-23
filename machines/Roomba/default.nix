@@ -24,6 +24,7 @@ with lib;
       };
       generic-extlinux-compatible.copyKernels = false;
     };
+    kernelPackages = mkForce pkgs.linuxPackages_5_15;
   };
 
   hardware.firmware = singleton (pkgs.runCommandNoCC "mt7610-firmware" {} ''
