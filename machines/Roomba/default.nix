@@ -64,16 +64,12 @@ with lib;
       networkConfig = {
         DHCPServer = true;
         MulticastDNS = true;
+        IPMasquerade = "ipv4";
       };
       # Hardcode Dartmouth DNS so clients recieve it over DHCP even if the
       # uplink interface is not connected
       dhcpServerConfig.DNS = "129.170.17.4";
     };
-  };
-  networking.nat = {
-    enable = true;
-    internalInterfaces = [ "br-lan" ];
-    externalInterface = "wl-wan";
   };
   networking.firewall.interfaces.br-lan.allowedUDPPorts = [
     53 # DNS
