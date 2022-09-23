@@ -42,6 +42,9 @@ in {
       MulticastDNS = "yes";
     };
   };
+  networking.firewall.interfaces.eth0.allowedUDPPorts = [
+    5353 # mDNS
+  ];
   # Work around checksumming bug
   networking.localCommands = ''
     ${pkgs.ethtool}/bin/ethtool -K eth0 rx off tx off
