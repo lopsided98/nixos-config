@@ -16,8 +16,6 @@ with lib;
     local.profiles.headless = mkDefault true;
     local.profiles.standard = mkDefault false;
     boot.enableContainers = mkDefault false;
-    security.polkit.enable = mkDefault false;
-    services.udisks2.enable = mkDefault false;
     documentation.enable = mkDefault false;
     programs.command-not-found.enable = mkDefault false;
     xdg.mime.enable = mkDefault false;
