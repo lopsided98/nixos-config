@@ -32,9 +32,12 @@ in {
     # Raspberry Pi 0s and 1s are the only ARMv6 systems I have, so it makes
     # sense to optimize for them. More importantly, enabling ARMv6k avoid many
     # issues with the lack of atomics support.
-    local.system.hostSystem = mkIf (cfg.version <= 1) lib.systems.examples.raspberryPi // {
-      gcc.cpu = "arm1176jzf-s";
-    };
+    local.system.hostSystem = mkIf (cfg.version <= 1) (lib.systems.examples.raspberryPi // {
+      gcc = {
+        arch = "armv6k";
+        tune = "arm1176jzf-s";
+      };
+    });
 
     sdImage = let
       firmwareBuilder = pkgs.buildPackages.callPackage
