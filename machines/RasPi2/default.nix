@@ -13,8 +13,6 @@ in {
   local.machine.raspberryPi.version = 2;
 
   local.profiles.headless = true;
-  # SpiderMonkey doesn't build on 32-bit (OOM)
-  security.polkit.enable = false;
 
   sdImage = {
     firmwarePartitionID = "0xc99f2756";
