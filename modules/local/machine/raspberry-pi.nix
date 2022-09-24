@@ -35,6 +35,7 @@ in {
     local.system.hostSystem = mkIf (cfg.version <= 1) (lib.systems.examples.raspberryPi // {
       gcc = {
         arch = "armv6k";
+        fpu = "vfpv2";
         tune = "arm1176jzf-s";
       };
     });
