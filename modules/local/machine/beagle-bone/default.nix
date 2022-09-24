@@ -2,15 +2,14 @@
 # not either and there is no way to do conditional imports. Any machine that
 # uses this configuration must manually include it.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 with lib;
 
 let
   cfg = config.local.machine.beagleBone;
 in {
-  # FIXME: find a way to import this from nixpkgs with flakes
-  imports = singleton ../sd-image.nix;
+  imports = singleton "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix";
 
   options.local.machine.beagleBone = {
     enableWirelessCape = mkEnableOption "support for the Wireless Connectivity Cape";

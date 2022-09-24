@@ -8,7 +8,10 @@ with lib;
     ../../modules/local/machine/raspberry-pi.nix
   ];
 
-  local.machine.raspberryPi.enableWirelessFirmware = true;
+  local.machine.raspberryPi = {
+    version = 3;
+    enableWirelessFirmware = true;
+  };
 
   sdImage = {
     firmwarePartitionID = "0x0980df14";
