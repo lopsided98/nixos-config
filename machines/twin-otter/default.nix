@@ -13,7 +13,10 @@ in {
   # Enable cross-compilation
   local.system.buildSystem.system = "x86_64-linux";
 
-  local.machine.raspberryPi.enableWirelessFirmware = true;
+  local.machine.raspberryPi = {
+    version = 0;
+    enableWirelessFirmware = true;
+  };
   local.profiles.minimal = true;
 
   sdImage = {

@@ -9,6 +9,8 @@
   # Enable cross-compilation
   local.system.buildSystem.system = "x86_64-linux";
 
+  local.machine.raspberryPi.version = 1;
+
   local.profiles.minimal = true;
 
   sdImage = {
@@ -18,7 +20,6 @@
 
   boot.loader.raspberryPi = {
     enable = true;
-    version = 1;
     uboot.enable = true;
   };
 

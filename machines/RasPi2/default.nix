@@ -10,6 +10,8 @@ in {
     ../../modules
   ];
 
+  local.machine.raspberryPi.version = 2;
+
   local.profiles.headless = true;
   # SpiderMonkey doesn't build on 32-bit (OOM)
   security.polkit.enable = false;
@@ -22,7 +24,6 @@ in {
 
   boot.loader.raspberryPi = {
     enable = true;
-    version = 2;
     uboot.enable = true;
   };
 

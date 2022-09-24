@@ -20,6 +20,19 @@ self: super: with super.lib; let
   });
 
 in {
+  lib = super.lib.extend (libSelf: libSuper: {
+    systems = libSuper.systems // {
+      examples = libSuper.systems.examples // {
+        # Raspberry Pis are the only ARMv6 systems I have, so it makes sense to
+        # optimize for them. More importantly, enabling ARMv6k avoid many issues
+        # with the lack of atomics support.
+        raspberryPiOptimized = libSuper.systems.examples.raspberryPi // {
+          gcc.cpu = "arm1176jzf-s";
+        };
+      };
+    };
+  });
+
   aur-buildbot = self.callPackage ./aur-buildbot {};
 
   dnsupdate = self.python3Packages.callPackage ./dnsupdate { };

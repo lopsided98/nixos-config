@@ -14,16 +14,28 @@ in {
   imports = singleton "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix";
 
   options.local.machine.raspberryPi = {
+    version = mkOption {
+      type = types.enum [ 0 1 2 3 4 ];
+      description = lib.mdDoc "Raspberry Pi model version number";
+    };
+
     enableWirelessFirmware = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to enable the WiFi/Bluetooth firmware for the Raspberry Pi.
       '';
     };
   };
 
   config = {
+    # Raspberry Pi 0s and 1s are the only ARMv6 systems I have, so it makes
+    # sense to optimize for them. More importantly, enabling ARMv6k avoid many
+    # issues with the lack of atomics support.
+    local.system.hostSystem = mkIf (cfg.version <= 1) lib.systems.examples.raspberryPi // {
+      gcc.cpu = "arm1176jzf-s";
+    };
+
     sdImage = let
       firmwareBuilder = pkgs.buildPackages.callPackage
         (pkgs.path + "/nixos/modules/system/boot/loader/raspberrypi/firmware-builder.nix") {
@@ -56,7 +68,10 @@ in {
     };
 
     boot.loader = {
-      raspberryPi.firmwareDir = "/boot/firmware";
+      raspberryPi = {
+        inherit (cfg) version;
+        firmwareDir = "/boot/firmware";
+      };
       grub.enable = false;
     };
 

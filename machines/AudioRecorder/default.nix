@@ -19,7 +19,10 @@ in {
   # Enable cross-compilation
   local.system.buildSystem.system = "x86_64-linux";
 
-  local.machine.raspberryPi.enableWirelessFirmware = true;
+  local.machine.raspberryPi = {
+    version = 0;
+    enableWirelessFirmware = true;
+  };
   local.profiles.minimal = true;
 
   sdImage = {
@@ -38,7 +41,6 @@ in {
   boot = {
     loader.raspberryPi = {
       enable = true;
-      version = 0;
       uboot.enable = true;
     };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
