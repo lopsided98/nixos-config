@@ -95,7 +95,7 @@ in {
   local.services.backup = {
     server = {
       enable = true;
-      device = "/dev/disk/by-uuid/8ca1949f-18bc-47b7-927f-183f925881ed";
+      device = "/dev/disk/by-uuid/86056ca8-3d20-4bbe-90f6-e7ec1f837c79";
     };
     sanoid.enable = true;
     syncthing = {
