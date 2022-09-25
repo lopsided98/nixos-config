@@ -24,6 +24,26 @@ in {
 
     boot.supportedFilesystems = [ "zfs" ];
 
+    local.services.mail.enable = true;
+
+    services.smartd = {
+      enable = true;
+      autodetect = false;
+      extraOptions = [ "--interval=43200" /* 12h */ ];
+
+      notifications.mail = {
+        enable = true;
+        sender = "${config.networking.hostName}@benwolsieffer.com";
+        recipient = "benwolsieffer@gmail.com";
+        mailer = config.local.services.mail.sendmail;
+      };
+
+      defaults.monitored = "-H -f -l error -l selftest -C 197 -U 198";
+      devices = singleton {
+        inherit (cfg) device;
+      };
+    };
+
     # Backup drive decryption prompt
     environment.interactiveShellInit = let
       backupUtils = pkgs.writeText "backup-utils.sh" ''
