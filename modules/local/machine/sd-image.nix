@@ -18,7 +18,7 @@ with lib;
 let
   rootfsImage = pkgs.callPackage (pkgs.path + "/nixos/lib/make-ext4-fs.nix") ({
     inherit (config.sdImage) storePaths;
-    compressImage = true;
+    compressImage = config.sdImage.compressImage;
     populateImageCommands = config.sdImage.populateRootCommands;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
@@ -34,22 +34,22 @@ in
   options.sdImage = {
     imageName = mkOption {
       default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
-      description = ''
+      description = lib.mdDoc ''
         Name of the generated image file.
       '';
     };
 
     imageBaseName = mkOption {
       default = "nixos-sd-image";
-      description = ''
+      description = lib.mdDoc ''
         Prefix of the name of the generated image file.
       '';
     };
 
     storePaths = mkOption {
       type = with types; listOf package;
-      example = literalExample "[ pkgs.stdenv ]";
-      description = ''
+      example = literalExpression "[ pkgs.stdenv ]";
+      description = lib.mdDoc ''
         Derivations to be included in the Nix store in the generated SD image.
       '';
     };
@@ -57,7 +57,7 @@ in
     firmwarePartitionOffset = mkOption {
       type = types.int;
       default = 8;
-      description = ''
+      description = lib.mdDoc ''
         Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
         bytes).
         Can be increased to make more space for boards requiring to dd u-boot
@@ -72,7 +72,7 @@ in
     firmwarePartitionID = mkOption {
       type = types.str;
       default = "0x2178694e";
-      description = ''
+      description = lib.mdDoc ''
         Volume ID for the /boot/firmware partition on the SD card. This value
         must be a 32-bit hexadecimal number.
       '';
@@ -81,7 +81,7 @@ in
     firmwarePartitionName = mkOption {
       type = types.str;
       default = "FIRMWARE";
-      description = ''
+      description = lib.mdDoc ''
         Name of the filesystem which holds the boot firmware.
       '';
     };
@@ -90,7 +90,7 @@ in
       type = types.nullOr types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
-      description = ''
+      description = lib.mdDoc ''
         UUID for the filesystem on the main NixOS partition on the SD card.
       '';
     };
@@ -99,14 +99,14 @@ in
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
       default = 30;
-      description = ''
+      description = lib.mdDoc ''
         Size of the /boot/firmware partition, in megabytes.
       '';
     };
 
     populateFirmwareCommands = mkOption {
-      example = literalExample "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
-      description = ''
+      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+      description = lib.mdDoc ''
         Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
         /boot/firmware partition on the SD image.
@@ -114,8 +114,8 @@ in
     };
 
     populateRootCommands = mkOption {
-      example = literalExample "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
-      description = ''
+      example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
+      description = lib.mdDoc ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
         root (/) partition on the SD image. Use this to
@@ -124,9 +124,9 @@ in
     };
 
     postBuildCommands = mkOption {
-      example = literalExample "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
+      example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to run after the image is built.
         Can be used for boards requiring to dd u-boot SPL before actual partitions.
       '';
@@ -135,16 +135,16 @@ in
     compressImage = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether the SD image should be compressed using
-        <command>zstd</command>.
+        {command}`zstd`.
       '';
     };
 
     expandOnBoot = mkOption {
       type = types.bool;
       default = true;
-      description = ''
+      description = lib.mdDoc ''
         Whether to configure the sd image to expand it's partition on boot.
       '';
     };
@@ -172,9 +172,10 @@ in
     mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime util-linux zstd ];
+      nativeBuildInputs = [ dosfstools e2fsprogs libfaketime mtools util-linux ]
+      ++ lib.optional config.sdImage.compressImage zstd;
 
-      inherit (config.sdImage) compressImage;
+      inherit (config.sdImage) imageName compressImage;
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
@@ -185,12 +186,16 @@ in
         else
           echo "file sd-image $img" >> $out/nix-support/hydra-build-products
         fi
+        root_fs=${rootfsImage}
+        ${lib.optionalString config.sdImage.compressImage ''
+        root_fs=./root-fs.img
         echo "Decompressing rootfs image"
-        zstd -d --no-progress "${rootfsImage}" -o ./root-fs.img
+        zstd -d --no-progress "${rootfsImage}" -o $root_fs
+        ''}
         # Gap in front of the first partition, in MiB
         gap=${toString config.sdImage.firmwarePartitionOffset}
         # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
-        rootSizeBlocks=$(du -B 512 --apparent-size ./root-fs.img | awk '{ print $1 }')
+        rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
         firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
         imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
         truncate -s $imageSize $img
@@ -205,7 +210,7 @@ in
         EOF
         # Copy the rootfs into the SD image
         eval $(partx $img -o START,SECTORS --nr 2 --pairs)
-        dd conv=notrunc if=./root-fs.img of=$img seek=$START count=$SECTORS
+        dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) firmware_part.img
