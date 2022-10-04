@@ -2,7 +2,7 @@
 # not either and there is no way to do conditional imports. Any machine that
 # uses this configuration must manually include it.
 
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -11,7 +11,8 @@ let
   bootloaderCfg = config.boot.loader.raspberryPi;
   ubootEnabled = bootloaderCfg.uboot.enable;
 in {
-  imports = singleton "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix";
+  # FIXME: find a way to import this from nixpkgs with flakes
+  imports = singleton ./sd-image.nix;
 
   options.local.machine.raspberryPi = {
     version = mkOption {
