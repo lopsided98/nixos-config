@@ -25,14 +25,14 @@ in {
     compressImage = false;
   };
 
-  boot.kernelPackages = mkForce pkgs.linuxPackages_rpi0;
+  boot = {
+    kernelPackages = mkForce pkgs.linuxPackages_rpi0;
+    kernelParams = [ "cma=128M" ];
+  };
 
   boot.loader.raspberryPi = {
     enable = true;
     version = 0;
-    firmwareConfig = ''
-      gpu_mem=128
-    '';
     uboot.enable = true;
   };
   hardware.deviceTree = rec {
@@ -131,7 +131,7 @@ in {
   services.fakeHwClock.enable = true;
 
   services.chrony = {
-    enable = true;
+    enable = false;
     initstepslew = {
       enabled = true;
       threshold = 30;
@@ -146,6 +146,55 @@ in {
       # Allow GPS to step clock
       makestep 30 3
     '';
+  };
+
+  users = {
+    users.camera = {
+      isSystemUser = true;
+      description = "Camera user";
+      group = "camera";
+      extraGroups = [ "video" ];
+    };
+    groups.camera = {};
+  };
+
+  systemd.services.camera-still = {
+    description = "Camera still image capture";
+    wantedBy = [ "multi-user.service" ];
+    serviceConfig = {
+      Type = "exec";
+      User = "camera";
+      Group = "camera";
+      Restart = "on-failure";
+      ExecStart = pkgs.runCommand "gstreamer-still.sh" {
+        text = ''
+          #!${pkgs.runtimeShell}
+          export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
+          image_dir=$(mktemp -d /var/lib/camera/still-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+
+          ${pkgs.gst_all_1.gstreamer.bin}/bin/gst-launch-1.0 \
+            libcamerasrc ! \
+            video/x-raw,width=3280,height=2464,framerate=1/5,stream-role=still-capture ! \
+            queue ! \
+            jpegenc ! \
+            multifilesink location="${image_dir}/img_%06d.jpg"
+        '';
+        passAsFile = [ "text" ];
+        buildInputs = with pkgs.gst_all_1; [
+          pkgs.libcamera
+          gstreamer
+          gst-plugins-base
+          gst-plugins-good
+        ];
+        preferLocalBuild = true;
+      } ''
+        export gstPluginSystemPath="$GST_PLUGIN_SYSTEM_PATH_1_0"
+        substituteAll "$textPath" "$out"
+        chmod +x "$out"
+      '';
+      StateDirectory = "camera";
+      StateDirectoryMode = "0755";
+    };
   };
 
   systemd.secrets = {
