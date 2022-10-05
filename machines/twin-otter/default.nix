@@ -25,10 +25,7 @@ in {
     compressImage = false;
   };
 
-  boot = {
-    kernelPackages = mkForce pkgs.linuxPackages_rpi0;
-    kernelParams = [ "cma=128M" ];
-  };
+  boot.kernelPackages = mkForce pkgs.linuxPackages_rpi0;
 
   boot.loader.raspberryPi = {
     enable = true;
@@ -46,10 +43,6 @@ in {
       {
         name = "disable-stdout";
         dtsFile = ./disable-stdout.dts;
-      }
-      {
-        name = "imx219";
-        dtsFile = ./imx219.dts;
       }
     ];
   };
@@ -110,7 +103,6 @@ in {
   networking.hostName = "twin-otter";
 
   environment.systemPackages = with pkgs; [
-    libcamera
     v4l-utils
     gst_all_1.gstreamer.bin
     gst_all_1.gstreamer.out
