@@ -30,6 +30,10 @@ in {
   boot.loader.raspberryPi = {
     enable = true;
     version = 0;
+    firmwareConfig = ''
+      start_x=1
+      gpu_mem=128
+    '';
     uboot.enable = true;
   };
   hardware.deviceTree = rec {
