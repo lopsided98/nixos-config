@@ -43,6 +43,7 @@ with lib;
       MACAddressPolicy = "random";
     };
   };
+  networking.wireless.scanOnLowSignal = false;
   local.networking.wireless = {
     home = {
       enable = true;
@@ -93,6 +94,8 @@ with lib;
     ssid = "Illuin";
     countryCode = "US";
     extraConfig = ''
+      wpa=2
+      wpa_key_mgmt=WPA-PSK
       wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.Roomba.hostapd.wpaPsk}
     '';
   };
