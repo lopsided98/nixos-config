@@ -112,6 +112,7 @@ in {
     gst_all_1.gstreamer.out
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    libraspberrypi
   ];
 
   # Services to enable
@@ -156,28 +157,21 @@ in {
 
   systemd.services.camera-still = {
     description = "Camera still image capture";
-    wantedBy = [ "multi-user.service" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "exec";
-      User = "camera";
-      Group = "camera";
       Restart = "on-failure";
-      ExecStart = pkgs.runCommand "gstreamer-still.sh" {
+      ExecStart = pkgs.runCommand "camera-still.sh" {
         text = ''
           #!${pkgs.runtimeShell}
           export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
           image_dir=$(mktemp -d /var/lib/camera/still-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+          chmod +rx "$image_dir"
 
-          ${pkgs.gst_all_1.gstreamer.bin}/bin/gst-launch-1.0 \
-            libcamerasrc ! \
-            video/x-raw,width=3280,height=2464,framerate=1/5,stream-role=still-capture ! \
-            queue ! \
-            jpegenc ! \
-            multifilesink location="${image_dir}/img_%06d.jpg"
+          ${pkgs.libraspberrypi}/bin/raspistill -t 0 -tl 2000 -o "$image_dir/img_%04d.jpg"
         '';
         passAsFile = [ "text" ];
         buildInputs = with pkgs.gst_all_1; [
-          pkgs.libcamera
           gstreamer
           gst-plugins-base
           gst-plugins-good
