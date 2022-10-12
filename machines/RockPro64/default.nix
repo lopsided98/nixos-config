@@ -62,6 +62,10 @@ in {
     '';
   };
 
+  networking.firewall = {
+    extraPackages = [ pkgs.nftables ];
+  };
+
   networking = {
     hostName = "RockPro64";
     hostId = "67b35626";
@@ -121,6 +125,12 @@ in {
       };
 
       # Snapshots of non-ZFS devices that backup to this node
+      "backup/backups/Dell-Inspiron-15" = {
+        use_template = [ "backup" ];
+        autosnap = true;
+        recursive = true;
+        process_children_only = true;
+      };
       "backup/backups/P-3400" = {
         use_template = [ "backup" ];
         autosnap = true;
@@ -134,6 +144,11 @@ in {
   in {
     commonArgs = [ "--sshport" "4245" ];
     commands = {
+      "backup/backups/Dell-Inspiron-15" = {
+        target = "${remote}:backup/backups/Dell-Inspiron-15";
+        recursive = true;
+        extraArgs = [ "--skip-parent" ];
+      };
       "backup/backups/P-3400" = {
         target = "${remote}:backup/backups/P-3400";
         recursive = true;

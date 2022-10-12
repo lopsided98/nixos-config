@@ -196,12 +196,6 @@ in rec {
       };
 
       # Snapshots of non-ZFS devices that backup to this node
-      "backup/backups/Dell-Inspiron-15" = {
-        use_template = [ "backup" ];
-        autosnap = true;
-        recursive = true;
-        process_children_only = true;
-      };
       "backup/backups/Dell-Inspiron-15-Windows" = {
         use_template = [ "backup" ];
         autosnap = true;
@@ -222,11 +216,6 @@ in rec {
       };
       "backup/backups/HP-Z420" = {
         target = "${remote}:backup/backups/HP-Z420";
-        recursive = true;
-        extraArgs = [ "--skip-parent" ];
-      };
-      "backup/backups/Dell-Inspiron-15" = {
-        target = "${remote}:backup/backups/Dell-Inspiron-15";
         recursive = true;
         extraArgs = [ "--skip-parent" ];
       };
