@@ -35,7 +35,8 @@ in {
     # is used on the VPN in order to get consistent IPs.
     linkConfig.MACAddress = "ba:4b:f9:9b:f1:88";
     networkConfig = {
-      DHCP = "ipv4";
+      Address = "192.168.2.2/24";
+      Gateway = "192.168.2.1";
       MulticastDNS = "yes";
     };
   };

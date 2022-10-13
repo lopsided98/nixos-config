@@ -66,13 +66,20 @@ with lib;
       name = "br-lan";
       address = [ "192.168.2.1/24" ];
       networkConfig = {
+        DNS = [ "192.168.2.1" ];
         DHCPServer = true;
         MulticastDNS = true;
         IPMasquerade = "ipv4";
       };
-      # Hardcode Dartmouth DNS so clients recieve it over DHCP even if the
-      # uplink interface is not connected
-      dhcpServerConfig.DNS = "129.170.17.4";
+      dhcpServerConfig = {
+        DNS = "129.170.17.4";
+        # Reserve space for static IPs
+        PoolOffset = 100;
+      };
+      routes = [ { routeConfig = {
+        Destination = "192.168.1.1/24";
+        Gateway = "192.168.2.2";
+      }; } ];
     };
   };
   networking.firewall.interfaces.br-lan.allowedUDPPorts = [
@@ -112,11 +119,15 @@ with lib;
 
   # DNS server
   services.dnsmasq = {
+    enable = true;
     resolveLocalQueries = false;
     alwaysKeepRunning = true;
     # Dartmouth DNS
     servers = [ "129.170.17.4" ];
     extraConfig = ''
+      interface=br-lan
+      bind-interfaces
+      no-resolv
       server=/benwolsieffer.com/192.168.1.2
     '';
   };

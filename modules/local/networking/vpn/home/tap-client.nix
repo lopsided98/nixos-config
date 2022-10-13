@@ -155,14 +155,18 @@ in {
       # Apply source based routing to packets sent from VPN interface. This
       # allows devices to expose services to the internet through the VPN and
       # my home network.
-      routingPolicyRules = [ { routingPolicyRuleConfig = {
+      # FIXME: disabled because it breaks routing over the VPN. I think the
+      # policy rule needs to be modified a bit to avoid reflecting packets back
+      # over the VPN, but I'm not currently using this functionality so I can't
+      # test the fix.
+      /*routingPolicyRules = [ { routingPolicyRuleConfig = {
         From = "192.168.1.0/24";
         Table = 242;
       }; } ];
       routes = [ { routeConfig = {
         Gateway = "192.168.1.1";
         Table = 242;
-      }; } ];
+      }; } ];*/
     };
 
     # Keep attempting to connect forever
