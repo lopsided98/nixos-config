@@ -23,7 +23,7 @@ in {
       rev = "afc477e807c407736cfaff6a6188d09197dfbceb";
       hash = "sha256-544zEHIBMKXtIAp7sSLolPChCIFQw+xVin1/Ki1MliI=";
     };
-  in singleton (pkgs.runCommandNoCC "bcm4359-firmware" {} ''
+  in singleton (pkgs.runCommand "bcm4359-firmware" {} ''
     mkdir -p "$out/lib/firmware/brcm"
     cp '${libreElecFirmware}'/{BCM4359*.hcd,brcmfmac4359-sdio*}  "$out/lib/firmware/brcm"
   '');

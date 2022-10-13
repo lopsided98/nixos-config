@@ -30,7 +30,7 @@ with lib;
     kernelPackages = mkForce pkgs.linuxPackages_5_15;
   };
 
-  hardware.firmware = singleton (pkgs.runCommandNoCC "mt7610-firmware" {} ''
+  hardware.firmware = singleton (pkgs.runCommand "mt7610-firmware" {} ''
     mkdir -p "$out/lib/firmware/mediatek"
     cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610*.bin "$out/lib/firmware/mediatek"
   '');
