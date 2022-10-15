@@ -62,7 +62,9 @@
     pkgs = nixpkgsBySystem.${system};
   in {
     packages = with pkgs; {
-      inherit dnsupdate;
+      inherit
+        dnsupdate
+        nixos-secrets;
       deploy = runCommand "deploy" {
         inherit runtimeShell;
         nixosRoot = "/home/ben/nixos";
