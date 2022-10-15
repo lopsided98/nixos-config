@@ -37,9 +37,12 @@ with lib;
 
   # Uplink
   systemd.network.links."30-wl-wan" = {
-    matchConfig.Driver = "mt76x0u";
+    matchConfig = {
+      Driver = "mt76x0u";
+      PermanentMACAddress = "00:c0:ca:b1:07:ed";
+    };
     linkConfig = {
-      Name = "wl-wan";
+      Name = "wl-wan0";
       MACAddressPolicy = "random";
     };
   };
@@ -47,13 +50,27 @@ with lib;
   local.networking.wireless = {
     home = {
       enable = true;
-      interfaces = [ "wl-wan" ];
+      interfaces = [ "wl-wan0" ];
     };
     eduroam = {
       enable = true;
-      interfaces = [ "wl-wan" ];
+      interfaces = [ "wl-wan0" ];
       networkConfig.dhcpV4Config.Anonymize = true;
     };
+  };
+
+  # Backup uplink
+  systemd.network.links."30-wl-wan1" = {
+    matchConfig.Driver = "brcmfmac";
+    linkConfig.Name = "wl-wan1";
+  };
+  local.networking.wireless.xfinitywifi = {
+    enable = false;
+    interfaces = [ "wl-wan1" ];
+    networkConfig.extraConfig = ''
+      [DHCPv4]
+      UseGateway=no
+    '';
   };
 
   # LAN Bridge
@@ -102,12 +119,16 @@ with lib;
     countryCode = "US";
     extraConfig = ''
       wpa=2
+      ieee80211w=0
       wpa_key_mgmt=WPA-PSK
       wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.Roomba.hostapd.wpaPsk}
     '';
   };
   systemd.network.links."30-wl-lan" = {
-    matchConfig.Driver = "brcmfmac";
+    matchConfig = {
+      Driver = "mt76x0u";
+      PermanentMACAddress = "04:d4:c4:5e:fe:28";
+    };
     linkConfig.Name = "wl-lan";
   };
   systemd.network.networks."30-ap" = {
