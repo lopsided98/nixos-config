@@ -14,6 +14,14 @@ in {
       type = types.listOf types.str;
       description = "Wireless network interfaces";
     };
+
+    networkConfig = mkOption {
+      type = types.attrs;
+      default = {};
+      description = ''
+        Extra systemd-networkd configuration options for this network
+      '';
+    };
   };
 
   # Implementation
@@ -25,12 +33,13 @@ in {
       networks.xfinitywifi = {};
     };
 
-    systemd.network.networks = listToAttrs (map (interface: {
-      name = "30-xfinitywifi-${interface}";
-      value = {
+    systemd.network.networks."30-xfinitywifi" = mkMerge [
+      ({
+        name = concatStringsSep " " cfg.interfaces;
         matchConfig.SSID = "xfinitywifi";
-        networkConfig.DHCP = "ipv4";
-      };
-    }) cfg.interfaces);
+        DHCP = "ipv4";
+      })
+      cfg.networkConfig
+    ];
   };
 }
