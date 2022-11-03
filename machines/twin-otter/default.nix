@@ -157,34 +157,33 @@ in {
 
   systemd.services.camera-still = {
     description = "Camera still image capture";
+    serviceConfig = {
+      Type = "exec";
+      Restart = "on-failure";
+      StateDirectory = "camera";
+      StateDirectoryMode = "0755";
+    };
+    script = ''
+      image_dir=$(mktemp -d /var/lib/camera/still-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+      chmod +rx "$image_dir"
+      ${pkgs.libraspberrypi}/bin/raspistill -t 0 -tl 2000 -o "$image_dir/img_%04d.jpg"
+    '';
+  };
+
+  systemd.services.camera-video = {
+    description = "Camera video capture";
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "exec";
       Restart = "on-failure";
-      ExecStart = pkgs.runCommand "camera-still.sh" {
-        text = ''
-          #!${pkgs.runtimeShell}
-          export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
-          image_dir=$(mktemp -d /var/lib/camera/still-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
-          chmod +rx "$image_dir"
-
-          ${pkgs.libraspberrypi}/bin/raspistill -t 0 -tl 2000 -o "$image_dir/img_%04d.jpg"
-        '';
-        passAsFile = [ "text" ];
-        buildInputs = with pkgs.gst_all_1; [
-          gstreamer
-          gst-plugins-base
-          gst-plugins-good
-        ];
-        preferLocalBuild = true;
-      } ''
-        export gstPluginSystemPath="$GST_PLUGIN_SYSTEM_PATH_1_0"
-        substituteAll "$textPath" "$out"
-        chmod +x "$out"
-      '';
       StateDirectory = "camera";
       StateDirectoryMode = "0755";
     };
+    script = ''
+      image_dir=$(mktemp -d /var/lib/camera/video-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+      chmod +rx "$image_dir"
+      ${pkgs.libraspberrypi}/bin/raspivid -t 0 --width 1920 --height 1080 --framerate 30 -o "$image_dir/video.h264"
+    '';
   };
 
   systemd.secrets = {
