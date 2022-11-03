@@ -5,21 +5,25 @@ in {
   services.grafana = {
     enable = true;
 
-    protocol = "socket";
-    socket = socket;
-    domain = "grafana.benwolsieffer.com";
-    rootUrl = "https://%(domain)s/";
+    settings = {
+      server = {
+        protocol = "socket";
+        socket = socket;
+        domain = "grafana.benwolsieffer.com";
+        root_url = "https://%(domain)s/";
+      };
 
-    smtp = {
-      enable = true;
-      host = "smtp.gmail.com:465";
-      user = "benwolsieffer@gmail.com";
-      passwordFile = secrets.getSystemdSecret "grafana" secrets.grafana.gmailPassword;
-      fromAddress = "grafana@benwolsieffer.com";
+      smtp = {
+        enabled = true;
+        host = "smtp.gmail.com:465";
+        user = "benwolsieffer@gmail.com";
+        password = "$__file{${secrets.getSystemdSecret "grafana" secrets.grafana.gmailPassword}}";
+        from_address = "grafana@benwolsieffer.com";
+      };
+
+      # Enable XYChart
+      panels.enable_alpha = true;
     };
-
-    # Enable XYChart
-    extraOptions.PANELS_ENABLE_ALPHA = "true";
   };
 
   systemd.services.grafana = {
