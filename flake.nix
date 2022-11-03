@@ -4,7 +4,6 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
-    hydra.url = "github:NixOS/hydra/d6cbf227cba90cf281f72f464393d75a45f2f3a8";
     kitty-cam.url = "github:lopsided98/kitty-cam";
     lib-net = {
       url = "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz";

@@ -1,8 +1,6 @@
 { config, lib, pkgs, secrets, inputs, ... }: with lib; {
 
-  imports = [ inputs.hydra.nixosModules.hydra ];
-
-  services.hydra-dev = {
+  services.hydra = {
     enable = true;
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
@@ -12,7 +10,6 @@
       binary_cache_secret_key_file=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
     '';
     useSubstitutes = true;
-    inherit (config.services.hydra) buildMachinesFiles;
   };
 
   services.postgresql = {
@@ -81,7 +78,7 @@
 
     virtualHosts = {
       "hydra.benwolsieffer.com" = let
-        proxyPass = "http://127.0.0.1:${toString config.services.hydra-dev.port}";
+        proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
         cacheConfig = ''
           proxy_cache hydra;
           proxy_cache_valid 1w;
