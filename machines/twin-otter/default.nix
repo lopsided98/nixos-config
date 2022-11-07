@@ -186,6 +186,25 @@ in {
     '';
   };
 
+  # Allow access to serial ports
+  users.users.ros.extraGroups = [ "dialout" ];
+
+  services.ros2 = {
+    enable = true;
+    overlays = [ inputs.fixed-wing-sampling.rosOverlay ];
+
+    systemPackages = p: with p; [ ros2cli ros2run mavros ];
+
+    launchFiles.mavros = {
+      package = "fws_mavros";
+      launchFile = "mavros.launch";
+      args = {
+        fcu_url = "/dev/ttyAMA0:921600";
+        gcs_url = "udp://@";
+      };
+    };
+  };
+
   systemd.secrets = {
     sshd = {
       units = [ "sshd@.service" ];

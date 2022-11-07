@@ -2,6 +2,7 @@
   description = "Packages, modules and configurations for my NixOS machines";
 
   inputs = {
+    fixed-wing-sampling.url = "git+ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git";
     flake-utils.url = "github:numtide/flake-utils";
     freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     kitty-cam.url = "github:lopsided98/kitty-cam";
