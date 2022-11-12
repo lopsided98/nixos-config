@@ -82,10 +82,10 @@ in {
         ];
         networkConfig = {
           IPv6AcceptRA = false;
-          DHCPv6PrefixDelegation = true;
+          DHCPPrefixDelegation = true;
           IPForward = true;
         };
-        dhcpV6PrefixDelegationConfig = {
+        dhcpPrefixDelegationConfig = {
           SubnetId = 0;
           Assign = false;
         };
