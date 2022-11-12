@@ -113,6 +113,7 @@ in {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     libraspberrypi
+    strace
   ];
 
   # Services to enable
@@ -128,7 +129,7 @@ in {
   services.fakeHwClock.enable = true;
 
   services.chrony = {
-    enable = false;
+    enable = true;
     initstepslew = {
       enabled = true;
       threshold = 30;
@@ -193,7 +194,7 @@ in {
     enable = true;
     overlays = [ inputs.fixed-wing-sampling.rosOverlay ];
 
-    systemPackages = p: with p; [ ros2cli ros2run mavros ];
+    systemPackages = p: with p; [ ros2cli ros2run ros2topic ros2node ros2multicast mavros ];
 
     launchFiles.mavros = {
       package = "fws_mavros";
