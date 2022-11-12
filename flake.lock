@@ -54,11 +54,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1667784093,
-        "narHash": "sha256-s3W9NrMNTWfk5ywFNqB0MsfrFSXfus20ud7r7Xf16dA=",
+        "lastModified": 1668036622,
+        "narHash": "sha256-nmvGs9AfY4XDFJ5U1xAjGOmd8ZtlLDbPSPaUx2wlKcA=",
         "ref": "refs/heads/master",
-        "rev": "4b3887ba45736d3f5a66afd553bb4648a908fd8d",
-        "revCount": 4,
+        "rev": "c170486d3ce23fe3f97fdfae144b0509327469e9",
+        "revCount": 5,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -339,11 +339,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1667883648,
-        "narHash": "sha256-DaIUK3hJwknuvF3By9X+SIREyU05hk0Myjim1VGv6z0=",
+        "lastModified": 1668204344,
+        "narHash": "sha256-P0b2Ni04SNQiAq/D3JP6tBNZJm4hhlAwgS8GL791J00=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "bcd031613e07250560ec786928ca8fbe4219a1c4",
+        "rev": "a3356d8de174554df19c2f7435e3dae196a6bdb4",
         "type": "github"
       },
       "original": {
@@ -429,11 +429,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1667666980,
-        "narHash": "sha256-RbnzU3afu+jRMi5+3/3klLkgaf8n6BNL52xsfqiHjbo=",
+        "lastModified": 1668211284,
+        "narHash": "sha256-ADNMF1iUSHDKCQAXi6mxKXNo35zPVArtNlMxV5ZlPIU=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "987e4ddf7285236387629958daf2b10681bc0d3c",
+        "rev": "8a3b1f914f2ce08822f85c24bebad5ecb355b7ad",
         "type": "github"
       },
       "original": {
@@ -507,11 +507,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1667770650,
-        "narHash": "sha256-HjsD5QqGQgTv/EZ0ZHWqMhQoQsagp7zhgb9lBX145yc=",
+        "lastModified": 1668192777,
+        "narHash": "sha256-C/koqhRmkV2hRCENfDUAK6HP7HTDwLAmhyP5QOy1jtI=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "aa1a5440d8757cf4c3d188779f5705260295c6a1",
+        "rev": "cb892295b6674f6d942ce78df3a27f2f219972e0",
         "type": "github"
       },
       "original": {
