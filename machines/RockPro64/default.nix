@@ -34,11 +34,8 @@ in {
     # Use a different MAC address on physical interface, because the normal MAC
     # is used on the VPN in order to get consistent IPs.
     linkConfig.MACAddress = "ba:4b:f9:9b:f1:88";
-    networkConfig = {
-      Address = "192.168.2.2/24";
-      Gateway = "192.168.2.1";
-      MulticastDNS = "yes";
-    };
+    DHCP = "ipv4";
+    networkConfig.MulticastDNS = "yes";
   };
   networking.firewall.interfaces.eth0.allowedUDPPorts = [
     5353 # mDNS

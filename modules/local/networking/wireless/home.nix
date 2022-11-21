@@ -30,10 +30,7 @@ in {
     local.networking.wireless.passwordFiles =
       singleton (secrets.getSystemdSecret "wpa_supplicant-home" secrets.wpaSupplicant.home);
 
-    local.networking.home = {
-      enable = true;
-      inherit (cfg) interfaces;
-    };
+    local.networking.home.interfaces = listToAttrs (map (i: nameValuePair i {}) cfg.interfaces);
 
     systemd.network.networks = listToAttrs (map (interface: {
       name = "30-home-${interface}";

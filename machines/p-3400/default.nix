@@ -67,11 +67,7 @@ in {
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  local.networking.home = {
-    enable = true;
-    interfaces = [ interface ];
-    ipv4Address = "${address}/24";
-  };
+  local.networking.home.interfaces.${interface}.ipv4Address = "${address}/24";
 
   networking = {
     hostName = "p-3400";

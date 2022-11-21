@@ -24,6 +24,7 @@
     ./local/networking/vpn/dartmouth.nix
     ./local/networking/vpn/home/tap-client.nix
     ./local/networking/vpn/home/wireguard
+    ./local/networking/vpn/home/wireguard/client.nix
     ./local/networking/vpn/home/wireguard/server.nix
     ./local/networking/wireless
     ./local/networking/wireless/apartment.nix

@@ -129,8 +129,6 @@ in {
       # enabled in the server config file.
       comp-lzo
 
-      ;link-mtu 1634
-
       ${optionalString (cfg.macAddress != null) ''
         lladdr ${cfg.macAddress}
       ''}
@@ -139,8 +137,10 @@ in {
       verb 3
 
       # MTU optimization
-      fragment 1472
-      mssfix 1472
+      # Minimum link MTU of 1392 (a WireGuard link over xfinitywifi) minus 48
+      # bytes of IPv6 UDP headers.
+      fragment 1320
+      mssfix 1320
     '';
 
     systemd.network.networks."50-vpn-home-tap-client" = {

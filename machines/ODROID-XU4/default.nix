@@ -32,18 +32,15 @@ in {
     };
   };
 
-  local.networking.home = {
-    enable = true;
-    interfaces = [ interface ];
-    ipv4Address = "192.168.1.3/24";
-  };
+  local.networking.home.interfaces.${interface}.ipv4Address = "192.168.1.3/24";
 
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
   nix.settings.extra-platforms = "armv6l-linux";
 
   environment.systemPackages = with pkgs; [
-    pkgs.linuxPackages_latest.tmon
+    linuxPackages_latest.tmon
+    tcpdump
   ];
 
   # List services that you want to enable:
@@ -56,6 +53,7 @@ in {
 
   local.networking.vpn.home.wireGuard.server = {
     enable = true;
+    uplinkInterface = interface;
     # Public key: k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=
     privateKeySecret = secrets.ODROID-XU4.vpn.wireGuardPrivateKey;
   };

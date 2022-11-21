@@ -19,10 +19,7 @@ with lib;
     compressImage = false;
   };
 
-  local.networking.home = {
-    enable = true;
-    interfaces = [ "eth0" ];
-  };
+  local.networking.home.interfaces.eth0 = {};
 
   networking.hostName = "bone-black";
 

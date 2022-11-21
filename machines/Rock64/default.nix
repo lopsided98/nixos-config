@@ -16,11 +16,8 @@ in {
     generic-extlinux-compatible.enable = true;
   };
 
-  local.networking.home = {
-    enable = true;
-    interfaces = [ interface ];
-    ipv4Address = "192.168.1.6/24";
-  };
+  local.networking.home.interfaces.${interface}.ipv4Address = "192.168.1.6/24";
+
   networking.hostName = "Rock64"; # Define your hostname.
   networking.hostId = "566a7fd8";
 

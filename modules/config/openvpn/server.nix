@@ -125,6 +125,12 @@
       # sequential messages of the same message
       # category will be output to the log.
       ;mute 20
+
+      # MTU optimization
+      # Minimum link MTU of 1392 (a WireGuard link over xfinitywifi) minus 48
+      # bytes of IPv6 UDP headers.
+      fragment 1347
+      mssfix 1347
     '';
   in {
     tap.config = ''
@@ -155,9 +161,6 @@
       # will also need to appropriately firewall the
       # server's TUN/TAP interface.
       client-to-client
-
-      # MTU optimization
-      fragment 1472
     '';
     tun.config = let
       subnet = "10.54.0";

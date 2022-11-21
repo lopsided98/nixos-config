@@ -49,11 +49,15 @@ in {
       singleton (secrets.getSystemdSecret "wpa_supplicant-eduroam" secrets.wpaSupplicant.eduroam);
 
     systemd.network.networks."30-eduroam" = mkMerge [
-      ({
+      {
         name = concatStringsSep " " cfg.interfaces;
         matchConfig.SSID = "eduroam";
         DHCP = "ipv4";
-      })
+        networkConfig = {
+          Domains = [ "~dartmouth.edu" ];
+          DNSDefaultRoute = true;
+        };
+      }
       cfg.networkConfig
     ];
 
