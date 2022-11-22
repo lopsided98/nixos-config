@@ -20,10 +20,7 @@ in {
       enable = true;
       interfaces = [ "wlan0" ];
     };
-    home = {
-      enable = true;
-      interfaces = [ "eth0" ];
-    };
+    home.interfaces.eth0 = {};
   };
 
   networking.hostName = "octoprint";
