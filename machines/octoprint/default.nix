@@ -22,6 +22,7 @@ in {
     };
     home.interfaces.eth0 = {};
   };
+  systemd.network.wait-online.anyInterface = true;
 
   networking.hostName = "octoprint";
 
