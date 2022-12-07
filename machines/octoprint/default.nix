@@ -1,4 +1,6 @@
-{ lib, config, pkgs, secrets, ... }: let
+{ lib, config, pkgs, secrets, ... }: 
+with lib;
+let
   videoDevice = "/dev/v4l/by-id/usb-046d_HD_Webcam_C525_6498ABA0-video-index0";
   videoSystemdDevice = "dev-v4l-by\\x2did-usb\\x2d046d_HD_Webcam_C525_6498ABA0\\x2dvideo\\x2dindex0.device";
 in {
@@ -8,6 +10,9 @@ in {
     device = "/dev/disk/by-uuid/d0e35017-a677-4c46-818a-2ec028bb15a8";
     fsType = "ext4";
   };
+
+  # Hopefully fixes: https://bugzilla.kernel.org/show_bug.cgi?id=216711
+  boot.kernelPackages = mkForce pkgs.linuxPackages_testing;
 
   boot.loader = {
     grub.enable = false;
