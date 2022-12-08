@@ -12,7 +12,7 @@ in {
   };
 
   # Hopefully fixes: https://bugzilla.kernel.org/show_bug.cgi?id=216711
-  boot.kernelPackages = mkForce pkgs.linuxPackages_testing;
+  boot.kernelPackages = mkForce pkgs.crossPackages.linuxPackages_testing;
 
   boot.loader = {
     grub.enable = false;
