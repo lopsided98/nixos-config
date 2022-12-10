@@ -167,7 +167,11 @@ in {
     script = ''
       image_dir=$(mktemp -d /var/lib/camera/still-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
       chmod +rx "$image_dir"
-      ${pkgs.libraspberrypi}/bin/raspistill -t 0 -tl 2000 -o "$image_dir/img_%04d.jpg"
+      ${pkgs.libraspberrypi}/bin/raspistill \
+        --timeout 0 \
+        --timelapse 2000 \
+        --rotation 180
+        -o "$image_dir/img_%04d.jpg"
     '';
   };
 
@@ -183,7 +187,13 @@ in {
     script = ''
       image_dir=$(mktemp -d /var/lib/camera/video-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
       chmod +rx "$image_dir"
-      ${pkgs.libraspberrypi}/bin/raspivid -t 0 --width 1920 --height 1080 --framerate 30 -o "$image_dir/video.h264"
+      ${pkgs.libraspberrypi}/bin/raspivid \
+        -t 0 \
+        --width 1920 \
+        --height 1080 \
+        --framerate 30 \
+        -ro 180 \
+        -o "$image_dir/video.h264"
     '';
   };
 
