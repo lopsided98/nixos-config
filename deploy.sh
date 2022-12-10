@@ -34,7 +34,7 @@ realize_ssh() {
   nix copy --derivation --to "ssh://${machine}" "${toplevel_drv}" 1>&2
 
   machine_ssh "${machine}" nix-store --realize "${toplevel_drv}" \
-    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null
+    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null || return 1
 
   echo "$(nix-store --query --outputs "${toplevel_drv}")"
 }
@@ -50,7 +50,7 @@ realize_hydra() {
     | jq -r .buildoutputs.out.path)" || return 1
 
   machine_ssh "${machine}" nix-store --realize "${toplevel}" \
-    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null
+    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null || return 1
 
   echo "${toplevel}"
 }
@@ -63,13 +63,13 @@ realize_builder() {
     "${nixos_root}#nixosConfigurations.${machine}.config.system.build.toplevel.drvPath")" || return 1
 
   # Copy instantiated (but not realized) config to builder
-  nix copy --derivation --to "ssh://HP-Z420" "${toplevel_drv}" 1>&2
+  nix copy --derivation --to "ssh://HP-Z420" "${toplevel_drv}" 1>&2 || return 1
 
   # Build on builder
-  toplevel="$(machine_ssh HP-Z420 nix-store --realize "${toplevel_drv}")"
+  toplevel="$(machine_ssh HP-Z420 nix-store --realize "${toplevel_drv}")" || return 1
 
   machine_ssh "${machine}" nix-store --realize "${toplevel}" \
-    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null
+    --add-root "$(machine_toplevel_link "${machine}")" --indirect >/dev/null || return 1
 
   echo "${toplevel}"
 }
