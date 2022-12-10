@@ -209,8 +209,8 @@ in {
       package = "ntpd_driver";
       node = "shm_driver";
       params = {
-        _shm_unit = "0";
-        _time_ref_topic = "/mavros/time_reference";
+        shm_unit = "0";
+        time_ref_topic = "/mavros/time_reference";
       };
     };
   };
