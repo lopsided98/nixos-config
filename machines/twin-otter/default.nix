@@ -194,7 +194,15 @@ in {
     enable = true;
     overlays = [ inputs.fixed-wing-sampling.rosOverlay ];
 
-    systemPackages = p: with p; [ ros2cli ros2run ros2topic ros2node ros2multicast mavros ];
+    systemPackages = p: with p; [
+      ros2cli
+      ros2run
+      ros2topic
+      ros2node
+      ros2multicast
+      mavros
+      fws-mavros
+    ];
 
     launchFiles.mavros = {
       package = "fws_mavros";
