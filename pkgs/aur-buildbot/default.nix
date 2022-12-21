@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "aur-buildbot";
-  version = "2021-03-16";
+  version = "2022-12-09";
 
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "aur-buildbot";
-    rev = "18bf17b65313d739bafe819445dd005d4d5a2b41";
-    sha256 = "sha256-lKd+xUmxi1QXMG5ILURewpahafj/p6d9WRRBVm9Uq/4=";
+    rev = "6695417c21c95401ee4896ad2ec56953640a969b";
+    hash = "sha256-l40JSdgsyYVQ+xGsJU04IYmP9D9ZevyV4ejogmVRJNE=";
   };
 
   installPhase = ''
