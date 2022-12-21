@@ -188,11 +188,11 @@ in {
       image_dir=$(mktemp -d /var/lib/camera/video-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
       chmod +rx "$image_dir"
       ${pkgs.libraspberrypi}/bin/raspivid \
-        -t 0 \
+        --timeout 0 \
         --width 1920 \
         --height 1080 \
         --framerate 30 \
-        -ro 180 \
+        --rotation 180 \
         -o "$image_dir/video.h264"
     '';
   };
