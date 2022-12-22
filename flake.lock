@@ -54,11 +54,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1670645736,
-        "narHash": "sha256-BGqpceGSqmj9TD0IoUT1923eHCqrgBlo1fIIdnbm3Uk=",
+        "lastModified": 1671477137,
+        "narHash": "sha256-6ds7AmIKGKlSNYKw+IXCOIf4e9kd3dQa08PMTHw70/E=",
         "ref": "refs/heads/master",
-        "rev": "d5c4f8ece31a77ef172176bbfaa52e9e520572c0",
-        "revCount": 21,
+        "rev": "159ca05d9ff688cb0fd28a46cd0bdd5fc22e285f",
+        "revCount": 30,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -269,11 +269,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1654995723,
-        "narHash": "sha256-yXAzfjKu3CaRgGBjOGtFzmFy7bQPCRdN/ULi/vWP0tk=",
+        "lastModified": 1671752924,
+        "narHash": "sha256-TLWSqfhenNgOiSPWpoScO5DH/gvBBqEEtT2KuNjPlI4=",
         "ref": "refs/heads/master",
-        "rev": "c608625efaec62f969c2f9afac976c726fd5394a",
-        "revCount": 67,
+        "rev": "a34bb36675f077830c2a63711261356841cfba42",
+        "revCount": 77,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/freefb.git"
       },
@@ -339,11 +339,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1670645099,
-        "narHash": "sha256-43pG/CMULZGzc0Pclvpfzbwlnj/SMh5P3wdMKGX+nNY=",
+        "lastModified": 1670693373,
+        "narHash": "sha256-bN57G4pVApAVIZqCtflto8v7vArnMwLEAger2N8FCG0=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "9bd7fed0e266943c7b4373a4192850533daf871a",
+        "rev": "795e67fe0e19118cef94209e4470edc64f13df93",
         "type": "github"
       },
       "original": {
@@ -429,11 +429,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1670690027,
-        "narHash": "sha256-pjvkz9C2vN/uiSXYEBGKgGOSvN9N37dMMC4AhjS8+T8=",
+        "lastModified": 1671385392,
+        "narHash": "sha256-KND82BzMaBBWisceCX1EZOJhmKAMXnuwO7txB7XKiA8=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "2ff07abb98677b14e15c4eefe19bf4c8d200ba8f",
+        "rev": "65474cc25b15cab4ebde8e3863abc4896dad884f",
         "type": "github"
       },
       "original": {
