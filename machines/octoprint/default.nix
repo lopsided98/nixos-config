@@ -14,10 +14,20 @@ in {
   # Need to use a version older than 5.19.2 due to
   # https://bugzilla.kernel.org/show_bug.cgi?id=216711
   boot.kernelPackages = mkForce pkgs.linuxPackages_5_15;
+  hardware.deviceTree = {
+    filter = "meson-gxbb-odroidc2.dtb";
+    overlays = [ {
+      name = "bme280";
+      dtsFile = ./bme280.dts;
+    } ];
+  };
 
   boot.loader = {
     grub.enable = false;
-    generic-extlinux-compatible.enable = true;
+    generic-extlinux-compatible = {
+      enable = true;
+      copyKernels = false;
+    };
   };
 
   hardware.enableRedistributableFirmware = true;
