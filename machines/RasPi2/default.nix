@@ -59,7 +59,7 @@ in {
   };
 
   # Network monitoring
-  services.telegraf.inputs.ping = {
+  services.telegraf.extraConfig.inputs.ping = {
     urls = [
       "www.google.com"
       "192.168.1.1"
