@@ -134,6 +134,45 @@ in {
     configFile = secrets.getSystemdSecret "freefb" secrets.freefb.configFile;
   };
 
+  # BME280 data logging to InfluxDB
+  local.services.telegraf = {
+    enable = true;
+    enableSystemMetrics = false;
+    influxdb = {
+      tlsCertificate = ./telegraf/influxdb.pem;
+      tlsKeySecret = secrets.octoprint.telegraf.influxdbTlsKey;
+    };
+  };
+  services.telegraf.extraConfig = {
+    outputs.influxdb = {
+      database_tag = "database";
+      exclude_database_tag = true;
+    };
+    inputs.multifile = {
+      name_override = "bme280";
+      tags.database = "radon";
+      interval = "5m";
+      base_dir = "/sys/bus/i2c/devices/0-0077/iio:device1";
+      file = [
+        {
+          file = "in_pressure_input";
+          dest = "pressure";
+          conversion = "float";
+        }
+        {
+          file = "in_temp_input";
+          dest = "temperature";
+          conversion = "float(3)";
+        }
+        {
+          file = "in_humidityrelative_input";
+          dest = "humidityrelative";
+          conversion = "float(3)";
+        }
+      ];
+    };
+  };
+
   networking.firewall.allowedTCPPorts = [
     80 # OctoPrint
     5050 # mjpg-streamer

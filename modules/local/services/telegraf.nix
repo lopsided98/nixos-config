@@ -51,6 +51,11 @@ in {
             # urls = ["udp://localhost:8089"] # UDP endpoint example
             urls = [ "https://influxdb.benwolsieffer.com:8086" ];
 
+            ## If true, no CREATE DATABASE queries will be sent. Set to true when using
+            ## Telegraf with a user without permissions to create databases or when the
+            ## database already exists.
+            skip_database_creation = true;
+
             tls_cert = cfg.influxdb.tlsCertificate;
             tls_key = secrets.getSystemdSecret "telegraf" cfg.influxdb.tlsKeySecret;
           };
