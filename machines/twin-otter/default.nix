@@ -237,7 +237,7 @@ in {
         node = "fws_mavros";
         # Don't manage the config with Nix for now so that it is easier to
         # adjust in the field.
-        rosArgs = [ "--params-file" "/var/lib/fws_mavros.yaml" ];
+        rosArgs = [ "--params-file" "/var/lib/ros/fws_mavros.yaml" ];
       };
     };
   };
