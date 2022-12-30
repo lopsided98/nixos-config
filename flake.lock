@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1672343389,
-        "narHash": "sha256-zrrtuc4GzJZICzCAU7lvJdLYU6zqu/adYQJEShOl1U0=",
+        "lastModified": 1672363925,
+        "narHash": "sha256-PWDWrJPEwUjN3QMBgsqZ0/AOSX1wzT/8YfUWn+ZcvfA=",
         "ref": "refs/heads/master",
-        "rev": "7682550bf7706f444a52061d493a78a2f5b0051a",
-        "revCount": 36,
+        "rev": "48271df517a830caf4b6dafbe0044a3b5e9f8552",
+        "revCount": 38,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -673,11 +673,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1672359432,
-        "narHash": "sha256-hUY+0n+t2EThQ42LgldoThyfIbFQBfmS6W8qvkxcn4E=",
+        "lastModified": 1672365806,
+        "narHash": "sha256-CHJ3s1mNRG0Okxm7uqS0jKjiPSF0Y9Xwk6h2RvYj97g=",
         "ref": "refs/heads/master",
-        "rev": "911e80047ca591c1a33cfaade1a9c2ae0923c880",
-        "revCount": 105,
+        "rev": "e862f8adfe8eca87e49f904faa062f931ad59aa0",
+        "revCount": 106,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
