@@ -673,11 +673,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1672365806,
-        "narHash": "sha256-CHJ3s1mNRG0Okxm7uqS0jKjiPSF0Y9Xwk6h2RvYj97g=",
+        "lastModified": 1672368430,
+        "narHash": "sha256-VHsHQxGmoM/+WoYIfPZsvC931wUDZwCVLUwJl3Zc8uc=",
         "ref": "refs/heads/master",
-        "rev": "e862f8adfe8eca87e49f904faa062f931ad59aa0",
-        "revCount": 106,
+        "rev": "546a60e1f5872e0432599c53ac5a5231f1f10d05",
+        "revCount": 107,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
