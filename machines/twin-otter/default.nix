@@ -223,12 +223,21 @@ in {
       };
     };
 
-    nodes.ntpd-driver = {
-      package = "ntpd_driver";
-      node = "shm_driver";
-      params = {
-        shm_unit = "0";
-        time_ref_topic = "/mavros/time_reference";
+    nodes = {
+      ntpd-driver = {
+        package = "ntpd_driver";
+        node = "shm_driver";
+        params = {
+          shm_unit = "0";
+          time_ref_topic = "/mavros/time_reference";
+        };
+      };
+      fws-mavros = {
+        package = "fws_mavros";
+        node = "fws_mavros";
+        # Don't manage the config with Nix for now so that it is easier to
+        # adjust in the field.
+        rosArgs = [ "--params-file" "/var/lib/fws_mavros.yaml" ];
       };
     };
   };
