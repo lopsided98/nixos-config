@@ -17,6 +17,7 @@ in {
     services.rtlamr-collect = {
       enable = true;
       filterId = "44904168";
+      extraRtlamrArgs = [ "-centerfreq" "914000000" ];
       influxdb = {
         hostName = "https://influxdb.benwolsieffer.com:8086";
         # Authentication is done with client certificate
