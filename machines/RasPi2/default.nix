@@ -10,6 +10,9 @@ in {
     ../../modules
   ];
 
+  # Enable cross-compilation
+  local.system.buildSystem.system = "x86_64-linux";
+
   local.machine.raspberryPi.version = 2;
 
   local.profiles.headless = true;
@@ -78,19 +81,19 @@ in {
   systemd.services.telegraf.path = [ "/run/wrappers" ];
 
   # Quassel core (IRC)
-  services.quassel = {
+  /*services.quassel = {
     enable = true;
     portNumber = 4600;
     interfaces = [ "0.0.0.0" ];
     dataDir = "/var/lib/quassel";
-  };
+  };*/
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
 
-  networking.firewall.allowedTCPPorts = [
+  /*networking.firewall.allowedTCPPorts = [
     4600 # Quassel
-  ];
+  ];*/
 
   systemd.secrets.sshd = {
     units = [ "sshd@.service" ];
