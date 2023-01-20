@@ -30,19 +30,19 @@ in {
 
   # Ethernet
   systemd.network.networks."30-ethernet" = {
-    name = "eth0";
+    name = "end0";
     # Use a different MAC address on physical interface, because the normal MAC
     # is used on the VPN in order to get consistent IPs.
     linkConfig.MACAddress = "ba:4b:f9:9b:f1:88";
     DHCP = "ipv4";
     networkConfig.MulticastDNS = "yes";
   };
-  networking.firewall.interfaces.eth0.allowedUDPPorts = [
+  networking.firewall.interfaces.end0.allowedUDPPorts = [
     5353 # mDNS
   ];
   # Work around checksumming bug
   networking.localCommands = ''
-    ${pkgs.ethtool}/bin/ethtool -K eth0 rx off tx off
+    ${pkgs.ethtool}/bin/ethtool -K end0 rx off tx off
   '';
 
   # OpenVPN TAP client
