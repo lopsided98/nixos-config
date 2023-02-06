@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1675491478,
-        "narHash": "sha256-esKkadTwtDnALje2gKJjBzxsKQpx7W3YtdwqiBDJbUE=",
+        "lastModified": 1675660137,
+        "narHash": "sha256-I8klVbYszFgJ7/VZNGKhP968MUmZ6ZugbLQtqLTDDmE=",
         "ref": "refs/heads/master",
-        "rev": "59d7c2eda29aaaa9123fd830d64bb45f02ab397f",
-        "revCount": 59,
+        "rev": "c5ccaf019e8126b42de36f0d9165df174c2f009f",
+        "revCount": 71,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -446,11 +446,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1675532017,
-        "narHash": "sha256-gBEGX9AVDyOX+TPShO9uPd+OAP6UkXDfkhEj8wGL4Gs=",
+        "lastModified": 1675703199,
+        "narHash": "sha256-88dqxAdH1rBA/Bh5PqVq6W/MIMwBsvXH1L8VQtk+8JY=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "c5bcb8d5936b0e2992d6fccd083c78b1fe12df21",
+        "rev": "c8ab5116f568725fb19a975787e4d4e184d01e15",
         "type": "github"
       },
       "original": {
