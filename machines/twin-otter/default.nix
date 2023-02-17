@@ -106,6 +106,19 @@ in {
 
   networking.hostName = "twin-otter";
 
+  users = {
+    users = {
+      ben.openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEBcPmuNz1myMgMwy3LHzxlxIqQPoh2PXnrz2mKt+Be1 Pixel-4a" ];
+      camera = {
+        isSystemUser = true;
+        description = "Camera user";
+        group = "camera";
+        extraGroups = [ "video" ];
+      };
+    };
+    groups.camera = {};
+  };
+
   environment.systemPackages = with pkgs; [
     v4l-utils
     gst_all_1.gstreamer.bin
@@ -144,16 +157,6 @@ in {
       # Allow GPS to step clock
       makestep 30 3
     '';
-  };
-
-  users = {
-    users.camera = {
-      isSystemUser = true;
-      description = "Camera user";
-      group = "camera";
-      extraGroups = [ "video" ];
-    };
-    groups.camera = {};
   };
 
   systemd.services.camera-still = {
