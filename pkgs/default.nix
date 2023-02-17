@@ -42,24 +42,6 @@ in {
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
 
-  ffmpeg-full = super.ffmpeg-full.override {
-    libX11 = null; # Xlib support
-    libxcb = null; # X11 grabbing using XCB
-    libxcbshmExtlib = false; # X11 grabbing shm communication
-    libxcbxfixesExtlib = false; # X11 grabbing mouse rendering
-    libxcbshapeExtlib = false; # X11 grabbing shape rendering
-    libXv = null; # Xlib support
-    libpulseaudio = null; # Pulseaudio input support
-  };
-
-  libao = super.libao.override {
-    usePulseAudio = false;
-  };
-
-  sox = super.sox.override {
-    enableLibpulseaudio = false;
-  };
-
   linux_omnitech = self.callPackage ./linux-omnitech {
     kernelPatches = with self.kernelPatches; [
       bridge_stp_helper
