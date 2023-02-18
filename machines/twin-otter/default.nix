@@ -115,6 +115,8 @@ in {
         group = "camera";
         extraGroups = [ "video" ];
       };
+      # Allow access to serial ports
+      ros.extraGroups = [ "dialout" ];
     };
     groups.camera = {};
   };
@@ -199,9 +201,6 @@ in {
         -o "$image_dir/video.h264"
     '';
   };
-
-  # Allow access to serial ports
-  users.users.ros.extraGroups = [ "dialout" ];
 
   services.ros2 = {
     enable = true;
