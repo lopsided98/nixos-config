@@ -126,7 +126,7 @@ in {
     gst_all_1.gstreamer.bin
     gst_all_1.gstreamer.out
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { raspiCameraSupport = true; })
     libraspberrypi
     strace
   ];
@@ -188,18 +188,36 @@ in {
       Restart = "on-failure";
       StateDirectory = "camera";
       StateDirectoryMode = "0755";
+
+      ExecStart = pkgs.runCommand "camera-video.sh" {
+        text = ''
+          #!${pkgs.runtimeShell}
+          export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
+          image_dir=$(mktemp -d /var/lib/camera/video-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+          chmod +rx "$image_dir"
+
+          ${pkgs.gst_all_1.gstreamer.bin}/bin/gst-launch-1.0 -e \
+            rpicamsrc rotation=180 ! \
+            video/x-h264,width=1920,height=1080,framerate=30/1,profile=high ! \
+            queue ! \
+            h264parse ! \
+            matroskamux streamable=true ! \
+            filesink location="$image_dir/video.mkv"
+        '';
+        passAsFile = [ "text" ];
+        buildInputs = with pkgs.gst_all_1; [
+          gstreamer
+          gst-plugins-base
+          (gst-plugins-good.override { raspiCameraSupport = true; })
+          gst-plugins-bad
+        ];
+        preferLocalBuild = true;
+      } ''
+        export gstPluginSystemPath="$GST_PLUGIN_SYSTEM_PATH_1_0"
+        substituteAll "$textPath" "$out"
+        chmod +x "$out"
+      '';
     };
-    script = ''
-      image_dir=$(mktemp -d /var/lib/camera/video-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
-      chmod +rx "$image_dir"
-      ${pkgs.libraspberrypi}/bin/raspivid \
-        --timeout 0 \
-        --width 1920 \
-        --height 1080 \
-        --framerate 30 \
-        --rotation 180 \
-        -o "$image_dir/video.h264"
-    '';
   };
 
   services.ros2 = {
