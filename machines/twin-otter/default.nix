@@ -27,14 +27,17 @@ in {
 
   boot.kernelPackages = mkForce pkgs.linuxPackages_rpi0;
 
-  boot.loader.raspberryPi = {
-    enable = true;
-    version = 0;
-    firmwareConfig = ''
-      start_x=1
-      gpu_mem=128
-    '';
-    uboot.enable = true;
+  boot.loader = {
+    raspberryPi = {
+      enable = true;
+      version = 0;
+      firmwareConfig = ''
+        start_x=1
+        gpu_mem=128
+      '';
+      uboot.enable = true;
+    };
+    generic-extlinux-compatible.copyKernels = false;
   };
   hardware.deviceTree = rec {
     name = "bcm2708-rpi-zero-w.dtb";
@@ -160,6 +163,8 @@ in {
       makestep 30 3
     '';
   };
+  # chrony has begun crashing on startup, but it works if you restart it
+  systemd.services.chronyd.serviceConfig.Restart = "on-failure";
 
   systemd.services.camera-still = {
     description = "Camera still image capture";
