@@ -175,7 +175,7 @@ in {
       StateDirectoryMode = "0755";
     };
     script = ''
-      image_dir=$(mktemp -d /var/lib/camera/still-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+      image_dir=$(mktemp -d /var/lib/camera/still_$(date +%Y%m%d_%H%M%S)_XXXX)
       chmod +rx "$image_dir"
       ${pkgs.libraspberrypi}/bin/raspistill \
         --timeout 0 \
@@ -198,7 +198,7 @@ in {
         text = ''
           #!${pkgs.runtimeShell}
           export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
-          image_dir=$(mktemp -d /var/lib/camera/video-$(date +%Y-%m-%d-%H-%M-%S)-XXXXXXXXXX)
+          image_dir=$(mktemp -d /var/lib/camera/video_$(date +%Y%m%d_%H%M%S)_XXXX)
           chmod +rx "$image_dir"
 
           ${pkgs.gst_all_1.gstreamer.bin}/bin/gst-launch-1.0 -e \
