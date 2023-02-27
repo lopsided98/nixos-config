@@ -244,7 +244,7 @@ in {
       launchFile = "mavros.launch";
       args = {
         fcu_url = "/dev/ttyAMA0:921600";
-        gcs_url = "udp://@";
+        gcs_url = "udp://@localhost:14551";
       };
     };
 
