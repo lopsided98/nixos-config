@@ -206,7 +206,7 @@ in {
             video/x-h264,width=1920,height=1080,framerate=30/1,profile=high ! \
             queue ! \
             h264parse ! \
-            matroskamux streamable=true ! \
+            matroskamux ! \
             filesink location="$image_dir/video.mkv"
         '';
         passAsFile = [ "text" ];
