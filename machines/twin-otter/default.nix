@@ -51,6 +51,10 @@ in {
         name = "disable-stdout";
         dtsFile = ./disable-stdout.dts;
       }
+      {
+        name = "sph0645lm4h-microphone";
+        dtsFile = ./sph0645lm4h-microphone.dts;
+      }
     ];
   };
 
@@ -185,6 +189,7 @@ in {
     '';
   };
 
+  sound.enable = true;
   systemd.services.camera-video = {
     description = "Camera video capture";
     wantedBy = [ "multi-user.target" ];
