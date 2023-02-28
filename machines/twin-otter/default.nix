@@ -58,6 +58,12 @@ in {
     ];
   };
 
+  # Start a console when a USB serial adapter is connected
+  systemd.services."serial-getty@ttyUSB0" = {
+    enable = true;
+    wantedBy = [ "dev-ttyUSB0.device" ];
+  };
+
   # WiFi configuration
 
   services.udev.extraRules = ''
