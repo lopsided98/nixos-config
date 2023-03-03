@@ -71,6 +71,9 @@ in {
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
     # Create virtual AP
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
+
+    # Enable systemd device unit for /dev/vchiq
+    SUBSYSTEM=="vchiq", TAG+="systemd"
   '';
 
   # Access point
@@ -198,7 +201,9 @@ in {
   sound.enable = true;
   systemd.services.camera-video = {
     description = "Camera video capture";
-    wantedBy = [ "multi-user.target" ];
+    bindsTo = [ "dev-vchiq.device" ];
+    after = [ "dev-vchiq.device" ];
+    # wantedBy = [ "dev-vchiq.device" ];
     serviceConfig = {
       Type = "exec";
       Restart = "on-failure";
