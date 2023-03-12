@@ -3,7 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { lib, config, pkgs, secrets, ... }: let
-  interface = "eth0";
+  interface = "end0";
 in {
   imports = [
     # Include the results of the hardware scan.
