@@ -28,10 +28,15 @@ in {
     "a '${socketDir}' - - - - u:nginx:rx"
   ];
 
-  systemd.services.influxdb.postStart = mkForce ''
-    # Wait for socket to be created
-    while [ ! -S "${socket}" ]; do sleep 1; done
-  '';
+  systemd.services.influxdb = {
+    # InfluxDB can take a long time to start
+    serviceConfig.TimeoutStartSec = "5 min";
+    # Wait for socket to be created. The default postStart only works with
+    # HTTP(S).
+    postStart = mkForce ''
+      until [ -S "${socket}" ]; do sleep 1; done
+    '';
+  };
 
   services.nginx = {
     enable = true;
