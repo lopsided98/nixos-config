@@ -161,23 +161,43 @@ in {
 
   services.chrony = {
     enable = true;
+    package = pkgs.chrony.overrideAttrs ({
+      patches ? [], ...
+    }: {
+      patches = patches ++ [
+        # Support 64-bit time_t in SOCK reflock messages
+        (pkgs.fetchpatch {
+          url = "https://git.tuxfamily.org/chrony/chrony.git/patch/refclock_sock.c?id=badaa83c319ae5a0bef872d1e7a55bf1260c1b84";
+          hash = "sha256-vzswMb4W16h4tYJSyYmj7ah9JabF9v/V9FvP37B6qz8=";
+        })
+      ];
+    });
     initstepslew = {
       enabled = true;
       threshold = 30;
     };
     extraConfig = ''
-      # GPS time from ntpd_driver ROS node. Owned by root:root so we have to
-      # make it world writable to allow ntpd_driver to write to it. Transmission
-      # delays usually cause it to be ~60-80 ms off NTP time (no idea if this
-      # will stay constant over time)
-      refclock SHM 0:perm=0666 delay 0.5 offset 0.070 refid GPS
+      # Time from MAVLink SYSTEM_TIME messages
+      refclock SOCK /run/chrony.mavlink.sock delay 0.070 refid MAV
 
-      # Allow GPS to step clock
+      # Allow MAVLink to step clock
       makestep 30 3
     '';
   };
-  # chrony has begun crashing on startup, but it works if you restart it
-  systemd.services.chronyd.serviceConfig.Restart = "on-failure";
+
+  systemd.services.chronyd.serviceConfig = let
+    mavlinkSocket = "/run/chrony.mavlink.sock";
+  in {
+    # Remove left over socket from previous run
+    ExecStartPre = "'${pkgs.coreutils}'/bin/rm -f '${mavlinkSocket}'";
+    # Allow fws_mavros to access socket
+    ExecStartPost = pkgs.writeShellScript "setup-mavlink-socket.sh" ''
+      while [ ! -e '${mavlinkSocket}' ]; do
+        sleep 1
+      done
+      '${pkgs.coreutils}'/bin/chown ros:ros '${mavlinkSocket}'
+    '';
+  };
 
   systemd.services.camera-still = {
     description = "Camera still image capture";
@@ -251,28 +271,10 @@ in {
       ros2topic
       ros2node
       ros2multicast
-      mavros
       fws-mavros
     ];
 
-    launchFiles.mavros = {
-      package = "fws_mavros";
-      launchFile = "mavros.launch";
-      args = {
-        fcu_url = "/dev/ttyAMA0:921600";
-        gcs_url = "udp://@localhost:14551";
-      };
-    };
-
     nodes = {
-      ntpd-driver = {
-        package = "ntpd_driver";
-        node = "shm_driver";
-        params = {
-          shm_unit = "0";
-          time_ref_topic = "/mavros/time_reference";
-        };
-      };
       fws-mavros = {
         package = "fws_mavros";
         node = "fws_mavros";
