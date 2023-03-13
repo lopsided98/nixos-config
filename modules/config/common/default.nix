@@ -24,11 +24,7 @@
   boot = {
     # Use the latest kernel. Some ARM systems and those with ZFS might use a
     # different kernel
-    kernelPackages =
-      # Use cross-compiled kernel on ARM, if we aren't cross-compiling everything
-      if pkgs.stdenv.isAarch32 && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform 
-      then pkgs.crossPackages.linuxPackages_latest
-      else pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.linuxPackages_latest;
     # Enable a shell if boot fails. This is disabled by default because it
     # gives root access, but someone with access to this shell would also have
     # physical access to the machine, so this doesn't really matter.
