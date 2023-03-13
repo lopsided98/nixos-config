@@ -21,7 +21,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        52         ; Serial
+                        53         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -66,11 +66,15 @@
 
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "rock64"; class = "IN"; type = "AAAA"; data = net.cidr.host "::fc07:23ff:fefc:d03e" ipv6Prefix; }
+    { name = "rock64"; class = "IN"; type = "AAAA"; data = net.cidr.host "::4e3:94ff:fecb:a2b0" ipv6Prefix; }
 
     # RockPro64
     { name = "rockpro64"; class = "IN"; type = "A"; data = externalIPv4; }
     { name = "rockpro64"; class = "IN"; type = "AAAA"; data = net.cidr.host "::b05e:efff:fe50:6aff" ipv6Prefix; }
+
+    # atomic-pi
+    { name = "atomic-pi"; class = "IN"; type = "A"; data = externalIPv4; }
+    { name = "atomic-pi"; class = "IN"; type = "AAAA"; data = net.cidr.host "::207:32ff:fe4d:3c3d" ipv6Prefix; }
 
     # maine-pi
     { name = "maine-pi"; class = "IN"; type = "CNAME"; data = "maine-pi.nsupdate.info."; }
@@ -79,11 +83,11 @@
   internalRecords = [
     { name = "raspi2"; class = "IN"; type = "A"; data = net.cidr.host 2 ipv4Subnet; }
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = net.cidr.host 3 ipv4Subnet; }
-    { name = "dell-optiplex-780"; class = "IN"; type = "A"; data = net.cidr.host 4 ipv4Subnet; }
     { name = "p-3400"; class = "IN"; type = "A"; data = net.cidr.host 4 ipv4Subnet; }
     { name = "hp-z420"; class = "IN"; type = "A"; data = net.cidr.host 5 ipv4Subnet; }
     { name = "rock64"; class = "IN"; type = "A"; data = net.cidr.host 6 ipv4Subnet; }
     { name = "rockpro64"; class = "IN"; type = "A"; data = net.cidr.host 7 ipv4Subnet; }
+    { name = "atomic-pi"; class = "IN"; type = "A"; data = net.cidr.host 9 ipv4Subnet; }
 
     { name = "influxdb"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "grafana"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
