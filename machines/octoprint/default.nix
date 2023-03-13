@@ -11,9 +11,6 @@ in {
     fsType = "ext4";
   };
 
-  # Need to use a version older than 5.19.2 due to
-  # https://bugzilla.kernel.org/show_bug.cgi?id=216711
-  boot.kernelPackages = mkForce pkgs.linuxPackages_5_15;
   hardware.deviceTree = {
     filter = "meson-gxbb-odroidc2.dtb";
     overlays = [ {
