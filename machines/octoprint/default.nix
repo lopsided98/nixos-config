@@ -33,7 +33,7 @@ in {
       enable = true;
       interfaces = [ "wlan0" ];
     };
-    home.interfaces.eth0 = {};
+    home.interfaces.end0 = {};
   };
   systemd.network.wait-online.anyInterface = true;
 
