@@ -1,0 +1,14 @@
+/dts-v1/;
+/plugin/;
+
+/* Enable UART3 on GPIOs 4 & 5 */
+
+/ {
+	compatible = "brcm,bcm2711";
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3_gpio4>;
+};

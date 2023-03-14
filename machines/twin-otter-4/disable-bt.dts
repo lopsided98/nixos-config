@@ -1,0 +1,24 @@
+/dts-v1/;
+/plugin/;
+
+/* Disable Bluetooth and restore UART0/ttyAMA0 over GPIOs 14 & 15. */
+
+/ {
+	compatible = "brcm,bcm2711";
+};
+
+&uart1 {
+	status = "disabled";
+};
+
+&uart0 {
+	pinctrl-0 = <&uart0_gpio14>;
+
+	bluetooth {
+		status = "disabled";
+	};
+};
+
+&{/chosen} {
+	stdout-path = "serial1:115200n8";
+};
