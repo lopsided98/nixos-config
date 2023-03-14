@@ -23,8 +23,14 @@ in {
       enable = true;
       inherit (cfg) interfaces;
       networks = {
-        Thunderbolt.pskRaw = "ext:HOME_PSK";
-        Thunderbolt_5GHz.pskRaw = "ext:HOME_PSK";
+        Thunderbolt = {
+          authProtocols = [ "WPA-PSK" "WPA-PSK-SHA256" "SAE" ];
+          pskRaw = "ext:HOME_PSK";
+        };
+        Thunderbolt_5GHz = {
+          authProtocols = [ "WPA-PSK" "WPA-PSK-SHA256" "SAE" ];
+          pskRaw = "ext:HOME_PSK";
+        };
       };
     };
     local.networking.wireless.passwordFiles =
