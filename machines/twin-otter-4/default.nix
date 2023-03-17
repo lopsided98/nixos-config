@@ -52,8 +52,6 @@ in {
   # WiFi configuration
 
   services.udev.extraRules = ''
-    # Disable power saving (causes network hangs every few seconds)
-    ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
     # Create virtual AP
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
   '';
