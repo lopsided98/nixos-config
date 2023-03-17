@@ -134,6 +134,10 @@ in {
           })
         ];
       }) cfg.interfaces;
+
+      networking.firewall.interfaces = mapAttrs (_: _: {
+        allowedUDPPorts = [ 5353 /* mDNS */ ];
+      }) cfg.interfaces;
     }
     (mkIf (cfg.interfaces != {}) {
       # Fallback DNS config for systems that don't use resolved
