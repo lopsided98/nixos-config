@@ -86,6 +86,10 @@ in {
         };
       };
     };
+    wait-online = {
+      ignoredInterfaces = [ "ap0" ];
+      anyInterface = true;
+    };
   };
   networking.firewall.interfaces = {
     end0.allowedUDPPorts = [
