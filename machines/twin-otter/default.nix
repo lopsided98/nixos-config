@@ -117,6 +117,8 @@ in {
     home = {
       enable = true;
       interfaces = [ "wlan0" ];
+      # Fails to connect if WPA-PSK-SHA256 is enabled
+      enableWpa2Sha256 = false;
     };
   };
 

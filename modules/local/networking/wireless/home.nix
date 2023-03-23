@@ -14,6 +14,16 @@ in {
       type = types.listOf types.str;
       description = "Wireless network interfaces";
     };
+
+    enableWpa2Sha256 = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enable WPA2-SHA256 support. This causes connections to fail on some
+        devices (Raspberry Pi Zero W), while others (Raspberry Pi 4) won't
+        connect without it.
+      '';
+    };
   };
 
   # Implementation
@@ -24,11 +34,11 @@ in {
       inherit (cfg) interfaces;
       networks = {
         Thunderbolt = {
-          authProtocols = [ "WPA-PSK" "WPA-PSK-SHA256" "SAE" ];
+          authProtocols = [ "WPA-PSK" "SAE" ] ++ lib.optional cfg.enableWpa2Sha256 "WPA-PSK-SHA256";
           pskRaw = "ext:HOME_PSK";
         };
         Thunderbolt_5GHz = {
-          authProtocols = [ "WPA-PSK" "WPA-PSK-SHA256" "SAE" ];
+          authProtocols = [ "WPA-PSK" "SAE" ] ++ lib.optional cfg.enableWpa2Sha256 "WPA-PSK-SHA256";
           pskRaw = "ext:HOME_PSK";
         };
       };
