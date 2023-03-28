@@ -225,7 +225,7 @@ in {
     description = "Camera video capture";
     bindsTo = [ "dev-vchiq.device" ];
     after = [ "dev-vchiq.device" ];
-    # wantedBy = [ "dev-vchiq.device" ];
+    wantedBy = [ "dev-vchiq.device" ];
     serviceConfig = {
       Type = "exec";
       Restart = "on-failure";
