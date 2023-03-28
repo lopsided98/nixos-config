@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1679166861,
-        "narHash": "sha256-zKaMXqArcviFpZDZ7VGa4+sIWeMEsLt7d02MCf/LTVc=",
+        "lastModified": 1680033290,
+        "narHash": "sha256-HHt7i2VQOLQpPo94deZuFS1a8sANDNGdqhv+WaaJd1k=",
         "ref": "refs/heads/master",
-        "rev": "8528c6c0d5d3d43b352953a80c7ef86640b4f642",
-        "revCount": 105,
+        "rev": "054e9de1b11d0a8e0ba8fabf954d8f110ef43932",
+        "revCount": 106,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -356,11 +356,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1678246785,
-        "narHash": "sha256-ma+ToZZddLpGed7pPBfG0CFYjP66QU/m0Yn4JM1Ezl4=",
+        "lastModified": 1679883731,
+        "narHash": "sha256-s+JOzKRcAOSCkMdjwKNXRX3cCJS99IrzXMb17PRHahU=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "155fc6ac233c64eb9fa07a1a81d6c6726441271c",
+        "rev": "3ae8887f8c0344d6d926a261c958993887487971",
         "type": "github"
       },
       "original": {
@@ -446,11 +446,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1678733811,
+        "lastModified": 1679187212,
         "narHash": "sha256-JOZMJYrsrSsgnkKlmCvjiPB3lqm3dHz/XtgDj/mDecA=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "65a8fc5dc71807c158c009151b559dbca450dda9",
+        "rev": "20d1c427e2b31884d6a563af2825475bd38b9813",
         "type": "github"
       },
       "original": {
@@ -462,11 +462,11 @@
     },
     "nixpkgs-unstable-custom": {
       "locked": {
-        "lastModified": 1679164072,
-        "narHash": "sha256-azGMOkib3aS8fP/hux5bruMlUlcsNK+PmV6bcIFAWB4=",
+        "lastModified": 1679531040,
+        "narHash": "sha256-3kT55znGhWVZ7ZUNrlze/vMjD7LEYV1UBUvFAoE38iA=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "3bab6fcb7bea2ef6bfe22b1ac589b735bae4c87c",
+        "rev": "3f8507e9610a317c88a52fea3bb4d58e0f3397f6",
         "type": "github"
       },
       "original": {
