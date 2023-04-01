@@ -3,11 +3,11 @@
     "crate2nix": {
       "flake": false,
       "locked": {
-        "lastModified": 1676852845,
-        "narHash": "sha256-WZ0IGyUo+yY9SoGvBJvFB6PgU+t6GfH0MF9Paru0u50=",
+        "lastModified": 1679876916,
+        "narHash": "sha256-XjDVFxUhXJFCco0ffbhbLkKcsHnX2mACYbBlfQTwRuE=",
         "owner": "kolloch",
         "repo": "crate2nix",
-        "rev": "a40edce3714744c6547516b9098dca6ad02e0b39",
+        "rev": "da442e433859f152f5f782f6d44c957206dd2b49",
         "type": "github"
       },
       "original": {
@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1680278430,
-        "narHash": "sha256-/9wMVyr5pdD0CUgUoyzSt4F396BIXBT+yHwaLhztqpo=",
+        "lastModified": 1680383109,
+        "narHash": "sha256-MTcMByw7zIhNtwBpQugYNRQaESQ+RC0IpL1MD+ndY18=",
         "ref": "refs/heads/master",
-        "rev": "1f5b79ceeac00132e890d2ed783e6cf9f2a5224e",
-        "revCount": 111,
+        "rev": "c50e3d1dfcff327c07e3f471fd5be21ebeae7cb0",
+        "revCount": 115,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -86,11 +86,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1676283394,
-        "narHash": "sha256-XX2f9c3iySLCw54rJ/CZs+ZK6IQy7GXNY4nSOyu2QG4=",
+        "lastModified": 1678901627,
+        "narHash": "sha256-U02riOqrKKzwjsxc/400XnElV+UtPUQWpANPlyazjH0=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "3db36a8b464d0c4532ba1c7dda728f4576d6d073",
+        "rev": "93a2b84fc4b70d9e089d029deacc3583435c2ed6",
         "type": "github"
       },
       "original": {
@@ -161,11 +161,11 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1667395993,
-        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "lastModified": 1676283394,
+        "narHash": "sha256-XX2f9c3iySLCw54rJ/CZs+ZK6IQy7GXNY4nSOyu2QG4=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "rev": "3db36a8b464d0c4532ba1c7dda728f4576d6d073",
         "type": "github"
       },
       "original": {
@@ -336,11 +336,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1677031957,
-        "narHash": "sha256-Fz8f3Lfgg0rcCtPxeUn+Ng6jomuJQukph7e4EGEwob8=",
+        "lastModified": 1680237850,
+        "narHash": "sha256-1Y5qXDeZFSHRIXRwPYArrth3NWqEcqjulrncC/xZXeQ=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "ca325a145772dfce52a23359996a47899f252c37",
+        "rev": "5386b7b6d15ada002830ac9ba622926b9d954785",
         "type": "github"
       },
       "original": {
@@ -430,11 +430,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1674641431,
-        "narHash": "sha256-qfo19qVZBP4qn5M5gXc/h1MDgAtPA5VxJm9s8RUAkVk=",
+        "lastModified": 1678244258,
+        "narHash": "sha256-iecrLqFb1QDgBKmC0h065ZBV6CZsigcz+1aHCv6rvfg=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "9b97ad7b4330aacda9b2343396eb3df8a853b4fc",
+        "rev": "61852b7faa8b47aad422adca0fea90fe007e9ead",
         "type": "github"
       },
       "original": {
