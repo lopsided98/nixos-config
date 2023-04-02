@@ -140,6 +140,7 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
+    rsync
     v4l-utils
     gst_all_1.gstreamer.bin
     gst_all_1.gstreamer.out
