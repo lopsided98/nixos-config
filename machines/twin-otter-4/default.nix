@@ -205,7 +205,6 @@ with lib;
       ${pkgs.libcamera-apps}/bin/libcamera-still \
         --timeout 0 \
         --timelapse 2000 \
-        --rotation 180
         -o "$image_dir/img_%04d.jpg"
     '';
   };
@@ -219,20 +218,45 @@ with lib;
       Restart = "on-failure";
       StateDirectory = "camera";
       StateDirectoryMode = "0755";
-    };
-    script = ''
-      image_dir=$(mktemp -d /var/lib/camera/video_$(date +%Y%m%d_%H%M%S)_XXXX)
-      chmod +rx "$image_dir"
 
-      ${pkgs.libcamera-apps}/bin/libcamera-vid \
-        --nopreview \
-        --timeout 0 \
-        --width 1920 \
-        --height 1080 \
-        --rotation 180 \
-        --save-pts "$image_dir/timestamps.txt" \
-        --output "$image_dir/video.h264"
-    '';
+      ExecStart = pkgs.runCommand "camera-video.sh" {
+        text = ''
+          #!${pkgs.runtimeShell}
+          export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
+          image_dir=$(mktemp -d /var/lib/camera/video_$(date +%Y%m%d_%H%M%S)_XXXX)
+          chmod +rx "$image_dir"
+
+          ${pkgs.gst_all_1.gstreamer.bin}/bin/gst-launch-1.0 -e \
+            libcamerasrc ! \
+            video/x-raw,format=YUY2,width=1920,height=1080,framerate=30/1,interlace-mode=progressive,colorimetry=bt709 ! \
+            v4l2h264enc ! \
+            'video/x-h264,level=(string)4' ! \
+            h264parse ! \
+            matroskamux0. \
+            alsasrc device=plughw:0 ! \
+            'audio/x-raw,rate=44100,format=S32LE,channels=1' ! \
+            audioconvert ! \
+            voaacenc ! \
+            aacparse ! \
+            queue ! \
+            matroskamux ! \
+            filesink location="$image_dir/video.mkv"
+        '';
+        passAsFile = [ "text" ];
+        buildInputs = with pkgs.gst_all_1; [
+          pkgs.libcamera
+          gstreamer
+          gst-plugins-base
+          gst-plugins-good
+          gst-plugins-bad
+        ];
+        preferLocalBuild = true;
+      } ''
+        export gstPluginSystemPath="$GST_PLUGIN_SYSTEM_PATH_1_0"
+        substituteAll "$textPath" "$out"
+        chmod +x "$out"
+      '';
+    };
   };
 
   services.ros2 = {
