@@ -139,14 +139,12 @@ with lib;
   };
 
   environment.systemPackages = with pkgs; [
-    v4l-utils
     libcamera-apps
     gst_all_1.gstreamer.bin
     gst_all_1.gstreamer.out
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     libraspberrypi
-    strace
   ];
 
   # Services to enable
