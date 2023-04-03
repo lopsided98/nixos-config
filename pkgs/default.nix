@@ -26,6 +26,8 @@ in {
 
   hacker-hats = self.callPackage ./hacker-hats {};
 
+  libcamera-apps = self.callPackage ./libcamera-apps { };
+
   nixos-secrets = self.python3Packages.callPackage ./nixos-secrets { };
 
   tinyssh = self.callPackage ./tinyssh {};

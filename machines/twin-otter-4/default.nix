@@ -2,9 +2,7 @@
 
 with lib;
 
-let
-  rosPkgs = config.services.ros.pkgs;
-in {
+{
   imports = [
     ../../modules
     ../../modules/local/machine/raspberry-pi.nix
@@ -22,7 +20,10 @@ in {
     compressImage = false;
   };
 
-  boot.kernelPackages = mkForce pkgs.linuxPackages_rpi4;
+  boot = {
+    kernelPackages = mkForce pkgs.linuxPackages_rpi4;
+    kernelParams = [ "cma=128M" ];
+  };
 
   boot.loader = {
     raspberryPi = {
@@ -43,10 +44,14 @@ in {
       name = "uart3";
       dtsFile = ./uart3.dts;
     }
-    /*{
+    {
+      name = "imx219";
+      dtsFile = ./imx219.dts;
+    }
+    {
       name = "sph0645lm4h-microphone";
       dtsFile = ./sph0645lm4h-microphone.dts;
-    }*/
+    }
   ];
 
   # WiFi configuration
@@ -134,11 +139,12 @@ in {
   };
 
   environment.systemPackages = with pkgs; [
-    /*v4l-utils
+    v4l-utils
+    libcamera-apps
     gst_all_1.gstreamer.bin
     gst_all_1.gstreamer.out
     gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { raspiCameraSupport = true; })*/
+    gst_all_1.gst-plugins-good
     libraspberrypi
     strace
   ];
@@ -157,17 +163,6 @@ in {
 
   services.chrony = {
     enable = true;
-    package = pkgs.chrony.overrideAttrs ({
-      patches ? [], ...
-    }: {
-      patches = patches ++ [
-        # Support 64-bit time_t in SOCK reflock messages
-        (pkgs.fetchpatch {
-          url = "https://git.tuxfamily.org/chrony/chrony.git/patch/refclock_sock.c?id=badaa83c319ae5a0bef872d1e7a55bf1260c1b84";
-          hash = "sha256-vzswMb4W16h4tYJSyYmj7ah9JabF9v/V9FvP37B6qz8=";
-        })
-      ];
-    });
     initstepslew = {
       enabled = true;
       threshold = 30;
@@ -181,7 +176,7 @@ in {
     '';
   };
 
-  systemd.services.chronyd.serviceConfig = let 
+  systemd.services.chronyd.serviceConfig = let
     mavlinkSocket = "/run/chrony.mavlink.sock";
   in {
     # Remove left over socket from previous run
@@ -206,7 +201,8 @@ in {
     script = ''
       image_dir=$(mktemp -d /var/lib/camera/still_$(date +%Y%m%d_%H%M%S)_XXXX)
       chmod +rx "$image_dir"
-      ${pkgs.libraspberrypi}/bin/raspistill \
+
+      ${pkgs.libcamera-apps}/bin/libcamera-still \
         --timeout 0 \
         --timelapse 2000 \
         --rotation 180
@@ -215,47 +211,29 @@ in {
   };
 
   sound.enable = true;
-  /*systemd.services.camera-video = {
+  systemd.services.camera-video = {
     description = "Camera video capture";
-    bindsTo = [ "dev-vchiq.device" ];
-    after = [ "dev-vchiq.device" ];
-    # wantedBy = [ "dev-vchiq.device" ];
+    wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "exec";
       Restart = "on-failure";
       StateDirectory = "camera";
       StateDirectoryMode = "0755";
-
-      ExecStart = pkgs.runCommand "camera-video.sh" {
-        text = ''
-          #!${pkgs.runtimeShell}
-          export GST_PLUGIN_SYSTEM_PATH_1_0="@gstPluginSystemPath@"
-          image_dir=$(mktemp -d /var/lib/camera/video_$(date +%Y%m%d_%H%M%S)_XXXX)
-          chmod +rx "$image_dir"
-
-          ${pkgs.gst_all_1.gstreamer.bin}/bin/gst-launch-1.0 -e \
-            rpicamsrc rotation=180 ! \
-            video/x-h264,width=1920,height=1080,framerate=30/1,profile=high ! \
-            queue ! \
-            h264parse ! \
-            matroskamux ! \
-            filesink location="$image_dir/video.mkv"
-        '';
-        passAsFile = [ "text" ];
-        buildInputs = with pkgs.gst_all_1; [
-          gstreamer
-          gst-plugins-base
-          (gst-plugins-good.override { raspiCameraSupport = true; })
-          gst-plugins-bad
-        ];
-        preferLocalBuild = true;
-      } ''
-        export gstPluginSystemPath="$GST_PLUGIN_SYSTEM_PATH_1_0"
-        substituteAll "$textPath" "$out"
-        chmod +x "$out"
-      '';
     };
-  };*/
+    script = ''
+      image_dir=$(mktemp -d /var/lib/camera/video_$(date +%Y%m%d_%H%M%S)_XXXX)
+      chmod +rx "$image_dir"
+
+      ${pkgs.libcamera-apps}/bin/libcamera-vid \
+        --nopreview \
+        --timeout 0 \
+        --width 1920 \
+        --height 1080 \
+        --rotation 180 \
+        --save-pts "$image_dir/timestamps.txt" \
+        --output "$image_dir/video.h264"
+    '';
+  };
 
   services.ros2 = {
     enable = true;
