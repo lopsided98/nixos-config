@@ -23,18 +23,18 @@ with lib;
   boot = {
     kernelPackages = mkForce pkgs.linuxPackages_rpi4;
     kernelParams = [ "cma=128M" ];
+    loader = {
+      raspberryPi = {
+        enable = true;
+        uboot.enable = true;
+        firmwareConfig = ''
+          enable_uart=1
+        '';
+      };
+      generic-extlinux-compatible.copyKernels = false;
+    };
   };
 
-  boot.loader = {
-    raspberryPi = {
-      enable = true;
-      uboot.enable = true;
-      firmwareConfig = ''
-        enable_uart=1
-      '';
-    };
-    generic-extlinux-compatible.copyKernels = false;
-  };
   hardware.deviceTree.overlays = [
     {
       name = "disable-bt";
