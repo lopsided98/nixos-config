@@ -12,6 +12,7 @@
     ./services/hardware/freefb.nix
     ./services/networking/dnsupdate.nix
     ./services/networking/doorman.nix
+    ./services/networking/mavlink-router.nix
     ./services/networking/tinyssh.nix
     ./services/monitoring/watchdog.nix
     ./services/system/fake-hwclock.nix

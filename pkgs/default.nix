@@ -26,6 +26,8 @@ in {
 
   libcamera-apps = self.callPackage ./libcamera-apps { };
 
+  mavlink-router = self.callPackage ./mavlink-router { };
+
   nixos-secrets = self.python3Packages.callPackage ./nixos-secrets { };
 
   tinyssh = self.callPackage ./tinyssh {};
