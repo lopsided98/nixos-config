@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Small suite of libcamera-based apps that aim to copy the functionality of the existing 'raspicam' apps";
+    homepage = "https://github.com/raspberrypi/libcamera-apps";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ lopsided98 ];
   };
 }

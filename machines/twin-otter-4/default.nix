@@ -96,14 +96,22 @@ with lib;
       anyInterface = true;
     };
   };
-  networking.firewall.interfaces = {
-    end0.allowedUDPPorts = [
-      5353 # mDNS
+  networking.firewall = {
+    allowedTCPPorts = [
+      5760 # MAVLink
     ];
-    ap0.allowedUDPPorts = [
-      67 # DHCP
-      5353 # mDNS
+    allowedUDPPorts = [
+      14550 # MAVLink
     ];
+    interfaces = {
+      end0.allowedUDPPorts = [
+        5353 # mDNS
+      ];
+      ap0.allowedUDPPorts = [
+        67 # DHCP
+        5353 # mDNS
+      ];
+    };
   };
 
   local.networking.wireless = {
@@ -254,6 +262,33 @@ with lib;
         substituteAll "$textPath" "$out"
         chmod +x "$out"
       '';
+    };
+  };
+
+  services.mavlink-router = {
+    enable = true;
+    settings = {
+      UartEndpoint.fcu = {
+        Device = "/dev/ttyAMA1";
+        Baud = 921600;
+      };
+      UdpEndpoint = {
+        gcs = {
+          Mode = "normal";
+          Address = "[::]";
+          Port = 14550;
+        };
+        fws_mavros = {
+          Mode = "normal";
+          Address = "[::1]";
+          Port = 14551;
+        };
+        fws_fake_detector = {
+          Mode = "normal";
+          Address = "[::1]";
+          Port = 14552;
+        };
+      };
     };
   };
 
