@@ -313,6 +313,11 @@ with lib;
         # adjust in the field.
         rosArgs = [ "--params-file" "/var/lib/ros/fws_mavros.yaml" ];
       };
+      fws-fake-detector = {
+        package = "fws_detector";
+        node = "fws_fake_detector";
+        rosArgs = [ "--params-file" "/var/lib/ros/fws_mavros.yaml" ];
+      };
     };
   };
 
