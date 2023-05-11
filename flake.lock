@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1682795452,
-        "narHash": "sha256-GrLardrinfL+zG+TjNhcTPqYkYFmVlMHs9ZalqJ6mMY=",
+        "lastModified": 1683777654,
+        "narHash": "sha256-xmSn6fr8lDfDfr0E6qxYVBDdhKQ/GD+nLYluu+EYBvM=",
         "ref": "refs/heads/master",
-        "rev": "02ba67f882faa4fd56712df3d0073ebd5dc67253",
-        "revCount": 150,
+        "rev": "a5ad589a3d3a2fa81175b3f6af3acecd4db8264c",
+        "revCount": 157,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -223,12 +223,15 @@
       }
     },
     "flake-utils_6": {
+      "inputs": {
+        "systems": "systems_2"
+      },
       "locked": {
-        "lastModified": 1680946745,
-        "narHash": "sha256-KqGlwg9UTDsFBZZB8wzXgMnc8XQm95LtSbFvBsnqkPI=",
+        "lastModified": 1681202837,
+        "narHash": "sha256-H+Rh19JDwRtpVPAWp64F+rlEtxUWBAQW28eAi3SRSzg=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "946da791763db1c306b86a8bd3828bf5814a1247",
+        "rev": "cfacdce06f30d2b68473a46042957675eebb3401",
         "type": "github"
       },
       "original": {
@@ -359,11 +362,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1680987729,
-        "narHash": "sha256-vXhyOMqBx0VxhjQz+JuGrI98xEvTA/AZgY6Sj5aKfUU=",
+        "lastModified": 1683088749,
+        "narHash": "sha256-mHtOrkf7fkXl+t424k4X2LibLRYU1PZHWlsGA+gV2w4=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "09db77c14c1a9bb50ae1cbd7f30ebee4d8aa843a",
+        "rev": "ba9492cbbdf1e906a1a9c4e9762743a311a7970f",
         "type": "github"
       },
       "original": {
@@ -527,11 +530,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1680987285,
-        "narHash": "sha256-H89D9Y0LconKgzW2G9bbeIsbCaDAf15blX1j91oU9tU=",
+        "lastModified": 1681059042,
+        "narHash": "sha256-f6HH1U/+YbM7vjnOOydPJt/Ia7Rn+ApCOryFNb3eGbk=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "dc92b7ed4a9e006ac7dcf94fe699ff5ad865941b",
+        "rev": "28aa66a5d7d196573aed06968b2e37ab98875511",
         "type": "github"
       },
       "original": {
@@ -690,6 +693,21 @@
       }
     },
     "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_2": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
