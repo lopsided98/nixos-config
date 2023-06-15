@@ -8,7 +8,8 @@
         # Recommended to be disabled to avoid potential corruption
         forceImportRoot = false;
         # Don't export kernel_neon_* symbols as GPL only
-        removeLinuxDRM = true;
+        # This is still WIP, so disable for now
+        # removeLinuxDRM = true;
       };
     };
   })
