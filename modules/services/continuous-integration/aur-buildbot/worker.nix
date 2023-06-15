@@ -83,7 +83,7 @@ in {
       buildbotDir = "/var/lib/${cfg.stateDirectory}";
       user = "aur-buildbot-worker";
       group = "aur-buildbot";
-      package = pkgs.python3Packages.buildbot-worker;
+      package = pkgs.buildbot-worker;
       masterUrl = "${cfg.masterHost}:${toString cfg.masterPort}";
 
       inherit (cfg) workerUser workerPassFile hostMessage adminMessage;

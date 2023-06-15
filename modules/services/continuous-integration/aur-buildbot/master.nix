@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.aur-buildbot;
 
-  python = cfg.package.pythonModule;
+  python = pkgs.python3;
 in {
   options = {
     services.aur-buildbot = {
@@ -25,7 +25,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.buildbot.withPlugins (with pkgs.python3Packages.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
+        default = pkgs.buildbot.withPlugins (with pkgs.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
         defaultText = "pkgs.buildbot.withPlugins (with pkgs.buildbot-plugins; [ www console-view waterfall-view grid-view ])";
         description = "Package to use for buildbot.";
         example = literalExample "pkgs.buildbot-full";
@@ -56,7 +56,7 @@ in {
     systemd.services.buildbot-master = {
       description = mkForce "AUR Buildbot Master";
       environment = {
-          PYTHONPATH = mkForce "${pkgs.aur-buildbot}/master:${(python.withPackages (self: [
+          PYTHONPATH = mkForce "${pkgs.aur-buildbot}/master:${(pkgs.python3.withPackages (self: [
             cfg.package
             self.pyyaml
             self.requests
