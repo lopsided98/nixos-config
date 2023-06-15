@@ -9,12 +9,7 @@ let
 in {
   options = {
     services.aur-buildbot = {
-
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to enable the AUR Buildbot Master.";
-      };
+      enable = mkEnableOption "AUR Buildbot Master";
 
       buildbotDir = mkOption {
         default = "/var/lib/aur-buildbot/master";
@@ -30,7 +25,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.python3Packages.buildbot.withPlugins (with pkgs.python3Packages.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
+        default = pkgs.buildbot.withPlugins (with pkgs.python3Packages.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
         defaultText = "pkgs.buildbot.withPlugins (with pkgs.buildbot-plugins; [ www console-view waterfall-view grid-view ])";
         description = "Package to use for buildbot.";
         example = literalExample "pkgs.buildbot-full";
