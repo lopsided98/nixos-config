@@ -38,7 +38,7 @@
     # is basically required to use NixOS on ARM now.
     initrd.includeDefaultModules = false;
 
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
 
     # Enable GRUB serial console
     loader.grub.extraConfig = ''
