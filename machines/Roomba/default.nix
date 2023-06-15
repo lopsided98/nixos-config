@@ -198,25 +198,28 @@ with lib;
     enable = true;
     resolveLocalQueries = false;
     alwaysKeepRunning = true;
-    servers = [
-      "9.9.9.10"
-      "149.112.112.10"
-      "2620:fe::10"
-      "2620:fe::fe:10"
-    ];
-    extraConfig = ''
-      interface=br-lan
-      bind-interfaces
-      no-resolv
-      server=/dartmouth.edu/129.170.17.4
+    settings = {
+      interface = "br-lan";
+      bind-interfaces = true;
+      no-resolv = true;
+      server = [
+        "9.9.9.10"
+        "149.112.112.10"
+        "2620:fe::10"
+        "2620:fe::fe:10"
+        "/dartmouth.edu/129.170.17.4"
+        "/benwolsieffer.com/2601:18c:8380:74b0:ba27:ebff:fe5e:6b6e"
+      ];
+      # Need to allow access to DNS server from VPN IPv4
+      # ++ map (s: "/benwolsieffer.com/${s}") config.local.networking.home.dns;
+
       # VPN server replies back from its VPN ip even if its normal internal IP
       # was the destination, so override its DNS entries to use its VPN IP.
-      address=/odroid-xu4.benwolsieffer.com/${config.local.networking.vpn.home.wireGuard.server.ipv4Address}
-      address=/odroid-xu4.benwolsieffer.com/${config.local.networking.vpn.home.wireGuard.server.ipv6Address}
-      # Need to allow access to DNS server from VPN IPv4
-      ${concatMapStringsSep "\n" (s: "#server=/benwolsieffer.com/${s}") config.local.networking.home.dns}
-      server=/benwolsieffer.com/2601:18c:8380:74b0:ba27:ebff:fe5e:6b6e
-    '';
+      address = [
+        "/odroid-xu4.benwolsieffer.com/${config.local.networking.vpn.home.wireGuard.server.ipv4Address}"
+        "/odroid-xu4.benwolsieffer.com/${config.local.networking.vpn.home.wireGuard.server.ipv6Address}"
+      ];
+    };
   };
 
   networking.hostName = "Roomba"; # Define your hostname.
