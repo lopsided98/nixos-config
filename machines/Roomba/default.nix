@@ -165,7 +165,7 @@ with lib;
 
   # Ethernet
   systemd.network.networks."30-ethernet" = {
-    name = "eth0";
+    name = "enu1u1";
     networkConfig.Bridge = "br-lan";
   };
 
