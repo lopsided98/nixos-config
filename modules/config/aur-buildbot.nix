@@ -85,7 +85,6 @@ in {
         ldcad: {}
         obfuscate: {}
         python-nss: {}
-        python-port-for: {}
         python-pynmea2: {}
         python-sphinx-argparse: {}
         python-sphinx-autobuild: {}
