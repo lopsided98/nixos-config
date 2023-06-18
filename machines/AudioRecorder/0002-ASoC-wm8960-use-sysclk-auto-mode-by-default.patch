@@ -1,4 +1,4 @@
-From b472a54d51660022eb4bde412b441fe611e5d41f Mon Sep 17 00:00:00 2001
+From 4e0e2ebb7c4446fd7343e2e9801d73ea575b13f0 Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Sun, 6 Jun 2021 13:09:20 -0400
 Subject: [PATCH 2/3] ASoC: wm8960: use sysclk auto mode by default
@@ -23,10 +23,10 @@ Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
  3 files changed, 18 insertions(+), 13 deletions(-)
 
 diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
-index 1abbc0dc278a..72aaa0461879 100644
+index 5c1249ac2890..baaa8d2a3781 100644
 --- a/sound/soc/codecs/wm8960.c
 +++ b/sound/soc/codecs/wm8960.c
-@@ -757,7 +757,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+@@ -761,7 +761,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
  		return 0;
  	}
  
@@ -35,7 +35,7 @@ index 1abbc0dc278a..72aaa0461879 100644
  		dev_err(component->dev, "No MCLK configured\n");
  		return -EINVAL;
  	}
-@@ -769,7 +769,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+@@ -773,7 +773,7 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
  	 * directly. Otherwise, auto select a available pll out frequency
  	 * and set PLL.
  	 */
@@ -44,7 +44,7 @@ index 1abbc0dc278a..72aaa0461879 100644
  		/* disable the PLL and using MCLK to provide sysclk */
  		wm8960_set_pll(component, 0, 0);
  		freq_out = freq_in;
-@@ -780,11 +780,11 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+@@ -784,11 +784,11 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
  		return -EINVAL;
  	}
  
@@ -58,7 +58,7 @@ index 1abbc0dc278a..72aaa0461879 100644
  			dev_err(component->dev, "failed to configure clock\n");
  			return -EINVAL;
  		}
-@@ -931,7 +931,7 @@ static int wm8960_set_bias_level_out3(struct snd_soc_component *component,
+@@ -936,7 +936,7 @@ static int wm8960_set_bias_level_out3(struct snd_soc_component *component,
  			 * If it's sysclk auto mode, and the pll is enabled,
  			 * disable the pll
  			 */
@@ -67,7 +67,7 @@ index 1abbc0dc278a..72aaa0461879 100644
  				wm8960_set_pll(component, 0, 0);
  
  			if (!IS_ERR(wm8960->mclk))
-@@ -1052,7 +1052,7 @@ static int wm8960_set_bias_level_capless(struct snd_soc_component *component,
+@@ -1062,7 +1062,7 @@ static int wm8960_set_bias_level_capless(struct snd_soc_component *component,
  			 * If it's sysclk auto mode, and the pll is enabled,
  			 * disable the pll
  			 */
@@ -76,7 +76,7 @@ index 1abbc0dc278a..72aaa0461879 100644
  				wm8960_set_pll(component, 0, 0);
  
  			if (!IS_ERR(wm8960->mclk))
-@@ -1236,7 +1236,7 @@ static int wm8960_set_dai_pll(struct snd_soc_dai *codec_dai, int pll_id,
+@@ -1246,7 +1246,7 @@ static int wm8960_set_dai_pll(struct snd_soc_dai *codec_dai, int pll_id,
  
  	wm8960->freq_in = freq_in;
  
@@ -85,7 +85,7 @@ index 1abbc0dc278a..72aaa0461879 100644
  		return 0;
  
  	return wm8960_set_pll(component, freq_in, freq_out);
-@@ -1291,15 +1291,15 @@ static int wm8960_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
+@@ -1301,15 +1301,15 @@ static int wm8960_set_dai_sysclk(struct snd_soc_dai *dai, int clk_id,
  	struct wm8960_priv *wm8960 = snd_soc_component_get_drvdata(component);
  
  	switch (clk_id) {
@@ -128,20 +128,20 @@ index 63ba6c03c488..eb5e21611a15 100644
 +
  #endif
 diff --git a/sound/soc/fsl/fsl-asoc-card.c b/sound/soc/fsl/fsl-asoc-card.c
-index 06107ae46e20..a426e995f189 100644
+index 8d14b5593658..2795588f1403 100644
 --- a/sound/soc/fsl/fsl-asoc-card.c
 +++ b/sound/soc/fsl/fsl-asoc-card.c
-@@ -637,8 +637,8 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
- 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
+@@ -644,8 +644,8 @@ static int fsl_asoc_card_probe(struct platform_device *pdev)
+ 		priv->dai_fmt |= SND_SOC_DAIFMT_CBP_CFP;
  	} else if (of_device_is_compatible(np, "fsl,imx-audio-wm8960")) {
  		codec_dai_name = "wm8960-hifi";
 -		priv->codec_priv.fll_id = WM8960_SYSCLK_AUTO;
 -		priv->codec_priv.pll_id = WM8960_SYSCLK_AUTO;
 +		priv->codec_priv.fll_id = WM8960_SYSCLK_SRC_AUTO;
 +		priv->codec_priv.pll_id = WM8960_SYSCLK_SRC_AUTO;
- 		priv->dai_fmt |= SND_SOC_DAIFMT_CBM_CFM;
+ 		priv->dai_fmt |= SND_SOC_DAIFMT_CBP_CFP;
  	} else if (of_device_is_compatible(np, "fsl,imx-audio-ac97")) {
  		codec_dai_name = "ac97-hifi";
 -- 
-2.37.2
+2.40.0
 

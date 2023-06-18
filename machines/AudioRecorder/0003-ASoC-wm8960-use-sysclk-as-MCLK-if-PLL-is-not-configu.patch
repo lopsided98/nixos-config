@@ -1,4 +1,4 @@
-From 130173c8355bde6de0541741652b66991473701b Mon Sep 17 00:00:00 2001
+From f9b1033423530325198c9c31ab16d6dbf81c7e90 Mon Sep 17 00:00:00 2001
 From: Ben Wolsieffer <benwolsieffer@gmail.com>
 Date: Sat, 27 Aug 2022 00:56:11 -0400
 Subject: [PATCH 3/3] ASoC: wm8960: use sysclk as MCLK if PLL is not configured
@@ -13,10 +13,10 @@ Signed-off-by: Ben Wolsieffer <benwolsieffer@gmail.com>
  1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/sound/soc/codecs/wm8960.c b/sound/soc/codecs/wm8960.c
-index 72aaa0461879..041b860b0c5d 100644
+index baaa8d2a3781..234c2ad0b307 100644
 --- a/sound/soc/codecs/wm8960.c
 +++ b/sound/soc/codecs/wm8960.c
-@@ -757,12 +757,22 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
+@@ -761,12 +761,22 @@ static int wm8960_configure_clocking(struct snd_soc_component *component)
  		return 0;
  	}
  
@@ -42,5 +42,5 @@ index 72aaa0461879..041b860b0c5d 100644
  	 * If it's sysclk auto mode, check if the MCLK can provide sysclk or
  	 * not. If MCLK can provide sysclk, using MCLK to provide sysclk
 -- 
-2.37.2
+2.40.0
 
