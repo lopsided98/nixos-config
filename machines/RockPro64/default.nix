@@ -1,9 +1,10 @@
 { lib, config, pkgs, secrets, ... }: with lib; {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-    ../../modules
-  ];
+  imports = [ ../../modules ];
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/5dd58fb9-dc7f-4b77-b14b-d53d370735a7";
+    fsType = "ext4";
+  };
 
   boot.loader = {
     grub.enable = false;
@@ -35,6 +36,8 @@
   };
 
   # List services that you want to enable:
+
+  nix.settings.cores = 4;
 
   services.openssh = {
     ports = [ 4247 ];
