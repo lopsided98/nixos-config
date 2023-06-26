@@ -1,10 +1,4 @@
-{ lib, config, pkgs, secrets, ... }:
-
-with lib;
-
-let
-  address = "192.168.1.7";
-in {
+{ lib, config, pkgs, secrets, ... }: with lib; {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -29,40 +23,11 @@ in {
   '');
 
   # Ethernet
-  systemd.network.networks."30-ethernet" = {
-    name = "end0";
-    # Use a different MAC address on physical interface, because the normal MAC
-    # is used on the VPN in order to get consistent IPs.
-    linkConfig.MACAddress = "ba:4b:f9:9b:f1:88";
-    DHCP = "ipv4";
-    networkConfig.MulticastDNS = "yes";
-  };
-  networking.firewall.interfaces.end0.allowedUDPPorts = [
-    5353 # mDNS
-  ];
+  local.networking.home.interfaces.end0.ipv4Address = "192.168.1.7/24";
   # Work around checksumming bug
   networking.localCommands = ''
     ${pkgs.ethtool}/bin/ethtool -K end0 rx off tx off
   '';
-
-  # OpenVPN TAP client
-  local.networking.vpn.home.tap.client = {
-    enable = true;
-    macAddress = "b2:5e:ef:50:6a:ff";
-    certificate = ./vpn/home/client.crt;
-    privateKeySecret = secrets.RockPro64.vpn.home.privateKey;
-  };
-  systemd.network.networks."50-vpn-home-tap-client" = {
-    address = [ "${address}/24" ];
-    extraConfig = ''
-      [IPv6AcceptRA]
-      UseDNS=false
-    '';
-  };
-
-  networking.firewall = {
-    extraPackages = [ pkgs.nftables ];
-  };
 
   networking = {
     hostName = "RockPro64";
