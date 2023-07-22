@@ -1,5 +1,5 @@
 { lib, config, pkgs, secrets, ... }: let
-  interface = "eth0";
+  interface = "enu1u1";
 in {
   imports = [
     ../../modules/local/machine/raspberry-pi.nix
