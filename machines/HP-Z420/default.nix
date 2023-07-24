@@ -192,7 +192,13 @@ in rec {
       };
 
       # Snapshots of non-ZFS devices that backup to this node
-      "backup/backups/Dell-Inspiron-15-Windows" = {
+      "backup/backups/Dell-Inspiron-15" = {
+        use_template = [ "backup" ];
+        autosnap = true;
+        recursive = true;
+        process_children_only = true;
+      };
+      "backup/backups/P-3400" = {
         use_template = [ "backup" ];
         autosnap = true;
         recursive = true;
@@ -210,7 +216,7 @@ in rec {
         recursive = true;
         extraArgs = [ "--skip-parent" ];
       };
-      "backup/backups/HP-Z420" = {
+      /*"backup/backups/HP-Z420" = {
         target = "${remote}:backup/backups/HP-Z420";
         recursive = true;
         extraArgs = [ "--skip-parent" ];
@@ -218,7 +224,7 @@ in rec {
       "backup/backups/Dell-Inspiron-15-Windows" = {
         target = "${remote}:backup/backups/Dell-Inspiron-15-Windows";
         recursive = true;
-      };
+      };*/
     };
   };
 
