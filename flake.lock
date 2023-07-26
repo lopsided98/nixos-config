@@ -292,11 +292,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1687738819,
-        "narHash": "sha256-m5Ul5sST7IbNSwK+7H9Ej0qB/P0pBrEWiryhInSBf88=",
+        "lastModified": 1690405979,
+        "narHash": "sha256-rtwTki2t+wA/Vr/Tt//CuArLHos93rqV/kADjqB95Ng=",
         "ref": "refs/heads/master",
-        "rev": "f04193088e34dcca1a8cdd484518a589a9312aa2",
-        "revCount": 94,
+        "rev": "3e6d9157cf236b5520ea933eef4cc33924cbe26b",
+        "revCount": 95,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/freefb.git"
       },
@@ -679,11 +679,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1690335236,
-        "narHash": "sha256-31b3oO8a2aMt9WYaTNcDP2+mATG/3Z3GSkeKM9KfD24=",
+        "lastModified": 1690406793,
+        "narHash": "sha256-5Ywp0nnVZvPAUcb6nL3ucpuvOySPmuPhzQVoWdzMF0Y=",
         "ref": "refs/heads/master",
-        "rev": "2d559903535bc727182722042a2ff096cffcf4a4",
-        "revCount": 108,
+        "rev": "9dd036745b6abae233e7daba507907bbd10c25e6",
+        "revCount": 110,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
