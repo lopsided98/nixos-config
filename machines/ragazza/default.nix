@@ -60,12 +60,16 @@ in {
 
   services.hostapd = {
     enable = true;
-    interface = "ap0";
-    ssid = "ragazza";
-    extraConfig = ''
-      wpa=2
-      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.ragazza.hostapd.wpaPsk}
-    '';
+    radios.ap0 = {
+      wifi4.capabilities = [ "HT40" "HT40-" "SHORT-GI-20" "DSSS_CCK-40" ];
+      networks.ap0 = {
+        ssid = config.networking.hostName;
+        authentication = {
+          mode = "wpa2-sha256";
+          wpaPskFile = secrets.getSystemdSecret "hostapd" secrets.ragazza.hostapd.wpaPsk;
+        };
+      };
+    };
   };
 
   services.resolved.extraConfig = "MulticastDNS=yes";
