@@ -95,14 +95,18 @@ in {
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
   '';
 
-  services.hostapd = mkIf ap {
+  services.hostapd = {
     enable = true;
-    interface = "ap0";
-    ssid = hostNamePrefix;
-    extraConfig = ''
-      wpa=2
-      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.AudioRecorder.hostapd.wpaPsk}
-    '';
+    radios.ap0 = {
+      wifi4.capabilities = [ "HT40" "HT40-" "SHORT-GI-20" "DSSS_CCK-40" ];
+      networks.ap0 = {
+        ssid = hostNamePrefix;
+        authentication = {
+          mode = "wpa2-sha256";
+          wpaPskFile = secrets.getSystemdSecret "hostapd" secrets.AudioRecorder.hostapd.wpaPsk;
+        };
+      };
+    };
   };
   systemd.services.hostapd = mkIf ap {
     wantedBy = [ "network.target" ];
