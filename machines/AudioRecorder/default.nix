@@ -95,7 +95,7 @@ in {
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name interface add ap0 type __ap"
   '';
 
-  services.hostapd = {
+  services.hostapd = mkIf ap {
     enable = true;
     radios.ap0 = {
       wifi4.capabilities = [ "HT40" "HT40-" "SHORT-GI-20" "DSSS_CCK-40" ];
