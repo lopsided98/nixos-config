@@ -79,11 +79,16 @@ in {
   # Access point
   services.hostapd = {
     enable = true;
-    interface = "ap0";
-    ssid = config.networking.hostName;
-    extraConfig = ''
-      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.twin-otter.hostapd.wpaPsk}
-    '';
+    radios.ap0 = {
+      wifi4.capabilities = [ "HT40" "HT40-" "SHORT-GI-20" "DSSS_CCK-40" ];
+      networks.ap0 = {
+        ssid = config.networking.hostName;
+        authentication = {
+          mode = "wpa2-sha256";
+          wpaPasswordFile = secrets.getSystemdSecret "hostapd" secrets.twin-otter.hostapd.password;
+        };
+      };
+    };
   };
   systemd.network = {
     enable = true;
@@ -300,7 +305,7 @@ in {
     };
     hostapd = {
       units = [ "hostapd.service" ];
-      files = secrets.mkSecret secrets.twin-otter.hostapd.wpaPsk {};
+      files = secrets.mkSecret secrets.twin-otter.hostapd.password {};
     };
   };
 }
