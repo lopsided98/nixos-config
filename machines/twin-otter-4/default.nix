@@ -64,11 +64,16 @@ with lib;
   # Access point
   services.hostapd = {
     enable = true;
-    interface = "ap0";
-    ssid = config.networking.hostName;
-    extraConfig = ''
-      wpa_psk_file=${secrets.getSystemdSecret "hostapd" secrets.twin-otter.hostapd.wpaPsk}
-    '';
+    radios.ap0 = {
+      wifi4.capabilities = [ "HT40" "HT40-" "SHORT-GI-20" "DSSS_CCK-40" ];
+      networks.ap0 = {
+        ssid = config.networking.hostName;
+        authentication = {
+          mode = "wpa2-sha256";
+          wpaPasswordFile = secrets.getSystemdSecret "hostapd" secrets.twin-otter.hostapd.password;
+        };
+      };
+    };
   };
   systemd.network = {
     enable = true;
@@ -239,7 +244,7 @@ with lib;
             'video/x-h264,level=(string)4' ! \
             h264parse ! \
             matroskamux0. \
-            alsasrc device=plughw:0 ! \
+            alsasrc device=plughw:1 ! \
             'audio/x-raw,rate=44100,format=S32LE,channels=1' ! \
             audioconvert ! \
             voaacenc ! \
@@ -333,7 +338,7 @@ with lib;
     };
     hostapd = {
       units = [ "hostapd.service" ];
-      files = secrets.mkSecret secrets.twin-otter.hostapd.wpaPsk {};
+      files = secrets.mkSecret secrets.twin-otter.hostapd.password {};
     };
   };
 }
