@@ -36,7 +36,7 @@ in {
   local.networking = {
     wireless.home = {
       enable = true;
-      interfaces = [ "wlan0" ];
+      interfaces = [ "wlu1u2" ];
     };
     home.interfaces.end0 = {};
   };
