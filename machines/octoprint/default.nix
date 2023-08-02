@@ -27,6 +27,11 @@ in {
     };
   };
 
+  # This driver controls the onboard USB hub reset line, but somehow this
+  # doesn't work right. As soon as this driver is loaded, all the USB devices
+  # disconnect.
+  boot.blacklistedKernelModules = [ "onboard-usb-hub" ];
+
   hardware.enableRedistributableFirmware = true;
   local.networking = {
     wireless.home = {
