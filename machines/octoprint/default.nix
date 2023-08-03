@@ -30,6 +30,7 @@ in {
   # This driver controls the onboard USB hub reset line, but somehow this
   # doesn't work right. As soon as this driver is loaded, all the USB devices
   # disconnect.
+  # See: https://lore.kernel.org/lkml/ZMrFb7H1ynwwBSCA@Dell-Inspiron-15/T/#t
   boot.blacklistedKernelModules = [ "onboard-usb-hub" ];
 
   hardware.enableRedistributableFirmware = true;
