@@ -10,7 +10,7 @@
       url = "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz";
       flake = false;
     };
-    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/staging";
+    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/develop";
     nix-sdr.url = "github:lopsided98/nix-sdr";
     nixos-secrets.url = "github:lopsided98/nixos-secrets";
     nixpkgs-master-custom.url = "github:lopsided98/nixpkgs/master-custom";
