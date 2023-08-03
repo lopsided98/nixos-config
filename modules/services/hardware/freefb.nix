@@ -10,10 +10,11 @@ in {
 
     interval = mkOption {
       type = types.str;
-      default = "hourly";
-      example = "*:0/10";
+      default = "*:0/30";
+      example = "hourly";
       description = ''
-        Syncronize trackers at this interval. The default is to run hourly.
+        Syncronize trackers at this interval. The default is to run every half
+        hour.
 
         The format is described in
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -90,9 +91,10 @@ in {
     (mkIf (cfg.link == "ble") {
       hardware.bluetooth.enable = true;
 
+      # Allow access to BlueZ over DBus
       services.dbus.packages = singleton (pkgs.writeTextFile {
-        name = "dbus-water-level-bluetooth.conf";
-        destination = "/etc/dbus-1/system.d/water-level-bluetooth.conf";
+        name = "dbus-freefb-bluetooth.conf";
+        destination = "/etc/dbus-1/system.d/freefb-bluetooth.conf";
         text = ''
           <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
            "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
