@@ -65,34 +65,8 @@ in {
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  /*local.networking.vpn.home.tap.client = {
-    enable = true;
-    macAddress = "00:07:32:4d:3c:3d";
-    certificate = ./vpn/home/client.crt;
-    privateKey = secrets.getSecret secrets.atomic-pi.vpn.home.privateKey;
-  };*/
-  systemd.network = {
-    enable = true;
+  local.networking.home.interfaces.${interface}.ipv4Address = "${address}/24";
 
-    /*networks."50-vpn-home-tap-client" = {
-      address = [ "${address}/24" ];
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=false
-      '';
-    };*/
-
-    # Home network
-    networks."50-${interface}" = {
-      name = "${interface}";
-      address = [ "${address}/24" ];
-      gateway = [ gateway ];
-      dns = [ "192.168.1.2" "2601:18c:8380:74b0:ba27:ebff:fe5e:6b6e" ];
-      dhcpV4Config.UseDNS = false;
-      dhcpV6Config.UseDNS = false;
-      ipv6AcceptRAConfig.UseDNS = false;
-    };
-  };
   networking.hostName = "atomic-pi";
 
   # List services that you want to enable:
