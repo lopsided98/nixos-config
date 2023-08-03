@@ -47,42 +47,62 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    users = {
-      users.freefb = {
-        isSystemUser = true;
-        description = "FreeFB user";
-        group = "freefb";
+  config = mkIf cfg.enable (mkMerge [
+    ({
+      users = {
+        users.freefb = {
+          isSystemUser = true;
+          description = "FreeFB user";
+          group = "freefb";
+        };
+        groups.freefb = {};
       };
-      groups.freefb = {};
-    };
-  
-    systemd.services.freefb = {
-      serviceConfig = mkMerge [ 
-        {
-          Type = "oneshot";
-          ExecStart = escapeShellArgs ([
-            "${pkgs.freefb}/bin/freefb"
-          ] ++ optionals (cfg.configFile != null) [
-            "--config" cfg.configFile
-          ] ++ [
-            "-l" "${cfg.link}"
-            "sync"
-          ] ++ optional cfg.dump "--dump");
-        }
-        (mkIf cfg.dump {
-          StateDirectory = "freefb";
-          StateDirectoryMode = "0750";
-          WorkingDirectory = "/var/lib/freefb";
-        })
-      ];
-      environment.RUST_LOG = "info";
-      startAt = cfg.interval;
-    };
 
-    # Allow access to Fitbit dongle
-    services.udev.extraRules = ''
-      SUBSYSTEM=="usb", ATTRS{idVendor}=="2687", ATTRS{idProduct}=="fb01", MODE="660", GROUP="freefb"
-    '';
-  };
+      systemd.services.freefb = {
+        serviceConfig = mkMerge [
+          {
+            Type = "oneshot";
+            ExecStart = escapeShellArgs ([
+              "${pkgs.freefb}/bin/freefb"
+            ] ++ optionals (cfg.configFile != null) [
+              "--config" cfg.configFile
+            ] ++ [
+              "-l" "${cfg.link}"
+              "sync"
+            ] ++ optional cfg.dump "--dump");
+          }
+          (mkIf cfg.dump {
+            StateDirectory = "freefb";
+            StateDirectoryMode = "0750";
+            WorkingDirectory = "/var/lib/freefb";
+          })
+        ];
+        environment.RUST_LOG = "info";
+        startAt = cfg.interval;
+      };
+    })
+    (mkIf (cfg.link == "dongle") {
+      # Allow access to Fitbit dongle
+      services.udev.extraRules = ''
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="2687", ATTRS{idProduct}=="fb01", MODE="660", GROUP="freefb"
+      '';
+    })
+    (mkIf (cfg.link == "ble") {
+      hardware.bluetooth.enable = true;
+
+      services.dbus.packages = singleton (pkgs.writeTextFile {
+        name = "dbus-water-level-bluetooth.conf";
+        destination = "/etc/dbus-1/system.d/water-level-bluetooth.conf";
+        text = ''
+          <!DOCTYPE busconfig PUBLIC "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+           "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+          <busconfig>
+            <policy user="freefb">
+              <allow send_destination="org.bluez"/>
+            </policy>
+          </busconfig>
+        '';
+      });
+    })
+  ]);
 }

@@ -97,32 +97,43 @@ in {
 
   # List services that you want to enable:
 
+  # Radon sensor logging
   local.services.radonpy.enable = true;
-  # Enable bluetoothd debugging
-  /*systemd.services.bluetooth.serviceConfig.ExecStart = mkForce [
-    ""
-    "${config.hardware.bluetooth.package}/libexec/bluetooth/bluetoothd -d -f /etc/bluetooth/main.conf"
-  ];*/
 
   # Power usage logging
   local.services.rtlamr.enable = true;
   boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
 
-  services.openssh = {
-    ports = [ 4286 ];
-    hostKeys = [
-      { type = "rsa"; bits = 4096; path = secrets.getSecret secrets.atomic-pi.ssh.hostRsaKey; }
-      { type = "ed25519"; path = secrets.getSecret secrets.atomic-pi.ssh.hostEd25519Key; }
-    ];
+  # Fitbit synchronization
+  services.freefb = {
+    enable = true;
+    link = "ble";
+    dump = true;
+    configFile = secrets.getSystemdSecret "freefb" secrets.freefb.configFile;
   };
+
+  services.openssh.hostKeys = [
+    { type = "rsa"; bits = 4096; path = secrets.getSystemdSecret "sshd" secrets.atomic-pi.ssh.hostRsaKey; }
+    { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.atomic-pi.ssh.hostEd25519Key; }
+  ];
 
   # Enable eMMC TRIM
   services.fstrim.enable = true;
 
   boot.secrets = secrets.mkSecret secrets.atomic-pi.tinyssh.hostEd25519Key { };
-  environment.secrets = mkMerge [
-    # (secrets.mkSecret secrets.atomic-pi.vpn.home.privateKey { })
-    (secrets.mkSecret secrets.atomic-pi.ssh.hostRsaKey { })
-    (secrets.mkSecret secrets.atomic-pi.ssh.hostEd25519Key { })
-  ];
+  systemd.secrets = {
+    freefb = {
+      units = [ "freefb.service" ];
+      files = secrets.mkSecret secrets.freefb.configFile {};
+    };
+    sshd = {
+      units = [ "sshd@.service" ];
+      # Prevent first connection from failing due to decryption taking too long
+      lazy = false;
+      files = mkMerge [
+        (secrets.mkSecret secrets.atomic-pi.ssh.hostRsaKey {})
+        (secrets.mkSecret secrets.atomic-pi.ssh.hostEd25519Key {})
+      ];
+    };
+  };
 }

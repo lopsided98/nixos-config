@@ -129,14 +129,6 @@ in {
     KERNEL=="gpiochip*", GROUP="gpio", MODE="0660"
   '';
 
-  # Enable Fitbit synchronization
-  services.freefb = {
-    enable = true;
-    link = "dongle";
-    dump = true;
-    configFile = secrets.getSystemdSecret "freefb" secrets.freefb.configFile;
-  };
-
   # BME280 data logging to InfluxDB
   local.services.telegraf = {
     enable = true;
@@ -183,9 +175,4 @@ in {
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
-  
-  systemd.secrets.freefb = {
-    units = [ "freefb.service" ];
-    files = secrets.mkSecret secrets.freefb.configFile {};
-  };
 }
