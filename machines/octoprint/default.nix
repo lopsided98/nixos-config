@@ -59,13 +59,14 @@ in {
 
       octoprint-filament-sensor-universal = python.pkgs.buildPythonPackage rec {
         pname = "OctoPrint-Filament-Sensor-Universal";
-        version = "1.0.0";
+        version = "2.0.0";
+        format = "setuptools";
 
         src = pkgs.fetchFromGitHub {
           owner = "lopsided98";
           repo = pname;
-          rev = "8a72696867a9a008c5a79b49a9b029a4fc426720";
-          sha256 = "1a7lzmjbwx47qhrkjp3hggiwnx172x4axcz0labm9by17zxlsimr";
+          rev = "78a89d74b0b0fadcade0b4d20b43d1f496c44e3f";
+          hash = "sha256-KocqarKWX9WvZidmTqzTodX3hP3EcYpRWHrOW/2LB5I=";
         };
 
         propagatedBuildInputs = [ pkgs.octoprint python.pkgs.libgpiod ];
