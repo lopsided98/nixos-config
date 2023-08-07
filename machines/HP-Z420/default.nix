@@ -126,7 +126,7 @@ in rec {
 
   services.aur-buildbot-worker = {
     enable = true;
-    workerPassFile = secrets.getSecret secrets.HP-Z420.aurBuildbot.password;
+    workerPassFile = secrets.getSystemdSecret "aur-buildbot-worker" secrets.HP-Z420.aurBuildbot.password;
     masterHost = "hp-z420.benwolsieffer.com";
     adminMessage = "Ben Wolsieffer <benwolsieffer@gmail.com>";
   };
@@ -236,4 +236,9 @@ in rec {
   services.fstrim.enable = true;
 
   boot.secrets = secrets.mkSecret secrets.HP-Z420.tinyssh.hostEd25519Key {};
+
+  systemd.secrets.aur-buildbot-worker = {
+    units = [ "buildbot-worker.service" ];
+    files = secrets.mkSecret secrets.HP-Z420.aurBuildbot.password { user = "aur-buildbot-worker"; };
+  };
 }

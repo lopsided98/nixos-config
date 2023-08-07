@@ -9,7 +9,7 @@ in {
         enableACME = true;
         forceSSL = true;
 
-        basicAuthFile = secrets.getSecret secrets.aurBuildbot.htpasswd;
+        basicAuthFile = secrets.getSystemdSecret "aur-buildbot-nginx" secrets.aurBuildbot.htpasswd;
 
         locations = {
           "/aur-buildbot/" = {
@@ -67,10 +67,10 @@ in {
           addr: smtp.gmail.com
           port: 587
           user: benwolsieffer@gmail.com
-          password: !include_text ${secrets.getSecret secrets.aurBuildbot.smtpPassword}
+          password: !include_text ${secrets.getSystemdSecret "aur-buildbot" secrets.aurBuildbot.smtpPassword}
           use_tls: true
       workers:
-        HP-Z420: !include_text ${secrets.getSecret secrets.HP-Z420.aurBuildbot.password}
+        HP-Z420: !include_text ${secrets.getSystemdSecret "aur-buildbot" secrets.HP-Z420.aurBuildbot.password}
       architectures:
         any:
           - HP-Z420
@@ -118,12 +118,17 @@ in {
     '';
   };
 
-  environment.secrets =
-    secrets.mkSecret secrets.HP-Z420.aurBuildbot.password {
-      user = "aur-buildbot";
-      group = "aur-buildbot";
-      mode = "0440";
-    } //
-    secrets.mkSecret secrets.aurBuildbot.smtpPassword { user = "aur-buildbot"; } //
-    secrets.mkSecret secrets.aurBuildbot.htpasswd { user = "nginx"; };
+  systemd.secrets = {
+    aur-buildbot = {
+      units = [ "buildbot-master.service" ];
+      files = lib.mkMerge [
+        (secrets.mkSecret secrets.HP-Z420.aurBuildbot.password { user = "aur-buildbot"; })
+        (secrets.mkSecret secrets.aurBuildbot.smtpPassword { user = "aur-buildbot"; })
+      ];
+    };
+    aur-buildbot-nginx = {
+      units = [ "nginx.service" ];
+      files = secrets.mkSecret secrets.aurBuildbot.htpasswd { user = "nginx"; };
+    };
+  };
 }
