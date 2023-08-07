@@ -24,8 +24,8 @@
       };
     };
     networks = {
-      "30-eth0" = {
-        name = "eth0";
+      "30-enu1" = {
+        name = "enu1";
         networkConfig.Bridge = "br0";
       };
       "30-vpn0" = {
