@@ -1,0 +1,34 @@
+name: "Update nixpkgs"
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+jobs:
+  update_nixpkgs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - branch: master-custom
+            upstream-branch: master
+          - branch: unstable-custom
+            upstream-branch: nixos-unstable
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: lopsided98/nixpkgs
+          ref: ${{ matrix.branch }}
+          token: ${{ secrets.NIXPKGS_GITHUB_TOKEN }}
+          fetch-depth: 0
+      - uses: cachix/install-nix-action@v22
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update nixpkgs
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          git remote add upstream https://github.com/NixOS/nixpkgs.git
+          git fetch upstream ${{ matrix.upstream-branch }}
+          git rebase upstream/${{ matrix.upstream-branch }}
+          git push --force-with-lease
