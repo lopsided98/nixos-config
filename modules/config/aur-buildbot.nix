@@ -83,9 +83,7 @@ in {
         dnsupdate-git: {}
         keepass-plugin-quickunlock: {}
         ldcad: {}
-        obfuscate: {}
         python-nss: {}
-        python-pynmea2: {}
         python-sphinx-argparse: {}
         python-sphinx-autobuild: {}
         qdriverstation: {}
@@ -100,7 +98,6 @@ in {
         binfmt-qemu-static: {}
         bumblebee-git: {}
         clion: {}
-        dropbox: {}
         eagle: {}
         flightgear: {}
         flightgear-data: {}
