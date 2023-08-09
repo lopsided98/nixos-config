@@ -83,12 +83,10 @@ in {
         dnsupdate-git: {}
         keepass-plugin-quickunlock: {}
         ldcad: {}
-        python-nss: {}
         python-sphinx-argparse: {}
         python-sphinx-autobuild: {}
         qdriverstation: {}
         qdriverstation-git: {}
-        slapi-nis: {}
 
         # Other packages
         android-studio: {}
