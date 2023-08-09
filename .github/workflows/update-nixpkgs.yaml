@@ -32,6 +32,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           
           git remote add upstream https://github.com/NixOS/nixpkgs.git
-          git fetch upstream ${{ matrix.upstream-branch }}
+          git fetch --filter=tree:0 upstream ${{ matrix.upstream-branch }}
           git rebase upstream/${{ matrix.upstream-branch }}
           git push --force-with-lease
