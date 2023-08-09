@@ -5,6 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   update_nixpkgs:
+    name: Update nixpkgs (${{ matrix.branch }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -14,12 +15,14 @@ jobs:
           - branch: unstable-custom
             upstream-branch: nixos-unstable
     steps:
-      - uses: actions/checkout@v3
+      # Supports filter option
+      # https://github.com/actions/checkout/pull/1396
+      - uses: finleygn/checkout@573932dbdda76b2055415af22b663867dae9bdc3
         with:
           repository: lopsided98/nixpkgs
           ref: ${{ matrix.branch }}
+          filter: tree:0
           token: ${{ secrets.NIXPKGS_GITHUB_TOKEN }}
-          fetch-depth: 0
       - uses: cachix/install-nix-action@v22
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
