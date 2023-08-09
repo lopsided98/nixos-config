@@ -22,6 +22,7 @@ jobs:
           repository: lopsided98/nixpkgs
           ref: ${{ matrix.branch }}
           filter: tree:0
+          fetch-depth: 0
           token: ${{ secrets.NIXPKGS_GITHUB_TOKEN }}
       - uses: cachix/install-nix-action@v22
         with:
