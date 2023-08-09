@@ -8,6 +8,8 @@ jobs:
     name: Update nixpkgs (${{ matrix.branch }})
     runs-on: ubuntu-latest
     strategy:
+      strategy:
+        fail-fast: false
       matrix:
         include:
           - branch: master-custom
@@ -24,17 +26,18 @@ jobs:
           filter: tree:0
           fetch-depth: 0
           token: ${{ secrets.NIXPKGS_GITHUB_TOKEN }}
-      - name: Update nixpkgs
+      - name: Configure git user
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          
+      - name: Update nixpkgs
+        run: |
           git remote add upstream https://github.com/NixOS/nixpkgs.git
           git fetch --filter=tree:0 upstream ${{ matrix.upstream-branch }}
           git rebase upstream/${{ matrix.upstream-branch }}
           git push --force-with-lease
   update-flake:
-    name: Update nixpkgs inputs in flake
+    name: Update flake inputs
     runs-on: ubuntu-latest
     needs: update-nixpkgs
     permissions:
@@ -49,11 +52,12 @@ jobs:
       - uses: cachix/install-nix-action@v22
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Update flake inputs
+      - name: Configure git user
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-
+      - name: Update flake inputs
+        run: |
           nix flake lock \
             --update-input nixpkgs-master-custom \
             --update-input nixpkgs-unstable-custom \
