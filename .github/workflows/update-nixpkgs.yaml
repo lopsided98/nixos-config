@@ -7,9 +7,9 @@ jobs:
   update-nixpkgs:
     name: Update nixpkgs (${{ matrix.branch }})
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
-      strategy:
-        fail-fast: false
+      fail-fast: false
       matrix:
         include:
           - branch: master-custom
