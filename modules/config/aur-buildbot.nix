@@ -94,8 +94,6 @@ in {
         android-studio: {}
         android-sdk-build-tools: {}
         android-sdk-platform-tools: {}
-        arm-linux-gnueabihf-gcc: {}
-        binfmt-qemu-static: {}
         bumblebee-git: {}
         clion: {}
         eagle: {}
@@ -105,9 +103,7 @@ in {
         keepass-plugin-rpc: {}
         keepass-plugin-keetraytotp: {}
         lejos-nxj: {}
-        nix: {}
         pycharm-professional: {}
-        qemu-user-static: {}
         redeclipse: {}
         saleae-logic: {}
         sbupdate-git: {}
