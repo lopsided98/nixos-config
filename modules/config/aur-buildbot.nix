@@ -101,6 +101,7 @@ in {
         keepass-plugin-rpc: {}
         keepass-plugin-keetraytotp: {}
         lejos-nxj: {}
+        nix: {}
         pycharm-professional: {}
         redeclipse: {}
         saleae-logic: {}
