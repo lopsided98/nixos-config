@@ -169,17 +169,6 @@ in {
 
   services.chrony = {
     enable = true;
-    package = pkgs.chrony.overrideAttrs ({
-      patches ? [], ...
-    }: {
-      patches = patches ++ [
-        # Support 64-bit time_t in SOCK reflock messages
-        (pkgs.fetchpatch {
-          url = "https://git.tuxfamily.org/chrony/chrony.git/patch/refclock_sock.c?id=badaa83c319ae5a0bef872d1e7a55bf1260c1b84";
-          hash = "sha256-vzswMb4W16h4tYJSyYmj7ah9JabF9v/V9FvP37B6qz8=";
-        })
-      ];
-    });
     initstepslew = {
       enabled = true;
       threshold = 30;
