@@ -101,7 +101,7 @@
       # enable it in the client config file.
       comp-lzo
 
-      # Drop root privelges after setup
+      # Drop root privileges after setup
       user nobody
       group nobody
 
