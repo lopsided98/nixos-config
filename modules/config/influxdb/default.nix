@@ -57,7 +57,7 @@ in {
 
       addSSL = true;
       sslCertificate = ./server.pem;
-      sslCertificateKey = secrets.getSecret secrets.influxdb.sslCertificateKey;
+      sslCertificateKey = secrets.getSystemdSecret "influxdb-nginx" secrets.influxdb.sslCertificateKey;
 
       locations."/" = {
         proxyPass = "http://unix:${socket}";
@@ -86,12 +86,16 @@ in {
       # automatically authenticate that user. Otherwise, pass the basic auth
       # header through.
       map $influxdb_username $influxdb_authorization {
-        include ${secrets.getSecret secrets.influxdb.passwordMap};
+        include ${secrets.getSystemdSecret "influxdb-nginx" secrets.influxdb.passwordMap};
       }
     '';
   };
 
-  environment.secrets = 
-    secrets.mkSecret secrets.influxdb.sslCertificateKey { user = "nginx"; } //
-    secrets.mkSecret secrets.influxdb.passwordMap { user = "nginx"; };
+  systemd.secrets.influxdb-nginx = {
+    files = lib.mkMerge [
+      (secrets.mkSecret secrets.influxdb.sslCertificateKey { user = "nginx"; })
+      (secrets.mkSecret secrets.influxdb.passwordMap { user = "nginx"; })
+    ];
+    units = [ "nginx.service" ];
+  };
 }

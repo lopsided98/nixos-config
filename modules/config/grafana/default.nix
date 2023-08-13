@@ -31,6 +31,8 @@ in {
     serviceConfig = {
       Group = "grafana";
       PermissionsStartOnly = true;
+      # Grafana can take a long time to start
+      TimeoutStartSec = "5 min";
     };
     preStart = ''
       # Setup socket directory
@@ -54,17 +56,20 @@ in {
 
       forceSSL = true;
       sslCertificate = ./server.pem;
-      sslCertificateKey = secrets.getSystemdSecret "grafana" secrets.grafana.sslCertificateKey;
+      sslCertificateKey = secrets.getSystemdSecret "grafana-nginx" secrets.grafana.sslCertificateKey;
 
       locations."/".proxyPass = "http://unix:${socket}";
     };
   };
 
-  systemd.secrets.grafana = {
-    files = lib.mkMerge [
-      (secrets.mkSecret secrets.grafana.sslCertificateKey { user = "nginx"; })
-      (secrets.mkSecret secrets.grafana.gmailPassword { user = "grafana"; })
-    ];
-    units = [ "grafana.service" ];
+  systemd.secrets = {
+    grafana = {
+      files = secrets.mkSecret secrets.grafana.gmailPassword { user = "grafana"; };
+      units = [ "grafana.service" ];
+    };
+    grafana-nginx = {
+      files = secrets.mkSecret secrets.grafana.sslCertificateKey { user = "nginx"; };
+      units = [ "nginx.service" ];
+    };
   };
 }
