@@ -2,14 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, secrets, ... }:
-let
+{ lib, config, pkgs, secrets, ... }: let
 
 interface = "br0";
 address = "192.168.1.5";
-gateway = "192.168.1.1";
 
-in rec {
+rootPoolDeviceUnits = [ "dev-disk-by\\x2duuid-10787227399261399199.device" ];
+
+in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -23,6 +23,50 @@ in rec {
     ../../modules
   ];
 
+  fileSystems = {
+    "/" = {
+      device = "root/system/root";
+      fsType = "zfs";
+    };
+
+    "/nix" = {
+      device = "root/system/nix";
+      fsType = "zfs";
+    };
+
+    "/var" = {
+      device = "root/data/var";
+      fsType = "zfs";
+    };
+
+    "/var/lib/docker" = {
+      device = "root/local/docker";
+      fsType = "zfs";
+    };
+
+    "/home" = {
+      device = "root/data/home";
+      fsType = "zfs";
+    };
+
+    "/mnt/ssd" = {
+      device = "/dev/disk/by-uuid/85ed6ea7-de86-4fbd-9dfb-f2f7d83e1539";
+      fsType = "ext4";
+    };
+
+    "/tmp" = {
+      device = "/mnt/ssd/tmp";
+      options = [ "bind" ];
+    };
+
+    "/boot/esp" = {
+      device = "/dev/disk/by-uuid/BAA5-3E52";
+      fsType = "vfat";
+      # Prevent unprivileged users from being able to read secrets in the initrd
+      options = [ "fmask=0137" ];
+    };
+  };
+
   boot = {
     # Use systemd-boot
     loader = {
@@ -33,17 +77,61 @@ in rec {
       };
     };
 
+    kernelModules = [ "kvm-intel" ];
+    kernelParams = [ "intel_iommu=on" ];
+
     initrd = {
+      availableKernelModules = [
+        # USB
+        "ehci_pci"
+        "xhci_pci"
+        "usb_storage"
+        "usbhid"
+        # Keyboard
+        "hid_generic"
+        # Disks
+        "ahci"
+        "sd_mod"
+        "sr_mod"
+        # SSD
+        "isci"
+        # Ethernet
+        "e1000e"
+      ];
+
       luks.devices = {
-        root.device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
+        root = {
+          device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
+          crypttabExtraOpts = [ "tries=0" ];
+        };
         ssd = {
           device = "/dev/disk/by-uuid/aee09f7d-1d4b-42ea-8058-82272d3f8400";
+          # Supposed to increase performance of SSDs
+          bypassWorkqueues = true;
           allowDiscards = true;
+          crypttabExtraOpts = [ "tries=0" ];
         };
       };
 
+      systemd = {
+        network.enable = true;
+
+        # Wait until disk is decrypted before trying to import
+        services."zfs-import-root" = {
+          wants = rootPoolDeviceUnits;
+          after = rootPoolDeviceUnits;
+        };
+        # Disable device timeout
+        units = lib.listToAttrs (map (device: {
+          name = device;
+          value.text = ''
+            [Unit]
+            JobTimeoutSec=infinity
+          '';
+        }) rootPoolDeviceUnits);
+      };
+
       network = {
-        enable = true;
         tinyssh = {
           port = lib.head config.services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
@@ -55,13 +143,14 @@ in rec {
         decryptssh.enable = true;
       };
     };
-    # "ip=:::::eno1:dhcp"
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::eno1:none" "intel_iommu=on" ];
   };
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  local.networking.home.interfaces.${interface}.ipv4Address = "${address}/24";
+  local.networking.home = {
+    interfaces.${interface}.ipv4Address = "${address}/24";
+    initrdInterfaces.eno1.ipv4Address = "${address}/24";
+  };
 
   # local.networking.vpn.dartmouth.enable = true;
 

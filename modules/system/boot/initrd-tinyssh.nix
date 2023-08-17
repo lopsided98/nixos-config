@@ -3,9 +3,7 @@
 with lib;
 
 let
-
   cfg = config.boot.initrd.network.tinyssh;
-
 in {
 
   options = {
@@ -31,7 +29,7 @@ in {
 
       shell = mkOption {
         type = types.str;
-        default = "/bin/ash";
+        default = "/bin/sh";
         description = ''
           Login shell of the remote user. Can be used to limit actions user can do.
         '';
@@ -69,55 +67,69 @@ in {
     };
   };
 
-  config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
+  config = mkIf (config.boot.initrd.systemd.network.enable && cfg.enable) {
     assertions = [
-      { assertion = cfg.authorizedKeys != [];
+      {
+        assertion = config.boot.initrd.systemd.enable;
+        message = "TinySSH is only supported with systemd in initrd";
+      }
+      {
+        assertion = cfg.authorizedKeys != [];
         message = "You should specify at least one authorized key for initrd SSH";
       }
     ];
 
     boot.initrd = {
-      extraUtilsCommands = ''
-        copy_bin_and_libs ${pkgs.tinyssh}/bin/tinysshd
-        copy_bin_and_libs ${pkgs.ucspi-tcp}/bin/tcpserver
+      secrets."/etc/tinyssh/sshkeydir/.ed25519.sk" = cfg.hostEd25519Key.privateKey;
 
-        cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
-      '';
+      systemd = let
+        shadow-minimal = pkgs.shadow.override {
+          pam = null;
+          withTcb = false;
+        };
+      in {
+        contents = {
+          # root home is hardcoded as /var/empty. Generally a bad idea to put
+          # things in /var/empty, but in the initrd it's probably fine.
+          "/var/empty/.ssh/authorized_keys".text = concatStringsSep "\n" cfg.authorizedKeys;
+          "/etc/tinyssh/sshkeydir/ed25519.pk".source = cfg.hostEd25519Key.publicKey;
+        };
+        storePaths = [ "${shadow-minimal}/bin/chsh" "${pkgs.tinyssh}/bin/tinysshd" ];
 
-      extraUtilsCommandsTest = ''
-        $out/bin/tinysshd || [ $? -eq 100 ]
-        $out/bin/tcpserver || [ $? -eq 100 ]
-      '';
+        sockets.tinysshd = {
+          description = "TinySSH Socket";
+          wantedBy = [ "sockets.target" ];
+          before = [ "sockets.target" ];
 
-      network.postCommands = ''
-        echo '${cfg.shell}' > /etc/shells
-        echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
-        echo 'passwd: files' > /etc/nsswitch.conf
+          unitConfig.DefaultDependencies = false;
+          socketConfig = {
+            ListenStream = cfg.port;
+            Accept = true;
+            KeepAlive = true;
+            IPTOS = "low-delay";
+          };
+        };
 
-        mkdir -p /root/.ssh
+        services."tinysshd@" = {
+          description = "TinySSH Per-Connection Daemon";
+          after = [ "initrd-nixos-copy-secrets.service" ];
 
-        ${concatStrings (map (key: ''
-          echo ${escapeShellArg key} >> /root/.ssh/authorized_keys
-        '') cfg.authorizedKeys)}
-
-        tcpserver -HRDl0 0.0.0.0 ${toString cfg.port} tinysshd -v /etc/tinyssh/sshkeydir &
-      '';
-
-      postMountCommands = ''
-        # Stop tinyssh cleanly before stage 2.
-        #
-        # If you want to keep it around to debug post-mount SSH issues,
-        # run `touch /.keep_tinyssh` (either from an SSH session or in
-        # another initrd hook like preDeviceCommands).
-        if ! [ -e /.keep_tinyssh ]; then
-          pkill -x tcpserver
-        fi
-      '';
-
-      secrets = {
-        # Not a secret, but there seems to be no other way to include it.
-        "/etc/tinyssh/sshkeydir/ed25519.pk" = cfg.hostEd25519Key.publicKey;
-        "/etc/tinyssh/sshkeydir/.ed25519.sk" = cfg.hostEd25519Key.privateKey;
+          unitConfig.DefaultDependencies = false;
+          serviceConfig = {
+            # systemd initrd doesn't allow declaratively setting the shell, so
+            # we have to do this dance
+            ExecStartPre = [
+              # chsh refuses to work on a symlink, even if the target is writable
+              "/bin/mv /etc/passwd /etc/passwd.orig"
+              "/bin/cp -L /etc/passwd.orig /etc/passwd"
+              "/bin/chmod u+rw /etc/passwd"
+              "${shadow-minimal}/bin/chsh --shell ${cfg.shell}"
+            ];
+            ExecStart = "${pkgs.tinyssh}/bin/tinysshd -v -- /etc/tinyssh/sshkeydir";
+            StandardInput = "socket";
+            StandardError = "journal";
+          };
+        };
       };
     };
   };

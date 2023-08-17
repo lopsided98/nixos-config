@@ -12,7 +12,7 @@ in {
   config = mkIf cfg.enable {
     boot.initrd.network.tinyssh = {
       enable = true;
-      shell = "/bin/cryptsetup-askpass";
+      shell = "/bin/systemd-tty-ask-password-agent";
     };
   };
 }

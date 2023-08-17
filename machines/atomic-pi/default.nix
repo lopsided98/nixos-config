@@ -2,7 +2,6 @@
 with lib;
 let
   address = "192.168.1.9";
-  gateway = "192.168.1.1";
   interface = "enp1s0";
 in {
   imports = [ ../../modules ];
@@ -11,6 +10,8 @@ in {
     "/" = {
       device = "/dev/disk/by-uuid/37fe0a4a-bb66-4163-9ed5-48528d72b73b";
       fsType = "ext4";
+      # Prevent timeout while waiting for decryption password
+      options = [ "x-systemd.device-timeout=0" ];
     };
 
     "/boot/efi" = {
@@ -21,13 +22,13 @@ in {
 
   boot = {
     loader = {
-      grub.enable = false;
       systemd-boot.enable = true;
       efi = {
         canTouchEfiVariables = true;
         efiSysMountPoint = "/boot/efi";
       };
     };
+
     initrd = {
       availableKernelModules = [
         # USB
@@ -43,12 +44,16 @@ in {
         # Ethernet
         "r8169"
       ];
+
       luks.devices.root = {
         device = "/dev/disk/by-uuid/b70eef17-f299-4f20-857f-1c04c5d316df";
         allowDiscards = true;
+        crypttabExtraOpts = [ "tries=0" ];
       };
+
+      systemd.network.enable = true;
+
       network = {
-        enable = true;
         tinyssh = {
           port = lib.head config.services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
@@ -60,12 +65,14 @@ in {
         decryptssh.enable = true;
       };
     };
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::${interface}:none" ];
   };
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  local.networking.home.interfaces.${interface}.ipv4Address = "${address}/24";
+  local.networking.home.interfaces.${interface} = {
+    ipv4Address = "${address}/24";
+    initrd = true;
+  };
 
   networking.hostName = "atomic-pi";
 

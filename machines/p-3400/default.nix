@@ -1,14 +1,12 @@
-{ lib, config, pkgs, secrets, ... }: with lib; let
-  interface = "enp2s0";
-  address = "192.168.1.4";
-  gateway = "192.168.1.1";
-in {
+{ lib, config, pkgs, secrets, ... }: {
   imports = [ ../../modules ];
 
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/142198ba-ed5c-45e1-986b-f92646a53fd0";
       fsType = "ext4";
+      # Prevent timeout while waiting for decryption password
+      options = [ "x-systemd.device-timeout=0" ];
     };
 
     "/boot/esp" = {
@@ -30,6 +28,7 @@ in {
     };
 
     kernelModules = [ "kvm-intel" ];
+    kernelParams = [ "intel_iommu=on" ];
 
     initrd = {
       availableKernelModules = [
@@ -47,10 +46,14 @@ in {
         "r8169"
       ];
     
-      luks.devices.root.device = "/dev/disk/by-uuid/2d7c8523-15a0-4922-a65f-fdd37d078a34";
+      luks.devices.root = {
+        device = "/dev/disk/by-uuid/2d7c8523-15a0-4922-a65f-fdd37d078a34";
+        crypttabExtraOpts = [ "tries=0" ];
+      };
+
+      systemd.network.enable = true;
 
       network = {
-        enable = true;
         tinyssh = {
           port = lib.head config.services.openssh.ports;
           authorizedKeys = config.users.extraUsers.ben.openssh.authorizedKeys.keys;
@@ -62,12 +65,14 @@ in {
         decryptssh.enable = true;
       };
     };
-    kernelParams = [ "ip=${address}::${gateway}:255.255.255.0::${interface}:none" "intel_iommu=on" ];
   };
 
   hardware.cpu.intel.updateMicrocode = true;
 
-  local.networking.home.interfaces.${interface}.ipv4Address = "${address}/24";
+  local.networking.home.interfaces.enp2s0 = {
+    ipv4Address = "192.168.1.4/24";
+    initrd = true;
+  };
 
   networking = {
     hostName = "p-3400";
@@ -98,7 +103,7 @@ in {
     units = [ "sshd@.service" ];
     # Prevent first connection from failing due to decryption taking too long
     lazy = false;
-    files = mkMerge [
+    files = lib.mkMerge [
       (secrets.mkSecret secrets.p-3400.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.p-3400.ssh.hostEd25519Key {})
     ];
