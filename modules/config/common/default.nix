@@ -38,6 +38,7 @@
       systemd = {
         enable = true;
         emergencyAccess = "$6$Sl0MAo3O/McVvTwo$tUk05vbppFJKBwgfffLQk2f1PWbnRqiJVAF9iF697KZ0KtjzOJX78sXIbL9lwNJWJXj9RiK2PRgTlaEijz0Mh.";
+        enableTpm2 = lib.mkDefault false;
       };
     };
 
@@ -133,7 +134,7 @@
       min-free = toString (1024 * 1024 * 1024);
       max-free = toString (4096 * 1024 * 1024);
     };
-    # Causes infinite recursion in in nix.settings
+    # Causes infinite recursion in nix.settings
     extraOptions = ''
       netrc-file = ${secrets.getSystemdSecret "nix" secrets.hydra.netrc}
     '';
