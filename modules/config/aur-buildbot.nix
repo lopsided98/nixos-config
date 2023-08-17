@@ -105,7 +105,6 @@ in {
         pycharm-professional: {}
         redeclipse: {}
         saleae-logic: {}
-        sbupdate-git: {}
         webstorm: {}
     '';
   };
