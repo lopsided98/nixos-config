@@ -82,6 +82,8 @@ in {
 
     initrd = {
       availableKernelModules = [
+        # Mode setting
+        "nouveau"
         # USB
         "ehci_pci"
         "xhci_pci"
