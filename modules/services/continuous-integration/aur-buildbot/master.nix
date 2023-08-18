@@ -1,39 +1,38 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.aur-buildbot;
 
-  python = pkgs.python3;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 in {
   options = {
     services.aur-buildbot = {
-      enable = mkEnableOption "AUR Buildbot Master";
+      enable = lib.mkEnableOption "AUR Buildbot Master";
 
-      buildbotDir = mkOption {
+      buildbotDir = lib.mkOption {
         default = "/var/lib/aur-buildbot/master";
-        type = types.path;
+        type = lib.types.path;
         description = "Specifies the AUR Buildbot directory.";
       };
 
-      configFile = mkOption {
+      configFile = lib.mkOption {
         default = "localhost";
-        type = types.lines;
+        type = lib.types.lines;
         description = "AUR Buildbot YAML configuration file";
       };
 
-      package = mkOption {
-        type = types.package;
+      package = lib.mkOption {
+        type = lib.types.package;
         default = pkgs.buildbot.withPlugins (with pkgs.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
         defaultText = "pkgs.buildbot.withPlugins (with pkgs.buildbot-plugins; [ www console-view waterfall-view grid-view ])";
         description = "Package to use for buildbot.";
-        example = literalExample "pkgs.buildbot-full";
+        example = lib.literalExample "pkgs.buildbot-full";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.extraGroups."aur-buildbot" = {};
     users.extraUsers."aur-buildbot" = {
@@ -50,24 +49,33 @@ in {
       user = "aur-buildbot";
       group = "aur-buildbot";
       packages = with pkgs; [ git pacman gzip ];
+      pythonPackages = self: [
+        self.pyyaml
+        self.requests
+        self.future
+        self.aur
+        self.pyxdg
+        self.memoizedb
+        self.xcpf
+        self.xcgf
+      ];
       masterCfg = "${pkgs.aur-buildbot}/master/master.cfg";
     };
 
     systemd.services.buildbot-master = {
-      description = mkForce "AUR Buildbot Master";
       environment = {
-          PYTHONPATH = mkForce "${pkgs.aur-buildbot}/master:${(pkgs.python3.withPackages (self: [
-            cfg.package
-            self.pyyaml
-            self.requests
-            self.future
-            self.aur
-            self.pyxdg
-            self.memoizedb
-            self.xcpf
-            self.xcgf
-          ]))}/${python.sitePackages}";
-          AUR_BUILDBOT_CONFIG = pkgs.writeText "aur-buildbot-config.yml" cfg.configFile;
+        PYTHONPATH = lib.mkForce "${pkgs.aur-buildbot}/master:${(python.withPackages (self: [
+          package
+          self.pyyaml
+          self.requests
+          self.future
+          self.aur
+          self.pyxdg
+          self.memoizedb
+          self.xcpf
+          self.xcgf
+        ]))}/${python.sitePackages}";
+        AUR_BUILDBOT_CONFIG = pkgs.writeText "aur-buildbot-config.yml" cfg.configFile;
       };
       serviceConfig.TimeoutStartSec = "300";
     };

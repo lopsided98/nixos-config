@@ -7,8 +7,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "aur-buildbot";
-    rev = "6695417c21c95401ee4896ad2ec56953640a969b";
-    hash = "sha256-l40JSdgsyYVQ+xGsJU04IYmP9D9ZevyV4ejogmVRJNE=";
+    rev = "b1385268c24551ceb509bb4ed21a0ff8dafd3560";
+    hash = "sha256-mG2KJ4mKgEfxYXTZNIUvogdJJ6QmEwwk0ecXRtsvGS4=";
   };
 
   installPhase = ''
