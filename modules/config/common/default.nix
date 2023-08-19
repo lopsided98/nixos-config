@@ -246,11 +246,7 @@
   };
 
   # My personal root CA
-  security.pki.certificateFiles = [
-    ./root_ca.pem
-    # Old CA without name constraints
-    ./root_ca_old.pem
-  ];
+  security.pki.certificateFiles = [ ./root_ca.pem ];
 
   # Global ACME settings. Doesn't do anything unless ACME is enabled.
   security.acme = {
