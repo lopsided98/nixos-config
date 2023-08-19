@@ -57,9 +57,6 @@ in {
     systemd = {
       notifyFailed.enable = true;
       services.sanoid.notifyFailed = true;
-      # Prevent syncoid on multiple machines from running at the same time and
-      # failing with "<dataset> is already target of a zfs receive process."
-      timers.syncoid.timerConfig.RandomizedDelaySec = "10m";
     };
 
     environment.secrets = secrets.mkSecret secrets."${config.networking.hostName}".backup.sshKey { user = "syncoid"; };
