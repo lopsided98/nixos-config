@@ -6,10 +6,6 @@
     flake-utils.url = "github:numtide/flake-utils";
     freefb.url = "git+ssh://git@github.com/lopsided98/freefb.git";
     kitty-cam.url = "github:lopsided98/kitty-cam";
-    lib-net = {
-      url = "https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/archive/3885f7cd9ed0a746a9d675da6f265d41e9fd6704.tar.gz";
-      flake = false;
-    };
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/develop";
     nix-sdr.url = "github:lopsided98/nix-sdr";
     nixos-secrets.url = "github:lopsided98/nixos-secrets";

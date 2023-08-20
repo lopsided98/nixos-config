@@ -16,10 +16,14 @@
     })
   ];
 
-  lib =
+  lib = let
     # IP address math library
     # https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba
-    (import "${inputs.lib-net}/net.nix" { inherit lib; }).lib;
+    lib-net = pkgs.fetchurl {
+      url = "https://gist.githubusercontent.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba/raw/3885f7cd9ed0a746a9d675da6f265d41e9fd6704/net.nix";
+      hash = "sha256-AwaD9FlpevyGwh4wAhvA4cV144BVtDWKa27JNQCYYMM=";
+    };
+  in (import lib-net { inherit lib; }).lib;
 
   boot = {
     # Use the latest kernel. Some ARM systems and those with ZFS might use a
