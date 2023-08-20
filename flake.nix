@@ -22,11 +22,8 @@
     zeus-audio.url = "github:lopsided98/zeus_audio";
   };
 
-  outputs = inputs:
-  with inputs;
-  with flake-utils.lib;
-  let
-    lib = nixpkgs-unstable-custom.lib;
+  outputs = { self, ... }@inputs: let
+    lib = inputs.nixpkgs-unstable-custom.lib;
 
     systems = [
       "x86_64-linux"
@@ -45,7 +42,7 @@
         inherit system;
         overlays = [
           self.overlays.default
-          nixos-secrets.overlays.default
+          inputs.nixos-secrets.overlays.default
         ];
         config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
           "dropbox"
@@ -54,16 +51,16 @@
       })) systems);
 
     nixpkgsBySystem =
-      (nixpkgsSystemsAttrs nixpkgs-unstable-custom [
+      (nixpkgsSystemsAttrs inputs.nixpkgs-unstable-custom [
         "x86_64-linux"
         "aarch64-linux"
       ]) //
-      (nixpkgsSystemsAttrs nixpkgs-master-custom [
+      (nixpkgsSystemsAttrs inputs.nixpkgs-master-custom [
         "armv7l-linux"
         "armv6l-linux"
         "armv5tel-linux"
       ]);
-  in eachSystem systems (system: let
+  in inputs.flake-utils.lib.eachSystem systems (system: let
     pkgs = nixpkgsBySystem.${system};
   in {
     packages = with pkgs; {
@@ -106,7 +103,7 @@
       importMachines = nixpkgs: hostSystems: (import ./machines {
         inherit (nixpkgs) lib;
         inherit hostSystems;
-        modules = [
+        modules = with inputs; [
           nixos-secrets.nixosModules.default
           secrets.nixosModule
           zeus-audio.nixosModule
@@ -119,13 +116,13 @@
           inherit nixpkgs;
         };
       });
-    in importMachines nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
-       importMachines nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
+    in importMachines inputs.nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
+       importMachines inputs.nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
 
     hydraJobs = {
-      machines = mapAttrs (name: config: config.config.system.build.toplevel)
+      machines = lib.mapAttrs (name: config: config.config.system.build.toplevel)
         self.nixosConfigurations;
-      packages = getAttrs hydraSystems self.packages;
+      packages = lib.getAttrs hydraSystems self.packages;
     };
   };
 }
