@@ -24,9 +24,10 @@
 
   outputs = inputs:
   with inputs;
-  with nixpkgs-unstable-custom.lib;
   with flake-utils.lib;
   let
+    lib = nixpkgs-unstable-custom.lib;
+
     systems = [
       "x86_64-linux"
       "aarch64-linux"
@@ -40,11 +41,15 @@
     ];
 
     nixpkgsSystemsAttrs = nixpkgs: systems:
-      listToAttrs (map (system: nameValuePair system (import nixpkgs {
+      lib.listToAttrs (map (system: lib.nameValuePair system (import nixpkgs {
         inherit system;
         overlays = [
           self.overlays.default
           nixos-secrets.overlays.default
+        ];
+        config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+          "dropbox"
+          "zoom"
         ];
       })) systems);
 
@@ -74,6 +79,8 @@
         substituteAll ${./deploy.sh} "$out"
         chmod +x "$out"
       '';
+
+      user-env = pkgs.callPackage ./machines/Dell-Inspiron-15/user-env.nix { };
     };
 
     apps = rec {
@@ -81,6 +88,13 @@
       deploy = {
         type = "app";
         program = self.packages.${system}.deploy.outPath;
+      };
+
+      update-user-env = {
+        type = "app";
+        program = (pkgs.callPackage ./scripts/update-user-env.nix {
+          inherit (self.packages.${system}) user-env;
+        }).outPath;
       };
     };
   }) // {
