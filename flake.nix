@@ -56,69 +56,82 @@
         "armv6l-linux"
         "armv5tel-linux"
       ]);
-  in inputs.flake-utils.lib.eachSystem systems (system: let
-    pkgs = nixpkgsBySystem.${system};
-  in {
-    packages = with pkgs; {
-      inherit
-        dnsupdate
-        nixos-secrets;
-      deploy = runCommand "deploy" {
-        inherit runtimeShell;
-        nixosRoot = "/home/ben/nixos";
-        secretsRoot = "/home/ben/nixos/secrets";
-        path = lib.makeBinPath [ nix nixos-secrets coreutils openssh git rsync jq curl ];
-      } ''
-        substituteAll ${./deploy.sh} "$out"
-        chmod +x "$out"
-      '';
 
-      user-env = pkgs.callPackage ./machines/Dell-Inspiron-15/user-env.nix { };
-    };
+    outputsForSystems = systems: func: inputs.flake-utils.lib.eachSystem systems
+      (system: func system nixpkgsBySystem.${system});
 
-    apps = rec {
-      default = deploy;
-      deploy = {
-        type = "app";
-        program = self.packages.${system}.deploy.outPath;
+    mergeOutputs = lib.foldl lib.recursiveUpdate { };
+
+    outputsAllSystems = system: pkgs: {
+      packages = with pkgs; {
+        inherit
+          dnsupdate
+          nixos-secrets;
+        deploy = runCommand "deploy" {
+          inherit runtimeShell;
+          nixosRoot = "/home/ben/nixos";
+          secretsRoot = "/home/ben/nixos/secrets";
+          path = lib.makeBinPath [ nix nixos-secrets coreutils openssh git rsync jq curl ];
+        } ''
+          substituteAll ${./deploy.sh} "$out"
+          chmod +x "$out"
+        '';
       };
 
-      update-user-env = {
+      apps = rec {
+        default = deploy;
+        deploy = {
+          type = "app";
+          program = self.packages.${system}.deploy.outPath;
+        };
+      };
+    };
+
+    outputsx86_64Only = system: pkgs: {
+      packages.user-env = pkgs.callPackage ./machines/Dell-Inspiron-15/user-env.nix { };
+
+      apps.update-user-env = {
         type = "app";
         program = (pkgs.callPackage ./scripts/update-user-env.nix {
           inherit (self.packages.${system}) user-env;
         }).outPath;
       };
     };
-  }) // {
-    overlays.default = import ./pkgs;
 
-    nixosModules.default = import ./modules;
+    outputsNoSystem = {
+      overlays.default = import ./pkgs;
 
-    nixosConfigurations = let
-      importMachines = nixpkgs: hostSystems: (import ./machines {
-        inherit (nixpkgs) lib;
-        inherit hostSystems;
-        modules = with inputs; [
-          nixos-secrets.nixosModules.default
-          secrets.nixosModule
-          zeus-audio.nixosModule
-          nix-ros-overlay.nixosModules.default
-        ];
-        # Allow modules to access flake inputs
-        specialArgs.inputs = inputs // {
-          # Add fake nixpkgs input that selects the right branch for the
-          # machine
-          inherit nixpkgs;
-        };
-      });
-    in importMachines inputs.nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
-       importMachines inputs.nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
+      nixosModules.default = import ./modules;
 
-    hydraJobs = {
-      machines = lib.mapAttrs (name: config: config.config.system.build.toplevel)
-        self.nixosConfigurations;
-      packages = lib.getAttrs hydraSystems self.packages;
+      nixosConfigurations = let
+        importMachines = nixpkgs: hostSystems: (import ./machines {
+          inherit (nixpkgs) lib;
+          inherit hostSystems;
+          modules = with inputs; [
+            nixos-secrets.nixosModules.default
+            secrets.nixosModule
+            zeus-audio.nixosModule
+            nix-ros-overlay.nixosModules.default
+          ];
+          # Allow modules to access flake inputs
+          specialArgs.inputs = inputs // {
+            # Add fake nixpkgs input that selects the right branch for the
+            # machine
+            inherit nixpkgs;
+          };
+        });
+      in importMachines inputs.nixpkgs-unstable-custom [ "x86_64-linux" "aarch64-linux" ] //
+         importMachines inputs.nixpkgs-master-custom [ "armv7l-linux" "armv6l-linux" "armv5tel-linux" ];
+
+      hydraJobs = {
+        machines = lib.mapAttrs (name: config: config.config.system.build.toplevel)
+          self.nixosConfigurations;
+        packages = lib.getAttrs hydraSystems self.packages;
+      };
     };
-  };
+  in mergeOutputs [
+    (outputsForSystems systems outputsAllSystems)
+    (outputsForSystems [ "x86_64-linux" ] outputsx86_64Only)
+    outputsNoSystem
+  ];
 }
