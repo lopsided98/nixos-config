@@ -80,11 +80,6 @@ in buildEnv {
     dropbox
     zoom-us-wrapped
     (wrapNixGL {
-      pkg = cura;
-      file = "bin/cura";
-      desktopFile = "share/applications/com.ultimaker.cura.desktop";
-    })
-    (wrapNixGL {
       pkg = prusa-slicer;
       file = "bin/prusa-slicer";
       preScript = ''
