@@ -59,7 +59,7 @@
     };
   };
 
-  local.services.backup = {
+  /*local.services.backup = {
     server = {
       enable = true;
       device = "/dev/disk/by-uuid/86056ca8-3d20-4bbe-90f6-e7ec1f837c79";
@@ -107,7 +107,7 @@
         recursive = true;
       };
     };
-  };
+  };*/
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
