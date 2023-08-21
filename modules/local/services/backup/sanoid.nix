@@ -15,6 +15,7 @@ in {
     services.sanoid = {
       enable = true;
       templates = {
+        # Local snapshots of /nix and other easily replaceable data
         system = {
           hourly = 24;
           daily = 5;
@@ -25,6 +26,7 @@ in {
           autoprune = true;
         };
 
+        # Local snapshots of irreplaceable data
         data = {
           hourly = 48;
           daily = 10;
@@ -35,6 +37,7 @@ in {
           autoprune = true;
         };
 
+        # Backups of irreplaceable data
         backup = {
           hourly = 48;
           daily = 60;
@@ -43,6 +46,14 @@ in {
 
           autosnap = false;
           autoprune = true;
+        };
+
+        # Backups of /nix and other easily replaceable data
+        backup-system = {
+          hourly = 48;
+          daily = 60;
+          monthly = 3;
+          yearly = 0;
         };
       };
       extraArgs = [ "--verbose" ];

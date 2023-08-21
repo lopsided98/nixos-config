@@ -258,41 +258,39 @@ in {
   services.sanoid = {
     datasets = {
       "root/data" = {
-        use_template = [ "data" ];
-        # Not allowed in template
         recursive = true;
+        use_template = [ "data" ];
       };
       "root/system" = {
-        use_template = [ "system" ];
-        # Not allowed in template
         recursive = true;
+        use_template = [ "system" ];
       };
 
-      # Each backup node takes its own snapshots of data
-      "backup/data" = {
-        use_template = [ "backup" ];
-        autosnap = true;
+      # Prune all backups
+      "backup" = {
         recursive = true;
-        process_children_only = true;
+        use_template = [ "backup" ];
       };
-      # Prune all backups with one rule
-      "backup/backups" = {
-        use_template = [ "backup" ];
+      # Prune system data more aggressively
+      "backup/home/backups/HP-Z420/system" = {
         recursive = true;
-        process_children_only = true;
+        use_template = [ "backup-system" ];
+      };
+
+      # Snapshots of data
+      "backup/home/data" = {
+        recursive = true;
+        autosnap = true;
       };
 
       # Snapshots of non-ZFS devices that backup to this node
-      "backup/backups/Dell-Inspiron-15" = {
-        use_template = [ "backup" ];
-        autosnap = true;
+      "backup/home/backups/Dell-Inspiron-15" = {
         recursive = true;
-        process_children_only = true;
+        autosnap = true;
       };
-      "backup/backups/P-3400" = {
-        use_template = [ "backup" ];
-        autosnap = true;
+      "backup/home/backups/P-3400" = {
         recursive = true;
+        autosnap = true;
       };
     };
   };
@@ -303,7 +301,7 @@ in {
     commonArgs = [ "--sshport" "4247" ];
     commands = {
       "root" = {
-        target = "backup/backups/HP-Z420";
+        target = "backup/home/backups/HP-Z420";
         recursive = true;
         extraArgs = [ "--skip-parent" ];
       };
