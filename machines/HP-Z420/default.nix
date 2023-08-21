@@ -248,6 +248,7 @@ in {
     sanoid.enable = true;
     syncthing = {
       virtualHost = "syncthing.hp-z420.benwolsieffer.com";
+      backupMountpoint = "/mnt/backup/home";
       certificate = ./syncthing/cert.pem;
       certificateKeySecret = secrets.HP-Z420.syncthing.certificateKey;
       httpsCertificate = ./syncthing/https-cert.pem;

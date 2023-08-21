@@ -27,7 +27,6 @@ in {
 
     backupMountpoint = mkOption {
       type = types.str;
-      default = "/mnt/backup";
       description = "Path where the backup drive is mounted";
     };
 
@@ -62,7 +61,7 @@ in {
       dataDir = "${cfg.backupMountpoint}";
       configDir = "${cfg.backupMountpoint}/syncthing";
       cert = "${cfg.certificate}";
-      key = secrets.getSecret cfg.certificateKeySecret;
+      key = secrets.getSystemdSecret "syncthing" cfg.certificateKeySecret;
     };
 
     # Increase inotify watch limit
@@ -77,7 +76,7 @@ in {
 
         forceSSL = true;
         sslCertificate = cfg.httpsCertificate;
-        sslCertificateKey = secrets.getSecret cfg.httpsCertificateKeySecret;
+        sslCertificateKey = secrets.getSystemdSecret "syncthing-nginx" cfg.httpsCertificateKeySecret;
 
         locations."/".proxyPass = "https://localhost:8384";
 
@@ -96,9 +95,17 @@ in {
       allowedUDPPorts = [ 22000 ];
     };
 
-    environment.secrets = mkMerge [
-      (secrets.mkSecret cfg.certificateKeySecret { })
-      (secrets.mkSecret cfg.httpsCertificateKeySecret { inherit (config.services.nginx) user; })
-    ];
+    systemd.secrets = {
+      syncthing = {
+        units = [ "syncthing.service" ];
+        files = secrets.mkSecret cfg.certificateKeySecret {  };
+      };
+      syncthing-nginx = {
+        units = [ "nginx.service" ];
+        files = secrets.mkSecret cfg.httpsCertificateKeySecret {
+          inherit (config.services.nginx) user;
+        };
+      };
+    };
   };
 }
