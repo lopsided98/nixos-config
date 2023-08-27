@@ -71,7 +71,7 @@ in {
 
     services.nginx = {
       enable = true;
-      virtualHosts."${cfg.virtualHost}" = {
+      virtualHosts.${cfg.virtualHost} = {
         http2 = true;
 
         forceSSL = true;
