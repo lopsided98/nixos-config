@@ -623,11 +623,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1694357577,
-        "narHash": "sha256-uV1kzbD6LP+zemBMVLqFd5DbJKaIUYLiJSWDGrNPzgU=",
+        "lastModified": 1694363152,
+        "narHash": "sha256-ntbT5UQBs0GX+2Enfm0e21kYH42IGj947oVFJOc+lqI=",
         "owner": "lopsided98",
         "repo": "radonpy",
-        "rev": "0581780b2db8883278d5a0b9e2f0a40df45304bd",
+        "rev": "51d33fc294c62e9a1af8b073801cbbf20debe38d",
         "type": "github"
       },
       "original": {
