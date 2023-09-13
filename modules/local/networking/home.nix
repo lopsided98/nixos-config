@@ -130,9 +130,9 @@ in {
   in mkMerge [
     {
       local.networking.home = {
-        ipv4PublicAddress = "73.149.35.171";
+        ipv4PublicAddress = "73.123.249.28";
         ipv4Subnet = "192.168.1.0/24";
-        ipv6Prefix = "2601:18c:8380:74b0::/60";
+        ipv6Prefix = "2601:18c:8002:3d40::/60";
         ipv6SlaacPrefix = net.cidr.subnet (64 - net.cidr.length cfg.ipv6Prefix) 0 cfg.ipv6Prefix;
         dns = [
           (net.cidr.host 2 cfg.ipv4Subnet)
