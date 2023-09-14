@@ -1,5 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, pkgconfig, pkg-config, pacman, libarchive
-, nose }:
+{ lib, fetchPypi, buildPythonPackage, pkg-config, pacman, libarchive, nose }:
 
 buildPythonPackage rec {
   pname = "pyalpm";
@@ -10,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-mebsc7jEa7EkZgE/Io+DHuDRjoq2ZLkaAcKjxA3gfH8=";
   };
 
-  nativeBuildInputs = [ pkgconfig pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pacman libarchive ];
   checkInputs = [ nose ];
 
