@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1691886850,
-        "narHash": "sha256-r7vGL7RIF4wcbuvbMIbBiuEZ/6F7WQON8L4m0DaJNSc=",
+        "lastModified": 1694379452,
+        "narHash": "sha256-D4vjFIPhMFe0psd6b3X6I/12s5pevEX6FK2Gdwobipw=",
         "ref": "refs/heads/master",
-        "rev": "d0903f358fb4b110cb9f863792393734ded51b45",
-        "revCount": 212,
+        "rev": "ad62598186966efc1fea2ca80d74c967f194277e",
+        "revCount": 214,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -179,11 +179,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1692799911,
-        "narHash": "sha256-3eihraek4qL744EvQXsK1Ha6C3CR7nnT8X2qWap4RNk=",
+        "lastModified": 1694529238,
+        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "f9e7cf818399d17d347f847525c5a5a8032e4e44",
+        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
         "type": "github"
       },
       "original": {
@@ -359,11 +359,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1694222684,
-        "narHash": "sha256-uZoEXHNbGq2u/o93MLlyiFkSin3ah3cpAtLfIVTixeU=",
+        "lastModified": 1694652301,
+        "narHash": "sha256-tpOa1q956GFf8XNaDIqnQVnbXd8SeluVJTBiNXNqyDs=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "122541494bb320c86bff0bdc60184203b6c67209",
+        "rev": "c060df9b683e87b793ca24b398aad6630b4fee9d",
         "type": "github"
       },
       "original": {
@@ -790,11 +790,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1678739773,
-        "narHash": "sha256-ucXrkRX1tzUrR+5NipVJmByI7aRV9G/fqGIHWL0FSQk=",
+        "lastModified": 1694732920,
+        "narHash": "sha256-fA9RWfuVOGLhypZuXOAwzF3MB3pcaA0g8VBvyDSDXno=",
         "owner": "lopsided98",
         "repo": "zeus_audio",
-        "rev": "6a357f5f81db0d3d5daae8d0ab74720b51906d2b",
+        "rev": "e688f89b4f712bd1b52157f0514efdb5eceb04c1",
         "type": "github"
       },
       "original": {
