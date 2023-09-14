@@ -9,7 +9,7 @@
       options = [ "x-systemd.device-timeout=0" ];
     };
 
-    "/boot/esp" = {
+    "/boot/efi" = {
       device = "/dev/disk/by-uuid/6B22-0731";
       fsType = "vfat";
       # Prevent unprivileged users from being able to read secrets in the initrd
@@ -23,7 +23,7 @@
       systemd-boot.enable = true;
       efi = {
         canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot/esp";
+        efiSysMountPoint = "/boot/efi";
       };
     };
 
