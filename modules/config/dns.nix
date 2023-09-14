@@ -21,7 +21,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        55         ; Serial
+                        56         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
