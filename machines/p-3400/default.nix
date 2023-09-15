@@ -3,14 +3,14 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/142198ba-ed5c-45e1-986b-f92646a53fd0";
+      device = "/dev/disk/by-uuid/a0219bee-b808-4897-b262-9ed9cd868369";
       fsType = "ext4";
       # Prevent timeout while waiting for decryption password
       options = [ "x-systemd.device-timeout=0" ];
     };
 
     "/boot/efi" = {
-      device = "/dev/disk/by-uuid/6B22-0731";
+      device = "/dev/disk/by-uuid/7D38-19FE";
       fsType = "vfat";
       # Prevent unprivileged users from being able to read secrets in the initrd
       options = [ "fmask=0137" ];
@@ -47,7 +47,7 @@
       ];
     
       luks.devices.root = {
-        device = "/dev/disk/by-uuid/2d7c8523-15a0-4922-a65f-fdd37d078a34";
+        device = "/dev/disk/by-uuid/9911ded5-61bf-4cda-9c79-faf743799d90";
         crypttabExtraOpts = [ "tries=0" ];
       };
 
