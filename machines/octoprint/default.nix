@@ -69,6 +69,9 @@ in {
           hash = "sha256-KocqarKWX9WvZidmTqzTodX3hP3EcYpRWHrOW/2LB5I=";
         };
 
+        # No tests
+        doCheck = false;
+
         propagatedBuildInputs = [ pkgs.octoprint python.pkgs.libgpiod ];
       };
 
