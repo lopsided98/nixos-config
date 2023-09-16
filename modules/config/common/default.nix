@@ -109,7 +109,7 @@
     };
     "RockPro64" = machine {
       systems = [ "aarch64-linux" ];
-      maxJobs = 6;
+      maxJobs = 4;
       speedFactor = 4;
       supportedFeatures = [ "big-parallel" ];
     };
