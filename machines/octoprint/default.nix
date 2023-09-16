@@ -103,6 +103,9 @@ in {
           sha256 = "1i5kh8v99357ia4ngq3llap8kw6fkk1j91s27jfb1adgxycxpsqv";
         };
 
+        # No tests
+        doCheck = false;
+
         propagatedBuildInputs = [ pkgs.octoprint inotify ];
       };
     in p: [ octoprint-filament-sensor-universal octoprint-portlister ];
