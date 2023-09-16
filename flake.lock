@@ -3,11 +3,11 @@
     "crate2nix": {
       "flake": false,
       "locked": {
-        "lastModified": 1679876916,
-        "narHash": "sha256-XjDVFxUhXJFCco0ffbhbLkKcsHnX2mACYbBlfQTwRuE=",
+        "lastModified": 1694769942,
+        "narHash": "sha256-N8wmIK+DTEoQ5T7DjRSiF/Qi+3Q/jUOQILnUziR4Y/Y=",
         "owner": "kolloch",
         "repo": "crate2nix",
-        "rev": "da442e433859f152f5f782f6d44c957206dd2b49",
+        "rev": "61ecf15dbb98e415872c536892ebcb1d2beddc56",
         "type": "github"
       },
       "original": {
@@ -19,11 +19,11 @@
     "crate2nix_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1681086579,
-        "narHash": "sha256-MEcdG7EXkFsmrTo1/X5tq7UDFY6enHdl65k0wbTCuD0=",
+        "lastModified": 1694769942,
+        "narHash": "sha256-N8wmIK+DTEoQ5T7DjRSiF/Qi+3Q/jUOQILnUziR4Y/Y=",
         "owner": "kolloch",
         "repo": "crate2nix",
-        "rev": "1b042dab3928aaa37421a83d4e1023e7a79527e2",
+        "rev": "61ecf15dbb98e415872c536892ebcb1d2beddc56",
         "type": "github"
       },
       "original": {
@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1694379452,
-        "narHash": "sha256-D4vjFIPhMFe0psd6b3X6I/12s5pevEX6FK2Gdwobipw=",
+        "lastModified": 1694892490,
+        "narHash": "sha256-UmGGYhjPz2L2O9oMOEusOLnRQd2jnnuauPGWBtnT+uc=",
         "ref": "refs/heads/master",
-        "rev": "ad62598186966efc1fea2ca80d74c967f194277e",
-        "revCount": 214,
+        "rev": "e41502b2ed8ea1b99846f03239862fc8edf2ccc5",
+        "revCount": 217,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
@@ -197,11 +197,11 @@
         "systems": "systems_2"
       },
       "locked": {
-        "lastModified": 1689068808,
-        "narHash": "sha256-6ixXo3wt24N/melDWjq70UuHQLxGV8jZvooRanIHXw0=",
+        "lastModified": 1694529238,
+        "narHash": "sha256-zsNZZGTGnMOf9YpHKJqMSsa0dXbfmxeoJ7xHlrt+xmY=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "919d646de7be200f3bf08cb76ae1f09402b6f9b4",
+        "rev": "ff7b65b44d01cf9ba6a71320833626af21126384",
         "type": "github"
       },
       "original": {
@@ -301,11 +301,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1691260455,
-        "narHash": "sha256-oROZTM6NPmH0ovnkm5UZK5Zj+w3iLo4Ws1XHXBioipU=",
+        "lastModified": 1694893071,
+        "narHash": "sha256-B3FznsSrk4004Bsyhtium9GFSZiEGubOM/rhHkgHeA4=",
         "ref": "refs/heads/master",
-        "rev": "5470d94fb9e1c9c88c07e9450a4d0bba0f92eb7c",
-        "revCount": 112,
+        "rev": "848564a52dec303a0b89af89ee4e312a0d445416",
+        "revCount": 114,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/freefb.git"
       },
@@ -497,11 +497,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1691155369,
-        "narHash": "sha256-CIuJO5pgwCMsZM8flIU2OiZ79QfDCesXPsAiokCzlNM=",
+        "lastModified": 1694760568,
+        "narHash": "sha256-3G07BiXrp2YQKxdcdms22MUx6spc6A++MSePtatCYuI=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7d050b98e51cdbdd88ad960152d398d41c7ff5b4",
+        "rev": "46688f8eb5cd6f1298d873d4d2b9cf245e09e88e",
         "type": "github"
       },
       "original": {
