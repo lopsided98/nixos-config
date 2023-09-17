@@ -306,6 +306,11 @@ in {
         recursive = true;
         extraArgs = [ "--skip-parent" ];
       };
+      "backup/home" = {
+        target = "backup2/home";
+        recursive = true;
+        sendOptions = "w";
+      };
       /*"backup/backups/HP-Z420" = {
         target = "${remote}:backup/backups/HP-Z420";
         recursive = true;
