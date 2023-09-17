@@ -48,6 +48,9 @@
     
       luks.devices.root = {
         device = "/dev/disk/by-uuid/9911ded5-61bf-4cda-9c79-faf743799d90";
+        # Supposed to increase performance of SSDs
+        bypassWorkqueues = true;
+        allowDiscards = true;
         crypttabExtraOpts = [ "tries=0" ];
       };
 
@@ -97,6 +100,9 @@
       { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.p-3400.ssh.hostEd25519Key; }
     ];
   };
+
+  # Enable SSD TRIM
+  services.fstrim.enable = true;
 
   boot.secrets = secrets.mkSecret secrets.p-3400.tinyssh.hostEd25519Key {};
   systemd.secrets.sshd = {
