@@ -1,64 +1,58 @@
-{ config, lib, pkgs, secrets, ... }:
-
-with lib;
-
-let
+{ config, lib, pkgs, secrets, ... }: let
   cfg = config.local.services.backup.syncthing;
 in {
   options.local.services.backup.syncthing = {
-    enable = mkEnableOption "Syncthing backup synchronization";
+    enable = lib.mkEnableOption "Syncthing backup synchronization";
 
-    virtualHost = mkOption {
-      type = types.str;
+    virtualHost = lib.mkOption {
+      type = lib.types.str;
       description = "Name of the nginx virtual host";
     };
 
-    user = mkOption {
-      type = types.str;
-      default = "backup";
-      description = "Syncthing user";
-    };
-
-    group = mkOption {
-      type = types.str;
-      default = "backup";
-      description = "Syncthing group";
-    };
-
-    backupMountpoint = mkOption {
-      type = types.str;
+    backupMountpoint = lib.mkOption {
+      type = lib.types.str;
       description = "Path where the backup drive is mounted";
     };
 
-    certificate = mkOption {
-      type = types.path;
+    certificate = lib.mkOption {
+      type = lib.types.path;
       description = "Certificate to use for Syncthing protocol";
     };
 
-    certificateKeySecret = mkOption {
-      type = types.str;
+    certificateKeySecret = lib.mkOption {
+      type = lib.types.str;
       description = "Certificate key to use for Syncthing protocol";
     };
 
-    httpsCertificate = mkOption {
-      type = types.path;
+    httpsCertificate = lib.mkOption {
+      type = lib.types.path;
       description = "Certificate to use for Syncthing web interface";
     };
 
-    httpsCertificateKeySecret = mkOption {
-      type = types.str;
+    httpsCertificateKeySecret = lib.mkOption {
+      type = lib.types.str;
       description = "Certificate key to use for Syncthing web interface";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
+    users = {
+      users.backup-syncthing = {
+        description = "Syncthing backup user";
+        isSystemUser = true;
+        home = config.services.syncthing.configDir;
+        group = "backup-syncthing";
+        uid = 994;
+      };
+      groups.backup-syncthing.gid = 994;
+    };
 
     services.syncthing = {
       enable = true;
-      user = cfg.user;
-      group = cfg.group;
+      user = "backup-syncthing";
+      group = "backup-syncthing";
       openDefaultPorts = true;
-      dataDir = "${cfg.backupMountpoint}";
+      dataDir = cfg.backupMountpoint;
       configDir = "${cfg.backupMountpoint}/syncthing";
       cert = "${cfg.certificate}";
       key = secrets.getSystemdSecret "syncthing" cfg.certificateKeySecret;
@@ -88,11 +82,6 @@ in {
           proxy_ssl_verify off;
         '';
       };
-    };
-
-    networking.firewall = {
-      allowedTCPPorts = [ 22000 ];
-      allowedUDPPorts = [ 22000 ];
     };
 
     systemd.secrets = {

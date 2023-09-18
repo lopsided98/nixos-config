@@ -36,7 +36,6 @@
     ./local/profiles/limited-memory.nix
     ./local/profiles/minimal.nix
     ./local/profiles/standard.nix
-    ./local/services/backup/common.nix
     ./local/services/backup/sanoid.nix
     ./local/services/backup/server.nix
     ./local/services/backup/syncthing.nix

@@ -1,15 +1,9 @@
-{ config, lib, pkgs, secrets, ... }:
-
-with lib;
-
-let
+{ config, lib, pkgs, secrets, ... }: let
   cfg = config.local.services.backup.sanoid;
 in {
-  options.local.services.backup.sanoid.enable = mkEnableOption "Sanoid ZFS backup";
+  options.local.services.backup.sanoid.enable = lib.mkEnableOption "Sanoid ZFS backup";
 
-  config = mkIf cfg.enable {
-    local.services.backup.common.enable = true;
-
+  config = lib.mkIf cfg.enable {
     boot.supportedFilesystems = [ "zfs" ];
 
     services.sanoid = {

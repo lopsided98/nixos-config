@@ -240,10 +240,15 @@ in {
     downloadDir = "/var/lib/torrents";
   };
 
+  boot.zfs = {
+    extraPools = [ "backup" "backup2" ];
+    requestEncryptionCredentials = [ "backup" ];
+  };
+
   local.services.backup = {
     server = {
       enable = true;
-      device = "/dev/disk/by-uuid/fb800281-ab46-4fe1-be4d-4d4606915346";
+      devices = [ "/dev/disk/by-id/ata-WDC_WD80EMZZ-11B4FB0_WD-CA0K7KNK" ];
     };
     sanoid.enable = true;
     syncthing = {
