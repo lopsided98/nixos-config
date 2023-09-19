@@ -3,10 +3,8 @@
 
   fileSystems = {
     "/" = {
-      device = "/dev/disk/by-uuid/a0219bee-b808-4897-b262-9ed9cd868369";
+      device = "/dev/mapper/root";
       fsType = "ext4";
-      # Prevent timeout while waiting for decryption password
-      options = [ "x-systemd.device-timeout=0" ];
     };
 
     "/boot/efi" = {
