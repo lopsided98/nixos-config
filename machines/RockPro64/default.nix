@@ -42,7 +42,7 @@
 
   # List services that you want to enable:
 
-  nix.settings.cores = 4;
+  nix.settings.cores = 2;
 
   services.openssh = {
     ports = [ 4247 ];
