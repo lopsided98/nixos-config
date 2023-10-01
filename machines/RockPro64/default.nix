@@ -6,6 +6,11 @@
     fsType = "ext4";
   };
 
+  swapDevices = lib.singleton {
+    device = "/var/lib/swap";
+    size = 2 * 1024; # 2 GiB
+  };
+
   boot.loader = {
     grub.enable = false;
     generic-extlinux-compatible.enable = true;
