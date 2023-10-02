@@ -98,7 +98,7 @@ in {
   services.hostapd = mkIf ap {
     enable = true;
     radios.ap0 = {
-      wifi4.capabilities = [ "HT40" "HT40-" "SHORT-GI-20" "DSSS_CCK-40" ];
+      wifi4.capabilities = [ "HT40" "SHORT-GI-20" "DSSS_CCK-40" ];
       networks.ap0 = {
         ssid = hostNamePrefix;
         authentication = {
