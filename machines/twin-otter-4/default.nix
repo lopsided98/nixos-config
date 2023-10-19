@@ -307,6 +307,7 @@ with lib;
       ros2topic
       ros2node
       ros2multicast
+      ros2param
       fws-mavros
     ];
 
