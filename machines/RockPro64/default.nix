@@ -1,9 +1,15 @@
 { lib, config, pkgs, secrets, ... }: with lib; {
   imports = [ ../../modules ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/5dd58fb9-dc7f-4b77-b14b-d53d370735a7";
-    fsType = "ext4";
+  fileSystems = {
+    "/" = {
+      device = "/dev/mapper/root";
+      fsType = "ext4";
+    };
+    /*"/boot" = {
+      device = "/dev/disk";
+      fsType = "ext4";
+    };*/
   };
 
   swapDevices = lib.singleton {
@@ -11,9 +17,34 @@
     size = 2 * 1024; # 2 GiB
   };
 
-  boot.loader = {
-    grub.enable = false;
-    generic-extlinux-compatible.enable = true;
+  boot = {
+    loader = {
+      grub.enable = false;
+      generic-extlinux-compatible.enable = true;
+    };
+
+    swraid = {
+      enable = true;
+      mdadmConf = ''
+        MAILADDR benwolsieffer@gmail.com
+        ARRAY /dev/md/root metadata=1.2 name=RockPro64:root UUID=6f5b44ce:973b3ca0:9fdb264d:c50f508b
+      '';
+    };
+
+    initrd = {
+      availableKernelModules = [
+        # PCIe SATA
+        "pcie_rockchip_host"
+        "phy_rockchip_pcie"
+      ];
+
+      luks.devices.root = {
+        device = "/dev/disk/by-uuid/1e3f4804-300d-490a-9241-fb986b993986";
+        allowDiscards = true;
+        keyFile = "/dev/disk/by-partuuid/c81e302e-d16b-4606-997b-f9a0d7b5f13d";
+        keyFileSize = 4096;
+      };
+    };
   };
 
   hardware.firmware = let

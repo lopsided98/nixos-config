@@ -66,7 +66,8 @@
       packages = with pkgs; {
         inherit
           dnsupdate
-          nixos-secrets;
+          nixos-secrets
+          tinyssh;
         deploy = runCommand "deploy" {
           inherit runtimeShell;
           nixosRoot = "/home/ben/nixos";
