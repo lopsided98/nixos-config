@@ -41,10 +41,16 @@ with lib;
     ACTION=="add", SUBSYSTEM=="net", KERNEL=="wlan0", RUN+="${pkgs.iw}/bin/iw dev $name set power_save off"
   '';
 
+  networking.hostName = "maine-pi";
+
   networking.wireless = {
     enable = true;
     interfaces = [ "wlan0" ];
-    networks."OLE AKI".pskRaw = "ext:MAINE_PSK";
+    networks."OLE AKI" = {
+      pskRaw = "ext:MAINE_PSK";
+      # WPA-PSK-SHA256 doesn't work on the RPi Zero
+      authProtocols = [ "WPA-PSK" "SAE" ];
+    };
   };
   local.networking.wireless.passwordFiles =
     singleton (secrets.getSystemdSecret "wpa_supplicant-maine" secrets.maine-pi.wpaSupplicant);
@@ -54,10 +60,11 @@ with lib;
     networks."30-wlan0" = {
       name = "wlan0";
       DHCP = "ipv4";
+      networkConfig.MulticastDNS = "yes";
     };
     networks."50-vpn-home-tap-client".DHCP = "ipv4";
   };
-  networking.hostName = "maine-pi";
+  networking.firewall.interfaces.wlan0.allowedUDPPorts = [ 5353 /* mDNS */ ];
 
   # Services to enable
 
