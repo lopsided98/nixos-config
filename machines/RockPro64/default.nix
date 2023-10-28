@@ -6,10 +6,10 @@
       device = "/dev/mapper/root";
       fsType = "ext4";
     };
-    /*"/boot" = {
-      device = "/dev/disk";
+    "/boot" = {
+      device = "/dev/disk/by-uuid/5dd58fb9-dc7f-4b77-b14b-d53d370735a7";
       fsType = "ext4";
-    };*/
+    };
   };
 
   swapDevices = lib.singleton {
@@ -41,7 +41,7 @@
       luks.devices.root = {
         device = "/dev/disk/by-uuid/1e3f4804-300d-490a-9241-fb986b993986";
         allowDiscards = true;
-        keyFile = "/dev/disk/by-partuuid/c81e302e-d16b-4606-997b-f9a0d7b5f13d";
+        keyFile = "/dev/disk/by-partuuid/95745259-1c1c-4633-8190-10cf1c1495eb";
         keyFileSize = 4096;
       };
     };
