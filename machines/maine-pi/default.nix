@@ -76,12 +76,6 @@ with lib;
     ];
   };
 
-  local.networking.vpn.home.tap.client = {
-    enable = true;
-    certificate = ./vpn/home/client.crt;
-    privateKeySecret = secrets.maine-pi.vpn.home.privateKey;
-  };
-
   local.networking.vpn.home.wireGuard.client = {
     enable = true;
     publicKey = "sVgdQpaigfOLO2nvYP7U1XcfzAml8dzZRjAcEmYfTQ0=";
