@@ -68,7 +68,7 @@ in {
       "192.168.1.1"
       "odroid-xu4.benwolsieffer.com"
       "hp-z420.benwolsieffer.com"
-      "dell-optiplex-780.benwolsieffer.com"
+      "p-3400.benwolsieffer.com"
       "rock64.benwolsieffer.com"
       "rockpro64.benwolsieffer.com"
     ];
@@ -76,9 +76,7 @@ in {
     # The only metric used in the dashboard
     fieldpass = [ "average_response_ms" ];
   };
-  # We need the privileged ping executable in the path (is there a better way
-  # to do this?)
-  systemd.services.telegraf.path = [ "/run/wrappers" ];
+  systemd.services.telegraf.path = [ pkgs.iputils /* ping */ ];
 
   # Quassel core (IRC)
   /*services.quassel = {
