@@ -66,6 +66,7 @@ in {
       peers = {
         "sBNbbhUP9l73RYWDeKBS4/P/Ev4PrKK/RbYJP1WYZzI=".index = 0; # Dell-Inspiron-15
         "+Qy2xNBd+gLpF0MRd/l4xT3YWaXOEqTADnp196a4tSU=".index = 1; # Pixel-4a
+        "sVgdQpaigfOLO2nvYP7U1XcfzAml8dzZRjAcEmYfTQ0=".index = 2; # maine-pi
       };
     };
   };

@@ -7,8 +7,8 @@ let
   cfg = config.local.networking.vpn.home.wireGuard;
   peer = cfg.peers.${cfg.client.publicKey};
 
-  serverHostName = "odroid-xu4.benwolsieffer.com";
-  serverPublicKey = "k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=";
+  serverHostName = "atomic-pi.benwolsieffer.com";
+  serverPublicKey = "+6YE+L1kyBmvbQ4GKpw20g2vQv/58QujDHCCCIqzH14=";
 in {
 
   # Interface
@@ -20,6 +20,11 @@ in {
       type = types.str;
       description = "VPN network interface name";
       default = "wg0";
+    };
+
+    outgoingInterfaces = mkOption {
+      type = types.listOf types.str;
+      description = "Interfaces to use to connect to server";
     };
 
     publicKey = mkOption {
@@ -46,12 +51,6 @@ in {
       description = "Firewall mark to apply to outgoing WireGuard packets";
     };
 
-    gatewayRouteConfig = mkOption {
-      type = types.attrs;
-      default = {};
-      description = "Extra configuration to apply to gateway routes";
-    };
-
     networkConfig = mkOption {
       type = types.attrs;
       default = {};
@@ -65,6 +64,8 @@ in {
 
   config = mkIf cfg.client.enable {
     systemd.network = {
+      config.routeTables.vpn-home-wireguard-client = 51950;
+
       netdevs."30-vpn-home-wireguard-client" = {
         netdevConfig = {
           Name = cfg.client.interface;
@@ -97,21 +98,39 @@ in {
             DNSDefaultRoute = true;
           };
           routes = [
-            { routeConfig = mkMerge [
-              { Gateway = cfg.server.ipv4Address; }
-              cfg.client.gatewayRouteConfig
-            ]; }
-            { routeConfig = mkMerge [
-              { Gateway = cfg.server.ipv6Address; }
-              cfg.client.gatewayRouteConfig
-            ]; }
+            # FIXME: default gateway breaks things
+            /*{ routeConfig = {
+              Gateway = cfg.server.ipv4Address;
+              Table = "vpn-home-wireguard-client";
+            }; }
+            { routeConfig = {
+              Gateway = cfg.server.ipv6Address;
+              Table = "vpn-home-wireguard-client";
+            }; }*/
             { routeConfig = {
               Destination = config.local.networking.home.ipv4Subnet;
               Gateway = cfg.server.ipv4Address;
+              Table = "vpn-home-wireguard-client";
             }; }
             { routeConfig = {
               Destination = config.local.networking.home.ipv6Prefix;
               Gateway = cfg.server.ipv6Address;
+              Table = "vpn-home-wireguard-client";
+            }; }
+          ];
+          routingPolicyRules = [
+            { routingPolicyRuleConfig = {
+              Table = "vpn-home-wireguard-client";
+              SuppressPrefixLength = 0;
+              Family = "both";
+              Priority = 31698;
+            }; }
+            { routingPolicyRuleConfig = {
+              Table = "vpn-home-wireguard-client";
+              InvertRule = true;
+              FirewallMark = cfg.client.firewallMark;
+              Family = "both";
+              Priority = 31699;
             }; }
           ];
         }
@@ -127,17 +146,15 @@ in {
       bindsTo = [ interfaceDevice ];
       after = [ interfaceDevice ];
       serviceConfig.Type = "oneshot";
-      script = let
-        path = with pkgs; makeBinPath [
-          coreutils
-          gawk
-          systemd
-          wireguard-tools
-          "/run/wrappers"
-        ];
-      in ''
+      path = with pkgs; [
+        coreutils
+        gawk
+        systemd
+        iputils
+        wireguard-tools
+      ];
+      script = ''
         set -eu -o pipefail
-        export PATH=${escapeShellArg path}
 
         function set_endpoint() {
           wg set ${escapeShellArg cfg.client.interface} \
@@ -150,7 +167,7 @@ in {
           if ! address="$(resolvectl query --legend=false -i "$1" -"$2" ${escapeShellArg serverHostName} | head -n1 | awk '{print $2}')"; then
             return 1
           fi
-          if ping -n -I "$1" -m ${toString cfg.client.firewallMark} -c1 -W10 "$address" 1>&2; then
+          if ping -qn -I "$1" -m ${toString cfg.client.firewallMark} -c1 -W10 "$address" 1>&2; then
             echo "$address"
             return 0
           else
@@ -158,22 +175,12 @@ in {
           fi
         }
 
-        # FIXME: don't hardcode interfaces
-        if address="$(get_address wl-wan0 4)"; then
-          set_endpoint "$address"
-          exit 0
-        fi
-
-        # IPv6 has some potential for routing loops
-        #if address="$(get_address wl-wan1 6)"; then
-        #  set_endpoint "$address"
-        #  exit 0
-        #fi
-
-        if address="$(get_address wl-wan1 4)"; then
-          set_endpoint "$address"
-          exit 0
-        fi
+        for interface in ${lib.escapeShellArgs cfg.client.outgoingInterfaces}; do
+          if address="$(get_address "$interface" 4)"; then
+            set_endpoint "$address"
+            exit 0
+          fi
+        done
 
         # Fallback to hardcoded IPv4 address
         set_endpoint ${escapeShellArg config.local.networking.home.ipv4PublicAddress}

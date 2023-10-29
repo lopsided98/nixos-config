@@ -82,6 +82,13 @@ with lib;
     privateKeySecret = secrets.maine-pi.vpn.home.privateKey;
   };
 
+  local.networking.vpn.home.wireGuard.client = {
+    enable = true;
+    publicKey = "sVgdQpaigfOLO2nvYP7U1XcfzAml8dzZRjAcEmYfTQ0=";
+    privateKeySecret = secrets.maine-pi.vpn.wireGuardPrivateKey;
+    outgoingInterfaces = [ "wlan0" ];
+  };
+
   services.dnsupdate = {
     enable = true;
     addressProvider = {
