@@ -119,6 +119,7 @@ in {
       acl internal {
         localnets;
         ${config.local.networking.home.ipv6Prefix};
+        ${config.local.networking.vpn.home.wireGuard.ipv4Subnet};
       };
 
       view "internal" {
