@@ -81,6 +81,7 @@ with lib;
     publicKey = "sVgdQpaigfOLO2nvYP7U1XcfzAml8dzZRjAcEmYfTQ0=";
     privateKeySecret = secrets.maine-pi.vpn.wireGuardPrivateKey;
     outgoingInterfaces = [ "wlan0" ];
+    persistentKeepalive = true;
   };
 
   services.dnsupdate = {
