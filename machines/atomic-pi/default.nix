@@ -91,6 +91,13 @@ in {
     configFile = secrets.getSystemdSecret "freefb" secrets.freefb.configFile;
   };
 
+  local.networking.vpn.home.wireGuard.server = {
+    enable = true;
+    uplinkInterface = interface;
+    # Public key: +6YE+L1kyBmvbQ4GKpw20g2vQv/58QujDHCCCIqzH14=
+    privateKeySecret = secrets.atomic-pi.vpn.wireGuardPrivateKey;
+  };
+
   services.openssh.hostKeys = [
     { type = "rsa"; bits = 4096; path = secrets.getSystemdSecret "sshd" secrets.atomic-pi.ssh.hostRsaKey; }
     { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.atomic-pi.ssh.hostEd25519Key; }
