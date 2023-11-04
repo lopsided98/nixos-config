@@ -9,9 +9,6 @@ in {
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
 
-    # Modules without configuration options
-    ../../modules/config/openvpn/server.nix
-
     ../../modules
   ];
 
@@ -50,13 +47,6 @@ in {
 
   # Set SSH port
   services.openssh.ports = [4243];
-
-  local.networking.vpn.home.wireGuard.server = {
-    enable = true;
-    uplinkInterface = interface;
-    # Public key: k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=
-    privateKeySecret = secrets.ODROID-XU4.vpn.wireGuardPrivateKey;
-  };
 
   # System metrics logging
   local.services.telegraf = {
