@@ -2,9 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, secrets, ... }: let
-  interface = "br0";
-in {
+{ lib, config, pkgs, secrets, ... }: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -29,7 +27,7 @@ in {
     };
   };
 
-  local.networking.home.interfaces.${interface}.ipv4Address = "192.168.1.3/24";
+  local.networking.home.interfaces.enu1.ipv4Address = "192.168.1.3/24";
 
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
