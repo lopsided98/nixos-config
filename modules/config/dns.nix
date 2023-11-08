@@ -49,7 +49,7 @@
 
     # ODROID-XU4
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = net.cidr.host "::b416:dcff:fe31:cbeb" ipv6Prefix; }
+    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = net.cidr.host "::21e:6ff:fe31:9be6" ipv6Prefix; }
 
     # p-3400
     { name = "p-3400"; class = "IN"; type = "A"; data = externalIPv4; }
