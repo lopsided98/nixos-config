@@ -81,7 +81,10 @@ in {
             WorkingDirectory = "/var/lib/freefb";
           })
         ];
-        environment.RUST_LOG = "info";
+        environment = {
+          XDG_CACHE_HOME = "/var/cache";
+          RUST_LOG = "info";
+        };
         startAt = cfg.interval;
       };
     })
@@ -92,7 +95,12 @@ in {
       '';
     })
     (mkIf (cfg.link == "ble") {
-      hardware.bluetooth.enable = true;
+      hardware.bluetooth = {
+        enable = true;
+        package = pkgs.bluez5-experimental;
+        # Enable advertisement monitor
+        settings.General.Experimental = true;
+      };
 
       # Allow access to BlueZ over DBus
       services.dbus.packages = singleton (pkgs.writeTextFile {

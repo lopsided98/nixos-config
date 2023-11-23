@@ -110,7 +110,7 @@ in {
   systemd.secrets = {
     freefb = {
       units = [ "freefb.service" ];
-      files = secrets.mkSecret secrets.freefb.configFile {};
+      files = secrets.mkSecret secrets.freefb.configFile { user = "freefb"; };
     };
     sshd = {
       units = [ "sshd@.service" ];
