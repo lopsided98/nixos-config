@@ -68,9 +68,12 @@ in {
             ] ++ optionals (cfg.configFile != null) [
               "--config" cfg.configFile
             ] ++ [
-              "-l" "${cfg.link}"
+              "--link" "${cfg.link}"
               "sync"
             ] ++ optional cfg.dump "--dump");
+            User = "freefb";
+            Group = "freefb";
+            CacheDirectory = "freefb";
           }
           (mkIf cfg.dump {
             StateDirectory = "freefb";
