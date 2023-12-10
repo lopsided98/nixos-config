@@ -240,7 +240,10 @@ in {
     downloadDir = "/var/lib/torrents";
   };
 
-  boot.zfs.extraPools = [ "backup" "backup2" ];
+  boot.zfs = {
+    extraPools = [ "backup" "backup2" ];
+    requestEncryptionCredentials = false;
+  };
 
   local.services.backup = {
     server = {
