@@ -152,7 +152,7 @@ with lib;
   };
 
   environment.systemPackages = with pkgs; [
-    libcamera-apps
+    rpicam-apps
     gst_all_1.gstreamer.bin
     gst_all_1.gstreamer.out
     gst_all_1.gst-plugins-base
@@ -213,7 +213,7 @@ with lib;
       image_dir=$(mktemp -d /var/lib/camera/still_$(date +%Y%m%d_%H%M%S)_XXXX)
       chmod +rx "$image_dir"
 
-      ${pkgs.libcamera-apps}/bin/libcamera-still \
+      ${pkgs.rpicam-apps}/bin/rpicam-still \
         --timeout 0 \
         --timelapse 2000 \
         -o "$image_dir/img_%04d.jpg"

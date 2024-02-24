@@ -22,8 +22,6 @@ in {
 
   hacker-hats = self.callPackage ./hacker-hats {};
 
-  libcamera-apps = self.callPackage ./libcamera-apps { };
-
   mavlink-router = self.callPackage ./mavlink-router { };
 
   nixos-secrets = self.python3Packages.callPackage ./nixos-secrets { };
@@ -49,6 +47,8 @@ in {
     ];
   };
   linuxPackages_omnitech = self.recurseIntoAttrs (self.linuxPackagesFor self.linux_omnitech);
+
+  rpicam-apps = self.callPackage ./rpicam-apps { };
 
   wpa_supplicant = super.wpa_supplicant.overrideAttrs ({ patches ? [], ... }: {
     patches = patches ++ [
