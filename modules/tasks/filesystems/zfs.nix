@@ -1,5 +1,5 @@
 # Automatically applied settings when ZFS is enabled
-{ config, lib, pkgs, ... }: with lib; mkIf (any (fs: fs == "zfs") config.boot.supportedFilesystems) (mkMerge [
+{ config, lib, pkgs, ... }: with lib; mkIf (config.boot.supportedFilesystems.zfs or false) (mkMerge [
   ({
     boot = {
       # Lower priority than mkForce to allow devices to use custom kernels

@@ -4,7 +4,7 @@ in {
   options.local.services.backup.sanoid.enable = lib.mkEnableOption "Sanoid ZFS backup";
 
   config = lib.mkIf cfg.enable {
-    boot.supportedFilesystems = [ "zfs" ];
+    boot.supportedFilesystems.zfs = true;
 
     services.sanoid = {
       enable = true;

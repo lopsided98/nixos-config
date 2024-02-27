@@ -13,7 +13,7 @@ in {
   config = lib.mkIf cfg.enable {
     local.services.backup.syncthing.enable = true;
 
-    boot.supportedFilesystems = [ "zfs" ];
+    boot.supportedFilesystems.zfs = true;
 
     local.services.mail.enable = true;
 
