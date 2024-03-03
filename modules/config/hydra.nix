@@ -27,7 +27,7 @@
       # Allow Hydra to build flakes
       experimental-features = "nix-command flakes";
       # Allow Hydra to access flake inputs
-      allowed-uris = "ssh:// http:// https:// github:";
+      allowed-uris = "git+ssh:// http:// https:// github:";
     };
   };
 
