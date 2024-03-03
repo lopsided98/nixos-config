@@ -17,9 +17,7 @@ jobs:
           - branch: unstable-custom
             upstream-branch: nixos-unstable
     steps:
-      # Supports filter option
-      # https://github.com/actions/checkout/pull/1396
-      - uses: finleygn/checkout@573932dbdda76b2055415af22b663867dae9bdc3
+      - uses: actions/checkout@v4
         with:
           repository: lopsided98/nixpkgs
           ref: ${{ matrix.branch }}
@@ -43,9 +41,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      # Supports filter option
-      # https://github.com/actions/checkout/pull/1396
-      - uses: finleygn/checkout@573932dbdda76b2055415af22b663867dae9bdc3
+      - uses: actions/checkout@v4
         with:
           filter: tree:0
           fetch-depth: 0
