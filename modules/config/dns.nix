@@ -1,11 +1,10 @@
-/*
- * DNS is managed using a hidden master running on my Raspberry Pi 2, which
- * transfers to Afraid FreeDNS (https://freedns.afraid.org/) and PUCK
- * (https://puck.nether.net/). BIND also serves as a caching recursive resolver
- * for my internal network. I use a custom Nix configuration format that allows
- * me to selectively override certain records to be served to the internal
- * network, to implement split horizon DNS without duplicating information.
- */
+# DNS is managed using a hidden master running on my Raspberry Pi 2, which
+# transfers to Afraid FreeDNS (https://freedns.afraid.org/), PUCK
+# (https://puck.nether.net/) and Hurricane Electric (https://dns.he.net). BIND
+# also serves as a caching recursive resolver for my internal network. I use a
+# custom Nix configuration format that allows me to selectively override
+# certain records to be served to the internal network, to implement split
+# horizon DNS without duplicating information.
 { config, lib, pkgs, ... }: with lib; let
   net = config.lib.net;
 
@@ -21,7 +20,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        59         ; Serial
+                        60         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -30,6 +29,7 @@
     }
     { name = "benwolsieffer.com."; class = "IN"; type = "NS"; data = "ns2.afraid.org."; }
     { name = "benwolsieffer.com."; class = "IN"; type = "NS"; data = "puck.nether.net."; }
+    { name = "benwolsieffer.com."; class = "IN"; type = "NS"; data = "ns1.he.net."; }
 
     { name = "benwolsieffer.com."; class = "IN"; type = "CAA"; data = "0 issue \"letsencrypt.org\""; }
 
@@ -141,10 +141,12 @@ in {
       acl secondaries {
         2001:1850:1:5:800::6b;
         2602:fe55:5::5;
+        2001:470:600::2;
       };
       masters secondaries {
         2001:1850:1:5:800::6b;
         2602:fe55:5::5;
+        2001:470:600::2;
       };
 
       view "external" {
