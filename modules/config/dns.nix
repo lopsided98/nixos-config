@@ -21,7 +21,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        58         ; Serial
+                        59         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -139,16 +139,12 @@ in {
       };
 
       acl secondaries {
-        69.65.50.192;
         2001:1850:1:5:800::6b;
-        204.42.254.5;
-        2001:418:3f4::5;
+        2602:fe55:5::5;
       };
       masters secondaries {
-        69.65.50.192;
         2001:1850:1:5:800::6b;
-        204.42.254.5;
-        2001:418:3f4::5;
+        2602:fe55:5::5;
       };
 
       view "external" {
