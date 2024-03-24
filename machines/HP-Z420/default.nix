@@ -315,6 +315,7 @@ in {
         target = "backup2/home";
         recursive = true;
         sendOptions = "w";
+        extraArgs = [ "--delete-target-snapshots" ];
       };
       /*"backup/backups/HP-Z420" = {
         target = "${remote}:backup/backups/HP-Z420";
