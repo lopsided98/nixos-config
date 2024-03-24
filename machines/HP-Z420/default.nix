@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ lib, config, pkgs, secrets, ... }: let
+{ lib, options, config, pkgs, secrets, ... }: let
 
 interface = "br0";
 address = "192.168.1.5";
@@ -315,6 +315,7 @@ in {
         target = "backup2/home";
         recursive = true;
         sendOptions = "w";
+        localTargetAllow = options.services.syncoid.localTargetAllow.default ++ [ "destroy" ];
         extraArgs = [ "--delete-target-snapshots" ];
       };
       /*"backup/backups/HP-Z420" = {
