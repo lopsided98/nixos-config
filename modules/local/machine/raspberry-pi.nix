@@ -11,19 +11,18 @@ let
   bootloaderCfg = config.boot.loader.raspberryPi;
   ubootEnabled = bootloaderCfg.uboot.enable;
 in {
-  # FIXME: find a way to import this from nixpkgs with flakes
   imports = singleton ./sd-image.nix;
 
   options.local.machine.raspberryPi = {
     version = mkOption {
       type = types.enum [ 0 1 2 3 4 ];
-      description = lib.mdDoc "Raspberry Pi model version number";
+      description = "Raspberry Pi model version number";
     };
 
     enableWirelessFirmware = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the WiFi/Bluetooth firmware for the Raspberry Pi.
       '';
     };

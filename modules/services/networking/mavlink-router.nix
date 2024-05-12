@@ -57,7 +57,7 @@ in {
           Baud = 52000;
         };
       };
-      description = lib.mdDoc ''
+      description = ''
         MAVLink Router configuration, see:
         https://github.com/mavlink-router/mavlink-router/blob/master/examples/config.sample
       '';
