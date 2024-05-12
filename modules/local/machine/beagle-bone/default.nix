@@ -9,7 +9,7 @@ with lib;
 let
   cfg = config.local.machine.beagleBone;
 in {
-  imports = singleton "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image.nix";
+  imports = singleton ../sd-image.nix;
 
   options.local.machine.beagleBone = {
     enableWirelessCape = mkEnableOption "support for the Wireless Connectivity Cape";
