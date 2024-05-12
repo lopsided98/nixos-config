@@ -124,6 +124,7 @@
       trusted-users = [ "build" ];
       auto-optimise-store = true;
       builders-use-substitutes = true;
+      experimental-features = "nix-command flakes";
       
       # Use my binary cache
       substituters = let
@@ -143,9 +144,22 @@
       netrc-file = ${secrets.getSystemdSecret "nix" secrets.hydra.netrc}
     '';
 
-    nixPath =
-      lib.optional (lib.hasAttr "rev" inputs.nixpkgs.sourceInfo)
-        "nixpkgs=https://github.com/lopsided98/nixpkgs/archive/${inputs.nixpkgs.sourceInfo.rev}.tar.gz";
+    registry.nixpkgs.to = lib.mkIf (lib.hasAttr "rev" inputs.nixpkgs.sourceInfo) {
+      type = "github";
+      owner = "lopsided98";
+      repo = "nixpkgs";
+      rev = inputs.nixpkgs.sourceInfo.rev;
+    };
+
+    # Reference the flake registry entry defined above
+    nixPath = [ "nixpkgs=flake:nixpkgs" ];
+  };
+
+  # This is manually done above in a way that doesn't include the source in the
+  # closure.
+  nixpkgs.flake = {
+    setFlakeRegistry = false;
+    setNixPath = false;
   };
 
   # Global SSH configuration for distributed builds

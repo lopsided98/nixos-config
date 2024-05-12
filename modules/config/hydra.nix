@@ -22,14 +22,8 @@
     };
   };
 
-  nix = {
-    settings = {
-      # Allow Hydra to build flakes
-      experimental-features = "nix-command flakes";
-      # Allow Hydra to access flake inputs
-      allowed-uris = "git+ssh:// http:// https:// github:";
-    };
-  };
+  # Allow Hydra to access flake inputs
+  nix.settings.allowed-uris = "git+ssh:// http:// https:// github:";
 
   # Deploy keys for private repositories
   programs.ssh.extraConfig = ''
