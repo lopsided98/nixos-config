@@ -78,11 +78,11 @@ in {
           FirewallMark = cfg.client.firewallMark;
         };
 
-        wireguardPeers = [ { wireguardPeerConfig = {
+        wireguardPeers = [ {
           AllowedIPs = [ "0.0.0.0/0" "::/0" ];
           PublicKey = serverPublicKey;
           PersistentKeepalive = mkIf cfg.client.persistentKeepalive 25;
-        }; } ];
+        } ];
       };
 
       networks."30-vpn-home-wireguard-client" = mkMerge [
@@ -99,39 +99,39 @@ in {
           };
           routes = [
             # FIXME: default gateway breaks things
-            /*{ routeConfig = {
+            /*{
               Gateway = cfg.server.ipv4Address;
               Table = "vpn-home-wireguard-client";
-            }; }
-            { routeConfig = {
+            }
+            {
               Gateway = cfg.server.ipv6Address;
               Table = "vpn-home-wireguard-client";
-            }; }*/
-            { routeConfig = {
+            }*/
+            {
               Destination = config.local.networking.home.ipv4Subnet;
               Gateway = cfg.server.ipv4Address;
               Table = "vpn-home-wireguard-client";
-            }; }
-            { routeConfig = {
+            }
+            {
               Destination = config.local.networking.home.ipv6Prefix;
               Gateway = cfg.server.ipv6Address;
               Table = "vpn-home-wireguard-client";
-            }; }
+            }
           ];
           routingPolicyRules = [
-            { routingPolicyRuleConfig = {
+            {
               Table = "vpn-home-wireguard-client";
               SuppressPrefixLength = 0;
               Family = "both";
               Priority = 31698;
-            }; }
-            { routingPolicyRuleConfig = {
+            }
+            {
               Table = "vpn-home-wireguard-client";
               InvertRule = true;
               FirewallMark = cfg.client.firewallMark;
               Family = "both";
               Priority = 31699;
-            }; }
+            }
           ];
         }
         cfg.client.networkConfig

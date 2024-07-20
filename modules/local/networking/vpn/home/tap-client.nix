@@ -159,14 +159,14 @@ in {
       # policy rule needs to be modified a bit to avoid reflecting packets back
       # over the VPN, but I'm not currently using this functionality so I can't
       # test the fix.
-      /*routingPolicyRules = [ { routingPolicyRuleConfig = {
+      /*routingPolicyRules = [ {
         From = "192.168.1.0/24";
         Table = 242;
-      }; } ];
-      routes = [ { routeConfig = {
+      } ];
+      routes = [ {
         Gateway = "192.168.1.1";
         Table = 242;
-      }; } ];*/
+      } ];*/
     };
 
     # Keep attempting to connect forever

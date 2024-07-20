@@ -72,13 +72,11 @@ in {
           };
 
           wireguardPeers = mapAttrsToList (publicKey: peerCfg: {
-            wireguardPeerConfig = {
-              AllowedIPs = [
-                peerCfg.ipv4Address
-                peerCfg.ipv6Address
-              ];
-              PublicKey = publicKey;
-            };
+            AllowedIPs = [
+              peerCfg.ipv4Address
+              peerCfg.ipv6Address
+            ];
+            PublicKey = publicKey;
           }) cfg.peers;
         };
 
