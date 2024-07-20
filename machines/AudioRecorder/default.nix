@@ -183,7 +183,7 @@ in {
   };
 
   # Audio recording service
-  sound.enable = true;
+  hardware.alsa.enablePersistence = true;
   services.zeusAudio = {
     enable = true;
     mixerEnums = [
