@@ -1,21 +1,4 @@
-self: super: with super.lib; let
-  pythonOverridesFor = python: python.override (old: {
-    packageOverrides = pySelf: pySuper: {
-      aur = pySelf.callPackage ./python-modules/aur { };
-
-      memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
-
-      pyalpm = pySelf.callPackage ./python-modules/pyalpm {
-        inherit (self) libarchive;
-      };
-
-      xcgf = pySelf.callPackage ./python-modules/xcgf { };
-
-      xcpf = pySelf.callPackage ./python-modules/xcpf { };
-    };
-  });
-
-in {
+self: super: with super.lib; {
   aur-buildbot = self.callPackage ./aur-buildbot {};
 
   dnsupdate = self.python3Packages.callPackage ./dnsupdate { };
@@ -30,12 +13,21 @@ in {
 
   watchdog = self.callPackage ./watchdog { };
 
-  python27 = pythonOverridesFor super.python27;
-  python37 = pythonOverridesFor super.python37;
-  python38 = pythonOverridesFor super.python38;
-  python39 = pythonOverridesFor super.python39;
-  python310 = pythonOverridesFor super.python310;
-  python311 = pythonOverridesFor super.python311;
+  pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
+    (pySelf: pySuper: {
+      aur = pySelf.callPackage ./python-modules/aur { };
+
+      memoizedb = pySelf.callPackage ./python-modules/memoizedb { };
+
+      pyalpm = pySelf.callPackage ./python-modules/pyalpm {
+        inherit (self) libarchive;
+      };
+
+      xcgf = pySelf.callPackage ./python-modules/xcgf { };
+
+      xcpf = pySelf.callPackage ./python-modules/xcpf { };
+    })
+  ];
 
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = super.gnupg.override { guiSupport = false; };
