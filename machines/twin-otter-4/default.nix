@@ -220,7 +220,6 @@ with lib;
     '';
   };
 
-  sound.enable = true;
   systemd.services.camera-video = {
     description = "Camera video capture";
     wantedBy = [ "multi-user.target" ];

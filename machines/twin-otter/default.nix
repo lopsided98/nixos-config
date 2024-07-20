@@ -215,7 +215,6 @@ in {
     '';
   };
 
-  sound.enable = true;
   systemd.services.camera-video = {
     description = "Camera video capture";
     bindsTo = [ "dev-vchiq.device" ];
