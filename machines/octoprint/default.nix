@@ -27,11 +27,15 @@ in {
     };
   };
 
-  # This driver controls the onboard USB hub reset line, but somehow this
-  # doesn't work right. As soon as this driver is loaded, all the USB devices
-  # disconnect.
-  # See: https://lore.kernel.org/lkml/ZMrFb7H1ynwwBSCA@Dell-Inspiron-15/T/#t
-  boot.blacklistedKernelModules = [ "onboard-usb-dev" ];
+  # This patch could maybe fix the USB reset issue?
+  # Bug reference: https://lore.kernel.org/lkml/ZMrFb7H1ynwwBSCA@Dell-Inspiron-15/T/#t
+  boot.kernelPatches = [ {
+    name = "arm64-dts-amlogic-gxbb-odroidc2-fix-invalid-reset-gpio-property";
+    patch = pkgs.fetchpatch {
+      url = "https://github.com/torvalds/linux/commit/e822ce43968daf9da4368617d2c948c22ccf93f9.patch";
+      hash = "sha256-D7sL1wmCcJ5+co+NXZsjUOt+2TqQr3DmvFLRNxf0Dws=";
+    };
+  } ];
 
   hardware.enableRedistributableFirmware = true;
   local.networking = {
