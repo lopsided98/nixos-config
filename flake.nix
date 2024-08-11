@@ -67,6 +67,7 @@
         inherit
           dnsupdate
           nixos-secrets
+          rpicam-apps
           tinyssh;
         deploy = runCommand "deploy" {
           inherit runtimeShell;

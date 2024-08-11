@@ -1,48 +1,49 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, libcamera, boost
-, ffmpeg_5, libexif, libjpeg, libtiff, libpng, libdrm, opencv }:
+, ffmpeg, libdrm, libexif, libjpeg, libtiff, libpng, opencv, libX11, epoxy
+, libGL
+, withOpencv ? false
+, withPreview ? false }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpicam-apps";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpicam-apps";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8YUXbk+qBAXoeMRaxJpUJB/lD8Yi8llO9A8ylpNA33A=";
+    hash = "sha256-s4zJh6r3VhiquO54KWZ78dVCH1BmlphY9zEB9BidNyo=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [
-    # rpicam-apps requires this fork
-    (libcamera.overrideAttrs ({
-      mesonFlags ? [], ...
-    }: {
-      src = fetchFromGitHub {
-        owner = "raspberrypi";
-        repo = "libcamera";
-        rev = "v0.2.0+rpt20240215";
-        hash = "sha256-+7dHUIXRsoy9CCHApmCnGuMjhGx/VhleI+zwB7E+5lU=";
-      };
-      mesonFlags = mesonFlags ++ [
-        "-Dpipelines=rpi/vc4"
-      ];
-    }))
+    libcamera
     boost
-    (ffmpeg_5.override { withV4l2M2m = true; })
+    (ffmpeg.override { withV4l2M2m = true; })
+    # Required unconditionally by libav_encoder
+    libdrm
     libexif
     libjpeg
     libtiff
     libpng
-    libdrm
+  ] ++ lib.optionals withOpencv [
     opencv
+  ] ++ lib.optionals withPreview [
+    libX11
+    epoxy
+    libGL
   ];
 
-  env = {
-    # https://github.com/NixOS/nixpkgs/issues/86131
-    BOOST_INCLUDEDIR = "${lib.getDev boost}/include";
-    BOOST_LIBRARYDIR = "${lib.getLib boost}/lib";
-  };
+  mesonFlags = [
+    (lib.mesonEnable "enable_opencv" withOpencv)
+    # libav_encoder requires libdrm unconditionally, so might as well include
+    # DRM preview as well
+    (lib.mesonEnable "enable_drm" true)
+    (lib.mesonEnable "enable_egl" withPreview)
+    # Don't want to bother with Qt
+    (lib.mesonEnable "enable_qt" false)
+    (lib.mesonEnable "enable_hailo" false)
+  ];
 
   meta = with lib; {
     description = "Small suite of libcamera-based applications to drive the cameras on a Raspberry Pi platform.";
