@@ -102,7 +102,7 @@
     outputsNoSystem = {
       overlays.default = import ./pkgs;
 
-      nixosModules.default = import ./modules;
+      nixosModules.default = ./modules;
 
       nixosConfigurations = let
         importMachines = nixpkgs: hostSystems: (import ./machines {
