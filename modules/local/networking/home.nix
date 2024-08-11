@@ -34,6 +34,15 @@ let
         description = "IPv6 prefix delegation to request using DHCPv6";
       };
 
+      ipv4Forwarding = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to allow IPv4 forwarding on this interface. Linux has no
+          per-interface IPv6 forwarding setting.
+        '';
+      };
+
       initrd = mkEnableOption "network in initrd";
     };
   });
@@ -95,7 +104,19 @@ in {
         {
           name = interface;
           inherit (cfg) dns;
-          networkConfig.MulticastDNS = "yes";
+          networkConfig = {
+            MulticastDNS = "yes";
+            # Despite the name, net.ipv6.conf.<interface>.forwarding doesn't
+            # control forwarding at all. Instead, it controls the IsRouter flag
+            # in neighbor advertisments, whether router advertisments are
+            # accepted and whether router solicitations are sent. In practice
+            # this probably doesn't matter since systemd-networkd is handling
+            # all of this rather than the kernel, but explicitly set it to false
+            # anyway to maintain the normal behavior even if other interfaces
+            # are using forwarding.
+            # See: https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch11s02.html
+            IPv6Forwarding = false;
+          };
           dhcpV4Config.UseDNS = false;
           dhcpV6Config = {
             # Router gives out address as part of DHCPv6, but we only want
@@ -124,6 +145,9 @@ in {
             WithoutRA = "solicit";
             PrefixDelegationHint = interfaceCfg.ipv6DelegatedPrefix;
           };
+        })
+        (mkIf (interfaceCfg.ipv4Forwarding) {
+          networkConfig.IPv4Forwarding = true;
         })
       ];
     };

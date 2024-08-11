@@ -89,16 +89,27 @@ in {
           networkConfig = {
             IPv6AcceptRA = false;
             DHCPPrefixDelegation = true;
-            IPForward = true;
+            IPv4Forwarding = true;
+            # Doesn't actually control forwarding and probably doesn't matter if
+            # we set it, but it doesn't hurt.
+            # See: https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch11s02.html
+            IPv6Forwarding = true;
           };
           dhcpPrefixDelegationConfig = {
             SubnetId = 0;
             Assign = false;
           };
         };
+
+        # Enables forwarding globally. Linux has no per-interface setting; you
+        # are supposed to use the firewall.
+        config.networkConfig.IPv6Forwarding = true;
       };
 
-      local.networking.home.interfaces.${cfg.server.uplinkInterface}.ipv6DelegatedPrefix = cfg.ipv6Prefix;
+      local.networking.home.interfaces.${cfg.server.uplinkInterface} = {
+        ipv6DelegatedPrefix = cfg.ipv6Prefix;
+        ipv4Forwarding = true;
+      };
 
       environment.systemPackages = [ pkgs.wireguard-tools ];
 
