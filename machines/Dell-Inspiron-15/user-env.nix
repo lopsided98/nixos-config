@@ -7,7 +7,7 @@
 , symlinkJoin
 , buildEnv
 , glibcLocales
-, nix
+, nixVersions
 , dropbox
 , zoom-us
 , cura
@@ -75,7 +75,7 @@
 in buildEnv {
   name = "Dell-Inspiron-15-user-env";
   paths = [
-    nix
+    nixVersions.latest
     nixGL
     dropbox
     zoom-us-wrapped
