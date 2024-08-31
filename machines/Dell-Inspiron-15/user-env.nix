@@ -19,10 +19,10 @@
 , mutt
 }: let
   nixGL = ((import (fetchFromGitHub {
-    owner = "guibou";
+    owner = "nix-community";
     repo = "nixGL";
-    rev = "489d6b095ab9d289fe11af0219a9ff00fe87c7c5";
-    hash = "sha256-E4zUPEUFyVWjVm45zICaHRpfGepfkE9Z2OECV9HXfA4=";
+    rev = "310f8e49a149e4c9ea52f1adf70cdc768ec53f8a";
+    hash = "sha256-lnzZQYG0+EXl/6NkGpyIz+FEOc/DSEG57AP1VsdeNrM=";
   }) { inherit pkgs; }).nixGLIntel);
 
   wrapNixGL = {
