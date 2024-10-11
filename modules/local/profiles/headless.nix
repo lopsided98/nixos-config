@@ -12,8 +12,6 @@ with lib;
   };
 
   config = mkIf config.local.profiles.headless {
-    environment.noXlibs = true;
-
     nixpkgs.overlays = singleton (const (super: {
       gnupg = super.gnupg.override { guiSupport = false; };
       qt515 = super.qt515.overrideScope' (const (super: {
