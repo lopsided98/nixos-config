@@ -200,22 +200,24 @@ in {
   # Samba file sharing
   services.samba = {
     enable = true;
-    enableWinbindd = false;
-    shares.audio = {
-      path = "/var/lib/${config.services.zeusAudio.audioDir}";
-      "valid users" = "ben, gary";
-      writable = "yes";
+    winbindd.enable = false;
+    settings = {
+      global = {
+        workgroup = "MSHOME";
+        "passdb backend" = "smbpasswd:${secrets.getSystemdSecret "samba" secrets.AudioRecorder.samba.smbpasswd}";
+        # Disable printing
+        "load printers" = "no";
+        # These might be unncessary cargo culting from: https://serverfault.com/questions/207510/how-do-you-disable-smb-printing-support
+        printing = "bsd";
+        "printcap name" = "/dev/null";
+        "disable spoolss" = "yes";
+      };
+      audio = {
+        path = "/var/lib/${config.services.zeusAudio.audioDir}";
+        "valid users" = "ben, gary";
+        writable = "yes";
+      };
     };
-    extraConfig = ''
-      workgroup = MSHOME
-      passdb backend = smbpasswd:${secrets.getSystemdSecret "samba" secrets.AudioRecorder.samba.smbpasswd}
-
-      # Disable printing
-      load printers = no
-      printing = bsd
-      printcap name = /dev/null
-      disable spoolss = yes
-    '';
   };
 
   # Disable HDMI
