@@ -42,7 +42,7 @@
       systemd = {
         enable = true;
         emergencyAccess = "$6$Sl0MAo3O/McVvTwo$tUk05vbppFJKBwgfffLQk2f1PWbnRqiJVAF9iF697KZ0KtjzOJX78sXIbL9lwNJWJXj9RiK2PRgTlaEijz0Mh.";
-        enableTpm2 = lib.mkDefault false;
+        tpm2.enable = lib.mkDefault false;
       };
     };
 
