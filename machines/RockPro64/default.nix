@@ -61,10 +61,6 @@
 
   # Ethernet
   local.networking.home.interfaces.end0.ipv4Address = "192.168.1.7/24";
-  # Work around checksumming bug
-  networking.localCommands = ''
-    ${pkgs.ethtool}/bin/ethtool -K end0 rx off tx off
-  '';
 
   networking = {
     hostName = "RockPro64";
