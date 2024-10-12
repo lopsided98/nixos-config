@@ -1,34 +1,36 @@
-{ config, lib, pkgs, ... }:
-with lib;
-{
+{ config, lib, pkgs, ... }: {
   options = {
-    local.profiles.headless = mkOption {
+    local.profiles.headless = lib.mkOption {
       default = false;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Disable modules and package features not needed on headless systems.
       '';
     };
   };
 
-  config = mkIf config.local.profiles.headless {
-    nixpkgs.overlays = singleton (const (super: {
-      gnupg = super.gnupg.override { guiSupport = false; };
-      qt515 = super.qt515.overrideScope' (const (super: {
+  config = lib.mkIf config.local.profiles.headless {
+    # Unnecessary, and pulls in X11 libraries through xauth
+    security.pam.services.su.forwardXAuth = lib.mkForce false;
+
+    nixpkgs.overlays = lib.singleton (final: prev: {
+      dbus = prev.dbus.override { x11Support = false; };
+      gnupg = prev.gnupg.override { guiSupport = false; };
+      qt515 = prev.qt515.overrideScope' (final: prev: {
         # Build Qt without Gtk. The other GUI deps can't be disabled right now.
-        qtbase = super.qtbase.override {
+        qtbase = prev.qtbase.override {
           withGtk3 = false;
         };
-      }));
-      v4l-utils = super.v4l-utils.override { withGUI = false; };
+      });
+      v4l-utils = prev.v4l-utils.override { withGUI = false; };
 
-      gst_all_1 = super.gst_all_1 // {
-        gst-plugins-base = super.gst_all_1.gst-plugins-base.override {
+      gst_all_1 = prev.gst_all_1 // {
+        gst-plugins-base = prev.gst_all_1.gst-plugins-base.override {
           enableX11 = false;
           enableWayland = false;
           enableGl = false;
         };
       };
-    }));
+    });
   };
 }
