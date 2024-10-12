@@ -29,7 +29,6 @@ in lib.filterAttrs (m: c: c != null) ({
   "ODROID-XU4" = callMachine ./ODROID-XU4 "armv7l-linux";
   "omnitech" = callMachine ./omnitech "armv5tel-linux";
   "p-3400" = callMachine ./p-3400 "x86_64-linux";
-  "ragazza" = callMachine ./ragazza "armv6l-linux";
   "RasPi2" = callMachine ./RasPi2 "armv7l-linux";
   "Rock64" = callMachine ./Rock64 "aarch64-linux";
   "RockPro64" = callMachine ./RockPro64 "aarch64-linux";
