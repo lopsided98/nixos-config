@@ -14,7 +14,7 @@
 
   swapDevices = lib.singleton {
     device = "/var/lib/swap";
-    size = 2 * 1024; # 2 GiB
+    size = 1024; # 1 GiB
   };
 
   boot = {
