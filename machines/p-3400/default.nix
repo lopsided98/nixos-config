@@ -15,6 +15,11 @@
     };
   };
 
+  swapDevices = lib.singleton {
+    device = "/var/lib/swap";
+    size = 1024; # 1 GiB
+  };
+
   boot = {
     # Use systemd-boot
     loader = {
