@@ -9,13 +9,16 @@ with lib;
   ];
 
   local.machine.raspberryPi = {
+    enable = true;
     version = 4;
+    firmwarePartitionID = "38CD-60D2";
+    firmwareConfig = ''
+      enable_uart=1
+    '';
     enableWirelessFirmware = true;
   };
-  #local.profiles.headless = true;
 
   sdImage = {
-    firmwarePartitionID = "0x38cd60d2";
     rootPartitionUUID = "4f54d50c-b6fb-4917-8e06-e008469bbb37";
     compressImage = false;
   };
@@ -23,16 +26,7 @@ with lib;
   boot = {
     kernelPackages = mkForce pkgs.linuxPackages_rpi4;
     kernelParams = [ "cma=128M" ];
-    loader = {
-      raspberryPi = {
-        enable = true;
-        uboot.enable = true;
-        firmwareConfig = ''
-          enable_uart=1
-        '';
-      };
-      generic-extlinux-compatible.copyKernels = false;
-    };
+    loader.generic-extlinux-compatible.copyKernels = false;
   };
 
   hardware.deviceTree.overlays = [

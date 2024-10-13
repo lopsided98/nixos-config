@@ -20,15 +20,20 @@ in {
   local.system.buildSystem.system = "x86_64-linux";
 
   local.machine.raspberryPi = {
+    enable = true;
     version = 0;
+    firmwarePartitionUUID = let
+      hash = lib.toUpper (builtins.substring 0 8 (builtins.hashString "md5" ("firmware" + hostName)));
+      u1 = builtins.substring 0 4 hash;
+      u2 = builtins.substring 4 4 hash;
+    in "${u1}-${u2}";
     enableWirelessFirmware = true;
   };
   local.profiles.minimal = true;
 
   sdImage = {
-    firmwarePartitionID = "0x" + substring 0 8 (builtins.hashString "md5" "firmware" + hostName);
     rootPartitionUUID = let 
-      hash = substring 0 32 (builtins.hashString "sha1" "root" + hostName);
+      hash = substring 0 32 (builtins.hashString "sha1" ("root" + hostName));
       u1 = substring 0 8 hash;
       u2 = substring 8 4 hash;
       u3 = substring 12 4 hash;
@@ -39,10 +44,6 @@ in {
   };
 
   boot = {
-    loader.raspberryPi = {
-      enable = true;
-      uboot.enable = true;
-    };
     kernelPackages = lib.mkForce pkgs.linuxPackages_rpi0;
     kernelPatches = [
       {

@@ -14,31 +14,25 @@ in {
   local.system.buildSystem.system = "x86_64-linux";
 
   local.machine.raspberryPi = {
+    enable = true;
     version = 0;
+    firmwarePartitionUUID = "87B7-6516";
+    firmwareConfig = ''
+      start_x=1
+      gpu_mem=128
+    '';
     enableWirelessFirmware = true;
   };
   local.profiles.minimal = true;
 
   sdImage = {
-    firmwarePartitionID = "0x87b76516";
     rootPartitionUUID = "c1f10940-ab67-43df-915f-2eab9432f62b";
     compressImage = false;
   };
 
   boot.kernelPackages = mkForce pkgs.linuxPackages_rpi0;
 
-  boot.loader = {
-    raspberryPi = {
-      enable = true;
-      version = 0;
-      firmwareConfig = ''
-        start_x=1
-        gpu_mem=128
-      '';
-      uboot.enable = true;
-    };
-    generic-extlinux-compatible.copyKernels = false;
-  };
+  boot.loader.generic-extlinux-compatible.copyKernels = false;
   hardware.deviceTree = rec {
     name = "bcm2708-rpi-zero-w.dtb";
     filter = name;

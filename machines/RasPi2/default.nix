@@ -13,19 +13,17 @@ in {
   # Enable cross-compilation
   local.system.buildSystem.system = "x86_64-linux";
 
-  local.machine.raspberryPi.version = 2;
+  local.machine.raspberryPi = {
+    enable = true;
+    version = 2;
+    firmwarePartitionUUID = "C99F-2756";
+  };
 
   local.profiles.headless = true;
 
   sdImage = {
-    firmwarePartitionID = "0xc99f2756";
     rootPartitionUUID = "7292e6e2-4528-4a9a-aed4-1918605dde1f";
     compressImage = false;
-  };
-
-  boot.loader.raspberryPi = {
-    enable = true;
-    uboot.enable = true;
   };
 
   systemd.network = {

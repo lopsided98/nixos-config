@@ -9,24 +9,16 @@ with lib;
   ];
 
   local.machine.raspberryPi = {
+    enable = true;
     version = 3;
+    firmwarePartitionUUID = "0980-DF14";
     enableWirelessFirmware = true;
   };
 
-  sdImage = {
-    firmwarePartitionID = "0x0980df14";
-    rootPartitionUUID = "b12d092c-fc79-4d6d-8879-0be220bc1ad2";
-  };
+  sdImage.rootPartitionUUID = "b12d092c-fc79-4d6d-8879-0be220bc1ad2";
 
   boot = {
-    loader = {
-      raspberryPi = {
-        enable = true;
-        version = 3;
-        uboot.enable = true;
-      };
-      generic-extlinux-compatible.copyKernels = false;
-    };
+    loader.generic-extlinux-compatible.copyKernels = false;
     kernelPackages = mkForce pkgs.linuxPackages_5_15;
   };
 

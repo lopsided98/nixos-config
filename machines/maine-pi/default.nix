@@ -12,24 +12,20 @@ with lib;
   local.system.buildSystem.system = "x86_64-linux";
 
   local.machine.raspberryPi = {
+    enable = true;
     version = 0;
+    firmwarePartitionUIID = "2A72-08BC";
+    firmwareConfig = ''
+      # Use the minimum amount of GPU memory
+      gpu_mem=16
+    '';
     enableWirelessFirmware = true;
   };
   local.profiles.minimal = true;
 
   sdImage = {
-    firmwarePartitionID = "0x2a7208bc";
     rootPartitionUUID = "79cd7c77-b355-4d2b-b1d5-fa9207e944f2";
     compressImage = false;
-  };
-
-  boot.loader.raspberryPi = {
-    enable = true;
-    firmwareConfig = ''
-      # Use the minimum amount of GPU memory
-      gpu_mem=16
-    '';
-    uboot.enable = true;
   };
 
   boot.extraModprobeConfig = ''
