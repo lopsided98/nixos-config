@@ -24,7 +24,10 @@ let
       else
         pkgs.ubootRaspberryPi3_32bit
     else if cfg.version == 4 then
-      pkgs.ubootRaspberryPi4
+      if pkgs.stdenv.hostPlatform.isAarch64 then
+        pkgs.ubootRaspberryPi4_64bit
+      else
+        pkgs.ubootRaspberryPi4_32bit
     else
       throw "U-Boot is not yet supported on the Raspberry Pi ${cfg.version}.";
 
