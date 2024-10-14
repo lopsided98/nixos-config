@@ -11,7 +11,7 @@ with lib;
   local.machine.raspberryPi = {
     enable = true;
     version = 4;
-    firmwarePartitionID = "38CD-60D2";
+    firmwarePartitionUUID = "38CD-60D2";
     firmwareConfig = ''
       enable_uart=1
     '';

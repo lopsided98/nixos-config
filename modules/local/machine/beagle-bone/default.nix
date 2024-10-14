@@ -8,14 +8,53 @@ with lib;
 
 let
   cfg = config.local.machine.beagleBone;
+
+  firmwarePartitionMount = "/boot/firmware";
+
+  update-firmware = let
+    inputs = with pkgs; [ util-linux coreutils ];
+  in pkgs.writers.writeBashBin "nixos-update-firmware" ''
+    set -eu -o pipefail
+    export PATH=${lib.escapeShellArg (lib.makeBinPath inputs)}
+
+    firmware=${lib.escapeShellArg firmwarePartitionMount}
+
+    if ! mountpoint "$firmware"; then
+      exit 1
+    fi
+
+    cp '${pkgs.ubootAmx335xEVM}'/{MLO,u-boot.img} -t "$firmware"
+  '';
 in {
   imports = singleton ../sd-image.nix;
 
   options.local.machine.beagleBone = {
-    enableWirelessCape = mkEnableOption "support for the Wireless Connectivity Cape";
+    enable = lib.mkEnableOption "Beagle Bone hardware support";
+
+    firmwarePartitionUUID = lib.mkOption {
+      type = lib.types.str;
+      example = "2178-694E";
+      description = ''
+        UUID for the firmware partition; 8 uppercase hex digits in two groups
+        separated by a dash.
+      '';
+    };
+
+    enableWirelessCape = lib.mkEnableOption "support for the Wireless Connectivity Cape";
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
+    assertions = [ {
+      assertion = (builtins.match "[0-9,A-F]{4}-[0-9,A-F]{4}" cfg.firmwarePartitionUUID != null);
+      message = "Invalid firmware partition UUID: ${cfg.firmwarePartitionUUID}";
+    } ];
+
+    fileSystems.${firmwarePartitionMount} = {
+      device = "/dev/disk/by-uuid/${cfg.firmwarePartitionUUID}";
+      fsType = "vfat";
+      options = [ "noauto" "x-systemd.automount" ];
+    };
+
     sdImage = {
       imageBaseName = "${config.networking.hostName}-sd-image";
       firmwareSize = 16; # MiB
@@ -42,10 +81,10 @@ in {
       ];
     };
 
-    fileSystems."/boot/firmware".options = [ "x-systemd.automount" ];
-
     # Enable SD card TRIM
     services.fstrim.enable = true;
+
+    environment.systemPackages = [ update-firmware ];
 
     hardware = mkIf cfg.enableWirelessCape {
       deviceTree = {

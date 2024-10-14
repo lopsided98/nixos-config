@@ -19,7 +19,7 @@ let
     else if cfg.version == 2 then
       pkgs.ubootRaspberryPi2
     else if cfg.version == 3 then
-      if stdenv.hostPlatform.isAarch64 then
+      if pkgs.stdenv.hostPlatform.isAarch64 then
         pkgs.ubootRaspberryPi3_64bit
       else
         pkgs.ubootRaspberryPi3_32bit
@@ -49,28 +49,32 @@ in {
   options.local.machine.raspberryPi = {
     enable = lib.mkEnableOption "Raspberry Pi hardware support";
 
-    version = mkOption {
-      type = types.enum [ 0 1 2 3 4 ];
+    version = lib.mkOption {
+      type = lib.types.enum [ 0 1 2 3 4 ];
       description = "Raspberry Pi model version number";
     };
 
-    enableWirelessFirmware = lib.mkEnableOption "WiFi/Bluetooth firmware for the Raspberry Pi";
-
-    firmwarePartitionUUID = mkOption {
+    firmwarePartitionUUID = lib.mkOption {
       type = lib.types.str;
       example = "2178-694E";
+      description = ''
+        UUID for the Raspberry Pi firmware partition; 8 uppercase hex digits in
+        two groups separated by a dash.
+      '';
     };
 
-    firmwareConfig = mkOption {
-      type = types.lines;
+    firmwareConfig = lib.mkOption {
+      type = lib.types.lines;
       description = ''
         Extra options that will be appended to `${firmwarePartitionMount}/config.txt` file.
         For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
       '';
     };
+
+    enableWirelessFirmware = lib.mkEnableOption "WiFi/Bluetooth firmware for the Raspberry Pi";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [ {
       assertion = (builtins.match "[0-9,A-F]{4}-[0-9,A-F]{4}" cfg.firmwarePartitionUUID != null);
       message = "Invalid firmware partition UUID: ${cfg.firmwarePartitionUUID}";

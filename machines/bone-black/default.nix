@@ -13,8 +13,12 @@ with lib;
 
   local.profiles.minimal = true;
 
+  local.machine.beagleBone = {
+    enable = true;
+    firmwarePartitionUUID = "D6C6-2B6C";
+  };
+
   sdImage = {
-    firmwarePartitionID = "0xd6c62b6c";
     rootPartitionUUID = "880d38c2-5a88-47a0-8d9d-65a7a601c8ee";
     compressImage = false;
   };

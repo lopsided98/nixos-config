@@ -13,13 +13,16 @@ with lib;
 
   local.profiles.minimal = true;
 
+  local.machine.beagleBone = {
+    enable = true;
+    firmwarePartitionUUID = "CE10-2799";
+    enableWirelessCape = true;
+  };
+
   sdImage = {
-    firmwarePartitionID = "0xce102799";
     rootPartitionUUID = "de4bdabd-5b30-4339-9168-14fbd944184f";
     compressImage = false;
   };
-
-  local.machine.beagleBone.enableWirelessCape = true;
 
   local.networking = {
     wireless.home = {
