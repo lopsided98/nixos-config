@@ -60,7 +60,6 @@ in {
       octoprint-filament-sensor-universal = python.pkgs.buildPythonPackage rec {
         pname = "OctoPrint-Filament-Sensor-Universal";
         version = "2.0.0";
-        format = "setuptools";
 
         src = pkgs.fetchFromGitHub {
           owner = "lopsided98";
