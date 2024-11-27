@@ -1,7 +1,3 @@
-# This module does not have an enable option because the sd-image module does
-# not either and there is no way to do conditional imports. Any machine that
-# uses this configuration must manually include it.
-
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -31,8 +27,46 @@ let
     else
       throw "U-Boot is not yet supported on the Raspberry Pi ${cfg.version}.";
 
+  firmwareFiles = lib.optionals (cfg.version < 4) [
+    "bootcode.bin"
+    "start.elf"
+    "start_x.elf"
+    "start_db.elf"
+    "start_cd.elf"
+    "fixup.dat"
+    "fixup_x.dat"
+    "fixup_db.dat"
+    "fixup_cd.dat"
+  ] ++ lib.optionals (cfg.version == 4) [
+    "start4.elf"
+    "start4x.elf"
+    "start4db.elf"
+    "start4cd.elf"
+    "fixup4.dat"
+    "fixup4x.dat"
+    "fixup4db.dat"
+    "fixup4cd.dat"
+    "bcm2711-rpi-4-b.dtb"
+  ];
+
+  copyFirmware = { coreutils }: let
+    inputs = [ coreutils ];
+  in pkgs.writers.writeBash "raspberrypi-copy-firmware" ''
+    set -eu -o pipefail
+    export PATH=${lib.escapeShellArg (lib.makeBinPath inputs)}
+
+    firmware="$1"
+
+    cp ${lib.escapeShellArg configTxt} "$firmware"/config.txt
+    cp ${lib.escapeShellArg uboot}/u-boot.bin "$firmware"/u-boot.bin
+    for f in ${lib.escapeShellArgs firmwareFiles}; do
+      cp ${lib.escapeShellArg pkgs.raspberrypifw}/share/raspberrypi/boot/"$f" "$firmware/$f"
+    done
+  '';
+
   update-firmware = let
-    inputs = with pkgs; [ util-linux coreutils ];
+    inputs = with pkgs; [ util-linux ];
+    copyFirmwareHost = pkgs.callPackage copyFirmware { };
   in pkgs.writers.writeBashBin "nixos-update-firmware" ''
     set -eu -o pipefail
     export PATH=${lib.escapeShellArg (lib.makeBinPath inputs)}
@@ -43,8 +77,7 @@ let
       exit 1
     fi
 
-    cp ${lib.escapeShellArg configTxt} "$firmware"/config.txt
-    cp ${lib.escapeShellArg uboot}/u-boot.bin "$firmware"/u-boot.bin
+    ${lib.escapeShellArg copyFirmwareHost} "$firmware"
   '';
 in {
   imports = singleton ./sd-image.nix;
@@ -114,33 +147,21 @@ in {
       options = [ "noauto" "x-systemd.automount" ];
     };
 
-    sdImage = let
-      firmwareBuilder = pkgs.buildPackages.callPackage
-        (pkgs.path + "/nixos/modules/system/boot/loader/raspberrypi/firmware-builder.nix") {
-          inherit (cfg) version;
-          ubootEnabled = true;
-          # Override to use host packages where necessary
-          inherit pkgs; # For U-Boot
-          inherit (pkgs) raspberrypifw;
-        };
-      raspberryPiBuilder = pkgs.buildPackages.callPackage
-        (pkgs.path + "/nixos/modules/system/boot/loader/raspberrypi/raspberrypi-builder.nix") { };
-    in {
+    sdImage = {
       imageBaseName = "${config.networking.hostName}-sd-image";
 
-      firmwareSize = mkIf (!ubootEnabled) 200;
-      firmwarePartitionID = "0x${builtins.replaceStrings [ "-" "" ] cfg.firmwarePartitionUUID}";
+      firmwarePartitionID = "0x${builtins.replaceStrings [ "-" ] [ "" ] cfg.firmwarePartitionUUID}";
 
-      populateFirmwareCommands = ''
-        '${firmwareBuilder}' -d ./firmware -c '${configTxt}'
-      '' + optionalString (!ubootEnabled) ''
-        # This should probably be done by raspberrypi-builder.sh
-        cp -r ${pkgs.raspberrypifw}/share/raspberrypi/boot/overlays ./firmware
-        '${raspberryPiBuilder}' -c '${config.system.build.toplevel}' -d ./firmware
+      populateFirmwareCommands = let
+        copyFirmwareBuild = pkgs.buildPackages.callPackage copyFirmware { };
+      in ''
+        ${lib.escapeShellArg copyFirmwareBuild} firmware
       '';
-      populateRootCommands = optionalString ubootEnabled ''
-        mkdir -p ./files/boot
-        ${config.boot.loader.generic-extlinux-compatible.populateCmd} -c '${config.system.build.toplevel}' -d ./files/boot
+      populateRootCommands = ''
+        mkdir -p files/boot
+        ${config.boot.loader.generic-extlinux-compatible.populateCmd} \
+          -c ${lib.escapeShellArg config.system.build.toplevel} \
+          -d ./files/boot
       '';
     };
 
