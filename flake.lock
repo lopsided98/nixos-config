@@ -808,11 +808,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1729359078,
-        "narHash": "sha256-N2ZKo8BFm8ct5DlV+bueNMdYXA2DGDAE9tujChj6z1k=",
+        "lastModified": 1732761938,
+        "narHash": "sha256-zCDcJNGtatAiGXNIngv5WNqAV8mqrzDqxHhQ42++XXs=",
         "owner": "lopsided98",
         "repo": "zeus_audio",
-        "rev": "56a2ee6ee849a1ec44a0ed6e622086112f6bd534",
+        "rev": "7fe7c048c6e7212522991b5193b4c38ac6bac593",
         "type": "github"
       },
       "original": {
