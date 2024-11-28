@@ -166,10 +166,6 @@ in {
     };
 
     boot.loader = {
-      raspberryPi = {
-        inherit (cfg) version;
-        firmwareDir = firmwarePartitionMount;
-      };
       generic-extlinux-compatible.enable = true;
       grub.enable = false;
     };
