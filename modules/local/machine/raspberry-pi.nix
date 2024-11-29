@@ -6,7 +6,7 @@ let
   cfg = config.local.machine.raspberryPi;
 
   firmwarePartitionMount = "/boot/firmware";
-  configTxt = pkgs.writeText "config.txt" cfg.firmwareConfig;
+
   uboot =
     if cfg.version == 0 then
       pkgs.ubootRaspberryPiZero
@@ -79,6 +79,11 @@ let
 
     ${lib.escapeShellArg copyFirmwareHost} "$firmware"
   '';
+
+  configTxtFmt = pkgs.formats.iniWithGlobalSection {
+    listToValue = lib.strings.concatStringsSep ",";
+  };
+  configTxt = configTxtFmt.generate "config.txt" cfg.firmwareSettings;
 in {
   imports = singleton ./sd-image.nix;
 
@@ -99,8 +104,8 @@ in {
       '';
     };
 
-    firmwareConfig = lib.mkOption {
-      type = lib.types.lines;
+    firmwareSettings = lib.mkOption {
+      type = configTxtFmt.type;
       description = ''
         Extra options that will be appended to `${firmwarePartitionMount}/config.txt` file.
         For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
@@ -116,19 +121,20 @@ in {
       message = "Invalid firmware partition UUID: ${cfg.firmwarePartitionUUID}";
     } ];
 
-    local.machine.raspberryPi.firmwareConfig = mkBefore (''
-      # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-      # when attempting to show low-voltage or overtemperature warnings.
-      avoid_warnings=1
-      # U-Boot needs this to work, regardless of whether UART is actually used or not.
-      # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
-      # a requirement in the future.
-      enable_uart=1
-      kernel=u-boot.bin
-    '' + optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
+    local.machine.raspberryPi.firmwareSettings.globalSection = {
+      # Prevent the firmware from smashing the framebuffer setup done by the
+      # mainline kernel when attempting to show low-voltage or overtemperature
+      # warnings.
+      avoid_warnings = 1;
+      # U-Boot needs this to work, regardless of whether UART is actually used
+      # or not. Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see
+      # if this is still a requirement in the future.
+      enable_uart = 1;
+      kernel = "u-boot.bin";
+    } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
       # Boot in 64-bit mode.
-      arm_64bit=1
-    '');
+      arm_64bit = 1;
+    };
 
     # Raspberry Pi 0s and 1s are the only ARMv6 systems I have, so it makes
     # sense to optimize for them. More importantly, enabling ARMv6k avoids many

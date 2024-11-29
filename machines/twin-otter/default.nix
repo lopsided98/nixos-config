@@ -17,10 +17,10 @@ in {
     enable = true;
     version = 0;
     firmwarePartitionUUID = "87B7-6516";
-    firmwareConfig = ''
-      start_x=1
-      gpu_mem=128
-    '';
+    firmwareSettings.globalSection = {
+      start_x = 1;
+      gpu_mem = 128;
+    };
     enableWirelessFirmware = true;
   };
   local.profiles.minimal = true;

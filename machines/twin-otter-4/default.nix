@@ -12,9 +12,6 @@ with lib;
     enable = true;
     version = 4;
     firmwarePartitionUUID = "38CD-60D2";
-    firmwareConfig = ''
-      enable_uart=1
-    '';
     enableWirelessFirmware = true;
   };
 

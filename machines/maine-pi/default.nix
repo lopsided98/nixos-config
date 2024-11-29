@@ -17,10 +17,8 @@ with lib;
     enable = true;
     version = 0;
     firmwarePartitionUUID = "2A72-08BC";
-    firmwareConfig = ''
-      # Use the minimum amount of GPU memory
-      gpu_mem=16
-    '';
+    # Use the minimum amount of GPU memory
+    firmwareSettings.globalSection.gpu_mem = 16;
     enableWirelessFirmware = true;
   };
 
