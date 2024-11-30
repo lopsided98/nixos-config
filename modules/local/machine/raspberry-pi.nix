@@ -37,6 +37,12 @@ let
     "fixup_x.dat"
     "fixup_db.dat"
     "fixup_cd.dat"
+  ] ++ lib.optionals (cfg.version == 2 && pkgs.stdenv.hostPlatform.isAarch32) [
+    # Original 32-bit RPi 2
+    "bcm2709-rpi-2-b.dtb"
+  ] ++ lib.optionals (cfg.version == 2) [
+    # New 64-bit RPi 2 rev 1.2
+    "bcm2710-rpi-2-b.dtb"
   ] ++ lib.optionals (cfg.version == 4) [
     "start4.elf"
     "start4x.elf"
@@ -51,7 +57,7 @@ let
 
   copyFirmware = { coreutils }: let
     inputs = [ coreutils ];
-  in pkgs.writers.writeBash "raspberrypi-copy-firmware" ''
+  in pkgs.writers.writeBash "raspberry-pi-copy-firmware" ''
     set -eu -o pipefail
     export PATH=${lib.escapeShellArg (lib.makeBinPath inputs)}
 
@@ -171,9 +177,15 @@ in {
       '';
     };
 
-    boot.loader = {
-      generic-extlinux-compatible.enable = true;
-      grub.enable = false;
+    boot = {
+      loader = {
+        generic-extlinux-compatible.enable = true;
+        grub.enable = false;
+      };
+      initrd.availableKernelModules = [
+        # SD card
+        "mmc_block"
+      ];
     };
 
     hardware.firmware = mkIf cfg.enableWirelessFirmware [ pkgs.raspberrypiWirelessFirmware ];
