@@ -48,7 +48,7 @@
         # Ethernet
         "r8169"
       ];
-    
+
       luks.devices.root = {
         device = "/dev/disk/by-uuid/9911ded5-61bf-4cda-9c79-faf743799d90";
         # Supposed to increase performance of SSDs
@@ -87,7 +87,9 @@
 
   # System metrics logging
   local.services.telegraf = {
-    enable = true;
+    # Constantly wakes the system up. Still testing, so don't remove the config
+    # yet.
+    enable = false;
     influxdb = {
       tlsCertificate = ./telegraf/influxdb.pem;
       tlsKeySecret = secrets.p-3400.telegraf.influxdbTlsKey;
@@ -102,6 +104,26 @@
       { type = "rsa"; bits = 4096; path = secrets.getSystemdSecret "sshd" secrets.p-3400.ssh.hostRsaKey; }
       { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.p-3400.ssh.hostEd25519Key; }
     ];
+  };
+
+  # Suspend system when idle
+  services.logind.extraConfig = ''
+    IdleAction=suspend
+    IdleActionSec=10
+  '';
+
+  # Wake up on unicast packets
+  systemd.network.links."30-ethernet-wol" = {
+    matchConfig.MACAddress = "44:8a:5b:ce:23:c6";
+    linkConfig = {
+      # Need to duplicate settings from 99-default.link, because multiple
+      # matching files are not merged.
+      NamePolicy = "keep kernel database onboard slot path";
+      AlternativeNamesPolicy = "database onboard slot path";
+      MACAddressPolicy = "persistent";
+
+      WakeOnLan = "unicast";
+    };
   };
 
   # Enable SSD TRIM

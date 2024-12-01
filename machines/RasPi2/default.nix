@@ -66,7 +66,6 @@ in {
       "192.168.1.1"
       "odroid-xu4.benwolsieffer.com"
       "hp-z420.benwolsieffer.com"
-      "p-3400.benwolsieffer.com"
       "rock64.benwolsieffer.com"
       "rockpro64.benwolsieffer.com"
     ];
