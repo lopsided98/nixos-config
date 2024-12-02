@@ -167,7 +167,7 @@
     extraConfig = ''
       CanonicalizeHostname yes
       CanonicalizeMaxDots 0
-      CanonicalDomains benwolsieffer.com thayer.dartmouth.edu cs.dartmouth.edu
+      CanonicalDomains benwolsieffer.com
 
       Host HP-Z420
         Port 4245
@@ -186,12 +186,6 @@
 
       Host RockPro64
         Port 4247
-
-      Host *.cs.dartmouth.edu
-        User benwolsieffer
-
-      Host *.thayer.dartmouth.edu
-        User f002w9k
     '';
     knownHosts = {
       "[raspi2.benwolsieffer.com]:4242".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
