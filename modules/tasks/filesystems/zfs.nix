@@ -2,8 +2,9 @@
 { config, lib, pkgs, ... }: with lib; mkIf (config.boot.supportedFilesystems.zfs or false) (mkMerge [
   ({
     boot = {
+      # Use default LTS kernel
       # Lower priority than mkForce to allow devices to use custom kernels
-      kernelPackages = mkOverride 75 config.boot.zfs.package.latestCompatibleLinuxPackages;
+      kernelPackages = mkOverride 75 pkgs.linuxPackages;
       zfs = {
         # Recommended to be disabled to avoid potential corruption
         forceImportRoot = false;

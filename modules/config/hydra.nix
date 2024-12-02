@@ -12,13 +12,25 @@
     useSubstitutes = true;
   };
 
+  # ZFS dataset properties:
+  # atime=off
+  # compression=zstd
+  # recordsize=16K
   services.postgresql = {
-    package = pkgs.postgresql_13;
+    package = pkgs.postgresql_17;
     dataDir = "/var/db/postgresql-${config.services.postgresql.package.psqlSchema}";
     settings = {
       max_connections = 250;
       work_mem = "8MB";
-      shared_buffers = "512MB";
+      shared_buffers = "4GB";
+      # ZFS ARC defaults to 50% of RAM
+      effective_cache_size = "64GB";
+      # ZFS writes are atomic, so this is unnecessary
+      # See: https://wiki.postgresql.org/wiki/Full_page_writes
+      full_page_writes = "off";
+      # Useless with CoW
+      wal_init_zero = "off";
+      wal_recycle = "off";
     };
   };
 
