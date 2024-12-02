@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, runtimeShell }:
 
 stdenv.mkDerivation {
   pname = "aur-buildbot";
-  version = "2022-12-09";
+  version = "2024-10-17";
 
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "aur-buildbot";
-    rev = "b1385268c24551ceb509bb4ed21a0ff8dafd3560";
-    hash = "sha256-mG2KJ4mKgEfxYXTZNIUvogdJJ6QmEwwk0ecXRtsvGS4=";
+    rev = "14cbd4c402e496e1ce4ea174aebdeb43e98c0c57";
+    hash = "sha256-SjBVWfUHlYaL+69LBSRVxtlxILs536GKrNa2G8rLBDo=";
   };
 
   installPhase = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace "$out/worker/build-package" \
-      --replace /bin/bash "${stdenv.shell}" \
+      --replace /bin/bash "${runtimeShell}" \
   '';
 
   # Don't patch the docker entrypoint script
