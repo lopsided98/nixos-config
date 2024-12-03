@@ -125,6 +125,19 @@ in {
             UseDNS = false;
           };
           ipv6AcceptRAConfig.UseDNS = false;
+
+          # p-3400 suspends when not in use, so it can't respond to ARP
+          # requests. Add a static ARP table entry to allow other devices to
+          # send packets to it and wake it up.
+          extraConfig = ''
+            [Neighbor]
+            Address=${net.cidr.host 4 cfg.ipv4Subnet}
+            LinkLayerAddress=44:8a:5b:ce:23:c6
+
+            [Neighbor]
+            Address=${net.cidr.host "::468a:5bff:fece:23c6" cfg.ipv6SlaacPrefix}
+            LinkLayerAddress=44:8a:5b:ce:23:c6
+          '';
         }
         (if interfaceCfg.ipv4Address == null then {
           DHCP = if interfaceCfg.ipv6DelegatedPrefix == null then "ipv4" else "yes";
