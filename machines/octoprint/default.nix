@@ -19,19 +19,26 @@ in {
     } ];
   };
 
-  boot.loader = {
-    grub.enable = false;
-    generic-extlinux-compatible = {
-      enable = true;
-      copyKernels = false;
+  boot = {
+    loader = {
+      grub.enable = false;
+      generic-extlinux-compatible = {
+        enable = true;
+        copyKernels = false;
+      };
     };
-  };
 
-  # This driver controls the onboard USB hub reset line, but somehow this
-  # doesn't work right. As soon as this driver is loaded, all the USB devices
-  # disconnect.
-  # See: https://lore.kernel.org/lkml/ZMrFb7H1ynwwBSCA@Dell-Inspiron-15/T/#t
-  boot.blacklistedKernelModules = [ "onboard-usb-dev" ];
+    initrd.availableKernelModules = [
+      # SD card
+      "mmc_block"
+    ];
+
+    # This driver controls the onboard USB hub reset line, but somehow this
+    # doesn't work right. As soon as this driver is loaded, all the USB devices
+    # disconnect.
+    # See: https://lore.kernel.org/lkml/ZMrFb7H1ynwwBSCA@Dell-Inspiron-15/T/#t
+    blacklistedKernelModules = [ "onboard-usb-dev" ];
+  };
 
   hardware.enableRedistributableFirmware = true;
   local.networking = {
