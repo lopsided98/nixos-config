@@ -11,9 +11,10 @@
           section = builtins.head sections;
           subsections = builtins.tail sections;
           subsection = lib.concatStringsSep "." subsections;
-        in if subsections == [ ]
-        then name
-        else "${section} ${subsection}";
+        in if subsections == [ ] then
+          name
+        else
+          "${section} ${subsection}";
 
       # generation for multiple ini values
       mkKeyValue = k: v:
@@ -36,10 +37,11 @@
     in
       toINI_ (flattenAttrs attrs);
 
-  settingsFormat = {
-    type = with lib.types; let
-      iniAtom = (pkgs.formats.ini { }).type/*attrsOf*/.functor.wrapped/*attrsOf*/.functor.wrapped;
-    in attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)));
+  settingsFormat = with lib.types; let
+    atom = (pkgs.formats.gitIni { }).lib.types.atom;
+  in {
+    type = attrsOf (attrsOf (either atom (attrsOf atom)));
+    lib.types.atom = atom;
     generate = name: value: pkgs.writeText name (toConf value);
   };
 in {
