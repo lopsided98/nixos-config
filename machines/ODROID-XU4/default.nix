@@ -25,6 +25,11 @@
         copyKernels = false;
       };
     };
+
+    initrd.availableKernelModules = [
+      # SD card
+      "mmc_block"
+    ];
   };
 
   local.networking.home.interfaces.enu1.ipv4Address = "192.168.1.3/24";
