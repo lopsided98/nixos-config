@@ -96,9 +96,25 @@ in {
         "e1000e"
       ];
 
-      luks.devices.root = {
-        device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
-        crypttabExtraOpts = [ "tries=0" ];
+      luks.devices = {
+        root = {
+          device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
+          crypttabExtraOpts = [ "tries=0" ];
+        };
+        root-metadata-1 = {
+          device = "/dev/disk/by-uuid/0e4b0dca-3609-4fa9-8328-53184883454e";
+          # Supposed to increase performance of SSDs
+          bypassWorkqueues = true;
+          allowDiscards = true;
+          crypttabExtraOpts = [ "tries=0" ];
+        };
+        root-metadata-2 = {
+          device = "/dev/disk/by-uuid/bab48222-f09d-400b-973f-021140721467";
+          # Supposed to increase performance of SSDs
+          bypassWorkqueues = true;
+          allowDiscards = true;
+          crypttabExtraOpts = [ "tries=0" ];
+        };
       };
 
       systemd = {
