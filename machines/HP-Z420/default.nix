@@ -44,19 +44,14 @@ in {
       fsType = "zfs";
     };
 
-    "/home" = {
-      device = "root/data/home";
+    "/var/db/postgresql-17" = {
+      device = "root/data/var/postgresql-17";
       fsType = "zfs";
     };
 
-    "/mnt/ssd" = {
-      device = "/dev/disk/by-uuid/85ed6ea7-de86-4fbd-9dfb-f2f7d83e1539";
-      fsType = "ext4";
-    };
-
-    "/tmp" = {
-      device = "/mnt/ssd/tmp";
-      options = [ "bind" ];
+    "/home" = {
+      device = "root/data/home";
+      fsType = "zfs";
     };
 
     "/boot/esp" = {
@@ -101,18 +96,9 @@ in {
         "e1000e"
       ];
 
-      luks.devices = {
-        root = {
-          device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
-          crypttabExtraOpts = [ "tries=0" ];
-        };
-        ssd = {
-          device = "/dev/disk/by-uuid/aee09f7d-1d4b-42ea-8058-82272d3f8400";
-          # Supposed to increase performance of SSDs
-          bypassWorkqueues = true;
-          allowDiscards = true;
-          crypttabExtraOpts = [ "tries=0" ];
-        };
+      luks.devices.root = {
+        device = "/dev/disk/by-uuid/0deb8a8e-13ea-4d58-aaa8-aaf444385843";
+        crypttabExtraOpts = [ "tries=0" ];
       };
 
       systemd = {
@@ -145,6 +131,8 @@ in {
         decryptssh.enable = true;
       };
     };
+
+    tmp.useTmpfs = true;
   };
 
   hardware.cpu.intel.updateMicrocode = true;
