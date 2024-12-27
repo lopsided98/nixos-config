@@ -107,10 +107,10 @@
   };
 
   # Suspend system when idle
-  services.logind.extraConfig = ''
+  /*services.logind.extraConfig = ''
     IdleAction=suspend
-    IdleActionSec=10
-  '';
+    IdleActionSec=60
+  '';*/
 
   # Wake up on unicast packets
   systemd.network.links."30-ethernet-wol" = {
