@@ -17,6 +17,7 @@
 , qgroundcontrol
 , mission-planner
 , mutt
+, keepassxc
 }: let
   nixGL = ((import (fetchFromGitHub {
     owner = "nix-community";
@@ -94,5 +95,6 @@ in buildEnv {
       file = "bin/mission-planner";
     })
     mutt
+    keepassxc
   ];
 }
