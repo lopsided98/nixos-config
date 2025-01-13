@@ -60,7 +60,7 @@
       in ''
         export ${var}=${valStr}
       '') env)}
-      exec -a "\$0" '${nixGL}'/bin/nixGLIntel ${lib.escapeShellArg "${pkg}/${file}"} "\$@"
+      exec -a "$0" '${nixGL}'/bin/nixGLIntel ${lib.escapeShellArg "${pkg}/${file}"} "$@"
     '';
 
     wrapper = runCommandLocal ("${lib.getName pkg}-wrapper") {
