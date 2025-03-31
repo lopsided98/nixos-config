@@ -1,5 +1,5 @@
 { config, lib, secrets, pkgs, ... }: let
-  socketDir = "/var/run/grafana";
+  socketDir = "/run/grafana";
   socket = "${socketDir}/grafana.sock";
 in {
   services.grafana = {
@@ -51,6 +51,7 @@ in {
 
   services.nginx = {
     enable = true;
+    recommendedProxySettings = true;
     virtualHosts."grafana.benwolsieffer.com" = {
       http2 = true;
 
@@ -58,7 +59,14 @@ in {
       sslCertificate = ./server.pem;
       sslCertificateKey = secrets.getSystemdSecret "grafana-nginx" secrets.grafana.sslCertificateKey;
 
-      locations."/".proxyPass = "http://unix:${socket}";
+      locations = {
+        "/".proxyPass = "http://unix:${socket}";
+
+        "/api/live/" = {
+          proxyPass = "http://unix:${socket}";
+          proxyWebsockets = true;
+        };
+      };
     };
   };
 
