@@ -432,16 +432,30 @@ let
   bit =
     let
       shift = n: x:
-        if n < 0
-        then x * math.pow 2 (-n)
+        if x == 0 then 0
+        else if n == 0 then x
+        else if n <= -64 then 0
+        else if n >= 64 then 0
+        else if n < 0 then
+          let
+            # Whether the sign bit will be set in the result
+            signBit = (and (bit (63 + n)) x) != 0;
+            # Mask input so sign bit will be clear after shifting
+            xMasked = (mask (63 + n) x);
+            m = math.pow2 (-n);
+          in xMasked * m + (if signBit then bit 63 else 0)
         else
           let
-            safeDiv = n: d: if d == 0 then 0 else n / d;
-            d = math.pow 2 n;
-          in
-            if x < 0
-            then not (safeDiv (not x) d)
-            else safeDiv x d;
+            # pow2 overflows with n == 63, so split operation into two shifts
+            n' = if n == 63 then 62 else n;
+            x' = if n == 63 then shift 1 x else x;
+
+            # Whether the sign bit is set in the input
+            signBit = (and (bit 63) x') != 0;
+            # Input with sign bit cleared
+            xMasked = mask 63 x';
+            d = math.pow2 n';
+          in xMasked / d + (if signBit then bit (63 - n') else 0);
 
       left = n: shift (-n);
 
@@ -455,7 +469,16 @@ let
 
       not = xor (-1);
 
-      mask = n: and (left n 1 - 1);
+      mask = n: let
+        m =
+          if n == 63 then 9223372036854775807
+          else if n == 64 then -1
+          else (math.pow2 n) - 1;
+      in and m;
+
+      bit = n:
+        if n == 63 then (-9223372036854775807 - 1)
+        else math.pow2 n;
     in
       {
         inherit left right and or xor not mask;
@@ -474,8 +497,19 @@ let
 
     clamp = a: b: c: max a (min b c);
 
-    # Calculates base^exp, but careful, this overflows for results > 2^62
-    pow = base: exp: builtins.foldl' (a: x: x * a) 1 (builtins.genList (_: base) exp);
+    # Calculates 2^exp, but careful, this overflows for results > 2^62
+    pow2 = exp: {
+      # Lookup table for common values
+      "0" = 1;
+      "1" = 2;
+      "2" = 4;
+      "4" = 16;
+      "8" = 256;
+      "16" = 65536;
+      "32" = 4294967296;
+      "48" = 281474976710656;
+      "62" = 4611686018427387904;
+    }.${toString exp} or ((pow2 ((exp + 1) / 2)) * (pow2 (exp / 2)));
   };
 
   parsers =
