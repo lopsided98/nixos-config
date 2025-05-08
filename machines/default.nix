@@ -33,6 +33,7 @@ in lib.filterAttrs (m: c: c != null) ({
   "Rock64" = callMachine ./Rock64 "aarch64-linux";
   "RockPro64" = callMachine ./RockPro64 "aarch64-linux";
   "Roomba" = callMachine ./Roomba "aarch64-linux";
+  "rpi-efi" = callMachine ./rpi-efi "armv6l-linux";
   "twin-otter" = callMachine ./twin-otter "armv6l-linux";
   "twin-otter-4" = callMachine ./twin-otter-4 "aarch64-linux";
 } //
