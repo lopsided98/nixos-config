@@ -8,6 +8,8 @@
     extraConfig = ''
       store_uri = daemon?secret-key=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
       binary_cache_secret_key_file=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
+      # Prevent: "Use of uninitialized value $numThreads in numeric gt (>)"
+      compress_num_threads = 0
     '';
     useSubstitutes = true;
   };
