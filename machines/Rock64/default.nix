@@ -13,9 +13,17 @@ in {
     size = 1024; # 1 GiB
   };
 
-  boot.loader = {
-    grub.enable = false;
-    generic-extlinux-compatible.enable = true;
+  boot = {
+    loader = {
+      grub.enable = false;
+      generic-extlinux-compatible.enable = true;
+    };
+
+    initrd.availableKernelModules = [
+      # SD/eMMC
+      "dw_mmc_rockchip"
+      "mmc_block"
+    ];
   };
 
   local.networking.home.interfaces.${interface}.ipv4Address = "192.168.1.6/24";
