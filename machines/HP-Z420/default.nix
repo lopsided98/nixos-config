@@ -157,30 +157,8 @@ in {
     initrdInterfaces.eno1.ipv4Address = "${address}/24";
   };
 
-  # local.networking.vpn.dartmouth.enable = true;
-
-  /*local.networking.vpn.home.tap.client = {
-    enable = true;
-    macAddress = "a0:d3:c1:20:da:3f";
-    certificate = ./vpn/home/client.crt;
-    privateKeySecret = secrets.HP-Z420.vpn.home.privateKey;
-  };*/
   systemd.network = {
     enable = true;
-
-    # Dartmouth network
-    /*networks."50-${interface}" = {
-      name = interface;
-      DHCP = "ipv4";
-    };
-
-    networks."50-vpn-home-tap-client" = {
-      address = [ "${address}/24" ];
-      extraConfig = ''
-        [IPv6AcceptRA]
-        UseDNS=false
-      '';
-    };*/
 
     # Use physical interface MAC on bridge to get same IPs
     netdevs."50-${interface}".netdevConfig = {

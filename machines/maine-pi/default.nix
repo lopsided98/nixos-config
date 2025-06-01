@@ -57,7 +57,6 @@ with lib;
       DHCP = "ipv4";
       networkConfig.MulticastDNS = "yes";
     };
-    networks."50-vpn-home-tap-client".DHCP = "ipv4";
   };
   networking.firewall.interfaces.wlan0.allowedUDPPorts = [ 5353 /* mDNS */ ];
 
