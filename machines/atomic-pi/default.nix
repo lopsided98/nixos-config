@@ -69,6 +69,7 @@ in {
 
   local.networking.home.interfaces.${interface} = {
     ipv4Address = "${address}/24";
+    duidIdentifier = "59:2b:f1:e2:f2:d5:81:5c";
     initrd = true;
   };
 

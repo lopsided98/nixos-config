@@ -34,6 +34,16 @@ let
         description = "IPv6 prefix delegation to request using DHCPv6";
       };
 
+      duidIdentifier = mkOption {
+        type = types.nullOr (types.strMatching "([[:xdigit:]]{2}:){7}[[:xdigit:]]{2}");
+        default = null;
+        description = ''
+          DUID-EN identifier portion. 8 hexadecimal bytes separated by colons.
+          If not specified, it will be generated from /etc/machine-id. Set this
+          to ensure the same DUID is used in the initrd as the normal system.
+        '';
+      };
+
       ipv4Forwarding = mkOption {
         type = types.bool;
         default = false;
@@ -157,6 +167,16 @@ in {
             # to delegate a prefix.
             WithoutRA = "solicit";
             PrefixDelegationHint = interfaceCfg.ipv6DelegatedPrefix;
+          };
+        })
+        (mkIf (interfaceCfg.duidIdentifier != null) {
+          dhcpV4Config = {
+            DUIDType = "vendor";
+            DUIDRawData = "00:00:ab:11:" + interfaceCfg.duidIdentifier;
+          };
+          dhcpV6Config = {
+            DUIDType = "vendor";
+            DUIDRawData = "00:00:ab:11:" + interfaceCfg.duidIdentifier;
           };
         })
         (mkIf (interfaceCfg.ipv4Forwarding) {
