@@ -441,7 +441,7 @@ let
             # Whether the sign bit will be set in the result
             signBit = (and (bit (63 + n)) x) != 0;
             # Mask input so sign bit will be clear after shifting
-            xMasked = (mask (63 + n) x);
+            xMasked = mask (63 + n) x;
             m = math.pow2 (-n);
           in xMasked * m + (if signBit then bit 63 else 0)
         else
@@ -1141,11 +1141,14 @@ let
           }
           else bit.right i x;
 
+    # ones :: (ip | mac | integer) -> (ip | mac | integer)
+    ones = target: coerce target ({ ipv6 = { a = 4294967295; b = 4294967295; c = 4294967295; d = 4294967295; }; });
+
     # shadow :: integer -> (ip | mac | integer) -> (ip | mac | integer)
-    shadow = n: a: and (right n (left n (coerce a (-1)))) a;
+    shadow = n: a: and (right n (left n (ones a))) a;
 
     # coshadow :: integer -> (ip | mac | integer) -> (ip | mac | integer)
-    coshadow = n: a: and (not (right n (left n (coerce a (-1))))) a;
+    coshadow = n: a: and (not (right n (left n (ones a)))) a;
 
     # coerce :: (ip | mac | integer) -> (ip | mac | integer) -> (ip | mac | integer)
     coerce = target: value:
@@ -1286,7 +1289,7 @@ let
       length = cidr: cidr.length;
 
       # netmask :: cidr -> ip
-      netmask = cidr: arithmetic.coshadow cidr.length (arithmetic.coerce cidr.base (-1));
+      netmask = cidr: arithmetic.coshadow cidr.length (arithmetic.ones cidr.base);
 
       # size :: cidr -> integer
       size = cidr: (if cidr.base ? ipv6 then 128 else 32) - cidr.length;
