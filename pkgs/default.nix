@@ -1,6 +1,4 @@
 final: prev: with prev.lib; {
-  aur-buildbot = final.callPackage ./aur-buildbot {};
-
   dnsupdate = final.python3Packages.callPackage ./dnsupdate { };
 
   hacker-hats = final.callPackage ./hacker-hats {};

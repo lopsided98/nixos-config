@@ -7,8 +7,6 @@
     ./system/boot/initrd-tinyssh.nix
     ./system/boot/initrd-decryptssh.nix
     ./system/boot/systemd-notify-failed.nix
-    ./services/continuous-integration/aur-buildbot/worker.nix
-    ./services/continuous-integration/aur-buildbot/master.nix
     ./services/hardware/freefb.nix
     ./services/networking/dnsupdate.nix
     ./services/networking/doorman.nix
