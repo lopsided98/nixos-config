@@ -10,7 +10,7 @@ in {
 
     downloadDir = mkOption {
       type = types.str;
-      default = "/mnt/backup/data/torrents";
+      default = "/var/lib/torrents";
       description = ''
         Directory to store downloaded files.
       '';
