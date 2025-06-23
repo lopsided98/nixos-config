@@ -71,8 +71,12 @@ in {
       };
     };
 
-    kernelModules = [ "kvm-intel" ];
+    # VFIO/PCI Passthrough
     kernelParams = [ "intel_iommu=on" ];
+    # These modules must come before early modesetting
+    kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" ];
+    # Quadro K4000
+    extraModprobeConfig = "options vfio-pci ids=10de:2486,10de:228b";
 
     initrd = {
       availableKernelModules = [
@@ -213,6 +217,36 @@ in {
     enable = true;
     downloadDir = "/var/lib/torrents";
   };
+
+  # Libvirt
+  virtualisation.libvirtd = {
+    enable = true;
+    onShutdown = "shutdown";
+    qemu = {
+      runAsRoot = false;
+      swtpm.enable = true;
+      ovmf.packages = [ pkgs.OVMFFull.fd ];
+    };
+    hooks.qemu.windows-11-isolate-cpus = "${pkgs.writeShellScript "windows-11-isolate-cpus.sh" ''
+      object="$1"
+      command="$2"
+
+      if [ "$object" != "Windows-11"]; then
+        exit 0
+      fi
+
+      if [ "$command" = "started" ]; then
+          ${pkgs.systemd}/bin/systemctl set-property --runtime -- system.slice AllowedCPUs=0-3,8-11
+          ${pkgs.systemd}/bin/systemctl set-property --runtime -- user.slice AllowedCPUs=0-3,8-11
+          ${pkgs.systemd}/bin/systemctl set-property --runtime -- init.scope AllowedCPUs=0-3,8-11
+      elif [ "$command" = "release" ]; then
+          ${pkgs.systemd}/bin/systemctl set-property --runtime -- system.slice AllowedCPUs=
+          ${pkgs.systemd}/bin/systemctl set-property --runtime -- user.slice AllowedCPUs=
+          ${pkgs.systemd}/bin/systemctl set-property --runtime -- init.scope AllowedCPUs=
+      fi
+    ''}";
+  };
+  users.users.ben.extraGroups = [ "libvirtd" ];
 
   boot.zfs = {
     extraPools = [ "backup" "backup2" ];
