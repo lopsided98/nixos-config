@@ -14,7 +14,7 @@
 
   swapDevices = lib.singleton {
     device = "/var/lib/swap";
-    size = 1024; # 1 GiB
+    size = 4096; # 4 GiB
   };
 
   boot = {
@@ -59,8 +59,15 @@
     cp '${libreElecFirmware}'/{BCM4359*.hcd,brcmfmac4359-sdio*}  "$out/lib/firmware/brcm"
   '');
 
-  # Ethernet
-  local.networking.home.interfaces.end0.ipv4Address = "192.168.1.7/24";
+  # Ethernet/WiFi
+  local.networking = {
+    home.interfaces.end0.ipv4Address = "192.168.1.7/24";
+    wireless.home = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
+  };
+  systemd.network.wait-online.anyInterface = true;
 
   networking = {
     hostName = "RockPro64";
@@ -91,58 +98,67 @@
     };
   };
 
-  /*local.services.backup = {
-    server = {
-      enable = true;
-      device = "/dev/disk/by-uuid/86056ca8-3d20-4bbe-90f6-e7ec1f837c79";
-    };
-    sanoid.enable = true;
-    syncthing = {
-      virtualHost = "syncthing.rockpro64.benwolsieffer.com";
-      certificate = ./syncthing/cert.pem;
-      certificateKeySecret = secrets.RockPro64.syncthing.certificateKey;
-      httpsCertificate = ./syncthing/https-cert.pem;
-      httpsCertificateKeySecret = secrets.RockPro64.syncthing.httpsCertificateKey;
-    };
-  };
-
-  services.sanoid = {
-    datasets = {
-      # Each backup node takes its own snapshots of data
-      "backup/data" = {
-        use_template = [ "backup" ];
-        autosnap = true;
-        recursive = true;
-        process_children_only = true;
-      };
-      # Prune all backups with one rule
-      "backup/backups" = {
-        use_template = [ "backup" ];
-        recursive = true;
-        process_children_only = true;
-      };
-    };
-  };
-
-  services.syncoid = let
-    remote = "backup@hp-z420.benwolsieffer.com";
-  in {
-    commonArgs = [ "--sshport" "4245" ];
-    commands = {
-      "backup/backups/Dell-Inspiron-15" = {
-        target = "${remote}:backup/backups/Dell-Inspiron-15";
-        recursive = true;
-        extraArgs = [ "--skip-parent" ];
-      };
-      "backup/backups/P-3400" = {
-        target = "${remote}:backup/backups/P-3400";
-        recursive = true;
-      };
-    };
-  };*/
-
   # Enable SD card TRIM
   services.fstrim.enable = true;
+
+  nixpkgs.overlays = lib.singleton (final: prev: {
+    qt6 = prev.qt6.overrideScope (qtFinal : qtPrev: {
+      qtbase = qtPrev.qtbase.overrideAttrs ({
+        buildInputs ? [],
+        cmakeFlags ? [], ...
+      }: {
+        buildInputs = buildInputs ++ [
+          pkgs.libgbm
+        ];
+      });
+    });
+
+    ffmpeg = prev.ffmpeg.overrideAttrs ({
+      patches ? [], 
+      buildInputs ? [],
+      configureFlags ? [], ...
+    }: {
+      patches = patches ++ [
+        # v4l2-request
+        (pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/6239a5f89647da5e286c478ca73a17c636bff273/packages/multimedia/ffmpeg/patches/v4l2-request/ffmpeg-001-v4l2-request.patch";
+          hash = "sha256-YuPB74ktoMIkplGkqSdkqjH5CtcrorSh451FGwnN5WA=";
+        })
+        # v4l2-drmprime
+        (pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/LibreELEC/LibreELEC.tv/6239a5f89647da5e286c478ca73a17c636bff273/packages/multimedia/ffmpeg/patches/v4l2-drmprime/ffmpeg-001-v4l2-drmprime.patch";
+          hash = "sha256-MTtWEUAc1BckE3G9TCT4jEapAomKOER7Tl6392fflsw=";
+        })
+      ];
+
+      buildInputs = buildInputs ++ [
+        pkgs.udev
+      ];
+
+      configureFlags = configureFlags ++ [
+        "--enable-v4l2-request"
+      ];
+    });
+  });
+
+  services.nixseparatedebuginfod.enable = true;
+
+  hardware.graphics.enable = true;
+  users.users.ben.extraGroups = [ "input" "video" ];
+
+  services.cage = {
+      enable = true;
+      user = "ben";
+      #program = "${pkgs.moonlight-qt}/bin/moonlight";
+  };
+
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+    #moonlight-embedded
+    glxinfo
+    gdb
+    kmscube
+  ];
 
   systemd.secrets.sshd = {
     units = [ "sshd@.service" ];
