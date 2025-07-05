@@ -63,6 +63,7 @@
       htop
       screen
       usbutils
+      killall
     ];
     # Disable packages that would be automatically added to systemPackages
     # A subset of these are re-added in the standard profile
