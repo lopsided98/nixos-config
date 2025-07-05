@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonApplication, requests, pyyaml
+{ lib, fetchFromGitHub, buildPythonApplication, setuptools, requests, pyyaml
 , networkInterfaceSupport ? true, netifaces ? null
 , webScrapingSupport ? false, beautifulsoup4 ? null }:
 
@@ -7,14 +7,17 @@ assert webScrapingSupport -> beautifulsoup4 != null;
 
 buildPythonApplication rec {
   pname = "dnsupdate";
-  version = "0.4";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lopsided98";
     repo = "dnsupdate";
-    rev = "f0168b423a1ee41e2ee04325657b7e08f21d30dc";
-    sha256 = "sha256-K519Jc5wY4wAoiM9kbzPJNu7EAVbR7Cs6vlOtFQRpyc=";
+    rev = version;
+    sha256 = "sha256-5inQReGp++8uQkuxsF4uDkvSlGO7to6S0ZA86EGt5i4=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ requests pyyaml ]
     ++ lib.optional webScrapingSupport beautifulsoup4
