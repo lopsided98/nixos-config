@@ -141,12 +141,23 @@
     });
   });
 
+  services.nixseparatedebuginfod.enable = true;
+
   hardware.graphics.enable = true;
-  users.users.ben.extraGroups = [ "input" "video" "render" ];
+  users.users.ben.extraGroups = [ "input" "video" ];
+
+  services.cage = {
+      enable = true;
+      user = "ben";
+      #program = "${pkgs.moonlight-qt}/bin/moonlight";
+  };
 
   environment.systemPackages = with pkgs; [
-    #moonlight-qt
-    moonlight-embedded
+    moonlight-qt
+    #moonlight-embedded
+    glxinfo
+    gdb
+    kmscube
   ];
 
   systemd.secrets.sshd = {
