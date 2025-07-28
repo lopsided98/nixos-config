@@ -92,6 +92,26 @@ in {
     configFile = secrets.getSystemdSecret "freefb" secrets.freefb.configFile;
   };
 
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    # Socket activation too slow for headless; start at boot instead.
+    socketActivation = false;
+    alsa.enable = true;
+    pulse.enable = true;
+  };
+  systemd.user.services.wireplumber.wantedBy = [ "default.target" ];
+  hardware.graphics = {
+    enable = true;
+    extraPackages = [ pkgs.intel-vaapi-driver ];
+  };
+  users.users.ben.extraGroups = [ "audio" "input" "video" "render" ];
+
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+    #moonlight-embedded
+  ];
+
   local.networking.vpn.home.wireGuard.server = {
     enable = true;
     uplinkInterface = interface;
