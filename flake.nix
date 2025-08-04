@@ -42,6 +42,9 @@
         ];
         config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
           "dropbox"
+          # used by dropbox, mostly unnecessary but a pain to remove
+          "firefox-bin"
+          "firefox-bin-unwrapped"
           "zoom"
         ];
       })) systems);
