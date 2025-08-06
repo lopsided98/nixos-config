@@ -45,7 +45,6 @@
           # used by dropbox, mostly unnecessary but a pain to remove
           "firefox-bin"
           "firefox-bin-unwrapped"
-          "zoom"
         ];
       })) systems);
 

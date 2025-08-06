@@ -11,7 +11,6 @@
 , qt5
 , nixVersions
 , dropbox
-, zoom-us
 , cura
 , prusa-slicer
 , cutecom
@@ -79,37 +78,12 @@
     name = "${pkg.name}-nixGLIntel";
     paths = [ wrapper pkg ];
   };
-
-  zoom-us-wrapped = symlinkJoin {
-    name = "${lib.getName zoom-us}-nixGLIntel";
-    paths = [ zoom-us ];
-    postBuild = ''
-      rm "$out/bin/zoom" "$out/opt/zoom/ZoomLauncher"
-
-      # ZoomLauncher is mostly useless and annoying; it overwrites
-      # LD_LIBRARY_PATH with some Zoom directories and then executes
-      # opt/zoom/zoom always from the package directory, making it impossible
-      # to create a wrapper. Replace it instead with a simple shell script that
-      # does the nixGL wrapping as well.
-      cat << EOF > "$out/opt/zoom/ZoomLauncher"
-      #!${runtimeShell}
-      export LD_LIBRARY_PATH=${lib.escapeShellArg zoom-us}/opt/zoom/Qt/lib:${lib.escapeShellArg zoom-us}/opt/zoom/cef:${lib.escapeShellArg zoom-us}/opt/zoom"\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}"
-      exec -a "\$0" '${nixGL}'/bin/nixGLIntel '${zoom-us}'/opt/zoom/zoom "\$@"
-      EOF
-
-      # Execute ZoomLauncher from the wrapped package
-      sed s:'${zoom-us}':"$out":g '${zoom-us}'/bin/zoom > "$out/bin/zoom"
-
-      chmod +x "$out/bin/zoom" "$out/opt/zoom/ZoomLauncher"
-    '';
-  };
 in buildEnv {
   name = "Dell-Inspiron-15-user-env";
   paths = [
     nixVersions.latest
     nixGL
     dropbox
-    zoom-us-wrapped
     (wrapNixGL {
       pkg = prusa-slicer;
       file = "bin/prusa-slicer";
