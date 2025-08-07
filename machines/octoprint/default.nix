@@ -68,6 +68,9 @@ in {
         pname = "OctoPrint-Filament-Sensor-Universal";
         version = "2.0.0";
 
+        pyproject = true;
+        build-system = [ python.pkgs.setuptools ];
+
         src = pkgs.fetchFromGitHub {
           owner = "lopsided98";
           repo = pname;
@@ -81,26 +84,12 @@ in {
         propagatedBuildInputs = [ pkgs.octoprint python.pkgs.libgpiod ];
       };
 
-      octoprint-portlister = with python.pkgs; let
-        inotify = buildPythonPackage rec {
-          pname = "inotify";
-          version = "unstable-2020-08-26";
-
-          src = pkgs.fetchFromGitHub {
-            owner = "dsoprea";
-            repo = "PyInotify";
-            rev = "f77596ae965e47124f38d7bd6587365924dcd8f7";
-            sha256 = "0mvddr5jlw7pql2mw9mcg3c9n5k4kp2b7yk7nqzaiz2irpi2wj2z";
-          };
-
-          # Tests fail for non-obvious reasons
-          doCheck = false;
-
-          checkInputs = [ nose ];
-        };
-      in buildPythonPackage rec {
+      octoprint-portlister = python.pkgs.buildPythonPackage rec {
         pname = "OctoPrint-PortLister";
         version = "0.1.10";
+
+        pyproject = true;
+        build-system = [ python.pkgs.setuptools ];
 
         src = pkgs.fetchFromGitHub {
           owner = "markwal";
@@ -112,7 +101,7 @@ in {
         # No tests
         doCheck = false;
 
-        propagatedBuildInputs = [ pkgs.octoprint inotify ];
+        propagatedBuildInputs = [ pkgs.octoprint python.pkgs.inotify ];
       };
     in p: [ octoprint-filament-sensor-universal octoprint-portlister ];
   };
