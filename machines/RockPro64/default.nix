@@ -82,6 +82,10 @@
   # Save/restore time
   services.fakeHwClock.enable = true;
 
+  # Power usage logging
+  local.services.rtlamr.enable = true;
+  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
+
   # System metrics logging
   local.services.telegraf = {
     enable = true;

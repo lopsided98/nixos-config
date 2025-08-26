@@ -80,10 +80,6 @@ in {
   # Radon sensor logging
   local.services.radonpy.enable = true;
 
-  # Power usage logging
-  local.services.rtlamr.enable = true;
-  boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
-
   # Fitbit synchronization
   services.freefb = {
     enable = true;
