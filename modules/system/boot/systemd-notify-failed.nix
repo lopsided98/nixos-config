@@ -14,7 +14,7 @@ in {
             default = false;
             description = "Whether to send an email when this service fails";
           };
-          config.unitConfig.OnFailure = mkIf (cfg.enable && config.notifyFailed) "notify-failed@%n.service";
+          config.unitConfig.OnFailure = mkIf (cfg.enable && config.notifyFailed) "notify-failed@${utils.escapeSystemdPath config.name}.service";
         }));
       };
       notifyFailed = {
