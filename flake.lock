@@ -405,11 +405,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1723400456,
-        "narHash": "sha256-FpbHMpK+WwvoT23oln3Jn0H86UBfBmqc/giuDxbNyKU=",
+        "lastModified": 1756258749,
+        "narHash": "sha256-eofwQ+EQUOPjofjOcIdUhBi40auMwrfY53M003KfjAo=",
         "owner": "lopsided98",
         "repo": "nix-sdr",
-        "rev": "047bf1ce027fa42dc06855a8a290c7657f563fcc",
+        "rev": "aa51f7bf1f95c68cd753d96013dab3728d76956c",
         "type": "github"
       },
       "original": {
