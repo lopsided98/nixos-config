@@ -9,11 +9,6 @@
     self.overlays.default
     freefb.overlay
     nix-sdr.overlay
-    (self: super: {
-      crossPackages = self.forceCross {
-        system = "x86_64-linux";
-      } config.nixpkgs.localSystem;
-    })
   ];
 
   lib = let

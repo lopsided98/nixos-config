@@ -14,4 +14,3 @@ manually to test changes using the `deploy.sh` script.
 Some interesting bits:
 * [Machine specific channels](machines/default.nix)
 * [A pragmatic way of handling secrets in the Nix store](https://github.com/lopsided98/nixos-secrets)
-* Selectively cross compile packages (search for `crossPackages`)
