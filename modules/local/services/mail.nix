@@ -41,7 +41,10 @@ in {
     users.groups.sendmail = {};
 
     security.sudo = {
-      enable = true;
+      # Since d30eeb3 (#429203), this causes infinite recursion when used with
+      # systemd-notify-failed. sudo is enabled anyway on all my machines, so
+      # whatever.
+      #enable = true;
       extraConfig = ''
         %sendmail ALL=(${nullmailerCfg.user}) NOPASSWD: ${pkgs.nullmailer}/bin/sendmail *
       '';
