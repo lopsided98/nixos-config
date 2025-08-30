@@ -13,7 +13,7 @@ in {
     };
 
     "/boot/efi" = {
-      device = "/dev/disk/by-uuid/5801-5386";
+      device = "/dev/disk/by-uuid/CF34-3252";
       fsType = "vfat";
     };
   };
@@ -44,7 +44,7 @@ in {
       ];
 
       luks.devices.root = {
-        device = "/dev/disk/by-uuid/b70eef17-f299-4f20-857f-1c04c5d316df";
+        device = "/dev/disk/by-uuid/4e7ada7f-1ed8-43c0-92e5-e682cf384dc9";
         allowDiscards = true;
         crypttabExtraOpts = [ "tries=0" ];
       };
