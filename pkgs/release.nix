@@ -24,11 +24,6 @@ in mapTestOn {
   nixos-secrets = fullSystems;
 
   python3Packages = {
-    aur = fullSystems;
-    memoizedb = fullSystems;
-    pyalpm = fullSystems;
-    xcgf = fullSystems;
-    xcpf = fullSystems;
   };
 
   linuxPackages_latest.tmon = fullSystems;

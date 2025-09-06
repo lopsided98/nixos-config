@@ -13,17 +13,6 @@ final: prev: with prev.lib; {
 
   pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
     (pyFinal: pyPrev: {
-      aur = pyFinal.callPackage ./python-modules/aur { };
-
-      memoizedb = pyFinal.callPackage ./python-modules/memoizedb { };
-
-      pyalpm = pyFinal.callPackage ./python-modules/pyalpm {
-        inherit (final) libarchive;
-      };
-
-      xcgf = pyFinal.callPackage ./python-modules/xcgf { };
-
-      xcpf = pyFinal.callPackage ./python-modules/xcpf { };
     })
   ];
 
