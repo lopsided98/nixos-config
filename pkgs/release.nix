@@ -23,9 +23,6 @@ in mapTestOn {
   tinyssh = fullSystems;
   nixos-secrets = fullSystems;
 
-  python3Packages = {
-  };
-
   linuxPackages_latest.tmon = fullSystems;
   linuxPackages.tmon = fullSystems;
 } // lib.optionalAttrs (lib.elem "armv7l-linux" hostSystems) {

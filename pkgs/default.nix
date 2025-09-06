@@ -11,11 +11,6 @@ final: prev: with prev.lib; {
 
   watchdog = final.callPackage ./watchdog { };
 
-  pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-    (pyFinal: pyPrev: {
-    })
-  ];
-
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = prev.gnupg.override { guiSupport = false; };
 
