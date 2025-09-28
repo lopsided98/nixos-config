@@ -38,13 +38,6 @@
     };
 
     tmp.cleanOnBoot = true;
-
-    # Enable GRUB serial console
-    loader.grub.extraConfig = ''
-      serial --unit=0 --speed=115200
-      terminal_input --append serial
-      terminal_output --append serial
-    '';
   };
 
   # All systems use USA Eastern Time
