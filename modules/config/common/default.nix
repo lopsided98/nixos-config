@@ -38,6 +38,9 @@
     };
 
     tmp.cleanOnBoot = true;
+
+    # No reason to have this enabled by default
+    bcache.enable = lib.mkDefault false;
   };
 
   # All systems use USA Eastern Time
