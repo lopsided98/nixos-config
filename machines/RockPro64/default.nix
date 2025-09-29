@@ -149,9 +149,7 @@
   services.fstrim.enable = true;
 
   systemd.secrets.sshd = {
-    units = [ "sshd@.service" ];
-    # Prevent first connection from failing due to decryption taking too long
-    lazy = false;
+    units = [ "sshd.service" ];
     files = mkMerge [
       (secrets.mkSecret secrets.RockPro64.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.RockPro64.ssh.hostEd25519Key {})

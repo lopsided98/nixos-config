@@ -73,9 +73,7 @@
 
   systemd.secrets = {
     sshd = {
-      units = [ "sshd@.service" ];
-      # Prevent first connection from failing due to decryption taking too long
-      lazy = false;
+      units = [ "sshd.service" ];
       files = lib.mkMerge [
         (secrets.mkSecret secrets.rpi-efi.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.rpi-efi.ssh.hostEd25519Key {})

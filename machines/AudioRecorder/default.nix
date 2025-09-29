@@ -259,8 +259,7 @@ in {
       files = secrets.mkSecret secrets.AudioRecorder.hostapd.wpaPsk {};
     };
     sshd = {
-      units = [ "sshd@.service" ];
-      lazy = false;
+      units = [ "sshd.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostRsaKey {})
         (secrets.mkSecret secrets.AudioRecorder.ssh."${hostName}".hostEd25519Key {})

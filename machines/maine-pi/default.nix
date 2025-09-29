@@ -116,9 +116,7 @@ with lib;
       units = [ "dnsupdate.service" ];
     };
     sshd = {
-      units = [ "sshd@.service" ];
-      # Prevent first connection from failing due to decryption taking too long
-      lazy = false;
+      units = [ "sshd.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.maine-pi.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.maine-pi.ssh.hostEd25519Key {})

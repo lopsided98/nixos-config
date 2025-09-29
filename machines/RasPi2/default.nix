@@ -91,9 +91,7 @@ in {
   ];*/
 
   systemd.secrets.sshd = {
-    units = [ "sshd@.service" ];
-    # Prevent first connection from failing due to decryption taking too long
-    lazy = false;
+    units = [ "sshd.service" ];
     files = lib.mkMerge [
       (secrets.mkSecret secrets.RasPi2.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.RasPi2.ssh.hostEd25519Key {})

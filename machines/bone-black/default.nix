@@ -41,9 +41,7 @@ with lib;
   ];
 
   systemd.secrets.sshd = {
-    units = [ "sshd@.service" ];
-    # Prevent first connection from failing due to decryption taking too long
-    lazy = false;
+    units = [ "sshd.service" ];
     files = mkMerge [
       (secrets.mkSecret secrets.bone-black.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.bone-black.ssh.hostEd25519Key {})

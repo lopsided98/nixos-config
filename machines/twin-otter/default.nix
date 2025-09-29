@@ -277,9 +277,7 @@ in {
 
   systemd.secrets = {
     sshd = {
-      units = [ "sshd@.service" ];
-      # Prevent first connection from failing due to decryption taking too long
-      lazy = false;
+      units = [ "sshd.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.twin-otter.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.twin-otter.ssh.hostEd25519Key {})

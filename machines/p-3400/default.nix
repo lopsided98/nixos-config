@@ -131,9 +131,7 @@
 
   boot.secrets = secrets.mkSecret secrets.p-3400.tinyssh.hostEd25519Key {};
   systemd.secrets.sshd = {
-    units = [ "sshd@.service" ];
-    # Prevent first connection from failing due to decryption taking too long
-    lazy = false;
+    units = [ "sshd.service" ];
     files = lib.mkMerge [
       (secrets.mkSecret secrets.p-3400.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.p-3400.ssh.hostEd25519Key {})
