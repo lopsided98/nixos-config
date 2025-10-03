@@ -43,7 +43,7 @@ with lib;
   ];
 
   systemd.secrets.sshd = {
-    units = [ "sshd.service" ];
+    units = [ "sshd-secrets.service" ];
     files = mkMerge [
       (secrets.mkSecret secrets.bone.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.bone.ssh.hostEd25519Key {})

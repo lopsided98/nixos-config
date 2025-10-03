@@ -319,7 +319,7 @@ with lib;
 
   systemd.secrets = {
     sshd = {
-      units = [ "sshd.service" ];
+      units = [ "sshd-secrets.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.twin-otter.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.twin-otter.ssh.hostEd25519Key {})

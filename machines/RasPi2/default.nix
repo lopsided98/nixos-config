@@ -91,7 +91,7 @@ in {
   ];*/
 
   systemd.secrets.sshd = {
-    units = [ "sshd.service" ];
+    units = [ "sshd-secrets.service" ];
     files = lib.mkMerge [
       (secrets.mkSecret secrets.RasPi2.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.RasPi2.ssh.hostEd25519Key {})

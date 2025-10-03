@@ -131,7 +131,7 @@
 
   boot.secrets = secrets.mkSecret secrets.p-3400.tinyssh.hostEd25519Key {};
   systemd.secrets.sshd = {
-    units = [ "sshd.service" ];
+    units = [ "sshd-secrets.service" ];
     files = lib.mkMerge [
       (secrets.mkSecret secrets.p-3400.ssh.hostRsaKey {})
       (secrets.mkSecret secrets.p-3400.ssh.hostEd25519Key {})

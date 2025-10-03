@@ -130,7 +130,7 @@ in {
       files = secrets.mkSecret secrets.freefb.configFile { user = "freefb"; };
     };
     sshd = {
-      units = [ "sshd.service" ];
+      units = [ "sshd-secrets.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.atomic-pi.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.atomic-pi.ssh.hostEd25519Key {})
