@@ -116,7 +116,7 @@ with lib;
       units = [ "dnsupdate.service" ];
     };
     sshd = {
-      units = [ "sshd-secrets.service" ];
+      units = [ "sshd-keygen.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.maine-pi.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.maine-pi.ssh.hostEd25519Key {})

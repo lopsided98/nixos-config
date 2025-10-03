@@ -48,7 +48,7 @@ with lib;
 
   systemd.secrets = {
     sshd = {
-      units = [ "sshd-secrets.service" ];
+      units = [ "sshd-keygen.service" ];
       files = mkMerge [
         (secrets.mkSecret secrets.Roomba.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.Roomba.ssh.hostEd25519Key {})

@@ -73,7 +73,7 @@
 
   systemd.secrets = {
     sshd = {
-      units = [ "sshd-secrets.service" ];
+      units = [ "sshd-keygen.service" ];
       files = lib.mkMerge [
         (secrets.mkSecret secrets.rpi-efi.ssh.hostRsaKey {})
         (secrets.mkSecret secrets.rpi-efi.ssh.hostEd25519Key {})
