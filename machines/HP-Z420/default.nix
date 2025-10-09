@@ -186,6 +186,11 @@ in {
     hostId = "5e9c1aa3";
   };
 
+  environment.systemPackages = with pkgs; [
+    pciutils
+    nvme-cli
+  ];
+
   # System metrics logging
   local.services.telegraf = {
     enable = true;
@@ -247,6 +252,15 @@ in {
     ''}";
   };
   users.users.ben.extraGroups = [ "libvirtd" ];
+
+  services.lvm = {
+    dmeventd.enable = true;
+    boot.thin.enable = true;
+  };
+  # Automatic extension of LVM thin pools
+  environment.etc."lvm/lvm.conf".text = ''
+     activation/thin_pool_autoextend_threshold = 90
+  '';
 
   boot.zfs = {
     extraPools = [ "backup" "backup2" ];
