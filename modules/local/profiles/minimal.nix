@@ -27,8 +27,7 @@ with lib;
       gnupg = super.gnupg.override { withPcsc = false; };
       wpa_supplicant = super.wpa_supplicant.override { withPcsclite = false; };
 
-      nix = super.nix.override { withAWS = false; };
-      nixUnstable = super.nixUnstable.override { withAWS = false; };
+      nix = super.nix.overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; });
 
       # Prevent building two versions of glibcLocales
       # This seems to break qemu
