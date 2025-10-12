@@ -215,15 +215,6 @@ in {
   # Web server for sharing publicly accessible files
   local.services.publicFiles.enable = true;
 
-  /*modules.doorman = {
-    enable = true;
-    device = "/dev/doorman";
-  };
-
-  services.udev.extraRules = ''
-    SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", SYMLINK+="doorman"
-  '';*/
-
   # Deluge torrent client
   local.services.deluge = {
     enable = true;
