@@ -118,6 +118,13 @@ in {
           allowDiscards = true;
           crypttabExtraOpts = [ "tries=0" ];
         };
+        data = {
+          device = "/dev/disk/by-uuid/4aa3665c-d3f1-4e03-923c-7214f4e01cf8";
+          # Supposed to increase performance of SSDs
+          bypassWorkqueues = true;
+          allowDiscards = true;
+          crypttabExtraOpts = [ "tries=0" ];
+        };
       };
 
       systemd = {
