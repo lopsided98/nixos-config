@@ -230,7 +230,6 @@ in {
     qemu = {
       runAsRoot = false;
       swtpm.enable = true;
-      ovmf.packages = [ pkgs.OVMFFull.fd ];
     };
     hooks.qemu.windows-11-isolate-cpus = "${pkgs.writeShellScript "windows-11-isolate-cpus.sh" ''
       object="$1"
