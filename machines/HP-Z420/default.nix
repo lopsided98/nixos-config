@@ -73,10 +73,6 @@ in {
 
     # VFIO/PCI Passthrough
     kernelParams = [ "intel_iommu=on" ];
-    # These modules must come before early modesetting
-    kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" ];
-    # Quadro K4000
-    extraModprobeConfig = "options vfio-pci ids=10de:2486,10de:228b";
 
     initrd = {
       availableKernelModules = [
