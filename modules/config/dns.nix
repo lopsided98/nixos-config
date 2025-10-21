@@ -20,7 +20,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        60         ; Serial
+                        61         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -62,7 +62,7 @@
     { name = "arch"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "hydra"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
     { name = "files"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
-    { name = "doorman"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
+    { name = "photos"; class = "IN"; type = "CNAME"; data = "hp-z420"; }
 
     # Rock64
     { name = "rock64"; class = "IN"; type = "A"; data = externalIPv4; }
