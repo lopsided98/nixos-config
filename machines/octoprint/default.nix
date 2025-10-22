@@ -1,9 +1,6 @@
 { lib, config, pkgs, secrets, ... }: 
 with lib;
-let
-  videoDevice = "/dev/v4l/by-id/usb-046d_HD_Webcam_C525_6498ABA0-video-index0";
-  videoSystemdDevice = "dev-v4l-by\\x2did-usb\\x2d046d_HD_Webcam_C525_6498ABA0\\x2dvideo\\x2dindex0.device";
-in {
+{
   imports = [ ../../modules ];
 
   fileSystems."/" = {
@@ -58,8 +55,8 @@ in {
     enable = true;
     port = 80;
     extraConfig.webcam = {
-      snapshot = "http://localhost:5050?action=snapshot";
-      stream = "http://octoprint.local:5050?action=stream";
+      snapshot = "http://localhost:5050/snapshot";
+      stream = "http://octoprint.local:5050/stream";
     };
     plugins = let
       python = pkgs.octoprint.python;
@@ -111,22 +108,16 @@ in {
   # Allow access to printer serial port and GPIO
   users.users.${config.services.octoprint.user}.extraGroups = [ "dialout" "gpio" ];
 
-  services.mjpg-streamer = {
+  services.ustreamer = {
     enable = true;
-    inputPlugin = "input_uvc.so -d ${videoDevice} -r 1280x720";
-  };
-  # Automatically start mjpg-streamer when camera connected (and stop when removed)
-  systemd.services.mjpg-streamer = {
-    after = [ videoSystemdDevice ];
-    bindsTo = [ videoSystemdDevice ];
-    # Replace multi-user.target
-    wantedBy = lib.mkForce [ videoSystemdDevice ];
+    autoStart = false;
+    device = "/dev/v4l/by-id/usb-046d_HD_Webcam_C525_6498ABA0-video-index0";
+    listenAddress = "[::]:5050";
+    extraArgs = [ "--resolution=1280x720" ];
   };
 
   users.groups.gpio = { };
   services.udev.extraRules = ''
-    # Enable systemd device units for cameras
-    SUBSYSTEM=="video4linux", TAG+="systemd"
     # Allow gpio group to access GPIO devices
     KERNEL=="gpiochip*", GROUP="gpio", MODE="0660"
   '';
@@ -172,7 +163,7 @@ in {
 
   networking.firewall.allowedTCPPorts = [
     80 # OctoPrint
-    5050 # mjpg-streamer
+    5050 # ustreamer
   ];
 
   # Enable SD card TRIM
