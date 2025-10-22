@@ -28,6 +28,7 @@ in {
             ${lib.concatMapStringsSep "\n" (s: "allow ${s};") config.local.networking.home.localSubnets}
             deny all;
 
+            client_body_buffer_size 256M;
             client_max_body_size 50000M;
             proxy_read_timeout   600s;
             proxy_send_timeout   600s;
