@@ -217,6 +217,8 @@ in {
     downloadDir = "/var/lib/torrents";
   };
 
+  local.services.immich.enable = true;
+
   # Libvirt
   virtualisation.libvirtd = {
     enable = true;
