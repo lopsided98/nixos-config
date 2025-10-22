@@ -1,81 +1,119 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.system.buildMachines;
-  
-  buildMachine = hostName: machine:
-    "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${hostName} "
-    + machine.system or (concatStringsSep "," machine.systems)
-    + " ${machine.sshKey} ${toString machine.maxJobs} "
-    + toString machine.speedFactor
-    + " "
-    + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
-    + " "
-    + concatStringsSep "," machine.mandatoryFeatures
-    + "\n";
 
-  hostName = config.networking.hostName;
-in {
+  hydraBuildMachinesText = lib.concatStrings (lib.mapAttrsToList (
+    origHostName: machine:
+    let
+      localhost = origHostName == config.networking.hostName;
+      hostName = if localhost then "localhost" else origHostName;
+      # Hydra doesn't support ssh-ng
+      # https://github.com/NixOS/hydra/issues/688
+      protocol = if localhost then null else "ssh";
+      sshUser = if localhost then null else machine.sshUser;
+    in
+    (lib.concatStringsSep " " ([
+      "${lib.optionalString (protocol != null) "${protocol}://"}${
+        lib.optionalString (sshUser != null) "${sshUser}@"
+      }${hostName}"
+      (
+        if machine.systems != [ ] then
+          lib.concatStringsSep "," machine.systems
+        else
+          "-"
+      )
+      (if machine.sshKey != null then machine.sshKey else "-")
+      (toString machine.maxJobs)
+      (toString machine.speedFactor)
+      (
+        let
+          res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
+        in
+        if (res == [ ]) then "-" else (lib.concatStringsSep "," res)
+      )
+      (
+        let
+          res = machine.mandatoryFeatures;
+        in
+        if (res == [ ]) then "-" else (lib.concatStringsSep "," machine.mandatoryFeatures)
+      )
+      "-"
+    ]))
+    + "\n"
+  ) cfg);
+in
+{
   options = {
-    system.buildMachines = mkOption {
+    system.buildMachines = lib.mkOption {
       description = ''
         Build machines used for distributed builds and Hydra, working around 
         bugs in each.
       '';
-      default = {};
-      type = types.attrsOf (types.submodule {
-        options = {
-          sshUser = mkOption {
-            type = types.nullOr types.str;
-            default = null;
+      default = { };
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            sshUser = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+            };
+            sshKey = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+            };
+            systems = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ "x86_64-linux" ];
+            };
+            maxJobs = lib.mkOption {
+              type = lib.types.ints.unsigned;
+              default = 1;
+            };
+            speedFactor = lib.mkOption {
+              type = lib.types.ints.unsigned;
+              default = 1;
+            };
+            supportedFeatures = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+            };
+            mandatoryFeatures = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+            };
           };
-          sshKey = mkOption {
-            type = types.str;
-            default = "-";
-          };
-          systems = mkOption {
-            type = types.listOf types.str;
-            default = [ "x86_64-linux" ];
-          };
-          maxJobs = mkOption {
-            type = types.ints.unsigned;
-            default = 1;
-          };
-          speedFactor = mkOption {
-            type = types.ints.unsigned;
-            default = 1;
-          };
-          supportedFeatures = mkOption {
-            type = types.listOf types.str;
-            default = [];
-          };
-          mandatoryFeatures = mkOption {
-            type = types.listOf types.str;
-            default = [];
-          };
-        };
-      });
+        }
+      );
     };
   };
 
-  config = mkIf (cfg != {}) {
-    nix.buildMachines = mapAttrsToList (hostName: m:
-      (if m.sshUser != null then { inherit (m) sshUser; } else {}) // {
+  config = {
+    nix.buildMachines = lib.mapAttrsToList (
+      hostName: m:
+      {
         inherit hostName;
         inherit (m)
+          sshUser
           sshKey
           systems
           maxJobs
           speedFactor
           supportedFeatures
-          mandatoryFeatures;
-      }) (filterAttrs (h: m: h != hostName) cfg);
+          mandatoryFeatures
+          ;
+        protocol = "ssh-ng";
+      }
+    ) (lib.filterAttrs (h: m: h != config.networking.hostName) cfg);
+
     # Include a second machine file with the configuration for the local machine
     services.hydra.buildMachinesFiles = [
-      "/etc/nix/machines"
-      (pkgs.writeText "hydra-localhost-build" (buildMachine "localhost" (cfg.${hostName} // { sshUser = null; })))
+      (pkgs.writeText "hydra-build-machines" hydraBuildMachinesText)
     ];
   };
 }
