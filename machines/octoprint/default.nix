@@ -37,7 +37,12 @@ with lib;
     blacklistedKernelModules = [ "onboard-usb-dev" ];
   };
 
-  hardware.enableRedistributableFirmware = true;
+  hardware.firmware = [
+    (pkgs.runCommand "rt2870-firmware" {} ''
+      mkdir -p "$out/lib/firmware"
+      cp '${pkgs.linux-firmware}'/lib/firmware/rt2870.bin "$out/lib/firmware"
+    '')
+  ];
   local.networking = {
     wireless.home = {
       enable = true;
