@@ -3,10 +3,10 @@ let
   cfg = config.local.services.immich;
 in {
   options.local.services.immich = {
-    enable = mkEnableOption "Immich server";
+    enable = lib.mkEnableOption "Immich server";
 
-    virtualHost = mkOption {
-      type = types.str;
+    virtualHost = lib.mkOption {
+      type = lib.types.str;
       default = "photos.benwolsieffer.com";
       description = "Web server domain name";
     };
