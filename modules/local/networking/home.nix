@@ -92,6 +92,14 @@ in {
       description = "DNS servers";
     };
 
+    localSubnets = mkOption {
+      type = types.listOf net.types.cidr;
+      readOnly = true;
+      description = ''
+        All subnets that should be considered part of the local network
+      '';
+    };
+
     interfaces = mkOption {
       description = "Network interfaces to configure";
       default = {};
@@ -194,6 +202,11 @@ in {
         dns = [
           (net.cidr.host 2 cfg.ipv4Subnet)
           (net.cidr.host "::ba27:ebff:fe5e:6b6e" cfg.ipv6SlaacPrefix)
+        ];
+        localSubnets = [
+          cfg.ipv4Subnet
+          cfg.ipv6Prefix
+          config.local.networking.vpn.home.wireGuard.ipv4Subnet
         ];
 
         initrdInterfaces = filterAttrs (_: interfaceCfg: interfaceCfg.initrd) cfg.interfaces;
