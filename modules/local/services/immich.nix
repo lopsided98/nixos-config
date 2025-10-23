@@ -28,7 +28,11 @@ in {
             ${lib.concatMapStringsSep "\n" (s: "allow ${s};") config.local.networking.home.localSubnets}
             deny all;
 
-            client_body_buffer_size 256M;
+            # Don't do any buffering in nginx. Let the large files flow directly
+            # to/from Immich
+            proxy_buffering off;
+            proxy_request_buffering off;
+
             client_max_body_size 50000M;
             proxy_read_timeout   600s;
             proxy_send_timeout   600s;
