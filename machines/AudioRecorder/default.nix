@@ -51,8 +51,8 @@ in {
         patch = ./0001-ASoC-wm8960-enable-mic-bias-network-for-electret-mic.patch;
       }
       {
-        name = "ASoC-wm8960-use-sysclk-auto-mode-by-default";
-        patch = ./0002-ASoC-wm8960-use-sysclk-auto-mode-by-default.patch;
+        name = "ASoC-wm8960-fix-using-automatic-clocking-mode-by-default";
+        patch = ./0002-ASoC-wm8960-fix-using-automatic-clocking-mode-by-def.patch
       }
       {
         name = "ASoC-wm8960-use-sysclk-as-MCLK-if-PLL-is-not-configu";
