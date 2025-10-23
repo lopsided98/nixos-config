@@ -52,7 +52,7 @@ in {
       }
       {
         name = "ASoC-wm8960-fix-using-automatic-clocking-mode-by-default";
-        patch = ./0002-ASoC-wm8960-fix-using-automatic-clocking-mode-by-def.patch
+        patch = ./0002-ASoC-wm8960-fix-using-automatic-clocking-mode-by-def.patch;
       }
       {
         name = "ASoC-wm8960-use-sysclk-as-MCLK-if-PLL-is-not-configu";
