@@ -6,23 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpicam-apps";
-  version = "1.6.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpicam-apps";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pTSHmRmGV203HjrH6MWNDEz2xLitCsILKsOYD9PgjwU=";
+    hash = "sha256-an1jWRF7nLrWjkam2Mqbl5WFdYasvnAGqYONFI4sVlA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix deprecation warning with FFmpeg 7.1
-      # https://github.com/raspberrypi/rpicam-apps/pull/792
-      url = "https://github.com/raspberrypi/rpicam-apps/commit/0d2b311db0a190b7475b5a2e72637110a4b0231d.patch";
-      hash = "sha256-/+88P1g3xcdUz1wnscRwKJywSjE9LtB+ipE1qL7didY=";
-    })
-  ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [
