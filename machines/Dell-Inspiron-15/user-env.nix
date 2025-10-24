@@ -19,6 +19,7 @@
 , mission-planner
 , mutt
 , keepassxc
+, nixfmt
 }: let
   nixGL = ((import (fetchFromGitHub {
     owner = "nix-community";
@@ -97,5 +98,6 @@ in buildEnv {
     (wrapNixGL { pkg = mission-planner; })
     mutt
     (wrapNixGL { pkg = keepassxc; })
+    nixfmt
   ];
 }
