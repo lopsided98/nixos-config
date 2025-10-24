@@ -71,11 +71,11 @@
         "nix-ros-overlay": "nix-ros-overlay"
       },
       "locked": {
-        "lastModified": 1761274014,
-        "narHash": "sha256-uHuWtY+wGdUF+T4GMFjrMUxY0fXFQFVVg6KqwC8Iej0=",
+        "lastModified": 1761275083,
+        "narHash": "sha256-KtpkQH++nv0lnXzD8kXQ1lC7M2WBbENoQ70nB+kpkoY=",
         "ref": "refs/heads/master",
-        "rev": "a03531fbfc9698e7f75120143263a7585655c2d3",
-        "revCount": 223,
+        "rev": "ba5ba6b5a4536e5b6dcc63e7065ad4ed32bbd572",
+        "revCount": 224,
         "type": "git",
         "url": "ssh://git@gitlab.com/dartmouthrobotics/fixed_wing_sampling.git"
       },
