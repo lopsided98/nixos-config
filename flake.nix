@@ -34,7 +34,7 @@
 
     nixpkgsForSystem = nixpkgs: buildSystem: hostSystem: import nixpkgs {
       system = buildSystem;
-      crossSystem = hostSystem;
+      crossSystem = if hostSystem != buildSystem then hostSystem else null;
       overlays = [
         self.overlays.default
         inputs.nixos-secrets.overlays.default
@@ -48,8 +48,8 @@
     };
 
     nixpkgsBySystem = {
-      "x86_64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "x86_64-linux" null;
-      "aarch64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "aarch64-linux" null;
+      "x86_64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "x86_64-linux" "x86_64-linux";
+      "aarch64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "aarch64-linux" "aarch64-linux";
       "armv7l-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv7l-linux";
       "armv6l-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv6l-linux";
       "armv5tel-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv5tel-linux";
