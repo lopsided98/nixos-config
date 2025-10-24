@@ -6,6 +6,7 @@
 , runtimeShell
 , symlinkJoin
 , buildEnv
+, nixgl
 , glibcLocales
 , qadwaitadecorations-qt6
 , qt5
@@ -21,13 +22,6 @@
 , keepassxc
 , nixfmt
 }: let
-  nixGL = ((import (fetchFromGitHub {
-    owner = "nix-community";
-    repo = "nixGL";
-    rev = "310f8e49a149e4c9ea52f1adf70cdc768ec53f8a";
-    hash = "sha256-lnzZQYG0+EXl/6NkGpyIz+FEOc/DSEG57AP1VsdeNrM=";
-  }) { inherit pkgs; }).nixGLIntel);
-
   # Environment variables to run Qt5 applications natively on Wayland with
   # reasonable GNOME integration. Missing shadows around window borders and
   # some weird behaviors with modal dialogs.
@@ -60,7 +54,7 @@
       in ''
         export ${var}=${valStr}
       '') env)}
-      exec -a "$0" '${nixGL}'/bin/nixGLIntel ${lib.escapeShellArg "${pkg}/${file}"} "$@"
+      exec -a "$0" '${nixgl.nixGLIntel}'/bin/nixGLIntel ${lib.escapeShellArg "${pkg}/${file}"} "$@"
     '';
 
     wrapper = runCommandLocal ("${lib.getName pkg}-wrapper") {
@@ -83,7 +77,7 @@ in buildEnv {
   name = "Dell-Inspiron-15-user-env";
   paths = [
     nixVersions.latest
-    nixGL
+    nixgl.nixGLIntel
     dropbox
     (wrapNixGL {
       pkg = prusa-slicer;

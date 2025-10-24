@@ -8,6 +8,7 @@
     kitty-cam.url = "github:lopsided98/kitty-cam";
     nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/develop";
     nix-sdr.url = "github:lopsided98/nix-sdr";
+    nixgl.url = "github:nix-community/nixGL";
     nixos-secrets.url = "github:lopsided98/nixos-secrets";
     nixpkgs-master-custom.url = "github:lopsided98/nixpkgs/master-custom";
     nixpkgs-unstable-custom.url = "github:lopsided98/nixpkgs/unstable-custom";
@@ -37,6 +38,7 @@
       crossSystem = if hostSystem != buildSystem then hostSystem else null;
       overlays = [
         self.overlays.default
+        inputs.nixgl.overlays.default
         inputs.nixos-secrets.overlays.default
       ];
       config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
