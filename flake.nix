@@ -48,8 +48,8 @@
     };
 
     nixpkgsBySystem = {
-      "x86_64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "x86_64-linux" "x86_64-linux";
-      "aarch64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "aarch64-linux" "aarch64-linux";
+      "x86_64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "x86_64-linux" null;
+      "aarch64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "aarch64-linux" null;
       "armv7l-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv7l-linux";
       "armv6l-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv6l-linux";
       "armv5tel-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv5tel-linux";
