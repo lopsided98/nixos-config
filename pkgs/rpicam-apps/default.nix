@@ -1,8 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, libcamera
-, boost, ffmpeg, libdrm, libexif, libjpeg, libtiff, libpng, opencv, libX11
-, epoxy, libGL
-, withOpencv ? false
-, withPreview ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  libcamera,
+  boost,
+  ffmpeg,
+  libdrm,
+  libexif,
+  libjpeg,
+  libtiff,
+  libpng,
+  opencv,
+  libX11,
+  epoxy,
+  libGL,
+  withOpencv ? false,
+  withPreview ? false,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpicam-apps";
@@ -15,7 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-an1jWRF7nLrWjkam2Mqbl5WFdYasvnAGqYONFI4sVlA=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [
     libcamera
     boost
@@ -26,9 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libtiff
     libpng
-  ] ++ lib.optionals withOpencv [
+  ]
+  ++ lib.optionals withOpencv [
     opencv
-  ] ++ lib.optionals withPreview [
+  ]
+  ++ lib.optionals withPreview [
     libX11
     epoxy
     libGL
