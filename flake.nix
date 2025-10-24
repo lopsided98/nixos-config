@@ -12,7 +12,6 @@
     nixpkgs-master-custom.url = "github:lopsided98/nixpkgs/master-custom";
     nixpkgs-unstable-custom.url = "github:lopsided98/nixpkgs/unstable-custom";
     radonpy.url = "github:lopsided98/radonpy";
-    ros-sailing.url = "git+ssh://git@gitlab.com/dartmouthrobotics/ros_sailing.git";
     secrets.url = "git+ssh://git@github.com/lopsided98/nixos-config-secrets.git";
     water-level-monitor.url = "github:lopsided98/WaterLevelMonitor";
     zeus-audio.url = "github:lopsided98/zeus_audio";
