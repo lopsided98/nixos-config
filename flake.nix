@@ -33,31 +33,28 @@
       "aarch64-linux"
     ];
 
-    nixpkgsSystemsAttrs = nixpkgs: systems:
-      lib.listToAttrs (map (system: lib.nameValuePair system (import nixpkgs {
-        inherit system;
-        overlays = [
-          self.overlays.default
-          inputs.nixos-secrets.overlays.default
-        ];
-        config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-          "dropbox"
-          # used by dropbox, mostly unnecessary but a pain to remove
-          "firefox-bin"
-          "firefox-bin-unwrapped"
-        ];
-      })) systems);
+    nixpkgsForSystem = nixpkgs: buildSystem: hostSystem: import nixpkgs {
+      system = buildSystem;
+      crossSystem = hostSystem;
+      overlays = [
+        self.overlays.default
+        inputs.nixos-secrets.overlays.default
+      ];
+      config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "dropbox"
+        # used by dropbox, mostly unnecessary but a pain to remove
+        "firefox-bin"
+        "firefox-bin-unwrapped"
+      ];
+    };
 
-    nixpkgsBySystem =
-      (nixpkgsSystemsAttrs inputs.nixpkgs-unstable-custom [
-        "x86_64-linux"
-        "aarch64-linux"
-      ]) //
-      (nixpkgsSystemsAttrs inputs.nixpkgs-master-custom [
-        "armv7l-linux"
-        "armv6l-linux"
-        "armv5tel-linux"
-      ]);
+    nixpkgsBySystem = {
+      "x86_64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "x86_64-linux" "x86_64-linux";
+      "aarch64-linux" = nixpkgsForSystem inputs.nixpkgs-unstable-custom "aarch64-linux" "aarch64-linux";
+      "armv7l-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv7l-linux";
+      "armv6l-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv6l-linux";
+      "armv5tel-linux" = nixpkgsForSystem inputs.nixpkgs-master-custom "x86_64-linux" "armv5tel-linux";
+    };
 
     outputsForSystems = systems: func: inputs.flake-utils.lib.eachSystem systems
       (system: func system nixpkgsBySystem.${system});
@@ -69,7 +66,6 @@
         inherit
           dnsupdate
           nixos-secrets
-          rpicam-apps
           tinyssh;
         deploy = runCommand "deploy" {
           inherit runtimeShell;
@@ -99,6 +95,12 @@
         program = (pkgs.callPackage ./scripts/update-user-env.nix {
           inherit (self.packages.${system}) user-env;
         }).outPath;
+      };
+    };
+
+    outputsRpiArchOnly = system: pkgs: {
+      packages = {
+        inherit (pkgs) rpicam-apps;
       };
     };
 
@@ -136,6 +138,7 @@
   in mergeOutputs [
     (outputsForSystems systems outputsAllSystems)
     (outputsForSystems [ "x86_64-linux" ] outputsx86_64Only)
+    (outputsForSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] outputsRpiArchOnly)
     outputsNoSystem
   ];
 }

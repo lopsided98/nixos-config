@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/raspberrypi/rpicam-apps";
     license = licenses.bsd2;
     maintainers = with maintainers; [ lopsided98 ];
+    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
   };
 })
