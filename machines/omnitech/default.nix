@@ -61,7 +61,7 @@ with lib;
     pkgs.wireless-regdb
     (pkgs.runCommand "mt7610u-firmware" {} ''
       mkdir -p "$out/lib/firmware/mediatek"
-      cp '${pkgs.firmwareLinuxNonfree}'/lib/firmware/mediatek/mt7610?.bin "$out/lib/firmware/mediatek"
+      cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610?.bin "$out/lib/firmware/mediatek"
     '')
   ];
 
