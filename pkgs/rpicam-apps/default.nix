@@ -16,7 +16,7 @@
   libpng,
   opencv,
   libX11,
-  epoxy,
+  libepoxy,
   libGL,
   withOpencv ? false,
   withPreview ? false,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withPreview [
     libX11
-    epoxy
+    libepoxy
     libGL
   ];
 
