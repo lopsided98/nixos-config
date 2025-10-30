@@ -289,6 +289,7 @@ with lib;
 
   services.ros2 = {
     enable = true;
+    distro = "jazzy";
     overlays = [ inputs.fixed-wing-sampling.rosOverlay ];
 
     systemPackages = p: with p; [
