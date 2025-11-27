@@ -56,6 +56,7 @@ in {
       enable = true;
       interval = "*-*-* *:15:00";
       sshKey = secrets.getSecret secrets."${config.networking.hostName}".backup.sshKey;
+      commonArgs = [ "--no-sync-snap" ];
       service.notifyFailed = true;
     };
     systemd = {
