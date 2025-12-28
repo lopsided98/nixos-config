@@ -53,6 +53,11 @@ in {
       fsType = "zfs";
     };
 
+    "/home/steam" = {
+      device = "/dev/mapper/data-steam";
+      fsType = "ext4";
+    };
+
     "/boot/esp" = {
       device = "/dev/disk/by-uuid/BAA5-3E52";
       fsType = "vfat";
@@ -218,6 +223,8 @@ in {
   };
 
   local.services.immich.enable = true;
+
+  local.services.steam.enable = true;
 
   # Libvirt
   virtualisation.libvirtd = {

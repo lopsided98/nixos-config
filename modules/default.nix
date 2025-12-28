@@ -42,7 +42,9 @@
     ./local/services/public-files.nix
     ./local/services/radonpy
     ./local/services/rtlamr
+    ./local/services/steam.nix
     ./local/services/telegraf.nix
+    ./local/services/virtual-seat.nix
     ./local/services/water-level-monitor.nix
     ./local/system.nix
   ];
