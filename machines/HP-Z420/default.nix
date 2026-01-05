@@ -13,7 +13,6 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/config/docker.nix
     ../../modules/config/hydra.nix
     ../../modules/config/hacker-hats.nix
     ../../modules/config/influxdb
@@ -35,11 +34,6 @@ in {
 
     "/var" = {
       device = "root/data/var";
-      fsType = "zfs";
-    };
-
-    "/var/lib/docker" = {
-      device = "root/local/docker";
       fsType = "zfs";
     };
 
