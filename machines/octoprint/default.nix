@@ -1,6 +1,11 @@
 { lib, config, pkgs, secrets, ... }: 
 with lib;
-{
+let
+  printerPowerCommand = name: method: let
+    curl = lib.getExe pkgs.curl;
+    netrc = secrets.getSystemdSecret "printer-power-netrc" secrets.octoprint.printerPowerNetrc;
+  in "'${curl}' --silent --show-error --netrc-file '${netrc}' -X POST http://printer-power.local/switch/${name}/${method}";
+in {
   imports = [ ../../modules ];
 
   fileSystems."/" = {
@@ -59,9 +64,17 @@ with lib;
   services.octoprint = {
     enable = true;
     port = 80;
-    extraConfig.webcam = {
-      snapshot = "http://localhost:5050/snapshot";
-      stream = "http://octoprint.local:5050/stream";
+    extraConfig.plugins = {
+      classicwebcam = {
+        snapshot = "http://localhost:5050/snapshot";
+        stream = "http://octoprint.local:5050/stream";
+      };
+
+      psucontrol = {
+        switchingMethod = "SYSTEM";
+        onSysCommand = printerPowerCommand "printer" "turn_on";
+        offSysCommand = printerPowerCommand "printer" "turn_off";
+      };
     };
     plugins = let
       python = pkgs.octoprint.python;
@@ -105,13 +118,19 @@ with lib;
 
         propagatedBuildInputs = [ pkgs.octoprint python.pkgs.inotify ];
       };
-    in p: [ octoprint-filament-sensor-universal octoprint-portlister ];
+    in plugins: with plugins; [ octoprint-filament-sensor-universal octoprint-portlister psucontrol ];
   };
   # Allow binding to port 80
   systemd.services.octoprint.serviceConfig.AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
 
-  # Allow access to printer serial port and GPIO
-  users.users.${config.services.octoprint.user}.extraGroups = [ "dialout" "gpio" ];
+  # Allow access to printer serial port and GPIO and printer power outlet
+  users.users.${config.services.octoprint.user}.extraGroups = [ "dialout" "gpio" "printer-power" ];
+
+  users.groups.gpio = { };
+  services.udev.extraRules = ''
+    # Allow gpio group to access GPIO devices
+    KERNEL=="gpiochip*", GROUP="gpio", MODE="0660"
+  '';
 
   services.ustreamer = {
     enable = true;
@@ -121,11 +140,23 @@ with lib;
     extraArgs = [ "--resolution=1280x720" ];
   };
 
-  users.groups.gpio = { };
-  services.udev.extraRules = ''
-    # Allow gpio group to access GPIO devices
-    KERNEL=="gpiochip*", GROUP="gpio", MODE="0660"
-  '';
+  systemd.services.camera-light = {
+    description = "Control 3D printer camera lighting";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      DynamicUser = true;
+      SupplementaryGroups = [ "printer-power" ];
+      Restart = "on-failure";
+      RestartSec = 10;
+      ExecStart = printerPowerCommand "light" "turn_on";
+      ExecStop = printerPowerCommand "light" "turn_off";
+    };
+    # Allow unlimited restarts
+    unitConfig.StartLimitIntervalSec = 0;
+    wantedBy = [ "ustreamer.service" ];
+    bindsTo = [ "ustreamer.service" ];
+  };
 
   # BME280 data logging to InfluxDB
   local.services.telegraf = {
@@ -173,4 +204,16 @@ with lib;
 
   # Enable SD card TRIM
   services.fstrim.enable = true;
+
+  # Group that can access the credentials to control the printer power outlet
+  users.groups.printer-power = { };
+
+  systemd.secrets.printer-power-netrc = {
+    files = secrets.mkSecret secrets.octoprint.printerPowerNetrc {
+      user = "root";
+      group = "printer-power";
+      mode = "0440";
+    };
+    units = [ "octoprint.service" ];
+  };
 }
