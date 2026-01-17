@@ -54,7 +54,10 @@ in {
     }) cfg.interfaces);
 
     systemd.secrets.wpa_supplicant-home = {
-      files = secrets.mkSecret secrets.wpaSupplicant.home { };
+      files = secrets.mkSecret secrets.wpaSupplicant.home {
+        user = "wpa_supplicant";
+        group = "wpa_supplicant";
+      };
       units = map (interface: "wpa_supplicant-${interface}.service") cfg.interfaces;
     };
   };
