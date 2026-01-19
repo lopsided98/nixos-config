@@ -104,21 +104,11 @@ in {
     5353 # mDNS
   ];
 
-  local.networking.wireless = {
-    apartment = {
-      enable = true;
-      interfaces = [ "wlan0" ];
-    };
-    eduroam = {
-      enable = true;
-      interfaces = [ "wlan0" ];
-    };
-    home = {
-      enable = true;
-      interfaces = [ "wlan0" ];
-      # Fails to connect if WPA-PSK-SHA256 is enabled
-      enableWpa2Sha256 = false;
-    };
+  local.networking.wireless.home = {
+    enable = true;
+    interfaces = [ "wlan0" ];
+    # Fails to connect if WPA-PSK-SHA256 is enabled
+    enableWpa2Sha256 = false;
   };
 
   networking.hostName = "twin-otter";

@@ -24,8 +24,6 @@
     ./local/networking/vpn/home/wireguard/client.nix
     ./local/networking/vpn/home/wireguard/server.nix
     ./local/networking/wireless
-    ./local/networking/wireless/apartment.nix
-    ./local/networking/wireless/eduroam
     ./local/networking/wireless/home.nix
     ./local/networking/wireless/thunderbat.nix
     ./local/networking/wireless/xfinitywifi.nix

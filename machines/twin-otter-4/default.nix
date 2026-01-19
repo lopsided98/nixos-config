@@ -110,19 +110,9 @@ with lib;
     };
   };
 
-  local.networking.wireless = {
-    apartment = {
-      enable = true;
-      interfaces = [ "wlan0" ];
-    };
-    eduroam = {
-      enable = true;
-      interfaces = [ "wlan0" ];
-    };
-    home = {
-      enable = true;
-      interfaces = [ "wlan0" ];
-    };
+  local.networking.wireless.home = {
+    enable = true;
+    interfaces = [ "wlan0" ];
   };
 
   networking.hostName = "twin-otter-4";
