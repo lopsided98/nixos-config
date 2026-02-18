@@ -448,11 +448,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1771334498,
-        "narHash": "sha256-0te9raXUE2I/WJ/ip2xiEBmaW5Q6Hz6AacLdfDJzkKY=",
+        "lastModified": 1771420968,
+        "narHash": "sha256-kAUvin1bcHnzWg5Zi7mc3ktF9usY08RZ5KxjZwniT4w=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "d6fc5a9feef99ff1021e54ea66812e3e4911a374",
+        "rev": "67cd1027f100b900a0c6e2ad295315f699bdebb2",
         "type": "github"
       },
       "original": {
