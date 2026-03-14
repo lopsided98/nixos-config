@@ -13,6 +13,8 @@ in {
         root_url = "https://%(domain)s/";
       };
 
+      security.secret_key = "$__file{${secrets.getSystemdSecret "grafana" secrets.grafana.secretKey}}";
+
       smtp = {
         enabled = true;
         host = "smtp.gmail.com:465";
@@ -72,7 +74,10 @@ in {
 
   systemd.secrets = {
     grafana = {
-      files = secrets.mkSecret secrets.grafana.gmailPassword { user = "grafana"; };
+      files = lib.mkMerge [
+        (secrets.mkSecret secrets.grafana.secretKey { user = "grafana"; })
+        (secrets.mkSecret secrets.grafana.gmailPassword { user = "grafana"; })
+      ];
       units = [ "grafana.service" ];
     };
     grafana-nginx = {
