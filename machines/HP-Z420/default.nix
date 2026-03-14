@@ -50,6 +50,7 @@ in {
     "/home/steam" = {
       device = "/dev/mapper/data-steam";
       fsType = "ext4";
+      options = [ "nofail" "defaults" ];
     };
 
     "/boot/esp" = {
