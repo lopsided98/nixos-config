@@ -134,6 +134,9 @@ in {
             # are using forwarding.
             # See: https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch11s02.html
             IPv6Forwarding = false;
+            # No need for privacy extensions on my own network. They just result
+            # in lots of temporary addresses being created.
+            IPv6PrivacyExtensions = false;
           };
           dhcpV4Config.UseDNS = false;
           dhcpV6Config = {
