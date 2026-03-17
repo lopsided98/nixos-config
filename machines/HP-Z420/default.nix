@@ -89,6 +89,7 @@ in {
         "ahci"
         "sd_mod"
         "sr_mod"
+        "nvme"
         # SSD
         "isci"
         # Ethernet
