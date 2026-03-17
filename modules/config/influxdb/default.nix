@@ -6,7 +6,7 @@ in {
 
   services.influxdb = {
     enable = true;
-    extraConfig = {
+    settings = {
       reporting-disabled = true;
       http = {
         auth-enabled = true;
