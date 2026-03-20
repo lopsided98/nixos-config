@@ -1,4 +1,4 @@
-final: prev: with prev.lib; {
+final: prev: {
   dnsupdate = final.python3Packages.callPackage ./dnsupdate { };
 
   hacker-hats = final.callPackage ./hacker-hats {};
@@ -20,7 +20,7 @@ final: prev: with prev.lib; {
       request_key_helper
     ];
   };
-  linuxPackages_omnitech = final.recurseIntoAttrs (final.linuxPackagesFor final.linux_omnitech);
+  linuxPackages_omnitech = final.lib.recurseIntoAttrs (final.linuxPackagesFor final.linux_omnitech);
 
   rpicam-apps = final.callPackage ./rpicam-apps { };
 }
