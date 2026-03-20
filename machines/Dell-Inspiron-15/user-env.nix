@@ -18,8 +18,9 @@
 , zotero
 , qgroundcontrol
 , mission-planner
-, mutt
 , keepassxc
+, oscar
+, mutt
 , nixfmt
 }: let
   # Environment variables to run Qt5 applications natively on Wayland with
@@ -90,8 +91,9 @@ in buildEnv {
     (wrapNixGL { pkg = zotero; })
     (wrapNixGL { pkg = qgroundcontrol; })
     (wrapNixGL { pkg = mission-planner; })
-    mutt
     (wrapNixGL { pkg = keepassxc; })
+    (wrapNixGL { pkg = oscar; })
+    mutt
     nixfmt
   ];
 }
