@@ -19,11 +19,11 @@
     "crate2nix_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1734429562,
-        "narHash": "sha256-V2XNs3Ir8WXNHdocfzkR/fu0FzkZ9uTDJkVecxJrGmQ=",
+        "lastModified": 1774369503,
+        "narHash": "sha256-YeCF4iBhlvTqkn4mihjZgixnDcEVgfyQlNeBsbLYUgQ=",
         "owner": "kolloch",
         "repo": "crate2nix",
-        "rev": "8537c2d7cb623679aaeff62c4c4c43a91566ab09",
+        "rev": "b873ca53dd64e12340416f0fd5e3b33792b9c17b",
         "type": "github"
       },
       "original": {
@@ -301,11 +301,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1743374250,
-        "narHash": "sha256-8Nr67cS/Lnjg2H2oudZKvlOUBb5Nh2n1OCafUFlYSZY=",
+        "lastModified": 1775614746,
+        "narHash": "sha256-2a66nyxnFKifZmnjUws7O95iktyFjN1sEcY3pj+u29M=",
         "ref": "refs/heads/master",
-        "rev": "fc54877a2ffa4fc5a3345b17fcf82af802301db5",
-        "revCount": 148,
+        "rev": "93844c76c3b10ccc912ecfd0330528eed0bf3540",
+        "revCount": 151,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/freefb.git"
       },
@@ -359,11 +359,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1774740601,
-        "narHash": "sha256-vnxPgJQVbP1EjT/GztgU3CyTjwcX/OO4DmuPF0Xk4Ns=",
+        "lastModified": 1776333174,
+        "narHash": "sha256-HWIPzufXeIawXkVD43wmGKVkmmiX+FrTLqoJGZWR/JM=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "88c65265caae81150d05d2dc53127218d1c35eb4",
+        "rev": "9a72e7379c0e1cb676ef948d9349f2403c2697c0",
         "type": "github"
       },
       "original": {
@@ -496,11 +496,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1738136902,
-        "narHash": "sha256-pUvLijVGARw4u793APze3j6mU1Zwdtz7hGkGGkD87qw=",
+        "lastModified": 1775579569,
+        "narHash": "sha256-/m3yyS/EnXqoPGBJYVy4jTOsirdgsEZ3JdN2gGkBr14=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "9a5db3142ce450045840cc8d832b13b8a2018e0c",
+        "rev": "dfd9566f82a6e1d55c30f861879186440614696e",
         "type": "github"
       },
       "original": {
@@ -526,16 +526,16 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1759381078,
-        "narHash": "sha256-gTrEEp5gEspIcCOx9PD8kMaF1iEmfBcTbO0Jag2QhQs=",
+        "lastModified": 1771369470,
+        "narHash": "sha256-0NBlEBKkN3lufyvFegY4TYv5mCNHbi5OmBDrzihbBMQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "7df7ff7d8e00218376575f0acdcc5d66741351ee",
+        "rev": "0182a361324364ae3f436a63005877674cf45efb",
         "type": "github"
       },
       "original": {
-        "owner": "lopsided98",
-        "ref": "nix-ros",
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
