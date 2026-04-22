@@ -301,11 +301,11 @@
         "nixpkgs": "nixpkgs_2"
       },
       "locked": {
-        "lastModified": 1775614746,
-        "narHash": "sha256-2a66nyxnFKifZmnjUws7O95iktyFjN1sEcY3pj+u29M=",
+        "lastModified": 1776825379,
+        "narHash": "sha256-Zif97Q5MP/ISik2aBy1KHf+o9h2g8D2zwo+UeeR0XXo=",
         "ref": "refs/heads/master",
-        "rev": "93844c76c3b10ccc912ecfd0330528eed0bf3540",
-        "revCount": 151,
+        "rev": "8fbfb60ee1d2a1d4fddaf6fe337b4cc5ca8b5fcf",
+        "revCount": 153,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/freefb.git"
       },
