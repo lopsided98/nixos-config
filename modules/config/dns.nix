@@ -98,22 +98,6 @@ in {
 
   services.bind = {
     enable = true;
-    package = pkgs.bind.override {
-      # Upgrade to libuv 1.52.1 due to https://github.com/libuv/libuv/issues/5030
-      # Don't patch nixpkgs because it rebuilds the world
-      # Upstream fix is in staging
-      libuv = pkgs.libuv.overrideAttrs (finalAttrs: prevAttrs: 
-        assert pkgs.libuv.version == "1.52.0";
-      {
-        version = "1.52.1";
-        src = pkgs.fetchFromGitHub {
-          owner = "libuv";
-          repo = "libuv";
-          rev = "v${finalAttrs.version}";
-          hash = "sha256-Y9Nph2LkT1qnOYTW3WCumWWwORnI4P7HxzBjUlGaL7M=";
-        };
-      });
-    };
 
     configFile = pkgs.writeText "named.conf" ''
       include "/etc/bind/rndc.key";
