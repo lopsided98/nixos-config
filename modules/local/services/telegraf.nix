@@ -1,8 +1,43 @@
 { config, lib, pkgs, secrets, ... }: with lib; let
   cfg = config.local.services.telegraf;
+
+  # Telegraf custom_builder utility
+  custom-builder = pkgs.buildPackages.buildGoModule {
+    # Use same pname to reuse vendored modules
+    pname = "telegraf";
+    inherit (pkgs.telegraf) version src vendorHash proxyVendor;
+
+    subPackages = [ "tools/custom_builder" ];
+  };
+
+  # Unused, but provides an example of how to generate go build tags for a
+  # config
+  tags = configFile: pkgs.stdenv.mkDerivation {
+    name = "telegraf-custom-build-tags";
+    inherit (pkgs.telegraf) src;
+
+    nativeBuildInputs = [ pkgs.go custom-builder ];
+
+    buildPhase = ''
+      HOME=$(pwd)
+      custom_builder --config ${configFile} --dry-run --tags | tee "$out"
+    '';
+  };
 in {
   options.local.services.telegraf = {
     enable = mkEnableOption "Telegraf machine telemetry logging";
+
+    buildTags = lib.mkOption {
+      type = with lib.types; listOf str;
+      default = [];
+      description = ''
+        Tags to pass to package build to selectively build only the plugins
+        required by a particular config in order to reduce binary size. The
+        list of required tags may be generated using the custom_build tool
+        included in the telegraf source.
+        See: https://www.influxdata.com/blog/how-reduce-telegraf-binary-size/
+      '';
+    };
 
     enableSystemMetrics = mkOption {
       type = types.bool;
@@ -36,8 +71,29 @@ in {
   };
 
   config = mkIf cfg.enable {
+    local.services.telegraf.buildTags = [
+      "outputs.influxdb"
+    ] ++ lib.optionals cfg.enableSystemMetrics [
+      "inputs.cpu"
+      "inputs.disk"
+      "inputs.diskio"
+      "inputs.mem"
+      "inputs.net"
+      "inputs.netstat"
+      "inputs.ping"
+      "inputs.processes"
+      "inputs.system"
+    ];
+
     services.telegraf = {
       enable = true;
+
+      package = pkgs.telegraf.overrideAttrs ({ tags ? [], ...}: {
+        tags = tags ++ [ "custom" ] ++ cfg.buildTags;
+        # Tests depend on plugins that may be disabled
+        doCheck = false;
+      });
+
       extraConfig = {
         # Output plugins
         outputs = {

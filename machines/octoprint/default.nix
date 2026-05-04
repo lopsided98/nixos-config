@@ -162,6 +162,7 @@ in {
   local.services.telegraf = {
     enable = true;
     enableSystemMetrics = false;
+    buildTags = [ "inputs.multifile" ];
     influxdb = {
       tlsCertificate = ./telegraf/influxdb.pem;
       tlsKeySecret = secrets.octoprint.telegraf.influxdbTlsKey;
