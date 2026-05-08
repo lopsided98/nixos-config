@@ -23,6 +23,13 @@
     # Enable magic SysRq
     kernel.sysctl."kernel.sysrq" = 1;
 
+    # Mitigate Dirty Frag vulnerability be preventing loading vulnerable modules
+    extraModprobeConfig = ''
+      install esp4 ${pkgs.coreutils}/bin/false
+      install esp6 ${pkgs.coreutils}/bin/false
+      install rxrpc ${pkgs.coreutils}/bin/false
+    '';
+
     initrd = {
       # NixOS tries to include a bunch of random modules by default, some of which
       # are missing in some kernel configs (e.g. Raspberry Pi). A poorly thought
