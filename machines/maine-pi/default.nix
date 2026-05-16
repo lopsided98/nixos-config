@@ -123,7 +123,10 @@ with lib;
       ];
     };
     wpa_supplicant-maine = {
-      files = secrets.mkSecret secrets.maine-pi.wpaSupplicant { };
+      files = secrets.mkSecret secrets.maine-pi.wpaSupplicant {
+        user = "wpa_supplicant";
+        group = "wpa_supplicant";
+      };
       units = [ "wpa_supplicant-wlan0.service" ];
     };
   };
