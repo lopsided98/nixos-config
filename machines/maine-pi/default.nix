@@ -60,6 +60,22 @@ with lib;
   };
   networking.firewall.interfaces.wlan0.allowedUDPPorts = [ 5353 /* mDNS */ ];
 
+  systemd = {
+    services.wpa-supplicant-restart = {
+      description = "Restart wpa_supplicant";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getBin pkgs.systemd}/bin/systemctl restart wpa_supplicant-wlan0";
+      };
+    };
+
+    timers.wpa-supplicant-restart = {
+      description = "Restart wpa_supplicant daily";
+      wantedBy = [ "timers.target" ];
+      timerConfig.OnCalendar = "*-*-* 00:00:00";
+    };
+  };
+
   # Services to enable
 
   services.openssh = {
