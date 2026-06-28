@@ -14,13 +14,5 @@ final: prev: {
   # GPG pulls in huge numbers of graphics libraries by default
   gnupg = prev.gnupg.override { guiSupport = false; };
 
-  linux_omnitech = final.callPackage ./linux-omnitech {
-    kernelPatches = with final.kernelPatches; [
-      bridge_stp_helper
-      request_key_helper
-    ];
-  };
-  linuxPackages_omnitech = final.lib.recurseIntoAttrs (final.linuxPackagesFor final.linux_omnitech);
-
   rpicam-apps = final.callPackage ./rpicam-apps { };
 }

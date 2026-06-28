@@ -1,7 +1,38 @@
-{ lib, config, pkgs, secrets, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  secrets,
+  ...
+}:
 
 with lib;
 
+let
+  kernel = pkgs.linuxManualConfig rec {
+    pname = "linux-omnitech";
+    version = "5.8.1";
+
+    # branch needs to be x.y
+    extraMeta.branch = lib.versions.majorMinor version;
+
+    src = pkgs.fetchFromGitHub {
+      name = "${pname}-${version}-source";
+      owner = "lopsided98";
+      repo = "linux";
+      rev = "240dd1417e114c041e92adc126d90fbb73bc28b4";
+      sha256 = "1gj6if3535ndfdaa44l3jyc9r5yxymmbxcsj3h73x0220jlg6qfn";
+    };
+
+    kernelPatches = with pkgs.kernelPatches; [
+      bridge_stp_helper
+      request_key_helper
+    ];
+
+    configfile = ./kernel.config;
+    config = import ./kernel-config.nix;
+  };
+in
 {
   imports = [ ../../modules ];
 
@@ -13,7 +44,11 @@ with lib;
     "/boot/firmware" = {
       device = "/dev/disk/by-uuid/3FF8-9E69";
       fsType = "vfat";
-      options = [ "nofail" "noauto" "x-systemd.automount" ];
+      options = [
+        "nofail"
+        "noauto"
+        "x-systemd.automount"
+      ];
     };
   };
 
@@ -22,13 +57,6 @@ with lib;
   local.system = {
     hostSystem = {
       config = "armv5tel-unknown-linux-gnueabi";
-      linux-kernel = {
-        name = "omnitech-16878";
-        Major = "2.6";
-        autoModules = false;
-        target = "zImage";
-        DTB = true;
-      };
       gcc = {
         arch = "armv5te";
         float-abi = "soft";
@@ -44,31 +72,28 @@ with lib;
       grub.enable = false;
       generic-extlinux-compatible.enable = true;
     };
-    kernelPackages = lib.mkForce (pkgs.linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit (pkgs) lib stdenv;
-      inherit (pkgs.linuxPackages_omnitech.kernel) version src;
-      configfile = ./kernel.config;
-      config = import ./kernel-config.nix;
-    }));
+    kernelPackages = lib.mkForce (pkgs.linuxPackagesFor kernel);
   };
   # Ignore broken kernel config assertions
-  system.requiredKernelConfig = mkForce [];
+  system.requiredKernelConfig = mkForce [ ];
 
   boot.extraModprobeConfig = ''
     options cfg80211 ieee80211_regdom="US"
   '';
   hardware.firmware = [
     pkgs.wireless-regdb
-    (pkgs.runCommand "mt7610u-firmware" {} ''
+    (pkgs.runCommand "mt7610u-firmware" { } ''
       mkdir -p "$out/lib/firmware/mediatek"
       cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610?.bin "$out/lib/firmware/mediatek"
     '')
   ];
 
-  /*local.networking.wireless.home = {
-    enable = true;
-    interfaces = [ "wlan0" ];
-  };*/
+  /*
+    local.networking.wireless.home = {
+      enable = true;
+      interfaces = [ "wlan0" ];
+    };
+  */
 
   networking.hostName = "omnitech";
 
@@ -76,8 +101,15 @@ with lib;
 
   services.openssh = {
     hostKeys = [
-      { type = "rsa"; bits = 4096; path = secrets.getSystemdSecret "sshd" secrets.omnitech.ssh.hostRsaKey; }
-      { type = "ed25519"; path = secrets.getSystemdSecret "sshd" secrets.omnitech.ssh.hostEd25519Key; }
+      {
+        type = "rsa";
+        bits = 4096;
+        path = secrets.getSystemdSecret "sshd" secrets.omnitech.ssh.hostRsaKey;
+      }
+      {
+        type = "ed25519";
+        path = secrets.getSystemdSecret "sshd" secrets.omnitech.ssh.hostEd25519Key;
+      }
     ];
   };
 
@@ -88,8 +120,8 @@ with lib;
     # Prevent first connection from failing due to decryption taking too long
     lazy = false;
     files = mkMerge [
-      (secrets.mkSecret secrets.omnitech.ssh.hostRsaKey {})
-      (secrets.mkSecret secrets.omnitech.ssh.hostEd25519Key {})
+      (secrets.mkSecret secrets.omnitech.ssh.hostRsaKey { })
+      (secrets.mkSecret secrets.omnitech.ssh.hostEd25519Key { })
     ];
   };
 }
