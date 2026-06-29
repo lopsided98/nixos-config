@@ -35,22 +35,6 @@
     "crate2nix_3": {
       "flake": false,
       "locked": {
-        "lastModified": 1655453176,
-        "narHash": "sha256-3Dr1vCEwl3/4smRLm3OqiJ3ZJybEAfUlzdHLnTLFPDs=",
-        "owner": "kolloch",
-        "repo": "crate2nix",
-        "rev": "805cdaf084c859c2ea0c084b74f4527b0483f6aa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "kolloch",
-        "repo": "crate2nix",
-        "type": "github"
-      }
-    },
-    "crate2nix_4": {
-      "flake": false,
-      "locked": {
         "lastModified": 1773440526,
         "narHash": "sha256-OcX1MYqUdoalY3/vU67PEx8m6RvqGxX0LwKonjzXn7I=",
         "owner": "kolloch",
@@ -121,12 +105,15 @@
       }
     },
     "flake-utils_11": {
+      "inputs": {
+        "systems": "systems_10"
+      },
       "locked": {
-        "lastModified": 1653893745,
-        "narHash": "sha256-0jntwV3Z8//YwuOjzhV2sgJJPt+HY6KhU7VZUL0fKZQ=",
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "1ed9fb1935d260de5fe1c2f7ee0ebaae17ed2fa1",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -137,7 +124,7 @@
     },
     "flake-utils_12": {
       "inputs": {
-        "systems": "systems_10"
+        "systems": "systems_11"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -356,14 +343,15 @@
     "nix-ros-overlay_2": {
       "inputs": {
         "flake-utils": "flake-utils_6",
-        "nixpkgs": "nixpkgs_4"
+        "nixpkgs": "nixpkgs_4",
+        "rosdistro": "rosdistro"
       },
       "locked": {
-        "lastModified": 1776333174,
-        "narHash": "sha256-HWIPzufXeIawXkVD43wmGKVkmmiX+FrTLqoJGZWR/JM=",
+        "lastModified": 1782424179,
+        "narHash": "sha256-slrmIubTfU/BolYHI6QdVpWzYWlhVV96EsAbaxRpYnU=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "9a72e7379c0e1cb676ef948d9349f2403c2697c0",
+        "rev": "fbba1e98610310509e36e4c658550519d5b2e8d6",
         "type": "github"
       },
       "original": {
@@ -526,11 +514,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1771369470,
-        "narHash": "sha256-0NBlEBKkN3lufyvFegY4TYv5mCNHbi5OmBDrzihbBMQ=",
+        "lastModified": 1781577229,
+        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "0182a361324364ae3f436a63005877674cf45efb",
+        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
         "type": "github"
       },
       "original": {
@@ -603,11 +591,11 @@
     },
     "nixpkgs_9": {
       "locked": {
-        "lastModified": 1655567057,
-        "narHash": "sha256-Cc5hQSMsTzOHmZnYm8OSJ5RNUp22bd5NADWLHorULWQ=",
+        "lastModified": 1776329215,
+        "narHash": "sha256-a8BYi3mzoJ/AcJP8UldOx8emoPRLeWqALZWu4ZvjPXw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "e0a42267f73ea52adc061a64650fddc59906fc99",
+        "rev": "b86751bc4085f48661017fa226dee99fab6c651b",
         "type": "github"
       },
       "original": {
@@ -652,6 +640,22 @@
         "zeus-audio": "zeus-audio"
       }
     },
+    "rosdistro": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781869206,
+        "narHash": "sha256-R4z1i9ud5wCUuyYgr+F+bLP0cMJgjk6/y/OiT5iSRJs=",
+        "owner": "ros",
+        "repo": "rosdistro",
+        "rev": "f650d990cad69b0898e83e636c09863f05a0b08c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ros",
+        "repo": "rosdistro",
+        "type": "github"
+      }
+    },
     "secrets": {
       "locked": {
         "lastModified": 1775331335,
@@ -683,6 +687,21 @@
       }
     },
     "systems_10": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_11": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
@@ -819,16 +838,15 @@
     },
     "water-level-monitor": {
       "inputs": {
-        "crate2nix": "crate2nix_3",
         "flake-utils": "flake-utils_11",
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1700719458,
-        "narHash": "sha256-+lhH+G7GGBdTFL/SBKEQBJ31VkSCzBoW++YpzfrMq1E=",
+        "lastModified": 1782680529,
+        "narHash": "sha256-SUHtgofXrjUQaf5PUYbzajyVthLtNNkkWUaiisP/tZY=",
         "owner": "lopsided98",
         "repo": "WaterLevelMonitor",
-        "rev": "9732c98ca30647f47e33d896d7ad035e0dd7b746",
+        "rev": "dd708175f82d1e2a1799af1fe746d8ae125f4897",
         "type": "github"
       },
       "original": {
@@ -839,7 +857,7 @@
     },
     "zeus-audio": {
       "inputs": {
-        "crate2nix": "crate2nix_4",
+        "crate2nix": "crate2nix_3",
         "flake-utils": "flake-utils_12",
         "nixpkgs": "nixpkgs_10"
       },
