@@ -25,7 +25,6 @@
     ./local/networking/vpn/home/wireguard/server.nix
     ./local/networking/wireless
     ./local/networking/wireless/home.nix
-    ./local/networking/wireless/thunderbat.nix
     ./local/networking/wireless/xfinitywifi.nix
     ./local/profiles/headless.nix
     ./local/profiles/limited-memory.nix
