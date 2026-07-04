@@ -32,7 +32,19 @@
     ];
   };
 
-  local.networking.home.interfaces.enu1.ipv4Address = "192.168.1.3/24";
+  hardware.firmware = [
+    (pkgs.runCommand "mt7610u-firmware" { } ''
+      mkdir -p "$out/lib/firmware/mediatek"
+      cp '${pkgs.linux-firmware}'/lib/firmware/mediatek/mt7610?.bin "$out/lib/firmware/mediatek"
+    '')
+  ];
+
+  local.networking.wireless.apartment = {
+    enable = true;
+    interfaces = [ "wlu1u2" ];
+  };
+
+  #local.networking.home.interfaces.enu1.ipv4Address = "192.168.1.3/24";
 
   networking.hostName = "ODROID-XU4"; # Define your hostname.
 
@@ -40,7 +52,7 @@
 
   environment.systemPackages = with pkgs; [
     linuxPackages_latest.tmon
-    tcpdump
+    mmc-utils
   ];
 
   # List services that you want to enable:
