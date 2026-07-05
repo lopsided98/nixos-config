@@ -51,7 +51,8 @@ in {
     systemd.network.networks."30-apartment" = mkMerge [
       ({
         name = concatStringsSep " " cfg.interfaces;
-        matchConfig.SSID = "Doctor Who";
+        # Need to manually insert quotes around SSIDs with spaces
+        matchConfig.SSID = "\"Doctor Who\"";
         DHCP = "ipv4";
         networkConfig.MulticastDNS = "yes";
       })
