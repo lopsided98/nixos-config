@@ -63,6 +63,14 @@
   # Set SSH port
   services.openssh.ports = [4243];
 
+  local.networking.vpn.home.wireGuard.client = {
+    enable = true;
+    publicKey = "k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=";
+    privateKeySecret = secrets.ODROID-XU4.vpn.wireGuardPrivateKey;
+    outgoingInterfaces = [ "enu1" "wlu1u2" ];
+    persistentKeepalive = true;
+  };
+
   # System metrics logging
   local.services.telegraf = {
     enable = true;

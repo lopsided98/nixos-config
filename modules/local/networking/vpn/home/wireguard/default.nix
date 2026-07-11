@@ -68,6 +68,7 @@ in {
         "+Qy2xNBd+gLpF0MRd/l4xT3YWaXOEqTADnp196a4tSU=".index = 1; # Pixel-4a
         "sVgdQpaigfOLO2nvYP7U1XcfzAml8dzZRjAcEmYfTQ0=".index = 2; # maine-pi
         "DzCLCMwhVerqFYjUuJG/JYt95l+KnRKbl58QlmsBADw=".index = 3; # Hefring laptop
+        "k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=".index = 4; # ODROID-XU4
       };
     };
   };
