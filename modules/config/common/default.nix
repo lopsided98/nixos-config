@@ -218,6 +218,9 @@
     MaxRetentionSec=3month
   '';
 
+  # Unused and pulls in unnecessary filesystem dependencies
+  system.tools.nixos-generate-config.enable = lib.mkDefault false;
+
   # Disable UDisks by default (significantly reduces system closure size)
   services.udisks2.enable = lib.mkDefault false;
 
