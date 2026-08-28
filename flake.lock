@@ -347,11 +347,11 @@
         "rosdistro": "rosdistro"
       },
       "locked": {
-        "lastModified": 1782424179,
-        "narHash": "sha256-slrmIubTfU/BolYHI6QdVpWzYWlhVV96EsAbaxRpYnU=",
+        "lastModified": 1787844999,
+        "narHash": "sha256-f7PG3Z4kxYL8OqNyFNMMXKLpUlvqm1Y0vRlPhdsVeNU=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "fbba1e98610310509e36e4c658550519d5b2e8d6",
+        "rev": "4041c79f2f1afbf7c9751425e4cf55c1621f7163",
         "type": "github"
       },
       "original": {
@@ -436,11 +436,11 @@
     },
     "nixpkgs-master-custom": {
       "locked": {
-        "lastModified": 1787489716,
-        "narHash": "sha256-zgUXh1ZkSfpMYnQEu1aKMe6Ko2wCiRFXMI/UBNno7To=",
+        "lastModified": 1787868890,
+        "narHash": "sha256-ShHto0srWWZqvske2uC2iYi2ygAZLh3CGN3wl085sIU=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "439cea718ef7fbf1f12f3c07c3e1fba85fd178ff",
+        "rev": "e96c883b7a81a116ef8a6e59bcdbc426f25b048d",
         "type": "github"
       },
       "original": {
@@ -452,11 +452,11 @@
     },
     "nixpkgs-unstable-custom": {
       "locked": {
-        "lastModified": 1784902733,
-        "narHash": "sha256-4iipynpR+BfFSzLuA2fqonI4/QGeNLz7G02dXEESKC0=",
+        "lastModified": 1787877738,
+        "narHash": "sha256-rFu8YT00xM8xpAAvoJoAJ5JkczREj2ZWfGQoantuBEw=",
         "owner": "lopsided98",
         "repo": "nixpkgs",
-        "rev": "129c0c475474bb94c3aeb3828f579c2de9d84668",
+        "rev": "299872cc6f2ac35ac15129b62dcd0d9140419514",
         "type": "github"
       },
       "original": {
@@ -514,11 +514,11 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1781577229,
-        "narHash": "sha256-lrp67w8AulE9Ks53n27I45ADSzbOCn4H+CNW1Ck8B+8=",
+        "lastModified": 1785828668,
+        "narHash": "sha256-8fsyqeO+mJqvIzeO4xIpgJe/f7MTbbVTEC6RT6WSXNs=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "567a49d1913ce81ac6e9582e3553dd90a955875f",
+        "rev": "e72e4f299401a3689d4b3d5fc6496b11db7064eb",
         "type": "github"
       },
       "original": {
@@ -643,11 +643,11 @@
     "rosdistro": {
       "flake": false,
       "locked": {
-        "lastModified": 1781869206,
-        "narHash": "sha256-R4z1i9ud5wCUuyYgr+F+bLP0cMJgjk6/y/OiT5iSRJs=",
+        "lastModified": 1787326473,
+        "narHash": "sha256-IQOaqN/0BtAmas5MHvo1NTAlEOSzMxcIIm35pqLM8ZU=",
         "owner": "ros",
         "repo": "rosdistro",
-        "rev": "f650d990cad69b0898e83e636c09863f05a0b08c",
+        "rev": "82eefa281fd5702f1869408c66606d395cd635ee",
         "type": "github"
       },
       "original": {
@@ -658,11 +658,11 @@
     },
     "secrets": {
       "locked": {
-        "lastModified": 1783131046,
-        "narHash": "sha256-rMCeZtrmrNYgP10tMcmp4Mcl6XGbF0TKEFK4TTmR2ww=",
+        "lastModified": 1783276603,
+        "narHash": "sha256-+nzLGmV7UkWf6sxeNHRHzfJe60HTdWQqhwz56XQU730=",
         "ref": "refs/heads/master",
-        "rev": "ab499852efec9ffd7925c656038346e4ebdbd2fd",
-        "revCount": 130,
+        "rev": "12467791f483666b7bd06107616262a988ec9517",
+        "revCount": 131,
         "type": "git",
         "url": "ssh://git@github.com/lopsided98/nixos-config-secrets.git"
       },
@@ -842,11 +842,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1782680529,
-        "narHash": "sha256-SUHtgofXrjUQaf5PUYbzajyVthLtNNkkWUaiisP/tZY=",
+        "lastModified": 1783904311,
+        "narHash": "sha256-5Snr+CsmG9yFEkWi4OO9TFoB82Kch4sfNesoV9Vqbag=",
         "owner": "lopsided98",
         "repo": "WaterLevelMonitor",
-        "rev": "dd708175f82d1e2a1799af1fe746d8ae125f4897",
+        "rev": "56355461ef9d44a5d6af3d6f64bb48c4b787694c",
         "type": "github"
       },
       "original": {
