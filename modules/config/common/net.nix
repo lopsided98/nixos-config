@@ -438,11 +438,15 @@ let
         else if n >= 64 then 0
         else if n < 0 then
           let
+            # pow2 overflows with n == -63, so split operation into two shifts
+            n' = if n == -63 then -62 else n;
+            x' = if n == -63 then shift (-1) x else x;
+
             # Whether the sign bit will be set in the result
-            signBit = (and (bit (63 + n)) x) != 0;
+            signBit = (and (bit (63 + n')) x') != 0;
             # Mask input so sign bit will be clear after shifting
-            xMasked = mask (63 + n) x;
-            m = math.pow2 (-n);
+            xMasked = mask (63 + n') x';
+            m = math.pow2 (-n');
           in xMasked * m + (if signBit then bit 63 else 0)
         else
           let
