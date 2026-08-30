@@ -70,6 +70,9 @@ in {
   local.networking.home.interfaces.${interface} = {
     ipv4Address = "${address}/24";
     duidIdentifier = "59:2b:f1:e2:f2:d5:81:5c";
+    # For WireGuard/AmneziaWG
+    ipv4Forwarding = true;
+    ipv6DelegatedPrefix = config.local.networking.vpn.home.ipv6Prefix;
     initrd = true;
   };
 
@@ -108,11 +111,17 @@ in {
     #moonlight-embedded
   ];
 
-  local.networking.vpn.home.wireGuard.server = {
-    enable = true;
-    uplinkInterface = interface;
-    # Public key: +6YE+L1kyBmvbQ4GKpw20g2vQv/58QujDHCCCIqzH14=
-    privateKeySecret = secrets.atomic-pi.vpn.wireGuardPrivateKey;
+  local.networking.vpn.home = {
+    wireGuard.server = {
+      enable = true;
+      # Public key: +6YE+L1kyBmvbQ4GKpw20g2vQv/58QujDHCCCIqzH14=
+      privateKeySecret = secrets.atomic-pi.vpn.wireGuardPrivateKey;
+    };
+    amneziawg.server = {
+      enable = true;
+      # Public key: +6YE+L1kyBmvbQ4GKpw20g2vQv/58QujDHCCCIqzH14=
+      privateKeySecret = secrets.atomic-pi.vpn.wireGuardPrivateKey;
+    };
   };
 
   services.openssh.hostKeys = [

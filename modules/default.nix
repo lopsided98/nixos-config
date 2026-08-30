@@ -20,9 +20,12 @@
 
     ./local/networking/home.nix
     ./local/networking/vpn/dartmouth.nix
+    ./local/networking/vpn/home
     ./local/networking/vpn/home/wireguard
     ./local/networking/vpn/home/wireguard/client.nix
     ./local/networking/vpn/home/wireguard/server.nix
+    ./local/networking/vpn/home/amneziawg
+    ./local/networking/vpn/home/amneziawg/server.nix
     ./local/networking/wireless
     ./local/networking/wireless/apartment.nix
     ./local/networking/wireless/home.nix

@@ -4,26 +4,27 @@ with lib;
 
 let
   net = config.lib.net;
-  cfg = config.local.networking.vpn.home.wireGuard;
+  cfg = config.local.networking.vpn.home.amneziawg;
 in {
 
   # Interface
 
-  options.local.networking.vpn.home.wireGuard = {
+  options.local.networking.vpn.home.amneziawg = {
     ipv4Subnet = mkOption {
       type = net.types.cidrv4;
       readOnly = true;
-      default = "192.168.118.0/24";
+      default = "192.168.119.0/24";
       description = "IPv4 subnet containing peer addresses";
     };
 
     ipv6Prefix = mkOption {
       type = net.types.cidrv6;
+      readOnly = true;
       description = "IPv6 prefix containing peer addresses";
     };
 
     peers = mkOption {
-      description = "WireGuard peers that may connect to the server";
+      description = "AmneziaWG peers that may connect to the server";
       default = {};
       type = types.attrsOf (types.submodule ({ config, ... }: {
         options = {
@@ -56,18 +57,14 @@ in {
   # Implementation
 
   config = {
-    local.networking.vpn.home.wireGuard = {
+    local.networking.vpn.home.amneziawg = {
       ipv6Prefix = net.cidr.subnet
         (64 - net.cidr.length config.local.networking.vpn.home.ipv6Prefix) # length
-        0 # subnet number
+        1 # subnet number
         config.local.networking.vpn.home.ipv6Prefix; # CIDR
 
       peers = {
-        "sBNbbhUP9l73RYWDeKBS4/P/Ev4PrKK/RbYJP1WYZzI=".index = 0; # Dell-Inspiron-15
-        "+Qy2xNBd+gLpF0MRd/l4xT3YWaXOEqTADnp196a4tSU=".index = 1; # Pixel-4a
-        "sVgdQpaigfOLO2nvYP7U1XcfzAml8dzZRjAcEmYfTQ0=".index = 2; # maine-pi
-        "DzCLCMwhVerqFYjUuJG/JYt95l+KnRKbl58QlmsBADw=".index = 3; # Hefring laptop
-        "k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=".index = 4; # ODROID-XU4
+        "+Qy2xNBd+gLpF0MRd/l4xT3YWaXOEqTADnp196a4tSU=".index = 0; # Pixel-4a
       };
     };
   };
