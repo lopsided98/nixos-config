@@ -200,7 +200,7 @@ in {
       local.networking.home = {
         ipv4PublicAddress = "76.24.178.114";
         ipv4Subnet = "192.168.1.0/24";
-        ipv6Prefix = "2601:18c:8002:3d40::/60";
+        ipv6Prefix = "2601:18c:8001:2360::/60";
         ipv6SlaacPrefix = net.cidr.subnet (64 - net.cidr.length cfg.ipv6Prefix) 0 cfg.ipv6Prefix;
         dns = [
           (net.cidr.host 2 cfg.ipv4Subnet)
