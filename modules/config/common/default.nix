@@ -119,7 +119,7 @@
       trusted-users = [ "build" ];
       auto-optimise-store = true;
       builders-use-substitutes = true;
-      experimental-features = "nix-command flakes";
+      experimental-features = [ "nix-command" "flakes" ];
       
       # Use my binary cache
       substituters = let
@@ -214,9 +214,7 @@
   };
 
   # Delete old logs after 3 months
-  services.journald.extraConfig = ''
-    MaxRetentionSec=3month
-  '';
+  services.journald.settings.Journal.MaxRetentionSec = "3month";
 
   # Unused and pulls in unnecessary filesystem dependencies
   system.tools.nixos-generate-config.enable = lib.mkDefault false;
