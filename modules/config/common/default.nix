@@ -130,14 +130,11 @@
         "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
         "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
       ];
+      netrc-file = secrets.getSystemdSecret "nix" secrets.hydra.netrc;
 
       min-free = toString (1024 * 1024 * 1024);
       max-free = toString (4096 * 1024 * 1024);
     };
-    # Causes infinite recursion in nix.settings
-    extraOptions = ''
-      netrc-file = ${secrets.getSystemdSecret "nix" secrets.hydra.netrc}
-    '';
 
     registry.nixpkgs.to = lib.mkIf (lib.hasAttr "rev" inputs.nixpkgs.sourceInfo) {
       type = "github";
