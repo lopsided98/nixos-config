@@ -157,24 +157,39 @@
   # Global SSH configuration for distributed builds
   programs.ssh = {
     extraConfig = let
+      broadcastAddress = config.lib.net.cidr.host (config.lib.net.cidr.capacity config.local.networking.home.ipv4Subnet - 1) config.local.networking.home.ipv4Subnet;
       wakeOnLanWrapper = pkgs.writeShellApplication {
         name = "ssh-wake-on-lan";
-        runtimeInputs = with pkgs; [ wakeonlan netcat-openbsd ];
+        runtimeInputs = with pkgs; [
+          # Need OpenBSD netcat with Debian patches for broadcast support
+          netcat-openbsd
+        ];
         text = ''
           host="$1"
           port="$2"
-          macAddress="$3"
+          # Remove colons
+          macAddress="''${3//:/}"
+          # Magic packets consist of 12*`f` followed by 16 repetitions of the
+          # MAC address
+          magicPacket="$( (
+            printf 'f%.0s' {1..12}
+            printf "$macAddress%.0s" {1..16}
+          ) | sed -e 's/../\\x&/g')"
+
+          # Repeatedly send WoL packets until SSH port is open
           while true; do
-            wakeonlan -i 192.168.1.255 "$macAddress" >/dev/null;
+            echo -e "$magicPacket" | nc -w 0 -u -b '${broadcastAddress}' 4343 || true
             if nc -z -w 1 "$host" "$port" 2>/dev/null; then
               break
             fi
           done
-          exec nc "$host" "$port"
+          exec nc -F "$host" "$port"
         '';
       };
-      wakeOnLanProxyCommand = macAddress: lib.optionalString (config.local.networking.home.interfaces != {})
-        "ProxyCommand ${lib.getExe wakeOnLanWrapper} %h %p ${lib.escapeShellArg macAddress}";
+      wakeOnLanProxyCommand = macAddress: lib.optionalString (config.local.networking.home.interfaces != {}) ''
+        ProxyCommand ${lib.getExe wakeOnLanWrapper} %h %p ${lib.escapeShellArg macAddress}
+        ProxyUseFdpass yes
+      '';
     in ''
       CanonicalizeHostname always
       CanonicalizeMaxDots 0
