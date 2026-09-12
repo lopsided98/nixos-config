@@ -195,23 +195,23 @@
       CanonicalizeMaxDots 0
       CanonicalDomains benwolsieffer.com
 
-      Host HP-Z420
+      Host hp-z420.benwolsieffer.com
         Port 4245
 
-      Host ODROID-XU4
+      Host odroid-xu4.benwolsieffer.com
         Port 4243
 
-      Host p-3400
+      Host p-3400.benwolsieffer.com
         Port 4244
         ${wakeOnLanProxyCommand "44:8a:5b:ce:23:c6"}
 
-      Host RasPi2
+      Host raspi2.benwolsieffer.com
         Port 4242
 
-      Host Rock64
+      Host rock64.benwolsieffer.com
         Port 4246
 
-      Host RockPro64
+      Host rockpro64.benwolsieffer.com
         Port 4247
     '';
     knownHosts = {
