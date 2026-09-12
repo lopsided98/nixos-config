@@ -60,8 +60,6 @@ in {
   # Interface
 
   options.local.networking.home = {
-    enable = mkEnableOption "home network";
-
     ipv4PublicAddress = mkOption {
       type = net.types.ipv4;
       readOnly = true;

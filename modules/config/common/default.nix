@@ -156,8 +156,27 @@
 
   # Global SSH configuration for distributed builds
   programs.ssh = {
-    extraConfig = ''
-      CanonicalizeHostname yes
+    extraConfig = let
+      wakeOnLanWrapper = pkgs.writeShellApplication {
+        name = "ssh-wake-on-lan";
+        runtimeInputs = with pkgs; [ wakeonlan netcat-openbsd ];
+        text = ''
+          host="$1"
+          port="$2"
+          macAddress="$3"
+          while true; do
+            wakeonlan -i 192.168.1.255 "$macAddress" >/dev/null;
+            if nc -z -w 1 "$host" "$port" 2>/dev/null; then
+              break
+            fi
+          done
+          exec nc "$host" "$port"
+        '';
+      };
+      wakeOnLanProxyCommand = macAddress: lib.optionalString (config.local.networking.home.interfaces != {})
+        "ProxyCommand ${lib.getExe wakeOnLanWrapper} %h %p ${lib.escapeShellArg macAddress}";
+    in ''
+      CanonicalizeHostname always
       CanonicalizeMaxDots 0
       CanonicalDomains benwolsieffer.com
 
@@ -169,6 +188,7 @@
 
       Host p-3400
         Port 4244
+        ${wakeOnLanProxyCommand "44:8a:5b:ce:23:c6"}
 
       Host RasPi2
         Port 4242

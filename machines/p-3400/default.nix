@@ -107,12 +107,12 @@
   };
 
   # Suspend system when idle
-  /*services.logind.extraConfig = ''
-    IdleAction=suspend
-    IdleActionSec=60
-  '';*/
+  services.logind.settings.Login = {
+    IdleAction = "suspend";
+    IdleActionSec = 60;
+  };
 
-  # Wake up on unicast packets
+  # Enable magic packet wakeup
   systemd.network.links."30-ethernet-wol" = {
     matchConfig.MACAddress = "44:8a:5b:ce:23:c6";
     linkConfig = {
@@ -122,7 +122,7 @@
       AlternativeNamesPolicy = "database onboard slot path";
       MACAddressPolicy = "persistent";
 
-      WakeOnLan = "unicast";
+      WakeOnLan = "magic";
     };
   };
 
