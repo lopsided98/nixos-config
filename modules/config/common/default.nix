@@ -1,4 +1,12 @@
-{ config, lib, pkgs, secrets, inputs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  secrets,
+  inputs,
+  ...
+}:
+{
 
   imports = [
     ../ssh.nix # Enable SSH on all systems
@@ -11,10 +19,9 @@
     nix-sdr.overlay
   ];
 
-  lib = let
-    # IP address math library
-    # https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba
-  in (import ./net.nix { inherit lib; }).lib;
+  # IP address math library
+  # https://gist.github.com/duairc/5c9bb3c922e5d501a1edb9e7b3b845ba
+  lib = (import ./net.nix { inherit lib; }).lib;
 
   boot = {
     # Use the latest kernel. Some ARM systems and those with ZFS might use a
@@ -65,50 +72,72 @@
     ];
     # Disable packages that would be automatically added to systemPackages
     # A subset of these are re-added in the standard profile
-    defaultPackages = [];
+    defaultPackages = [ ];
   };
 
   # Select internationalisation properties.
   console.keyMap = "us";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  system.buildMachines = let
-    machine = m: {
-      sshUser = "build";
-      sshKey = secrets.getSystemdSecret "nix" secrets.build.sshKey;
-    } // m;
-  in {
-    "HP-Z420" = machine {
-      systems = [ "x86_64-linux" "i686-linux" ];
-      maxJobs = 8;
-      speedFactor = 8;
-      supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
+  system.buildMachines =
+    let
+      machine =
+        m:
+        {
+          sshUser = "build";
+          sshKey = secrets.getSystemdSecret "nix" secrets.build.sshKey;
+        }
+        // m;
+    in
+    {
+      "HP-Z420" = machine {
+        systems = [
+          "x86_64-linux"
+          "i686-linux"
+        ];
+        maxJobs = 8;
+        speedFactor = 8;
+        supportedFeatures = [
+          "big-parallel"
+          "nixos-test"
+          "kvm"
+        ];
+      };
+      "p-3400" = machine {
+        systems = [
+          "x86_64-linux"
+          "i686-linux"
+        ];
+        maxJobs = 4;
+        speedFactor = 6;
+        supportedFeatures = [
+          "big-parallel"
+          "nixos-test"
+          "kvm"
+        ];
+      };
+      "ODROID-XU4" = machine {
+        systems = [
+          "armv6l-linux"
+          "armv7l-linux"
+        ];
+        maxJobs = 1;
+        speedFactor = 4;
+        supportedFeatures = [ "big-6" ];
+      };
+      "Rock64" = machine {
+        systems = [ "aarch64-linux" ];
+        maxJobs = 2;
+        speedFactor = 2;
+        supportedFeatures = [ ];
+      };
+      "RockPro64" = machine {
+        systems = [ "aarch64-linux" ];
+        maxJobs = 4;
+        speedFactor = 4;
+        supportedFeatures = [ "big-parallel" ];
+      };
     };
-    "p-3400" = machine {
-      systems = [ "x86_64-linux" "i686-linux" ];
-      maxJobs = 4;
-      speedFactor = 6;
-      supportedFeatures = [ "big-parallel" "nixos-test" "kvm" ];
-    };
-    "ODROID-XU4" = machine {
-      systems = [ "armv6l-linux" "armv7l-linux" ];
-      maxJobs = 1;
-      speedFactor = 4;
-      supportedFeatures = [ "big-parallel" ];
-    };
-    "Rock64" = machine {
-      systems = [ "aarch64-linux" ];
-      maxJobs = 2;
-      speedFactor = 2;
-      supportedFeatures = [ ];
-    };
-    "RockPro64" = machine {
-      systems = [ "aarch64-linux" ];
-      maxJobs = 4;
-      speedFactor = 4;
-      supportedFeatures = [ "big-parallel" ];
-    };
-  };
 
   nix = {
     distributedBuilds = true;
@@ -119,13 +148,17 @@
       trusted-users = [ "build" ];
       auto-optimise-store = true;
       builders-use-substitutes = true;
-      experimental-features = [ "nix-command" "flakes" ];
-      
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+
       # Use my binary cache
-      substituters = let
-        isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
-      in [ "https://ros.cachix.org" ] ++
-        lib.optional (!isHydra) "https://hydra.benwolsieffer.com";
+      substituters =
+        let
+          isHydra = config.services.nginx.virtualHosts ? "hydra.benwolsieffer.com";
+        in
+        [ "https://ros.cachix.org" ] ++ lib.optional (!isHydra) "https://hydra.benwolsieffer.com";
       trusted-public-keys = [
         "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
         "hydra.benwolsieffer.com-1:ppeFHW/O9KtZTQkB7vzpfIOEd4wM0+JZ4SosfqosmOQ="
@@ -156,73 +189,87 @@
 
   # Global SSH configuration for distributed builds
   programs.ssh = {
-    extraConfig = let
-      broadcastAddress = config.lib.net.cidr.host (config.lib.net.cidr.capacity config.local.networking.home.ipv4Subnet - 1) config.local.networking.home.ipv4Subnet;
-      wakeOnLanWrapper = pkgs.writeShellApplication {
-        name = "ssh-wake-on-lan";
-        runtimeInputs = with pkgs; [
-          # Need OpenBSD netcat with Debian patches for broadcast support
-          netcat-openbsd
-        ];
-        text = ''
-          host="$1"
-          port="$2"
-          # Remove colons
-          macAddress="''${3//:/}"
-          # Magic packets consist of 12*`f` followed by 16 repetitions of the
-          # MAC address
-          magicPacket="$( (
-            printf 'f%.0s' {1..12}
-            printf "$macAddress%.0s" {1..16}
-          ) | sed -e 's/../\\x&/g')"
+    extraConfig =
+      let
+        broadcastAddress = config.lib.net.cidr.host (
+          (config.lib.net.cidr.capacity config.local.networking.home.ipv4Subnet) - 1
+        ) config.local.networking.home.ipv4Subnet;
+        wakeOnLanWrapper = pkgs.writeShellApplication {
+          name = "ssh-wake-on-lan";
+          runtimeInputs = with pkgs; [
+            # Need OpenBSD netcat with Debian patches for broadcast support
+            netcat-openbsd
+          ];
+          text = ''
+            host="$1"
+            port="$2"
+            # Remove colons
+            macAddress="''${3//:/}"
+            # Magic packets consist of 12*`f` followed by 16 repetitions of the
+            # MAC address
+            magicPacket="$( (
+              printf 'f%.0s' {1..12}
+              printf "$macAddress%.0s" {1..16}
+            ) | sed -e 's/../\\x&/g')"
 
-          # Repeatedly send WoL packets until SSH port is open
-          while true; do
-            echo -e "$magicPacket" | nc -w 0 -u -b '${broadcastAddress}' 4343 || true
-            if nc -z -w 1 "$host" "$port" 2>/dev/null; then
-              break
-            fi
-          done
-          exec nc -F "$host" "$port"
-        '';
-      };
-      wakeOnLanProxyCommand = macAddress: lib.optionalString (config.local.networking.home.interfaces != {}) ''
-        ProxyCommand ${lib.getExe wakeOnLanWrapper} %h %p ${lib.escapeShellArg macAddress}
-        ProxyUseFdpass yes
+            # Repeatedly send WoL packets until SSH port is open
+            while true; do
+              echo -e "$magicPacket" | nc -w 0 -u -b '${broadcastAddress}' 4343 || true
+              if nc -z -w 1 "$host" "$port" 2>/dev/null; then
+                break
+              fi
+            done
+            exec nc -F "$host" "$port"
+          '';
+        };
+        wakeOnLanProxyCommand =
+          macAddress:
+          lib.optionalString (config.local.networking.home.interfaces != { }) ''
+            ProxyCommand ${lib.getExe wakeOnLanWrapper} %h %p ${lib.escapeShellArg macAddress}
+            ProxyUseFdpass yes
+          '';
+      in
+      ''
+        CanonicalizeHostname always
+        CanonicalizeMaxDots 0
+        CanonicalDomains benwolsieffer.com
+
+        Host hp-z420.benwolsieffer.com
+          Port 4245
+
+        Host odroid-xu4.benwolsieffer.com
+          Port 4243
+
+        Host p-3400.benwolsieffer.com
+          Port 4244
+          ${wakeOnLanProxyCommand "44:8a:5b:ce:23:c6"}
+
+        Host raspi2.benwolsieffer.com
+          Port 4242
+
+        Host rock64.benwolsieffer.com
+          Port 4246
+
+        Host rockpro64.benwolsieffer.com
+          Port 4247
       '';
-    in ''
-      CanonicalizeHostname always
-      CanonicalizeMaxDots 0
-      CanonicalDomains benwolsieffer.com
-
-      Host hp-z420.benwolsieffer.com
-        Port 4245
-
-      Host odroid-xu4.benwolsieffer.com
-        Port 4243
-
-      Host p-3400.benwolsieffer.com
-        Port 4244
-        ${wakeOnLanProxyCommand "44:8a:5b:ce:23:c6"}
-
-      Host raspi2.benwolsieffer.com
-        Port 4242
-
-      Host rock64.benwolsieffer.com
-        Port 4246
-
-      Host rockpro64.benwolsieffer.com
-        Port 4247
-    '';
     knownHosts = {
-      "[raspi2.benwolsieffer.com]:4242".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
-      "[odroid-xu4.benwolsieffer.com]:4243".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
-      "[p-3400.benwolsieffer.com]:4244".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA63giTolB7xmmyfxqlekRl97rncLwcNpsyvR2v1IsgE";
-      "[hp-z420.benwolsieffer.com]:4245".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
-      "[rock64.benwolsieffer.com]:4246".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeI22j7yJpTJcRpHms2V1xMbDq8DF/zmoG02HNOYWjH";
-      "[rockpro64.benwolsieffer.com]:4247".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
-      "github.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
-      "gitlab.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf";
+      "[raspi2.benwolsieffer.com]:4242".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH0OCWeV0gomOtQQEeJI+pciKQpJ3xuAXKrOQqMED0je";
+      "[odroid-xu4.benwolsieffer.com]:4243".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFmm8yfHhvqtXYWm7ivS8nfoqFPj3EKLTtD0+GAzpYYR";
+      "[p-3400.benwolsieffer.com]:4244".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA63giTolB7xmmyfxqlekRl97rncLwcNpsyvR2v1IsgE";
+      "[hp-z420.benwolsieffer.com]:4245".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDFSy+BIOwCUMxM+ru0tjSOIovhGqMf8UVHj8UuRJ534";
+      "[rock64.benwolsieffer.com]:4246".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeI22j7yJpTJcRpHms2V1xMbDq8DF/zmoG02HNOYWjH";
+      "[rockpro64.benwolsieffer.com]:4247".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFaErh4ggyVXfR2LcdevcWtkhImptp2iaQgY1bcrjCEW";
+      "github.com".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
+      "gitlab.com".publicKey =
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf";
     };
   };
 
@@ -269,7 +316,9 @@
         extraGroups = [ "wheel" ];
         uid = 1000;
         hashedPassword = "$6$7kgb.Sjp3Z5G$dvj96191PzKF/ODL9gzKHxmcyApYBZOeABnwGNgeX0hBhCaKdPp2Js31mQ4rqk4HnXvDohBmUVqV4Hy3tjE661";
-        openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPvx2Ssc6lR5PXX7esEWehj2RDyyLdZW+LDM245cOM9u 64:9a:22:db:59:50:19:64:20:6e:bf:b0:db:ef:19:b9 Dell-Inspiron-15" ];
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPvx2Ssc6lR5PXX7esEWehj2RDyyLdZW+LDM245cOM9u 64:9a:22:db:59:50:19:64:20:6e:bf:b0:db:ef:19:b9 Dell-Inspiron-15"
+        ];
       };
       # User for distributed builds
       build = {
@@ -279,10 +328,12 @@
         createHome = true;
         shell = pkgs.bashInteractive;
         group = "build";
-        openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAo5DSurLPw8PhMJq11qdqy312ie2oLV478grGUjR+B NixOS Build User" ];
+        openssh.authorizedKeys.keys = [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICAo5DSurLPw8PhMJq11qdqy312ie2oLV478grGUjR+B NixOS Build User"
+        ];
       };
     };
-    groups.build = {};
+    groups.build = { };
   };
 
   # My personal root CA
@@ -299,7 +350,7 @@
   systemd.secrets.nix = {
     units = [ "nix-daemon.service" ];
     files = lib.mkMerge [
-      (secrets.mkSecret secrets.build.sshKey {})
+      (secrets.mkSecret secrets.build.sshKey { })
       (secrets.mkSecret secrets.hydra.netrc {
         # Make world readable so nix can access the binary cache without going
         # through the daemon. This secret is not particularly sensitive, it
