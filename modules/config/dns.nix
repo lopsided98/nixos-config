@@ -20,7 +20,7 @@
     { name = "@"; class = "IN"; type = "SOA";
       data = ''
         ns2.afraid.org. admin.benwolsieffer.com. (
-                        63         ; Serial
+                        64         ; Serial
                       3600         ; Refresh
                        180         ; Retry
                    2419200         ; Expire
@@ -49,7 +49,8 @@
 
     # ODROID-XU4
     { name = "odroid-xu4"; class = "IN"; type = "A"; data = externalIPv4; }
-    { name = "odroid-xu4"; class = "IN"; type = "AAAA"; data = net.cidr.host "::21e:6ff:fe31:9be6" ipv6Prefix; }
+    { name = "odroid-xu4"; class = "IN"; type = "AAAA";
+      data = config.local.networking.vpn.home.wireGuard.peers."k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=".ipv6Address; }
 
     # p-3400
     { name = "p-3400"; class = "IN"; type = "A"; data = externalIPv4; }
@@ -82,7 +83,8 @@
 
   internalRecords = [
     { name = "raspi2"; class = "IN"; type = "A"; data = net.cidr.host 2 ipv4Subnet; }
-    { name = "odroid-xu4"; class = "IN"; type = "A"; data = net.cidr.host 3 ipv4Subnet; }
+    { name = "odroid-xu4"; class = "IN"; type = "A";
+      data = config.local.networking.vpn.home.wireGuard.peers."k8hqq72n9/MqGpbnIriPwcSXHkZYGOh8xXFMw1zj3QE=".ipv4Address; }
     { name = "p-3400"; class = "IN"; type = "A"; data = net.cidr.host 4 ipv4Subnet; }
     { name = "hp-z420"; class = "IN"; type = "A"; data = net.cidr.host 5 ipv4Subnet; }
     { name = "rock64"; class = "IN"; type = "A"; data = net.cidr.host 6 ipv4Subnet; }
