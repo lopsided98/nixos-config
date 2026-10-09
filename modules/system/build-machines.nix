@@ -7,53 +7,12 @@
 
 let
   cfg = config.system.buildMachines;
-
-  hydraBuildMachinesText = lib.concatStrings (lib.mapAttrsToList (
-    origHostName: machine:
-    let
-      localhost = origHostName == config.networking.hostName;
-      hostName = if localhost then "localhost" else origHostName;
-      # Hydra doesn't support ssh-ng
-      # https://github.com/NixOS/hydra/issues/688
-      protocol = if localhost then null else "ssh";
-      sshUser = if localhost then null else machine.sshUser;
-    in
-    (lib.concatStringsSep " " ([
-      "${lib.optionalString (protocol != null) "${protocol}://"}${
-        lib.optionalString (sshUser != null) "${sshUser}@"
-      }${hostName}"
-      (
-        if machine.systems != [ ] then
-          lib.concatStringsSep "," machine.systems
-        else
-          "-"
-      )
-      (if machine.sshKey != null then machine.sshKey else "-")
-      (toString machine.maxJobs)
-      (toString machine.speedFactor)
-      (
-        let
-          res = (machine.supportedFeatures ++ machine.mandatoryFeatures);
-        in
-        if (res == [ ]) then "-" else (lib.concatStringsSep "," res)
-      )
-      (
-        let
-          res = machine.mandatoryFeatures;
-        in
-        if (res == [ ]) then "-" else (lib.concatStringsSep "," machine.mandatoryFeatures)
-      )
-      "-"
-    ]))
-    + "\n"
-  ) cfg);
 in
 {
   options = {
     system.buildMachines = lib.mkOption {
       description = ''
-        Build machines used for distributed builds and Hydra, working around 
-        bugs in each.
+        Build machines used for distributed builds and Hydra
       '';
       default = { };
       type = lib.types.attrsOf (
@@ -110,10 +69,5 @@ in
         protocol = "ssh-ng";
       }
     ) (lib.filterAttrs (h: m: h != config.networking.hostName) cfg);
-
-    # Include a second machine file with the configuration for the local machine
-    services.hydra.buildMachinesFiles = [
-      (pkgs.writeText "hydra-build-machines" hydraBuildMachinesText)
-    ];
   };
 }
