@@ -209,6 +209,12 @@ in {
   # Set SSH port
   services.openssh.ports = [ 4245 ];
 
+  local.services.hydra-builder = {
+    enable = true;
+    mtlsClientCertPath = ./hydra-builder.pem;
+    mtlsClientKeySecret = secrets.HP-Z420.hydraBuilderKey;
+  };
+
   # Web server for sharing publicly accessible files
   local.services.publicFiles.enable = true;
 

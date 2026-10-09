@@ -38,6 +38,7 @@
     ./local/services/backup/server.nix
     ./local/services/backup/syncthing.nix
     ./local/services/deluge.nix
+    ./local/services/hydra-builder.nix
     ./local/services/immich.nix
     ./local/services/mail.nix
     ./local/services/public-files.nix
