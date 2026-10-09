@@ -13,7 +13,7 @@ in {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/config/hydra.nix
+    ../../modules/config/hydra
     ../../modules/config/hacker-hats.nix
     ../../modules/config/influxdb
     ../../modules/config/grafana

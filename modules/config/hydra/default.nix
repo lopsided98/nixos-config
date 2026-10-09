@@ -12,6 +12,15 @@
       compress_num_threads = 0
     '';
     useSubstitutes = true;
+
+    queueRunner = {
+      grpc.address = "[::]";
+      mtls = {
+        clientCaCertPath = ./queue-runner-ca.crt;
+        serverCertPath = ./queue-runner.pem;
+        serverKeyPath = secrets.getSystemdSecret "hydra-queue-runner" secrets.hydra.queueRunnerKey;
+      };
+    };
   };
 
   # ZFS dataset properties:
@@ -141,12 +150,9 @@
   systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/cache/hydra" ];
 
   systemd.secrets = {
-    nix = {
+    hydra-queue-runner = {
       units = [ "hydra-queue-runner.service" ];
-      files."${secrets.build.sshKey}" = {
-        user = "hydra-queue-runner";
-        group = "hydra";
-      };
+      files = secrets.mkSecret secrets.hydra.queueRunnerKey { user = "hydra"; };
     };
     hydra = {
       units = [
