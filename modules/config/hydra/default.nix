@@ -153,6 +153,8 @@
   # Allow access to cache directory
   systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/cache/hydra" ];
 
+  networking.firewall.allowedTCPPorts = [ config.services.hydra.queueRunner.grpc.port ];
+
   systemd.secrets = {
     hydra-queue-runner = {
       units = [ "hydra-queue-runner.service" ];
