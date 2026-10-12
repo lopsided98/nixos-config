@@ -28,7 +28,7 @@ in {
       queueRunnerAddr = "https://hydra.benwolsieffer.com:50051";
 
       mtls = {
-        serverRootCaCertPath = ../../config/hydra/queue-runner-ca.crt;
+        serverRootCaCertPath = ../../../config/hydra/queue-runner-ca.crt;
         clientCertPath = cfg.mtlsClientCertPath;
         clientKeyPath = secrets.getSystemdSecret "hydra-builder" cfg.mtlsClientKeySecret;
         domainName = "hydra.benwolsieffer.com";
