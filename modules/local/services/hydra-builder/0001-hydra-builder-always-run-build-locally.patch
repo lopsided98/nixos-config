@@ -1,0 +1,31 @@
+From 294e59b6f9b5389f3a5a7d9ad538dcbb650eb78f Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Mon, 12 Oct 2026 12:32:03 -0400
+Subject: [PATCH] hydra-builder: always run build locally
+
+If the hydra-builder machine has remote builders defined in
+/etc/nix/machines, Nix would attempt to run the Hydra build on them
+instead of the local machine. Prevent this by setting the "builders"
+option to an empty string.
+---
+ subprojects/hydra-builder/src/state.rs | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/subprojects/hydra-builder/src/state.rs b/subprojects/hydra-builder/src/state.rs
+index 3e69220b..435ac3e5 100644
+--- a/subprojects/hydra-builder/src/state.rs
++++ b/subprojects/hydra-builder/src/state.rs
+@@ -1440,6 +1440,10 @@ fn build_client_options(
+     options
+         .other_settings
+         .insert("timeout".to_string(), build_timeout.to_string().into());
++    // Always run build locally
++    options
++        .other_settings
++        .insert("builders".to_string(), "".into());
+     if presigned {
+         // With presigned uploads, inputs are substituted from a binary cache
+         // that other builders write to continuously; a cached negative narinfo
+-- 
+2.55.0
+

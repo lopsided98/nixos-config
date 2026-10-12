@@ -2,9 +2,13 @@
 
   services.hydra = {
     enable = true;
+    package = pkgs.hydra.overrideAttrs ({ patches ? [], ... }:{
+      patches = patches ++ [
+        ./0001-Fix-nar-hash-name-endpoint-after-store-path-changes.patch
+      ];
+    });
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
-    port = 8080;
     extraConfig = ''
       store_uri = daemon?secret-key=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
       binary_cache_secret_key_file=${secrets.getSystemdSecret "hydra" secrets.hydra.binaryCacheSecretKey}
@@ -95,7 +99,7 @@
 
     virtualHosts = {
       "hydra.benwolsieffer.com" = let
-        proxyPass = "http://127.0.0.1:${toString config.services.hydra.port}";
+        proxyPass = "http://localhost:${toString config.services.hydra.port}";
         cacheConfig = ''
           proxy_cache hydra;
           proxy_cache_valid 1w;
@@ -152,7 +156,10 @@
   systemd.secrets = {
     hydra-queue-runner = {
       units = [ "hydra-queue-runner.service" ];
-      files = secrets.mkSecret secrets.hydra.queueRunnerKey { user = "hydra"; };
+      files = secrets.mkSecret secrets.hydra.queueRunnerKey {
+        user = "hydra-queue-runner";
+        group = "hydra";
+      };
     };
     hydra = {
       units = [

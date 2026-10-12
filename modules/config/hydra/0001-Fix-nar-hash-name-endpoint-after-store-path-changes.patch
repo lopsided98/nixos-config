@@ -1,0 +1,34 @@
+From fb40dc2a7b876e444620b3b7b4f5178d19fc81ef Mon Sep 17 00:00:00 2001
+From: Ben Wolsieffer <benwolsieffer@gmail.com>
+Date: Sat, 10 Oct 2026 22:52:07 -0400
+Subject: [PATCH] Fix /nar/<hash>-<name> endpoint after store path changes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Currently, the /nar endpoint always fails with an error similar to:
+
+Caught exception in Hydra::Controller::Root->nar "␛[31;1merror:␛[0m '␛[35;1m/nix/store/<hash>-<name>␛[0m' can't name a store path because the hash part is not followed by a '-' at /nix/store/xpanfmanf781847qs3pydx8pk4ic4qkn-hydra-0-unstable-2026-10-04/libexec/hydra/lib/Hydra/Controller/Root.pm line 375."
+
+This occurs because a full store path is being passed to isValidPath(),
+but it now expects a Nix::StorePath with just the <hash>-<name> portion.
+---
+ subprojects/hydra/lib/Hydra/Controller/Root.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/subprojects/hydra/lib/Hydra/Controller/Root.pm b/subprojects/hydra/lib/Hydra/Controller/Root.pm
+index bf55aaa1..02f39415 100644
+--- a/lib/Hydra/Controller/Root.pm
++++ b/lib/Hydra/Controller/Root.pm
+@@ -370,7 +370,7 @@ sub nar :Local :Args(1) {
+     }
+ 
+     else {
+-        $path = machineLocalStore()->storeDir . "/$path";
++        $path = Nix::StorePath->new($path);
+ 
+         gone($c, "Path " . $path . " is no longer available.") unless machineLocalStore()->isValidPath($path);
+ 
+-- 
+2.55.0
+

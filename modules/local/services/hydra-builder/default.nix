@@ -20,6 +20,11 @@ in {
   config = lib.mkIf cfg.enable {
     services.hydra-builder = {
       enable = true;
+      package = pkgs.hydra-builder.overrideAttrs ({ patches ? [], ... }:{
+        patches = patches ++ [
+          ./0001-hydra-builder-always-run-build-locally.patch
+        ];
+      });
       queueRunnerAddr = "https://hydra.benwolsieffer.com:50051";
 
       mtls = {
