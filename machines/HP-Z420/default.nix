@@ -211,7 +211,7 @@ in {
 
   local.services.hydra-builder = {
     enable = true;
-    mtlsClientCertPath = ./hydra-builder.pem;
+    mtlsClientCertPath = ./hydra-builder.crt;
     mtlsClientKeySecret = secrets.HP-Z420.hydraBuilderKey;
   };
 

@@ -82,6 +82,12 @@
   # Save/restore time
   services.fakeHwClock.enable = true;
 
+  local.services.hydra-builder = {
+    enable = true;
+    mtlsClientCertPath = ./hydra-builder.crt;
+    mtlsClientKeySecret = secrets.RockPro64.hydraBuilderKey;
+  };
+
   # Power usage logging
   local.services.rtlamr.enable = true;
   boot.blacklistedKernelModules = [ "dvb_usb_rtl28xxu" ];
