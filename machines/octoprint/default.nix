@@ -72,8 +72,8 @@ in {
 
       psucontrol = {
         switchingMethod = "SYSTEM";
-        onSysCommand = printerPowerCommand "printer" "turn_on";
-        offSysCommand = printerPowerCommand "printer" "turn_off";
+        onSysCommand = printerPowerCommand "Printer" "turn_on";
+        offSysCommand = printerPowerCommand "Printer" "turn_off";
       };
     };
     plugins = let
@@ -149,8 +149,8 @@ in {
       SupplementaryGroups = [ "printer-power" ];
       Restart = "on-failure";
       RestartSec = 10;
-      ExecStart = printerPowerCommand "light" "turn_on";
-      ExecStop = printerPowerCommand "light" "turn_off";
+      ExecStart = printerPowerCommand "Light" "turn_on";
+      ExecStop = printerPowerCommand "Light" "turn_off";
     };
     # Allow unlimited restarts
     unitConfig.StartLimitIntervalSec = 0;
