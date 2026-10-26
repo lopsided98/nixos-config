@@ -70,10 +70,6 @@ in {
   config = mkIf (config.boot.initrd.systemd.network.enable && cfg.enable) {
     assertions = [
       {
-        assertion = config.boot.initrd.systemd.enable;
-        message = "TinySSH is only supported with systemd in initrd";
-      }
-      {
         assertion = cfg.authorizedKeys != [];
         message = "You should specify at least one authorized key for initrd SSH";
       }
