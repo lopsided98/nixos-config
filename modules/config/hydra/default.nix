@@ -2,11 +2,6 @@
 
   services.hydra = {
     enable = true;
-    package = pkgs.hydra.overrideAttrs ({ patches ? [], ... }:{
-      patches = patches ++ [
-        ./0001-Fix-nar-hash-name-endpoint-after-store-path-changes.patch
-      ];
-    });
     hydraURL = "https://hydra.benwolsieffer.com";
     notificationSender = "hydra@hydra.benwolsieffer.com";
     extraConfig = ''
