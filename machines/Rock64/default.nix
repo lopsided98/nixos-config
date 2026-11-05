@@ -40,6 +40,12 @@ in {
   # Set SSH port
   services.openssh.ports = [ 4246 ];
 
+  local.services.hydra-builder = {
+    enable = true;
+    mtlsClientCertPath = ./hydra-builder.crt;
+    mtlsClientKeySecret = secrets.Rock64.hydraBuilderKey;
+  };
+
   # System metrics logging
   local.services.telegraf = {
     enable = true;
