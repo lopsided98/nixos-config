@@ -16,6 +16,7 @@
     nixpkgs.overlays = lib.singleton (final: prev: {
       dbus = prev.dbus.override { x11Support = false; };
       gnupg = prev.gnupg.override { guiSupport = false; };
+      gobject-introspection = prev.gobject-introspection.override { x11Support = false; };
       qt515 = prev.qt515.overrideScope' (final: prev: {
         # Build Qt without Gtk. The other GUI deps can't be disabled right now.
         qtbase = prev.qtbase.override {
