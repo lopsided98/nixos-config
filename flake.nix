@@ -41,12 +41,20 @@
         inputs.nixgl.overlays.default
         inputs.nixos-secrets.overlays.default
       ];
-      config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-        "dropbox"
-        # used by dropbox, mostly unnecessary but a pain to remove
-        "firefox-bin"
-        "firefox-bin-unwrapped"
-      ];
+      config = {
+        allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+          "dropbox"
+          # used by dropbox, mostly unnecessary but a pain to remove
+          "firefox-bin"
+          "firefox-bin-unwrapped"
+          # zotero
+          "firefox-esr-140-bin-unwrapped"
+        ];
+        permittedInsecurePackages = [
+          # zotero
+          "firefox-esr-140-bin-unwrapped-140.17.0esr"
+        ];
+      };
     };
 
     nixpkgsBySystem = {
